@@ -730,6 +730,23 @@
   }
 }
 
+
+/* FIX — keep reel numbers visible on hover */
+.reel-row:hover .reel-row-num,
+.reel-row-num.ir-num-glitch {
+  color: #060606 !important;
+  text-shadow:
+    0 0 7px rgba(212,240,58,.35),
+    0 0 18px rgba(212,240,58,.12);
+}
+
+.reel-row:hover .reel-row-num::before,
+.reel-row:hover .reel-row-num::after,
+.reel-row-num.ir-num-glitch::before,
+.reel-row-num.ir-num-glitch::after {
+  color: #060606 !important;
+}
+
 </style>
 </head>
 <body>
