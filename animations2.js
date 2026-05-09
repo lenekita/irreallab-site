@@ -510,3 +510,47 @@
     initInlinePreviewProcessing();
   }
 })();
+
+
+/* ─────────────────────────────────────────
+   SITE AUDIO — Velvet Circuit loop
+   Browser-safe: starts only after user click.
+───────────────────────────────────────── */
+(function () {
+  'use strict';
+
+  function initSiteAudio() {
+    const audio = document.getElementById('site-audio');
+    const btn = document.getElementById('audio-toggle');
+    if (!audio || !btn) return;
+
+    audio.volume = 0.35;
+
+    const setState = (isOn) => {
+      btn.textContent = isOn ? 'SOUND ON' : 'SOUND OFF';
+      btn.classList.toggle('is-on', isOn);
+      btn.setAttribute('aria-label', isOn ? 'Couper la musique' : 'Activer la musique');
+    };
+
+    setState(false);
+
+    btn.addEventListener('click', async () => {
+      try {
+        if (audio.paused) {
+          await audio.play();
+          setState(true);
+        } else {
+          audio.pause();
+          setState(false);
+        }
+      } catch (err) {
+        console.log('Audio blocked until user interaction', err);
+        setState(false);
+      }
+    });
+  }
+
+  document.readyState === 'loading'
+    ? document.addEventListener('DOMContentLoaded', initSiteAudio)
+    : initSiteAudio();
+})();
