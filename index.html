@@ -560,6 +560,35 @@
   max-width: 100%;
 }
 
+
+
+/* CTA TEXT — same typography as intro typewriter */
+.cta-typewriter {
+  font-family: 'Space Mono', 'Courier New', monospace !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  letter-spacing: .035em !important;
+  text-transform: none !important;
+  font-size: clamp(.95rem, 1.4vw, 1.2rem) !important;
+  line-height: 1.55 !important;
+  color: rgba(237,233,223,.72) !important;
+}
+
+.cta-typewriter strong {
+  font-family: inherit !important;
+  font-style: normal !important;
+  font-weight: 700 !important;
+  color: var(--text) !important;
+}
+
+/* TOP LEFT LOGO — same electric flicker as footer */
+.nav-logo .footer-irreal {
+  position: relative;
+  display: inline-block;
+  animation: footerIrrealBlink 2.2s infinite;
+  will-change: opacity, text-shadow;
+}
+
 </style>
 </head>
 <body>
@@ -619,7 +648,7 @@
 <!-- NAV -->
 <div id="nav-spacer" class="nav-spacer" aria-hidden="true"></div>
 <nav id="main-nav">
-  <a href="#" class="nav-logo">irreal<em>lab_</em></a>
+  <a href="#" class="nav-logo"><span class="footer-irreal">irreal</span><em>lab_</em></a>
   <div class="nav-links">
     <a href="#reels" class="nav-hide">Reels</a>
     <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="nav-hide">About</a>
@@ -751,7 +780,7 @@
 
 <!-- CTA BAND -->
 <div class="cta-band">
-  <p class="cta-band-text">Every week, a new experiment.<br><strong>Follow @irreallab</strong> to never miss a reel.</p>
+  <p class="cta-band-text cta-typewriter">Every week, a new experiment.<br><strong>Follow @irreallab</strong> to never miss a reel.</p>
   <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="cta-btn">Follow on Instagram ↗</a>
 </div>
 
