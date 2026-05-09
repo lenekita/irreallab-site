@@ -747,6 +747,59 @@
   color: #060606 !important;
 }
 
+
+/* CUSTOM CURSOR — cinematic round cursor with soft trail */
+@media (pointer: fine) {
+  body {
+    cursor: none;
+  }
+
+  .ir-cursor,
+  .ir-cursor-trail {
+    position: fixed;
+    left: 0;
+    top: 0;
+    pointer-events: none;
+    border-radius: 50%;
+    z-index: 9999999;
+    transform: translate(-50%, -50%);
+    mix-blend-mode: difference;
+  }
+
+  .ir-cursor {
+    width: 16px;
+    height: 16px;
+    background: rgba(212,240,58,.95);
+    box-shadow:
+      0 0 12px rgba(212,240,58,.45),
+      0 0 28px rgba(212,240,58,.18);
+    transition:
+      width .18s ease,
+      height .18s ease,
+      background .18s ease,
+      opacity .2s ease;
+  }
+
+  .ir-cursor-trail {
+    width: 42px;
+    height: 42px;
+    border: 1px solid rgba(212,240,58,.42);
+    background: rgba(212,240,58,.04);
+    backdrop-filter: blur(2px);
+    transition:
+      width .22s ease,
+      height .22s ease,
+      border-color .22s ease,
+      opacity .2s ease;
+  }
+
+  a:hover ~ .ir-cursor,
+  button:hover ~ .ir-cursor {
+    width: 22px;
+    height: 22px;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -956,5 +1009,9 @@
 
 <script async src="https://www.instagram.com/embed.js"></script>
 <script src="animations2.js" defer></script>
+
+<div class="ir-cursor"></div>
+<div class="ir-cursor-trail"></div>
+
 </body>
 </html>
