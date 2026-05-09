@@ -634,6 +634,221 @@
     }
 
 
+
+
+    /* ══════════════════════════════
+       MORE REELS — true second page + editorial previews
+       Only affects the reels section after Sky Runway.
+    ══════════════════════════════ */
+    .reels-page {
+      min-height: 100vh;
+      position: relative;
+      padding: clamp(4.5rem, 8vw, 7rem) 0 clamp(5rem, 8vw, 7rem);
+      border-bottom: 1px solid var(--line);
+      background:
+        radial-gradient(circle at 85% 12%, rgba(212,240,58,.12), transparent 24%),
+        radial-gradient(circle at 12% 72%, rgba(237,233,223,.045), transparent 28%),
+        linear-gradient(180deg, #060606 0%, #0b0b0b 48%, #060606 100%);
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    .reels-page::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+      background:
+        linear-gradient(90deg, rgba(212,240,58,.06) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(255,255,255,.025) 1px, transparent 1px);
+      background-size: 82px 82px;
+      mask-image: radial-gradient(circle at 50% 38%, black, transparent 72%);
+      opacity: .45;
+    }
+
+    .reels-page::after {
+      content: 'REELS ARCHIVE';
+      position: absolute;
+      right: var(--pad-x);
+      top: clamp(2rem, 4vw, 3.3rem);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(4rem, 12vw, 13rem);
+      line-height: .8;
+      letter-spacing: -.03em;
+      color: rgba(255,255,255,.018);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .reels-page .section-head {
+      width: min(1180px, calc(100% - var(--pad-x) * 2));
+      margin: 0 auto clamp(2rem, 4vw, 3.5rem);
+      padding: 0 0 2rem;
+      border-bottom: 1px solid rgba(212,240,58,.18);
+    }
+
+    .reels-page .section-head h2 {
+      font-size: clamp(3.2rem, 9vw, 7.2rem);
+      letter-spacing: -.025em;
+    }
+
+    .reels-page .section-count {
+      color: rgba(237,233,223,.45);
+    }
+
+    .reels-page .reel-list {
+      width: min(1180px, calc(100% - var(--pad-x) * 2));
+      margin: 0 auto;
+      border: 1px solid rgba(237,233,223,.1);
+      background: rgba(8,8,8,.72);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 36px 90px rgba(0,0,0,.38);
+    }
+
+    .reels-page .section-head,
+    .reels-page .reel-list {
+      opacity: 0;
+      transform: translateY(42px) scale(.985);
+      transition: opacity .95s cubic-bezier(.16,1,.3,1), transform .95s cubic-bezier(.16,1,.3,1);
+    }
+
+    .reels-page.ir-reels-in .section-head,
+    .reels-page.ir-reels-in .reel-list {
+      opacity: 1;
+      transform: none;
+    }
+
+    .reels-page.ir-reels-in .reel-list {
+      transition-delay: .16s;
+    }
+
+    .reels-page .reel-row {
+      min-height: 102px;
+      background:
+        linear-gradient(90deg, rgba(255,255,255,.018), transparent 52%);
+    }
+
+    .reels-page .reel-row-title {
+      font-size: clamp(1.45rem, 3vw, 2.15rem);
+    }
+
+    .reels-page .reel-row-sub {
+      font-size: .66rem;
+      line-height: 1.6;
+      color: rgba(237,233,223,.55);
+    }
+
+    .reels-page .reel-row-preview-panel {
+      background: #050505;
+    }
+
+    .reels-page .reel-row:hover + .reel-row-preview-panel,
+    .reels-page .reel-row:focus-within + .reel-row-preview-panel,
+    .reels-page .reel-row-preview-panel:hover {
+      max-height: 430px;
+      opacity: 1;
+    }
+
+    .reels-page .reel-row-preview-shell {
+      grid-template-columns: 96px minmax(260px, 360px) 1fr;
+      gap: clamp(1.2rem, 3vw, 2.4rem);
+      padding: clamp(1.3rem, 2.8vw, 2.2rem) var(--pad-x) clamp(1.5rem, 3vw, 2.4rem);
+      background:
+        radial-gradient(circle at 23% 0%, rgba(212,240,58,.13), transparent 28%),
+        linear-gradient(135deg, rgba(212,240,58,.06), transparent 36%),
+        #090909;
+    }
+
+    .reels-page .reel-row-preview-label {
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      justify-self: start;
+      padding-top: 0;
+      font-size: .58rem;
+      color: rgba(212,240,58,.88);
+    }
+
+    .reels-page .reel-row-preview-frame {
+      position: relative;
+      width: 100%;
+      height: 310px;
+      border: 1px solid rgba(212,240,58,.28);
+      border-radius: 18px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.055), transparent 18%),
+        #020202;
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,.035),
+        0 22px 60px rgba(0,0,0,.48),
+        0 0 34px rgba(212,240,58,.07);
+    }
+
+    .reels-page .reel-row-preview-frame::before {
+      content: 'IRREALLAB PREVIEW';
+      position: absolute;
+      left: 14px;
+      top: 12px;
+      z-index: 4;
+      font-size: .48rem;
+      letter-spacing: .16em;
+      color: rgba(212,240,58,.72);
+      background: rgba(0,0,0,.62);
+      padding: 5px 7px;
+      backdrop-filter: blur(8px);
+    }
+
+    .reels-page .reel-row-preview-frame::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 3;
+      border-radius: 18px;
+      background:
+        linear-gradient(transparent 0 92%, rgba(212,240,58,.08) 93% 100%),
+        radial-gradient(circle at 50% 18%, transparent 0%, rgba(0,0,0,.22) 78%);
+      background-size: 100% 7px, 100% 100%;
+      mix-blend-mode: screen;
+      opacity: .42;
+    }
+
+    .reels-page .reel-row-preview-frame .instagram-media {
+      transform: scale(.54);
+      transform-origin: top center;
+      min-width: 326px !important;
+      width: 540px !important;
+      max-width: 540px !important;
+      margin: 46px auto 0 !important;
+      filter: saturate(.92) contrast(1.04);
+    }
+
+    .reels-page .reel-row-preview-text {
+      max-width: 520px;
+      font-size: clamp(1.15rem, 2vw, 1.42rem);
+      color: rgba(237,233,223,.68);
+    }
+
+    .reels-page .reel-row-preview-text strong {
+      display: inline-block;
+      margin-bottom: .7rem;
+      font-size: .88rem;
+      color: var(--accent);
+    }
+
+    @media (max-width: 900px) {
+      .reels-page {
+        padding-top: 4rem;
+      }
+      .reels-page .section-head,
+      .reels-page .reel-list {
+        width: calc(100% - var(--pad-x) * 2);
+      }
+      .reels-page .reel-row-preview-panel { display: none; }
+      .reels-page .reel-row-sub { font-size: .6rem; }
+    }
+
+
     /* ══════════════════════════════
        FEATURED REEL ONLY — compact container, normal preview
        This touches ONLY the first hero reel, not the reel list previews.
@@ -1072,10 +1287,10 @@
 </section>
 
 <!-- REELS LIST -->
-<div id="reels">
+<section id="reels" class="reels-page">
   <div class="section-head">
     <h2>More <span>Reels</span></h2>
-    <span class="section-count">04 live reels</span>
+    <span class="section-count">Scroll archive · 04 live reels</span>
   </div>
 
   <div class="reel-list">
@@ -1193,7 +1408,7 @@
     </div>
 
   </div>
-</div>
+</section>
 
 <!-- CTA BAND -->
 <div class="cta-band">
