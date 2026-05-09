@@ -207,8 +207,8 @@
       let deleting = false;
       let pauseTicks = 0;
 
-      const typeSpeed = 85;
-      const deleteSpeed = 38;
+      const typeSpeed = 115;
+      const deleteSpeed = 45;
       const pauseAtEnd = 18;
       const pauseAtStart = 6;
 
