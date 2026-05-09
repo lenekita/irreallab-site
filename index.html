@@ -416,6 +416,119 @@
       color: var(--muted); text-decoration: none; transition: color .2s;
     }
     .footer-link:hover { color: var(--accent); }
+
+
+    /* ══════════════════════════════
+       INSTAGRAM PREVIEWS — compact mode
+       Keeps the site intact, only visually reduces embeds by ~50%.
+    ══════════════════════════════ */
+    .hero-embed,
+    .reel-preview-embed-inner {
+      min-height: 260px;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 1.2rem;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(212,240,58,.08), transparent 35%),
+        var(--bg2);
+    }
+
+    .hero-embed .instagram-media,
+    .reel-preview-embed-inner .instagram-media {
+      transform: scale(.5);
+      transform-origin: top center;
+      margin: 0 auto !important;
+      min-width: 326px !important;
+      max-width: 540px !important;
+      width: 540px !important;
+    }
+
+    .hero-embed iframe,
+    .reel-preview-embed-inner iframe {
+      transform-origin: top center;
+    }
+
+    .reel-row[data-preview-url] {
+      isolation: isolate;
+    }
+
+    .reel-row[data-preview-url] .reel-row-title {
+      transition: transform .35s cubic-bezier(.16,1,.3,1), letter-spacing .35s cubic-bezier(.16,1,.3,1);
+      transform-origin: left center;
+    }
+
+    .reel-row[data-preview-url]:hover .reel-row-title {
+      transform: scale(1.08);
+      letter-spacing: .08em;
+    }
+
+    .ir-hover-preview-card {
+      position: fixed;
+      right: var(--pad-x);
+      top: 50%;
+      width: min(260px, 32vw);
+      min-height: 250px;
+      transform: translateY(-50%) translateX(22px) scale(.94);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 9990;
+      border: 1px solid rgba(212,240,58,.35);
+      background: rgba(6,6,6,.94);
+      box-shadow: 0 28px 90px rgba(0,0,0,.55);
+      overflow: hidden;
+      transition: opacity .28s cubic-bezier(.16,1,.3,1), transform .28s cubic-bezier(.16,1,.3,1);
+    }
+
+    .ir-hover-preview-card.is-visible {
+      opacity: 1;
+      transform: translateY(-50%) translateX(0) scale(1);
+    }
+
+    .ir-hover-preview-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      padding: .65rem .85rem;
+      border-bottom: 1px solid var(--line);
+      font-size: .5rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .ir-hover-preview-head strong {
+      color: var(--accent);
+      font-weight: 400;
+    }
+
+    .ir-hover-preview-body {
+      height: 230px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      overflow: hidden;
+      padding-top: .7rem;
+      background: var(--bg2);
+    }
+
+    .ir-hover-preview-body .instagram-media {
+      transform: scale(.43);
+      transform-origin: top center;
+      min-width: 326px !important;
+      width: 540px !important;
+      max-width: 540px !important;
+      margin: 0 auto !important;
+    }
+
+    @media (max-width: 900px) {
+      .hero-embed,
+      .reel-preview-embed-inner {
+        min-height: 240px;
+      }
+      .ir-hover-preview-card { display: none; }
+    }
+
   </style>
 </head>
 <body>
@@ -514,7 +627,7 @@
   <div class="reel-list">
 
     <!-- ROW — Reel №02: Art Heist (live link) -->
-    <a class="reel-row" href="https://www.instagram.com/reel/DYFrAFrIulH/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" target="_blank" rel="noopener">
+    <a class="reel-row" data-preview-url="https://www.instagram.com/reel/DYFrAFrIulH/" href="https://www.instagram.com/reel/DYFrAFrIulH/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" target="_blank" rel="noopener">
       <div class="reel-row-num">02</div>
       <div class="reel-row-body">
         <div class="reel-row-title">Art Heist</div>
@@ -600,7 +713,7 @@
 </footer>
 
 <script async src="https://www.instagram.com/embed.js"></script>
-<script src="animations2.js" defer></script>
+<script src="animations2_previews_half.js" defer></script>
 
 </body>
 </html>
