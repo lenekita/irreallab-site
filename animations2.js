@@ -514,7 +514,8 @@
 
 /* ─────────────────────────────────────────
    SITE AUDIO — Velvet Circuit loop
-   Browser-safe: starts only after user click.
+   Browser-safe: tries autoplay, then unlocks at first user gesture.
+   NOTE: unmuted autoplay is blocked by most modern browsers unless the site is trusted/allowed.
 ───────────────────────────────────────── */
 (function () {
   'use strict';
@@ -525,6 +526,9 @@
     if (!audio || !btn) return;
 
     audio.volume = 0.35;
+    audio.loop = true;
+    audio.preload = 'auto';
+    audio.autoplay = true;
 
     const setState = (isOn) => {
       btn.textContent = isOn ? 'SOUND ON' : 'SOUND OFF';
@@ -532,43 +536,55 @@
       btn.setAttribute('aria-label', isOn ? 'Couper la musique' : 'Activer la musique');
     };
 
-    setState(false);
-
-    const tryStartAudio = async () => {
+    const playAudio = async () => {
       try {
         await audio.play();
         setState(true);
+        return true;
       } catch (err) {
-        // Most browsers block unmuted autoplay until the first user interaction.
+        // Browser blocked unmuted autoplay. This is normal on Chrome/Safari/Firefox.
         setState(false);
+        return false;
       }
     };
 
-    tryStartAudio();
-
-    const unlockAudioOnce = async () => {
-      if (!audio.paused) return;
-      try {
-        await audio.play();
-        setState(true);
-      } catch (err) {}
+    const pauseAudio = () => {
+      audio.pause();
+      setState(false);
     };
 
-    document.addEventListener('pointerdown', unlockAudioOnce, { once: true, passive: true });
-    document.addEventListener('touchstart', unlockAudioOnce, { once: true, passive: true });
+    // Try immediately when the page loads.
+    setState(true);
+    playAudio();
 
+    // Try again after the full page is loaded.
+    window.addEventListener('load', () => {
+      if (audio.paused) playAudio();
+    }, { once: true });
+
+    // Try again on the first possible user gesture anywhere on the page.
+    const unlockOnce = () => {
+      if (audio.paused) playAudio();
+    };
+
+    document.addEventListener('pointerdown', unlockOnce, { once: true, passive: true });
+    document.addEventListener('touchstart', unlockOnce, { once: true, passive: true });
+    document.addEventListener('keydown', unlockOnce, { once: true });
+
+    // Also start sound when clicking the intro enter button.
+    const enterBtn = document.querySelector('.intro-enter');
+    if (enterBtn) {
+      enterBtn.addEventListener('click', () => {
+        if (audio.paused) playAudio();
+      });
+    }
+
+    // Manual toggle stays fully functional.
     btn.addEventListener('click', async () => {
-      try {
-        if (audio.paused) {
-          await audio.play();
-          setState(true);
-        } else {
-          audio.pause();
-          setState(false);
-        }
-      } catch (err) {
-        console.log('Audio blocked until user interaction', err);
-        setState(false);
+      if (audio.paused) {
+        await playAudio();
+      } else {
+        pauseAudio();
       }
     });
   }
@@ -577,6 +593,7 @@
     ? document.addEventListener('DOMContentLoaded', initSiteAudio)
     : initSiteAudio();
 })();
+
 
 
 /* ─────────────────────────────────────────
@@ -832,14 +849,14 @@
       window.setTimeout(step, startDelay);
     }
 
-    typeElement(introText, { speed: 46, delay: 750 });
+    typeElement(introText, { speed: 54, delay: 750 });
 
     if (heroText) {
       if ('IntersectionObserver' in window) {
         const heroObserver = new IntersectionObserver((entries) => {
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
-              typeElement(heroText, { speed: 44, delay: 350 });
+              typeElement(heroText, { speed: 52, delay: 350 });
               heroObserver.disconnect();
             }
           });
@@ -847,7 +864,7 @@
 
         heroObserver.observe(heroText);
       } else {
-        typeElement(heroText, { speed: 44, delay: 1200 });
+        typeElement(heroText, { speed: 52, delay: 1200 });
       }
     }
   }
