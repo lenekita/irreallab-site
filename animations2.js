@@ -11,8 +11,8 @@
   window.scrollTo(0, 0);
   window.addEventListener('load', () => window.scrollTo(0, 0), { once: true });
 
-  const qs    = (s, c = document) => c.querySelector(s);
-  const qsa   = (s, c = document) => [...c.querySelectorAll(s)];
+  const qs = (s, c = document) => c.querySelector(s);
+  const qsa = (s, c = document) => [...c.querySelectorAll(s)];
   const clamp = (v, a, b) => Math.min(Math.max(v, a), b);
   const isMobile = () => window.matchMedia('(pointer: coarse)').matches;
 
@@ -22,9 +22,10 @@
   function initCursor() {
     if (isMobile()) return;
 
-    const dot  = document.createElement('div');
+    const dot = document.createElement('div');
     const ring = document.createElement('div');
-    dot.id = 'ir-dot'; ring.id = 'ir-ring';
+    dot.id = 'ir-dot';
+    ring.id = 'ir-ring';
 
     const css = document.createElement('style');
     css.textContent = `
@@ -45,32 +46,51 @@
     document.head.appendChild(css);
     document.body.append(dot, ring);
 
-    let mx = innerWidth/2, my = innerHeight/2, rx = mx, ry = my, lastT = 0;
+    let mx = innerWidth / 2;
+    let my = innerHeight / 2;
+    let rx = mx;
+    let ry = my;
+    let lastT = 0;
 
     document.addEventListener('mousemove', e => {
-      mx = e.clientX; my = e.clientY;
-      // trail
+      mx = e.clientX;
+      my = e.clientY;
+
       const now = Date.now();
       if (now - lastT > 38) {
         lastT = now;
         const t = document.createElement('div');
         t.className = 'ir-trail';
-        t.style.left = mx + 'px'; t.style.top = my + 'px';
+        t.style.left = mx + 'px';
+        t.style.top = my + 'px';
         document.body.appendChild(t);
         setTimeout(() => t.remove(), 580);
       }
     });
+
     document.addEventListener('mousedown', () => document.body.classList.add('ir-clk'));
-    document.addEventListener('mouseup',   () => document.body.classList.remove('ir-clk'));
+    document.addEventListener('mouseup', () => document.body.classList.remove('ir-clk'));
 
     const hovSel = 'a,button,.reel-row,.cta-btn,.nav-cta,.reel-preview-cta,.hero-reel-open';
-    document.addEventListener('mouseover', e => { if (e.target.closest(hovSel)) document.body.classList.add('ir-hov'); });
-    document.addEventListener('mouseout',  e => { if (e.target.closest(hovSel)) document.body.classList.remove('ir-hov'); });
+
+    document.addEventListener('mouseover', e => {
+      if (e.target.closest(hovSel)) document.body.classList.add('ir-hov');
+    });
+
+    document.addEventListener('mouseout', e => {
+      if (e.target.closest(hovSel)) document.body.classList.remove('ir-hov');
+    });
 
     (function loop() {
-      dot.style.left  = mx + 'px'; dot.style.top  = my + 'px';
-      rx += (mx - rx) * .11; ry += (my - ry) * .11;
-      ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+      dot.style.left = mx + 'px';
+      dot.style.top = my + 'px';
+
+      rx += (mx - rx) * .11;
+      ry += (my - ry) * .11;
+
+      ring.style.left = rx + 'px';
+      ring.style.top = ry + 'px';
+
       requestAnimationFrame(loop);
     })();
   }
@@ -92,12 +112,12 @@
     document.head.appendChild(css);
 
     [
-      [qs('nav'),           'ir-fade',   0  ],
+      [qs('nav'), 'ir-fade', 0],
       [qs('.hero-eyebrow'), 'ir-fade-l', 100],
-      [qs('.hero-title'),   'ir-fade',   200],
-      [qs('.hero-sub'),     'ir-fade',   320],
-      [qs('.hero-meta'),    'ir-fade',   420],
-      [qs('.hero-right'),   'ir-scale',  260],
+      [qs('.hero-title'), 'ir-fade', 200],
+      [qs('.hero-sub'), 'ir-fade', 320],
+      [qs('.hero-meta'), 'ir-fade', 420],
+      [qs('.hero-right'), 'ir-scale', 260],
     ].forEach(([el, cls, delay]) => {
       if (!el) return;
       el.classList.add(cls);
@@ -110,15 +130,24 @@
   ───────────────────────────────────────── */
   function initScrollReveal() {
     const els = qsa('.section-head,.reel-row,.reel-preview-block,.cta-band,footer');
+
     els.forEach((el, i) => {
       el.classList.add('ir-fade');
       el.style.transitionDelay = (i % 4) * 55 + 'ms';
     });
+
     const io = new IntersectionObserver(entries => {
       entries.forEach(e => {
-        if (e.isIntersecting) { e.target.classList.add('ir-in'); io.unobserve(e.target); }
+        if (e.isIntersecting) {
+          e.target.classList.add('ir-in');
+          io.unobserve(e.target);
+        }
       });
-    }, { threshold: 0.07, rootMargin: '0px 0px -28px 0px' });
+    }, {
+      threshold: 0.07,
+      rootMargin: '0px 0px -28px 0px'
+    });
+
     els.forEach(el => io.observe(el));
   }
 
@@ -139,7 +168,8 @@
       if (t.endsWith('_')) {
         el.textContent = t.slice(0, -1);
         const c = document.createElement('span');
-        c.className = 'ir-blink'; c.textContent = '_';
+        c.className = 'ir-blink';
+        c.textContent = '_';
         el.appendChild(c);
       }
     });
@@ -151,33 +181,60 @@
   function initGlitch() {
     const title = qs('.hero-title');
     if (!title) return;
+
     const node = title.childNodes[0];
     if (!node) return;
+
     const orig = node.textContent.trim();
     const CHARS = '!<>-_\\/[]{}=+*^?#@$%&~|';
 
     const css = document.createElement('style');
-    css.textContent = `.ir-gl{position:absolute;top:0;left:0;pointer-events:none;
+    css.textContent = `
+      .ir-gl{position:absolute;top:0;left:0;pointer-events:none;
       user-select:none;font:inherit;letter-spacing:inherit;line-height:inherit;
-      color:var(--accent,#d4f03a);opacity:0;white-space:nowrap;}`;
+      color:var(--accent,#d4f03a);opacity:0;white-space:nowrap;}
+    `;
     document.head.appendChild(css);
+
     title.style.position = 'relative';
 
-    const scr = (s, a) => s.split('').map(c => Math.random() < a
-      ? CHARS[Math.floor(Math.random() * CHARS.length)] : c).join('');
+    const scr = (s, a) => s.split('').map(c => {
+      return Math.random() < a
+        ? CHARS[Math.floor(Math.random() * CHARS.length)]
+        : c;
+    }).join('');
 
     function run() {
       const g = document.createElement('span');
-      g.className = 'ir-gl'; title.appendChild(g);
+      g.className = 'ir-gl';
+      title.appendChild(g);
+
       let f = 0;
+
       const iv = setInterval(() => {
         f++;
-        if      (f <= 4) { g.style.opacity='.7'; g.textContent=scr(orig,.4); g.style.transform=`translate(${(Math.random()-.5)*7}px,${(Math.random()-.5)*3}px)`; g.style.clipPath=`inset(${Math.random()*60}% 0 ${Math.random()*35}% 0)`; }
-        else if (f <= 7) { g.style.opacity='.3'; g.textContent=scr(orig,.15); g.style.clipPath=`inset(${30+Math.random()*40}% 0 0 0)`; }
-        else             { g.style.opacity='0'; }
-        if (f >= 14) { clearInterval(iv); g.remove(); setTimeout(run, 3500 + Math.random()*4500); }
+
+        if (f <= 4) {
+          g.style.opacity = '.7';
+          g.textContent = scr(orig, .4);
+          g.style.transform = `translate(${(Math.random() - .5) * 7}px,${(Math.random() - .5) * 3}px)`;
+          g.style.clipPath = `inset(${Math.random() * 60}% 0 ${Math.random() * 35}% 0)`;
+        } else if (f <= 7) {
+          g.style.opacity = '.3';
+          g.textContent = scr(orig, .15);
+          g.style.clipPath = `inset(${30 + Math.random() * 40}% 0 0 0)`;
+        } else {
+          g.style.opacity = '0';
+        }
+
+        if (f >= 14) {
+          clearInterval(iv);
+          g.remove();
+          setTimeout(run, 3500 + Math.random() * 4500);
+        }
       }, 48);
     }
+
     setTimeout(run, 2800);
   }
 
@@ -188,15 +245,30 @@
     qsa('.reel-row').forEach(row => {
       const el = qs('.reel-row-num', row);
       if (!el) return;
+
       const orig = el.textContent.trim();
       let raf;
+
       row.addEventListener('mouseenter', () => {
         cancelAnimationFrame(raf);
         let f = 0;
-        const go = () => { f++; el.textContent = f < 9 ? String(Math.floor(Math.random()*99)).padStart(2,'0') : orig; if (f < 9) raf = requestAnimationFrame(go); };
+
+        const go = () => {
+          f++;
+          el.textContent = f < 9
+            ? String(Math.floor(Math.random() * 99)).padStart(2, '0')
+            : orig;
+
+          if (f < 9) raf = requestAnimationFrame(go);
+        };
+
         raf = requestAnimationFrame(go);
       });
-      row.addEventListener('mouseleave', () => { cancelAnimationFrame(raf); el.textContent = orig; });
+
+      row.addEventListener('mouseleave', () => {
+        cancelAnimationFrame(raf);
+        el.textContent = orig;
+      });
     });
   }
 
@@ -206,15 +278,24 @@
   function initNav() {
     const nav = qs('nav');
     if (!nav) return;
+
     const css = document.createElement('style');
     css.textContent = `
       nav{transition:height .35s cubic-bezier(.16,1,.3,1),background .35s,border-color .35s;}
       nav.ir-scrolled{height:44px;background:rgba(6,6,6,.95);backdrop-filter:blur(16px);border-color:#111;}
     `;
     document.head.appendChild(css);
+
     let tick = false;
+
     window.addEventListener('scroll', () => {
-      if (!tick) { requestAnimationFrame(() => { nav.classList.toggle('ir-scrolled', scrollY > 55); tick = false; }); tick = true; }
+      if (!tick) {
+        requestAnimationFrame(() => {
+          nav.classList.toggle('ir-scrolled', scrollY > 55);
+          tick = false;
+        });
+        tick = true;
+      }
     }, { passive: true });
   }
 
@@ -223,13 +304,21 @@
   ───────────────────────────────────────── */
   function initMagnetic() {
     if (isMobile()) return;
+
     qsa('.cta-btn,.nav-cta').forEach(btn => {
       btn.style.transition = 'transform .4s cubic-bezier(.16,1,.3,1),opacity .2s';
+
       btn.addEventListener('mousemove', e => {
         const r = btn.getBoundingClientRect();
-        btn.style.transform = `translate(${clamp((e.clientX-r.left-r.width/2)*.28,-12,12)}px,${clamp((e.clientY-r.top-r.height/2)*.28,-9,9)}px)`;
+
+        btn.style.transform =
+          `translate(${clamp((e.clientX - r.left - r.width / 2) * .28, -12, 12)}px,` +
+          `${clamp((e.clientY - r.top - r.height / 2) * .28, -9, 9)}px)`;
       });
-      btn.addEventListener('mouseleave', () => { btn.style.transform = 'translate(0,0)'; });
+
+      btn.addEventListener('mouseleave', () => {
+        btn.style.transform = 'translate(0,0)';
+      });
     });
   }
 
@@ -254,12 +343,19 @@
   function initLiveDot() {
     qsa('.live-dot').forEach(dot => {
       dot.style.transition = 'opacity .07s';
+
       const flicker = () => {
         setTimeout(() => {
           dot.style.opacity = '.2';
-          setTimeout(() => { dot.style.opacity = '1'; flicker(); }, 65 + Math.random()*110);
-        }, 1800 + Math.random()*3400);
+
+          setTimeout(() => {
+            dot.style.opacity = '1';
+            flicker();
+          }, 65 + Math.random() * 110);
+
+        }, 1800 + Math.random() * 3400);
       };
+
       flicker();
     });
   }
@@ -270,17 +366,24 @@
   function initParallax() {
     const numEl = qs('.reel-preview-num');
     if (!numEl) return;
+
     let tick = false;
+
     window.addEventListener('scroll', () => {
       if (!tick) {
         requestAnimationFrame(() => {
           const b = numEl.closest('.reel-preview-block');
+
           if (b) {
             const r = b.getBoundingClientRect();
-            numEl.style.transform = `translateY(${clamp(((innerHeight - r.top) / (innerHeight + r.height) - .5) * 65, -32, 32)}px)`;
+
+            numEl.style.transform =
+              `translateY(${clamp(((innerHeight - r.top) / (innerHeight + r.height) - .5) * 65, -32, 32)}px)`;
           }
+
           tick = false;
         });
+
         tick = true;
       }
     }, { passive: true });
@@ -290,20 +393,31 @@
      12. COUNTER — hero stat count-up
   ───────────────────────────────────────── */
   function initCounters() {
-    qsa('.hero-stat-num').filter(el => /^\d+$/.test(el.textContent.trim())).forEach(el => {
-      const target = parseInt(el.textContent.trim(), 10);
-      el.textContent = '00';
-      const io = new IntersectionObserver(([e]) => {
-        if (!e.isIntersecting) return;
-        io.disconnect();
-        let f = 0, steps = 22;
-        (function step() {
-          f++; el.textContent = String(Math.round(f/steps*target)).padStart(2,'0');
-          if (f < steps) requestAnimationFrame(step);
-        })();
-      }, { threshold: .5 });
-      io.observe(el);
-    });
+    qsa('.hero-stat-num')
+      .filter(el => /^\d+$/.test(el.textContent.trim()))
+      .forEach(el => {
+        const target = parseInt(el.textContent.trim(), 10);
+        el.textContent = '00';
+
+        const io = new IntersectionObserver(([e]) => {
+          if (!e.isIntersecting) return;
+
+          io.disconnect();
+
+          let f = 0;
+          const steps = 22;
+
+          (function step() {
+            f++;
+            el.textContent = String(Math.round(f / steps * target)).padStart(2, '0');
+
+            if (f < steps) requestAnimationFrame(step);
+          })();
+
+        }, { threshold: .5 });
+
+        io.observe(el);
+      });
   }
 
   /* ─────────────────────────────────────────
@@ -312,6 +426,7 @@
   function initMobileNav() {
     const nav = qs('nav');
     const links = qs('.nav-links');
+
     if (!nav || !links) return;
 
     const css = document.createElement('style');
@@ -378,17 +493,23 @@
       row.addEventListener('touchstart', e => {
         const r = row.getBoundingClientRect();
         const t = e.touches[0];
+
         const rip = document.createElement('span');
         rip.className = 'ir-ripple';
+
         const size = Math.max(r.width, r.height) * .5;
-        rip.style.cssText = `width:${size}px;height:${size}px;left:${t.clientX-r.left-size/2}px;top:${t.clientY-r.top-size/2}px;`;
+
+        rip.style.cssText =
+          `width:${size}px;height:${size}px;` +
+          `left:${t.clientX - r.left - size / 2}px;` +
+          `top:${t.clientY - r.top - size / 2}px;`;
+
         row.appendChild(rip);
+
         setTimeout(() => rip.remove(), 520);
       }, { passive: true });
     });
   }
-
-
 
   /* ─────────────────────────────────────────
      15. INTRO VIDEO — scroll to site content
@@ -396,39 +517,122 @@
   function initIntroVideo() {
     const intro = qs('.intro-video');
     const target = qs('#site-content');
+
     if (!intro || !target) return;
 
     const go = () => {
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      target.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
     };
 
     const btn = qs('.intro-enter', intro);
     if (btn) btn.addEventListener('click', go);
 
     let locked = false;
+
     intro.addEventListener('wheel', e => {
       if (e.deltaY <= 8 || locked) return;
+
       e.preventDefault();
       locked = true;
       go();
-      setTimeout(() => { locked = false; }, 900);
+
+      setTimeout(() => {
+        locked = false;
+      }, 900);
     }, { passive: false });
 
     let touchStartY = null;
+
     intro.addEventListener('touchstart', e => {
       touchStartY = e.touches[0].clientY;
     }, { passive: true });
 
     intro.addEventListener('touchmove', e => {
       if (touchStartY === null || locked) return;
+
       const diff = touchStartY - e.touches[0].clientY;
+
       if (diff > 28) {
         e.preventDefault();
         locked = true;
         go();
-        setTimeout(() => { locked = false; }, 900);
+
+        setTimeout(() => {
+          locked = false;
+        }, 900);
       }
     }, { passive: false });
+  }
+
+  /* ─────────────────────────────────────────
+     16. TYPEWRITER PARAGRAPHS — intro + hero
+     Only changes the two requested paragraphs.
+  ───────────────────────────────────────── */
+  function initTypewriterParagraphs() {
+    const introText = qs('.intro-copy');
+    const heroText = qs('.hero-sub');
+
+    const css = document.createElement('style');
+    css.textContent = `
+      .intro-copy,
+      .hero-sub{
+        font-family:"Courier New", Courier, monospace !important;
+        font-style:normal !important;
+        font-weight:400 !important;
+        letter-spacing:.035em !important;
+      }
+
+      .ir-typewriter-cursor::after{
+        content:"_";
+        display:inline-block;
+        margin-left:.08em;
+        color:var(--accent,#d4f03a);
+        text-shadow:
+          0 0 8px rgba(212,240,58,.65),
+          0 0 20px rgba(212,240,58,.28);
+        animation:ir-typewriter-blink .85s step-end infinite;
+      }
+
+      .ir-typewriter-done::after{
+        opacity:.42;
+      }
+
+      @keyframes ir-typewriter-blink{
+        0%,48%{opacity:1;}
+        49%,100%{opacity:0;}
+      }
+    `;
+    document.head.appendChild(css);
+
+    function typeLine(el, speed, delay) {
+      if (!el) return;
+
+      const fullText = el.textContent.replace(/\s+/g, ' ').trim();
+      if (!fullText) return;
+
+      el.textContent = '';
+      el.classList.add('ir-typewriter-cursor');
+
+      let i = 0;
+
+      const run = () => {
+        if (i <= fullText.length) {
+          el.textContent = fullText.slice(0, i);
+          i++;
+          setTimeout(run, speed);
+        } else {
+          el.classList.add('ir-typewriter-done');
+        }
+      };
+
+      setTimeout(run, delay);
+    }
+
+    typeLine(introText, 26, 650);
+    typeLine(heroText, 24, 1350);
   }
 
   /* ─────────────────────────────────────────
@@ -450,6 +654,7 @@
     initMobileNav();
     initTouchRipple();
     initIntroVideo();
+    initTypewriterParagraphs();
   }
 
   document.readyState === 'loading'
@@ -463,31 +668,41 @@
    irreallab — compact Instagram embeds + inline row preview
    Does not replace the original reel-row hover animation.
    ============================================================ */
+
 (function () {
   'use strict';
 
   function processInstagramEmbeds() {
-    if (window.instgrm && window.instgrm.Embeds && typeof window.instgrm.Embeds.process === 'function') {
+    if (
+      window.instgrm &&
+      window.instgrm.Embeds &&
+      typeof window.instgrm.Embeds.process === 'function'
+    ) {
       window.instgrm.Embeds.process();
     }
   }
 
   function compactEmbeds() {
-    document.querySelectorAll('.hero-embed, .reel-preview-embed-inner, .reel-row-preview-frame').forEach(box => {
-      box.style.overflow = 'hidden';
-    });
+    document.querySelectorAll('.hero-embed, .reel-preview-embed-inner, .reel-row-preview-frame')
+      .forEach(box => {
+        box.style.overflow = 'hidden';
+      });
   }
 
   function initInlinePreviewProcessing() {
     const panels = [...document.querySelectorAll('.reel-row-preview-panel')];
+
     panels.forEach(panel => {
       const row = panel.previousElementSibling;
+
       if (!row || !row.classList.contains('reel-row')) return;
+
       const run = () => {
         processInstagramEmbeds();
         setTimeout(compactEmbeds, 650);
         setTimeout(compactEmbeds, 1400);
       };
+
       row.addEventListener('mouseenter', run, { once: false });
       row.addEventListener('focusin', run, { once: false });
     });
@@ -509,6 +724,7 @@
     initCompactInstagram();
     initInlinePreviewProcessing();
   }
+
 })();
 
 
@@ -516,12 +732,14 @@
    SITE AUDIO — Velvet Circuit loop
    Browser-safe: starts only after user click.
 ───────────────────────────────────────── */
+
 (function () {
   'use strict';
 
   function initSiteAudio() {
     const audio = document.getElementById('site-audio');
     const btn = document.getElementById('audio-toggle');
+
     if (!audio || !btn) return;
 
     audio.volume = 0.35;
@@ -529,7 +747,10 @@
     const setState = (isOn) => {
       btn.textContent = isOn ? 'SOUND ON' : 'SOUND OFF';
       btn.classList.toggle('is-on', isOn);
-      btn.setAttribute('aria-label', isOn ? 'Couper la musique' : 'Activer la musique');
+      btn.setAttribute(
+        'aria-label',
+        isOn ? 'Couper la musique' : 'Activer la musique'
+      );
     };
 
     setState(false);
@@ -553,6 +774,7 @@
   document.readyState === 'loading'
     ? document.addEventListener('DOMContentLoaded', initSiteAudio)
     : initSiteAudio();
+
 })();
 
 
@@ -560,6 +782,7 @@
    MORE REELS — page 2 arrival animation
    Safe add-on: only toggles a class when the reels archive enters view.
 ───────────────────────────────────────── */
+
 (function () {
   'use strict';
 
@@ -579,17 +802,26 @@
         if (entry.isIntersecting) {
           enter();
           io.disconnect();
-          if (window.instgrm && window.instgrm.Embeds && typeof window.instgrm.Embeds.process === 'function') {
+
+          if (
+            window.instgrm &&
+            window.instgrm.Embeds &&
+            typeof window.instgrm.Embeds.process === 'function'
+          ) {
             setTimeout(() => window.instgrm.Embeds.process(), 180);
           }
         }
       });
-    }, { threshold: 0.16, rootMargin: '0px 0px -12% 0px' });
+    }, {
+      threshold: 0.16,
+      rootMargin: '0px 0px -12% 0px'
+    });
 
     io.observe(page);
 
     setTimeout(() => {
       const r = page.getBoundingClientRect();
+
       if (r.top < window.innerHeight * .86) enter();
     }, 600);
   }
@@ -597,13 +829,14 @@
   document.readyState === 'loading'
     ? document.addEventListener('DOMContentLoaded', initReelsPageArrival)
     : initReelsPageArrival();
-})();
 
+})();
 
 
 /* ─────────────────────────────────────────
    MOBILE VIDEO + INSTAGRAM SAFETY FIX
 ───────────────────────────────────────── */
+
 (function () {
   function hardenVideosForMobile() {
     document.querySelectorAll('video').forEach(function (video) {
@@ -612,6 +845,7 @@
       video.loop = true;
       video.autoplay = true;
       video.playsInline = true;
+
       video.setAttribute('muted', '');
       video.setAttribute('loop', '');
       video.setAttribute('autoplay', '');
@@ -621,10 +855,14 @@
 
       var tryPlay = function () {
         var p = video.play();
-        if (p && typeof p.catch === 'function') p.catch(function () {});
+
+        if (p && typeof p.catch === 'function') {
+          p.catch(function () { });
+        }
       };
 
       if (video.readyState >= 2) tryPlay();
+
       video.addEventListener('loadeddata', tryPlay, { once: true });
       document.addEventListener('touchstart', tryPlay, { once: true, passive: true });
       document.addEventListener('click', tryPlay, { once: true });
@@ -633,7 +871,9 @@
 
   function refreshInstagramEmbeds() {
     if (window.instgrm && window.instgrm.Embeds) {
-      try { window.instgrm.Embeds.process(); } catch (e) {}
+      try {
+        window.instgrm.Embeds.process();
+      } catch (e) { }
     }
   }
 
@@ -650,9 +890,11 @@
   }
 
   window.addEventListener('pageshow', initMobileFixes);
+
   window.addEventListener('orientationchange', function () {
     setTimeout(initMobileFixes, 400);
   });
+
 })();
 
 
@@ -660,6 +902,7 @@
    FINAL iOS / Safari VIDEO AUTOPLAY FIX
    Keeps videos muted + inline and retries play after first user gesture.
 ───────────────────────────────────────── */
+
 (function () {
   function forceIOSVideos() {
     const videos = document.querySelectorAll('video');
@@ -686,10 +929,11 @@
       const playVideo = () => {
         try {
           const promise = video.play();
+
           if (promise && typeof promise.catch === 'function') {
-            promise.catch(() => {});
+            promise.catch(() => { });
           }
-        } catch (e) {}
+        } catch (e) { }
       };
 
       playVideo();
@@ -713,7 +957,9 @@
 
   window.addEventListener('load', forceIOSVideos);
   window.addEventListener('pageshow', forceIOSVideos);
+
   window.addEventListener('orientationchange', () => {
     setTimeout(forceIOSVideos, 450);
   });
+
 })();
