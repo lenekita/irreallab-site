@@ -297,7 +297,6 @@
 
     .intro-brand::before,
     .hero-title::before {
-      content: attr(data-glitch);
       position: absolute;
       left: 0;
       top: 0;
@@ -308,6 +307,16 @@
       mix-blend-mode: screen;
       transform: translateX(0);
       clip-path: inset(0 0 72% 0);
+    }
+
+    .intro-brand::before {
+      content: "Irreal\A Lab";
+      white-space: pre;
+      line-height: inherit;
+    }
+
+    .hero-title::before {
+      content: attr(data-glitch);
     }
 
     .intro-brand:hover,
