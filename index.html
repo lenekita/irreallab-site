@@ -1179,7 +1179,188 @@
       }
     }
 
-  </style>
+  
+/* ─────────────────────────────────────────
+   MORE REELS — calmer scale refinement
+   Added to reduce oversized titles/cards only in the reels archive section
+───────────────────────────────────────── */
+#reels,
+.more-reels-page,
+.reels-archive,
+.reels-page {
+  scroll-margin-top: 0;
+}
+
+#reels .section-head,
+.more-reels-page .section-head,
+.reels-archive .section-head,
+.reels-page .section-head {
+  padding-top: clamp(4rem, 7vw, 7rem) !important;
+  padding-bottom: clamp(2.2rem, 4vw, 3.6rem) !important;
+}
+
+#reels .section-head h2,
+.more-reels-page .section-head h2,
+.reels-archive .section-head h2,
+.reels-page .section-head h2 {
+  font-size: clamp(4.2rem, 8.5vw, 8rem) !important;
+  line-height: .82 !important;
+}
+
+#reels .section-count,
+.more-reels-page .section-count,
+.reels-archive .section-count,
+.reels-page .section-count {
+  font-size: .56rem !important;
+}
+
+#reels .reel-row,
+.more-reels-page .reel-row,
+.reels-archive .reel-row,
+.reels-page .reel-row {
+  min-height: unset !important;
+}
+
+#reels .reel-card,
+#reels .reel-row,
+.more-reels-page .reel-card,
+.more-reels-page .reel-row,
+.reels-archive .reel-card,
+.reels-archive .reel-row,
+.reels-page .reel-card,
+.reels-page .reel-row {
+  max-width: min(1320px, calc(100vw - 8rem)) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+#reels .reel-row-num,
+.more-reels-page .reel-row-num,
+.reels-archive .reel-row-num,
+.reels-page .reel-row-num {
+  font-size: clamp(2.4rem, 4vw, 4rem) !important;
+}
+
+#reels .reel-row-title,
+.more-reels-page .reel-row-title,
+.reels-archive .reel-row-title,
+.reels-page .reel-row-title {
+  font-size: clamp(1.45rem, 2.3vw, 2.35rem) !important;
+  letter-spacing: .035em !important;
+}
+
+#reels .reel-row-sub,
+.more-reels-page .reel-row-sub,
+.reels-archive .reel-row-sub,
+.reels-page .reel-row-sub {
+  font-size: .6rem !important;
+}
+
+#reels .reel-reveal,
+#reels .reel-preview-reveal,
+#reels .reel-preview-panel,
+.more-reels-page .reel-reveal,
+.more-reels-page .reel-preview-reveal,
+.more-reels-page .reel-preview-panel,
+.reels-archive .reel-reveal,
+.reels-archive .reel-preview-reveal,
+.reels-archive .reel-preview-panel,
+.reels-page .reel-reveal,
+.reels-page .reel-preview-reveal,
+.reels-page .reel-preview-panel {
+  min-height: unset !important;
+  padding-top: clamp(2rem, 3vw, 3rem) !important;
+  padding-bottom: clamp(2rem, 3vw, 3rem) !important;
+}
+
+#reels .reel-preview-shell,
+#reels .instagram-preview-shell,
+#reels .reel-embed-shell,
+.more-reels-page .reel-preview-shell,
+.more-reels-page .instagram-preview-shell,
+.more-reels-page .reel-embed-shell,
+.reels-archive .reel-preview-shell,
+.reels-archive .instagram-preview-shell,
+.reels-archive .reel-embed-shell,
+.reels-page .reel-preview-shell,
+.reels-page .instagram-preview-shell,
+.reels-page .reel-embed-shell {
+  max-width: 360px !important;
+  transform: scale(.88) !important;
+  transform-origin: center center !important;
+}
+
+#reels .reel-preview-copy,
+#reels .reel-card-copy,
+.more-reels-page .reel-preview-copy,
+.more-reels-page .reel-card-copy,
+.reels-archive .reel-preview-copy,
+.reels-archive .reel-card-copy,
+.reels-page .reel-preview-copy,
+.reels-page .reel-card-copy {
+  max-width: 520px !important;
+}
+
+#reels .reel-preview-copy h3,
+#reels .reel-card-copy h3,
+.more-reels-page .reel-preview-copy h3,
+.more-reels-page .reel-card-copy h3,
+.reels-archive .reel-preview-copy h3,
+.reels-archive .reel-card-copy h3,
+.reels-page .reel-preview-copy h3,
+.reels-page .reel-card-copy h3 {
+  font-size: clamp(1.05rem, 1.45vw, 1.45rem) !important;
+}
+
+#reels .reel-preview-copy p,
+#reels .reel-card-copy p,
+.more-reels-page .reel-preview-copy p,
+.more-reels-page .reel-card-copy p,
+.reels-archive .reel-preview-copy p,
+.reels-archive .reel-card-copy p,
+.reels-page .reel-preview-copy p,
+.reels-page .reel-card-copy p {
+  font-size: clamp(1.05rem, 1.45vw, 1.45rem) !important;
+  line-height: 1.75 !important;
+}
+
+@media (max-width: 900px) {
+  #reels .reel-card,
+  #reels .reel-row,
+  .more-reels-page .reel-card,
+  .more-reels-page .reel-row,
+  .reels-archive .reel-card,
+  .reels-archive .reel-row,
+  .reels-page .reel-card,
+  .reels-page .reel-row {
+    max-width: calc(100vw - 2rem) !important;
+  }
+
+  #reels .section-head h2,
+  .more-reels-page .section-head h2,
+  .reels-archive .section-head h2,
+  .reels-page .section-head h2 {
+    font-size: clamp(3.4rem, 17vw, 5.6rem) !important;
+  }
+
+  #reels .reel-preview-shell,
+  #reels .instagram-preview-shell,
+  #reels .reel-embed-shell,
+  .more-reels-page .reel-preview-shell,
+  .more-reels-page .instagram-preview-shell,
+  .more-reels-page .reel-embed-shell,
+  .reels-archive .reel-preview-shell,
+  .reels-archive .instagram-preview-shell,
+  .reels-archive .reel-embed-shell,
+  .reels-page .reel-preview-shell,
+  .reels-page .instagram-preview-shell,
+  .reels-page .reel-embed-shell {
+    transform: none !important;
+    max-width: 100% !important;
+  }
+}
+
+</style>
 </head>
 <body>
 
