@@ -18,6 +18,7 @@
     initIntroEnterButton();
     initReelsReveal();
     initTypewriterLoop();
+    initLargeTitleTypewriter();
     initAudioToggle();
     initMobileVideoAutoplay();
     initCustomCursor();
@@ -170,6 +171,90 @@
       }
 
       window.setTimeout(trigger, 900 + (index * 380));
+    });
+  }
+
+
+  function initLargeTitleTypewriter() {
+    const titles = document.querySelectorAll('.ir-title-typewriter');
+    if (!titles.length) return;
+
+    const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
+
+    titles.forEach(function (title, titleIndex) {
+      const firstTarget = title.dataset.titleFirst || '';
+      const secondTarget = title.dataset.titleSecond || '';
+      const fullText = firstTarget + secondTarget;
+
+      const secondElement = title.querySelector('span, em');
+
+      function getFirstTextNode(element) {
+        for (let i = 0; i < element.childNodes.length; i += 1) {
+          if (element.childNodes[i].nodeType === Node.TEXT_NODE) {
+            return element.childNodes[i];
+          }
+        }
+        return null;
+      }
+
+      const firstNode = getFirstTextNode(title);
+      if (!firstNode || !secondElement) return;
+
+      let index = 0;
+      let deleting = false;
+      let pauseTicks = 0;
+
+      const typeSpeed = 85;
+      const deleteSpeed = 38;
+      const pauseAtEnd = 18;
+      const pauseAtStart = 6;
+
+      function render() {
+        const firstLength = Math.min(index, firstTarget.length);
+        const secondLength = Math.max(0, index - firstTarget.length);
+
+        firstNode.nodeValue = firstTarget.slice(0, firstLength);
+        secondElement.textContent = secondTarget.slice(0, secondLength);
+      }
+
+      function tick() {
+        if (!deleting) {
+          index += 1;
+
+          if (index >= fullText.length) {
+            index = fullText.length;
+            pauseTicks += 1;
+
+            if (pauseTicks >= pauseAtEnd) {
+              deleting = true;
+              pauseTicks = 0;
+            }
+          }
+        } else {
+          index -= 1;
+
+          if (index <= 0) {
+            index = 0;
+            pauseTicks += 1;
+
+            if (pauseTicks >= pauseAtStart) {
+              deleting = false;
+              pauseTicks = 0;
+            }
+          }
+        }
+
+        render();
+
+        const nextDelay = deleting ? deleteSpeed : typeSpeed;
+        window.setTimeout(tick, nextDelay);
+      }
+
+      firstNode.nodeValue = '';
+      secondElement.textContent = '';
+
+      window.setTimeout(tick, 600 + (titleIndex * 250));
     });
   }
 
