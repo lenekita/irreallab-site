@@ -46,29 +46,8 @@
     .marquee {
       background: var(--accent);
       overflow: hidden;
-      position: relative;
-      top: auto;
-      z-index: 200;
+      position: sticky; top: 0; z-index: 200;
       border-bottom: 1.5px solid #000;
-    }
-
-    /* Yellow banner becomes fixed only after the fullscreen intro/home is passed */
-    .marquee.is-sticky {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      z-index: 100000;
-      box-shadow: 0 10px 30px rgba(0,0,0,.22);
-    }
-
-    .marquee-spacer {
-      height: 0;
-      pointer-events: none;
-    }
-
-    .marquee-spacer.is-active {
-      height: var(--marquee-height, 34px);
     }
     .marquee-track {
       display: inline-flex; white-space: nowrap;
@@ -986,16 +965,35 @@
       border-bottom: 1px solid var(--line);
     }
 
+    /* Intro video display — old visual feeling restored
+       - blurred cover layer fills the screen
+       - main vertical reel stays fully visible in the center
+       - no aggressive crop on the actual intro video */
+    .intro-video-bg,
     .intro-video-media {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
+      pointer-events: none;
+    }
+
+    .intro-video-bg {
+      object-fit: cover;
+      object-position: center center;
+      opacity: .34;
+      filter: blur(24px) contrast(1.1) saturate(.85) brightness(.48);
+      transform: scale(1.08);
+      z-index: 0;
+    }
+
+    .intro-video-media {
       object-fit: contain;
       object-position: center center;
-      opacity: .82;
-      filter: contrast(1.08) saturate(.9) brightness(.72);
+      opacity: .92;
+      filter: contrast(1.06) saturate(.92) brightness(.78);
       transform: none;
+      z-index: 0;
     }
 
     .intro-video::before {
@@ -1151,6 +1149,29 @@
       .intro-video { min-height: 560px; }
       .intro-bottom { flex-direction: column; align-items: flex-start; }
       .intro-enter { width: 100%; }
+    }
+
+
+    @media (max-width: 768px) {
+      .intro-video {
+        height: 100svh;
+        min-height: 100svh;
+      }
+
+      .intro-video-bg {
+        opacity: .26;
+        filter: blur(18px) contrast(1.08) saturate(.88) brightness(.45);
+        transform: scale(1.12);
+      }
+
+      .intro-video-media {
+        object-fit: contain !important;
+        object-position: center center !important;
+        width: 100% !important;
+        height: 100svh !important;
+        max-width: 100% !important;
+        max-height: 100svh !important;
+      }
     }
 
 
@@ -1831,6 +1852,24 @@ video {
     color:#8c8c8c !important;
 }
 
+
+/* FINAL INTRO VIDEO LOCK — keeps the new intro displayed like the previous reel */
+.intro-video .intro-video-bg {
+  object-fit: cover !important;
+}
+
+.intro-video .intro-video-media {
+  object-fit: contain !important;
+  object-position: center center !important;
+}
+
+@media (max-width: 768px) {
+  .intro-video .intro-video-media {
+    object-fit: contain !important;
+    height: 100svh !important;
+  }
+}
+
 </style>
   <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
 </head>
@@ -1838,6 +1877,7 @@ video {
 
 <!-- INTRO VIDEO — fullscreen landing -->
 <section class="intro-video" aria-label="Irreallab video intro">
+  <video class="intro-video-bg" src="intro-reel.mp4" autoplay muted loop playsinline webkit-playsinline preload="auto" x5-playsinline x5-video-player-type="h5" x5-video-player-fullscreen="false" disablepictureinpicture aria-hidden="true"></video>
   <video class="intro-video-media" src="intro-reel.mp4" autoplay muted loop playsinline webkit-playsinline preload="auto" x5-playsinline x5-video-player-type="h5" x5-video-player-fullscreen="false" disablepictureinpicture></video>
 
   <div class="intro-video-content">
@@ -1859,7 +1899,6 @@ video {
 
 
 <!-- MARQUEE -->
-<div id="marquee-spacer" class="marquee-spacer" aria-hidden="true"></div>
 <div id="site-content" class="marquee">
   <div class="marquee-track">
     <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="marquee-item">@irreallab on Instagram</a>
@@ -2082,32 +2121,6 @@ video {
 
 <audio id="site-audio" src="velvet-circuit.mp3" loop preload="auto"></audio>
 <button id="audio-toggle" class="audio-toggle" type="button" aria-label="Activer la musique">SOUND OFF</button>
-
-
-<script>
-  /* Sticky yellow banner after intro/home */
-  const introSection = document.querySelector('.intro-video');
-  const marquee = document.querySelector('.marquee');
-  const marqueeSpacer = document.getElementById('marquee-spacer');
-
-  function updateMarqueeSticky() {
-    if (!introSection || !marquee || !marqueeSpacer) return;
-
-    const marqueeHeight = marquee.offsetHeight;
-    document.documentElement.style.setProperty('--marquee-height', `${marqueeHeight}px`);
-
-    const triggerPoint = introSection.offsetTop + introSection.offsetHeight;
-    const shouldStick = window.scrollY >= triggerPoint;
-
-    marquee.classList.toggle('is-sticky', shouldStick);
-    marqueeSpacer.classList.toggle('is-active', shouldStick);
-  }
-
-  window.addEventListener('scroll', updateMarqueeSticky, { passive: true });
-  window.addEventListener('resize', updateMarqueeSticky);
-  window.addEventListener('load', updateMarqueeSticky);
-  updateMarqueeSticky();
-</script>
 
 <script async src="https://www.instagram.com/embed.js"></script>
 <script src="animations2.js" defer></script>
