@@ -6,6 +6,11 @@
 (function () {
   'use strict';
 
+  // Always open the site on the fullscreen intro video, not mid-page from browser restore.
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  window.scrollTo(0, 0);
+  window.addEventListener('load', () => window.scrollTo(0, 0), { once: true });
+
   const qs    = (s, c = document) => c.querySelector(s);
   const qsa   = (s, c = document) => [...c.querySelectorAll(s)];
   const clamp = (v, a, b) => Math.min(Math.max(v, a), b);
