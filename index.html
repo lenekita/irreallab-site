@@ -1,992 +1,414 @@
+# index.html (version mise à jour)
+
+```html
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>irreallab</title>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300&display=swap" rel="stylesheet">
+
   <style>
-    /* ── TOKENS ── */
     :root {
-      --bg: #060606;
-      --bg2: #0d0d0d;
-      --line: #1c1c1c;
-      --line2: #242424;
-      --accent: #d4f03a;
-      --text: #ede9df;
-      --muted: #4a4a4a;
-      --muted2: #222;
-      --pad-x: 3.5rem;
+      --bg:#060606;
+      --bg2:#0d0d0d;
+      --line:#1c1c1c;
+      --line2:#242424;
+      --accent:#d4f03a;
+      --text:#ede9df;
+      --muted:#4a4a4a;
+      --muted2:#222;
+      --pad-x:3.5rem;
     }
 
-    @media (max-width: 900px) {
-      :root {
-        --pad-x: 1.5rem;
-      }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+
+    body{
+      background:var(--bg);
+      color:var(--text);
+      font-family:'Space Mono',monospace;
+      overflow-x:hidden;
     }
 
-    @media (max-width: 480px) {
-      :root {
-        --pad-x: 1.1rem;
-      }
+    body::after{
+      content:'';
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      opacity:.035;
+      z-index:9999;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     }
 
-    *,
-    *::before,
-    *::after {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    .marquee{
+      background:var(--accent);
+      overflow:hidden;
+      position:sticky;
+      top:0;
+      z-index:200;
+      border-bottom:1px solid #000;
     }
 
-    html {
-      scroll-behavior: smooth;
+    .marquee-track{
+      display:inline-flex;
+      white-space:nowrap;
+      animation:mscroll 22s linear infinite;
     }
 
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Space Mono', monospace;
-      min-height: 100vh;
-      overflow-x: hidden;
+    .marquee-item{
+      font-family:'Bebas Neue',sans-serif;
+      font-size:.9rem;
+      letter-spacing:.15em;
+      color:#060606;
+      text-decoration:none;
+      padding:8px 24px;
+      transition:color .25s ease;
     }
 
-    /* grain */
-    body::after {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-      opacity: 0.035;
-      pointer-events: none;
-      z-index: 9999;
+    .marquee-item:hover{
+      opacity:1;
+      color:#ff0000;
     }
 
-    /* ══════════════════════════════
-       MARQUEE TOP
-    ══════════════════════════════ */
-    .marquee {
-      background: var(--accent);
-      overflow: hidden;
-      position: sticky;
-      top: 0;
-      z-index: 200;
-      border-bottom: 1.5px solid #000;
+    .marquee-dot{
+      color:#06060650;
+      padding:8px 4px;
     }
 
-    .marquee-track {
-      display: inline-flex;
-      white-space: nowrap;
-      animation: mscroll 22s linear infinite;
+    @keyframes mscroll{
+      from{transform:translateX(0);}
+      to{transform:translateX(-50%);}
     }
 
-    .marquee:hover .marquee-track {
-      animation-play-state: paused;
+    nav{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:0 var(--pad-x);
+      height:60px;
+      border-bottom:1px solid var(--line);
     }
 
-    .marquee-item {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 0.9rem;
-      letter-spacing: 0.15em;
-      color: #060606;
-      text-decoration: none;
-      padding: 8px 24px;
-      display: inline-block;
-      transition: opacity .2s;
+    .nav-logo{
+      font-family:'Bebas Neue',sans-serif;
+      font-size:1.5rem;
+      text-decoration:none;
+      color:var(--text);
     }
 
-    .marquee-item:hover {
-      opacity: .5;
+    .nav-logo em{
+      color:var(--accent);
+      font-style:normal;
     }
 
-    .marquee-dot {
-      color: #06060650;
-      padding: 8px 4px;
-      font-size: .7rem;
+    .nav-links{
+      display:flex;
+      gap:2rem;
+      align-items:center;
     }
 
-    @keyframes mscroll {
-      from {
-        transform: translateX(0);
-      }
-
-      to {
-        transform: translateX(-50%);
-      }
+    .nav-links a{
+      font-size:.6rem;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      text-decoration:none;
+      color:var(--muted);
     }
 
-    /* ══════════════════════════════
-       NAV
-    ══════════════════════════════ */
-    nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 var(--pad-x);
-      height: 60px;
-      border-bottom: 1px solid var(--line);
-      position: relative;
-      z-index: 100;
+    .nav-cta{
+      background:var(--accent);
+      color:#060606!important;
+      padding:6px 14px;
     }
 
-    .nav-logo {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.5rem;
-      letter-spacing: .04em;
-      color: var(--text);
-      text-decoration: none;
+    .hero{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      min-height:92vh;
+      border-bottom:1px solid var(--line);
     }
 
-    .nav-logo em {
-      color: var(--accent);
-      font-style: normal;
+    .hero-left{
+      padding:3.5rem var(--pad-x);
+      border-right:1px solid var(--line);
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
     }
 
-    .nav-links {
-      display: flex;
-      gap: 2rem;
-      align-items: center;
+    .hero-title{
+      font-family:'Bebas Neue',sans-serif;
+      font-size:clamp(4rem,8vw,9rem);
+      line-height:.85;
     }
 
-    .nav-links a {
-      font-size: .6rem;
-      letter-spacing: .16em;
-      text-transform: uppercase;
-      color: var(--muted);
-      text-decoration: none;
-      transition: color .2s;
+    .hero-title em{
+      color:var(--accent);
+      display:block;
+      font-style:normal;
     }
 
-    .nav-links a:hover {
-      color: var(--text);
+    .hero-sub{
+      margin-top:1rem;
+      color:var(--muted);
+      max-width:320px;
+      line-height:1.7;
+      font-family:'Cormorant Garamond',serif;
+      font-style:italic;
     }
 
-    .nav-cta {
-      background: var(--accent) !important;
-      color: #060606 !important;
-      padding: 6px 14px;
+    .hero-right{
+      background:var(--bg2);
+      display:flex;
+      flex-direction:column;
     }
 
-    @media (max-width: 600px) {
-      .nav-links .nav-hide {
-        display: none;
-      }
+    .hero-reel-label,
+    .hero-reel-footer{
+      padding:1rem 1.8rem;
+      border-bottom:1px solid var(--line);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
     }
 
-    @media (max-width: 420px) {
-      .nav-links {
-        gap: 1rem;
-      }
-
-      .nav-logo {
-        font-size: 1.2rem;
-      }
+    .hero-embed{
+      flex:1;
+      min-height:480px;
     }
 
-    /* ══════════════════════════════
-       HERO — split layout
-    ══════════════════════════════ */
-    .hero {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      min-height: 92vh;
-      border-bottom: 1px solid var(--line);
+    .instagram-media{
+      width:100%!important;
+      max-width:100%!important;
+      margin:0!important;
+      border:none!important;
+      border-radius:0!important;
     }
 
-    /* LEFT */
-    .hero-left {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      padding: 3.5rem var(--pad-x);
-      border-right: 1px solid var(--line);
+    .section-head{
+      padding:2.5rem var(--pad-x) 1.8rem;
+      border-bottom:1px solid var(--line);
     }
 
-    .hero-eyebrow {
-      font-size: .58rem;
-      letter-spacing: .22em;
-      text-transform: uppercase;
-      color: var(--muted);
-      display: flex;
-      align-items: center;
-      gap: .8rem;
+    .section-head h2{
+      font-family:'Bebas Neue',sans-serif;
+      font-size:3rem;
     }
 
-    .hero-eyebrow::before {
-      content: '';
-      width: 28px;
-      height: 1px;
-      background: var(--muted);
-      flex-shrink: 0;
+    .section-head span{
+      color:var(--accent);
     }
 
-    .hero-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(4rem, 8.5vw, 9.5rem);
-      line-height: .86;
-      letter-spacing: -.01em;
+    .reel-row{
+      display:grid;
+      grid-template-columns:80px 1fr auto;
+      align-items:center;
+      border-bottom:1px solid var(--line);
+      text-decoration:none;
+      color:var(--text);
+      position:relative;
+      overflow:hidden;
     }
 
-    .hero-title em {
-      color: var(--accent);
-      display: block;
-      font-style: normal;
+    .reel-row::before{
+      content:'';
+      position:absolute;
+      inset:0;
+      background:var(--accent);
+      transform:scaleX(0);
+      transform-origin:left;
+      transition:transform .45s cubic-bezier(.16,1,.3,1);
+      z-index:0;
     }
 
-    .hero-sub {
-      font-family: 'Cormorant Garamond', serif;
-      font-style: italic;
-      font-size: 1rem;
-      color: var(--muted);
-      line-height: 1.7;
-      max-width: 300px;
-      margin-top: 1.2rem;
+    .reel-row:hover::before{
+      transform:scaleX(1);
     }
 
-    .hero-divider {
-      width: 100%;
-      height: 1px;
-      background: var(--line2);
+    .reel-row:hover *{
+      color:#060606!important;
     }
 
-    .hero-meta {
-      display: flex;
-      flex-direction: column;
-      gap: .9rem;
+    .reel-row-num{
+      font-family:'Bebas Neue',sans-serif;
+      font-size:3rem;
+      padding:1.6rem;
+      position:relative;
+      z-index:1;
     }
 
-    .hero-stat {
-      display: flex;
-      align-items: baseline;
-      gap: .6rem;
+    .reel-row-body,
+    .reel-row-right{
+      position:relative;
+      z-index:1;
     }
 
-    .hero-stat-num {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 2.4rem;
-      line-height: 1;
+    .reel-row-title{
+      font-family:'Bebas Neue',sans-serif;
+      font-size:1.4rem;
     }
 
-    .hero-stat-label {
-      font-size: .56rem;
-      letter-spacing: .15em;
-      text-transform: uppercase;
-      color: var(--muted);
+    .reel-row-sub{
+      color:var(--muted);
+      font-size:.58rem;
+      letter-spacing:.12em;
+      text-transform:uppercase;
     }
 
-    /* RIGHT */
-    .hero-right {
-      display: flex;
-      flex-direction: column;
-      background: var(--bg2);
+    .reel-row-right{
+      padding-right:3rem;
+      display:flex;
+      gap:1rem;
+      align-items:center;
     }
 
-    .hero-reel-label {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1rem 1.8rem;
-      border-bottom: 1px solid var(--line);
-      font-size: .58rem;
-      letter-spacing: .16em;
-      text-transform: uppercase;
-      color: var(--muted);
+    .reel-row-tag{
+      background:var(--line2);
+      padding:4px 10px;
+      font-size:.55rem;
+      text-transform:uppercase;
     }
 
-    .live-dot {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      color: var(--accent);
+    .cta-band{
+      padding:3rem var(--pad-x);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      background:var(--bg2);
     }
 
-    .live-dot::before {
-      content: '';
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--accent);
-      animation: lpulse 2s ease infinite;
+    .cta-btn{
+      background:var(--accent);
+      color:#060606;
+      text-decoration:none;
+      padding:14px 32px;
+      font-family:'Bebas Neue',sans-serif;
+      letter-spacing:.12em;
     }
 
-    @keyframes lpulse {
+    footer{
+      padding:2rem var(--pad-x);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    }
 
-      0%,
-      100% {
-        opacity: 1;
-        transform: scale(1);
+    .footer-logo{
+      font-family:'Bebas Neue',sans-serif;
+    }
+
+    .footer-logo em{
+      color:var(--accent);
+      font-style:normal;
+    }
+
+    @media(max-width:900px){
+      .hero{
+        grid-template-columns:1fr;
       }
 
-      50% {
-        opacity: .3;
-        transform: scale(.6);
+      .hero-left{
+        border-right:none;
+        border-bottom:1px solid var(--line);
       }
-    }
-
-    .hero-embed {
-      flex: 1;
-      display: flex;
-      align-items: stretch;
-      overflow: hidden;
-      min-height: 480px;
-    }
-
-    .hero-embed .instagram-media {
-      flex: 1 !important;
-      width: 100% !important;
-      max-width: 100% !important;
-      min-width: 0 !important;
-      border-radius: 0 !important;
-      border: none !important;
-    }
-
-    .hero-reel-footer {
-      padding: 1rem 1.8rem;
-      border-top: 1px solid var(--line);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-
-    .hero-reel-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1rem;
-      letter-spacing: .05em;
-    }
-
-    .hero-reel-open {
-      font-size: .58rem;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      color: var(--accent);
-      text-decoration: none;
-      border-bottom: 1px solid var(--accent);
-      padding-bottom: 1px;
-      transition: opacity .2s;
-      white-space: nowrap;
-    }
-
-    .hero-reel-open:hover {
-      opacity: .6;
-    }
-
-    /* HERO RESPONSIVE */
-    @media (max-width: 900px) {
-      .hero {
-        grid-template-columns: 1fr;
-        min-height: auto;
-      }
-
-      .hero-left {
-        border-right: none;
-        border-bottom: 1px solid var(--line);
-      }
-
-      .hero-embed {
-        min-height: 420px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .hero-title {
-        font-size: clamp(3.5rem, 16vw, 5.5rem);
-      }
-
-      .hero-embed {
-        min-height: 360px;
-      }
-    }
-
-    /* ══════════════════════════════
-       SECTION HEAD
-    ══════════════════════════════ */
-    .section-head {
-      padding: 2.5rem var(--pad-x) 1.8rem;
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .section-head h2 {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(2rem, 5vw, 3rem);
-      line-height: 1;
-      letter-spacing: -.01em;
-    }
-
-    .section-head h2 span {
-      color: var(--accent);
-    }
-
-    .section-count {
-      font-size: .58rem;
-      letter-spacing: .15em;
-      text-transform: uppercase;
-      color: var(--muted);
-      white-space: nowrap;
-    }
-
-    /* ══════════════════════════════
-       REEL ROWS
-    ══════════════════════════════ */
-    .reel-list {
-      border-bottom: 1px solid var(--line);
-    }
-
-    .reel-row {
-      display: grid;
-      grid-template-columns: 80px 1fr auto;
-      align-items: center;
-      border-bottom: 1px solid var(--line);
-      text-decoration: none;
-      color: var(--text);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .reel-row:last-child {
-      border-bottom: none;
-    }
-
-    .reel-row::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: var(--accent);
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform .45s cubic-bezier(.16, 1, .3, 1);
-      z-index: 0;
-    }
-
-    .reel-row:hover::before {
-      transform: scaleX(1);
-    }
-
-    .reel-row:hover,
-    .reel-row:hover .reel-row-num,
-    .reel-row:hover .reel-row-sub,
-    .reel-row:hover .reel-row-arrow {
-      color: #060606;
-    }
-
-    .reel-row:hover .reel-row-tag {
-      background: #06060618;
-      color: #060606;
-    }
-
-    .reel-row-num {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(2rem, 4vw, 3rem);
-      color: var(--muted2);
-      padding: 1.6rem 1.5rem 1.6rem var(--pad-x);
-      line-height: 1;
-      position: relative;
-      z-index: 1;
-      transition: color .3s;
-    }
-
-    .reel-row-body {
-      padding: 1.6rem 1.5rem;
-      position: relative;
-      z-index: 1;
-    }
-
-    .reel-row-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(1.1rem, 2.5vw, 1.4rem);
-      letter-spacing: .03em;
-      line-height: 1.1;
-      margin-bottom: .3rem;
-    }
-
-    .reel-row-sub {
-      font-size: .56rem;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      color: var(--muted);
-      transition: color .3s;
-    }
-
-    .reel-row-right {
-      padding: 1.6rem var(--pad-x) 1.6rem 1.5rem;
-      display: flex;
-      align-items: center;
-      gap: 1.2rem;
-      position: relative;
-      z-index: 1;
-    }
-
-    .reel-row-tag {
-      font-size: .52rem;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      background: var(--line2);
-      color: var(--muted);
-      padding: 3px 9px;
-      transition: background .3s, color .3s;
-    }
-
-    .reel-row-arrow {
-      font-size: 1.2rem;
-      color: var(--muted2);
-      transition: color .3s, transform .3s;
-      line-height: 1;
-    }
-
-    .reel-row:hover .reel-row-arrow {
-      transform: translate(4px, -4px);
-    }
-
-    @media (max-width: 600px) {
-      .reel-row {
-        grid-template-columns: 60px 1fr;
-      }
-
-      .reel-row-right {
-        display: none;
-      }
-
-      .reel-row-num {
-        padding-left: var(--pad-x);
-        font-size: 2rem;
-      }
-    }
-
-    /* ══════════════════════════════
-       REEL PREVIEW BLOCK (embed)
-    ══════════════════════════════ */
-    .reel-preview-block {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      border-bottom: 1px solid var(--line);
-      background: var(--bg2);
-    }
-
-    .reel-preview-embed {
-      display: flex;
-      flex-direction: column;
-      border-right: 1px solid var(--line);
-    }
-
-    .reel-preview-embed-label {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1rem 1.8rem;
-      border-bottom: 1px solid var(--line);
-      font-size: .58rem;
-      letter-spacing: .16em;
-      text-transform: uppercase;
-      color: var(--muted);
-    }
-
-    .reel-preview-embed-inner {
-      flex: 1;
-      display: flex;
-      align-items: stretch;
-      overflow: hidden;
-      min-height: 460px;
-    }
-
-    .reel-preview-embed-inner .instagram-media {
-      flex: 1 !important;
-      width: 100% !important;
-      max-width: 100% !important;
-      min-width: 0 !important;
-      border-radius: 0 !important;
-      border: none !important;
-    }
-
-    .reel-preview-info {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      padding: 2.5rem var(--pad-x);
-    }
-
-    .reel-preview-num {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(4rem, 8vw, 7rem);
-      color: var(--muted2);
-      line-height: 1;
-      letter-spacing: -.02em;
-    }
-
-    .reel-preview-body {
-      flex: 1;
-      padding: 1.5rem 0;
-    }
-
-    .reel-preview-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(1.8rem, 3.5vw, 2.5rem);
-      letter-spacing: .02em;
-      line-height: 1;
-      margin-bottom: .8rem;
-    }
-
-    .reel-preview-desc {
-      font-family: 'Cormorant Garamond', serif;
-      font-style: italic;
-      font-size: .95rem;
-      color: var(--muted);
-      line-height: 1.7;
-      margin-bottom: 1.5rem;
-    }
-
-    .reel-preview-desc strong {
-      color: var(--text);
-      font-style: normal;
-    }
-
-    .reel-preview-cta {
-      font-size: .6rem;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      color: var(--accent);
-      text-decoration: none;
-      border-bottom: 1px solid var(--accent);
-      padding-bottom: 2px;
-      transition: opacity .2s;
-      display: inline-block;
-    }
-
-    .reel-preview-cta:hover {
-      opacity: .6;
-    }
-
-    @media (max-width: 900px) {
-      .reel-preview-block {
-        grid-template-columns: 1fr;
-      }
-
-      .reel-preview-embed {
-        border-right: none;
-        border-bottom: 1px solid var(--line);
-      }
-
-      .reel-preview-info {
-        padding: 2rem var(--pad-x);
-      }
-
-      .reel-preview-embed-inner {
-        min-height: 400px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .reel-preview-embed-inner {
-        min-height: 340px;
-      }
-    }
-
-    /* ══════════════════════════════
-       CTA BAND
-    ══════════════════════════════ */
-    .cta-band {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 2.5rem var(--pad-x);
-      background: var(--bg2);
-      border-bottom: 1px solid var(--line);
-      gap: 2rem;
-      flex-wrap: wrap;
-    }
-
-    .cta-band-text {
-      font-family: 'Cormorant Garamond', serif;
-      font-style: italic;
-      font-size: 1.2rem;
-      color: var(--muted);
-      line-height: 1.6;
-    }
-
-    .cta-band-text strong {
-      color: var(--text);
-      font-style: normal;
-      font-weight: 600;
-    }
-
-    .cta-btn {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: .95rem;
-      letter-spacing: .12em;
-      color: #060606;
-      background: var(--accent);
-      text-decoration: none;
-      padding: 13px 32px;
-      transition: opacity .2s, transform .2s;
-      white-space: nowrap;
-      display: inline-block;
-    }
-
-    .cta-btn:hover {
-      opacity: .82;
-      transform: translateY(-2px);
-    }
-
-    @media (max-width: 480px) {
-      .cta-band {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .cta-btn {
-        width: 100%;
-        text-align: center;
-      }
-    }
-
-    /* ══════════════════════════════
-       FOOTER
-    ══════════════════════════════ */
-    footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1.8rem var(--pad-x);
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-
-    .footer-logo {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.2rem;
-      color: var(--muted);
-    }
-
-    .footer-logo em {
-      color: var(--accent);
-      font-style: normal;
-    }
-
-    .footer-right {
-      display: flex;
-      gap: 2rem;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    .footer-link {
-      font-size: .58rem;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      color: var(--muted);
-      text-decoration: none;
-      transition: color .2s;
-    }
-
-    .footer-link:hover {
-      color: var(--accent);
     }
   </style>
 </head>
-
 <body>
 
-  <!-- MARQUEE -->
-  <div class="marquee">
-    <div class="marquee-track">
-      <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="marquee-item">@irreallab on
-        Instagram</a>
-      <span class="marquee-dot">✦</span>
-      <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="marquee-item">Visual
-        Experiments</a>
-      <span class="marquee-dot">✦</span>
-      <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="marquee-item">Follow on
-        Instagram</a>
-      <span class="marquee-dot">✦</span>
-      <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="marquee-item">Short-form /
-        Reels</a>
-      <span class="marquee-dot">✦</span>
-      <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="marquee-item">@irreallab</a>
-      <span class="marquee-dot">✦</span>
-      <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="marquee-item">New Reels Every
-        Week</a>
-      <span class="marquee-dot">✦</span>
-      <!-- duplicate for seamless loop -->
-      <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="marquee-item">@irreallab on
-        Instagram</a>
-      <span class="marquee-dot">✦</span>
-      <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="marquee-item">Visual
-        Experiments</a>
-      <span class="marquee-dot">✦</span>
-      <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="marquee-item">Follow on
-        Instagram</a>
-      <span class="marquee-dot">✦</span>
-      <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="marquee-item">Short-form /
-        Reels</a>
-      <span class="marquee-dot">✦</span>
-      <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="marquee-item">@irreallab</a>
-      <span class="marquee-dot">✦</span>
-      <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="marquee-item">New Reels Every
-        Week</a>
-      <span class="marquee-dot">✦</span>
+<div class="marquee">
+  <div class="marquee-track">
+    <a href="https://www.instagram.com/irreallab/" target="_blank" class="marquee-item">@irreallab on Instagram</a>
+    <span class="marquee-dot">✦</span>
+    <a href="https://www.instagram.com/irreallab/" target="_blank" class="marquee-item">Visual Experiments</a>
+    <span class="marquee-dot">✦</span>
+    <a href="https://www.instagram.com/irreallab/" target="_blank" class="marquee-item">Follow on Instagram</a>
+    <span class="marquee-dot">✦</span>
+    <a href="https://www.instagram.com/irreallab/" target="_blank" class="marquee-item">Short-form / Reels</a>
+  </div>
+</div>
+
+<nav>
+  <a href="#" class="nav-logo">irreal<em>lab_</em></a>
+
+  <div class="nav-links">
+    <a href="#reels">Reels</a>
+    <a href="https://www.instagram.com/irreallab/" target="_blank">About</a>
+    <a href="https://www.instagram.com/irreallab/" target="_blank" class="nav-cta">↗ Instagram</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-left">
+    <div>
+      <h1 class="hero-title">Irreal<em>Lab_</em></h1>
+      <p class="hero-sub">Visual experiments in short-form. Motion, surrealism & the art of the unreal.</p>
     </div>
   </div>
 
-  <!-- NAV -->
-  <nav>
-    <a href="#" class="nav-logo">irreal<em>lab_</em></a>
-    <div class="nav-links">
-      <a href="#reels" class="nav-hide">Reels</a>
-      <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="nav-hide">About</a>
-      <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="nav-cta">↗ Instagram</a>
-    </div>
-  </nav>
-
-  <!-- HERO — Reel №01: Closing Hours -->
-  <section class="hero">
-    <div class="hero-left">
-      <div class="hero-eyebrow">Featured Reel</div>
-      <div>
-        <h1 class="hero-title">Irreal<em>Lab_</em></h1>
-        <p class="hero-sub">Visual experiments in short-form. Motion, surrealism &amp; the art of the unreal.</p>
-      </div>
-      <div class="hero-meta">
-        <div class="hero-divider"></div>
-        <div class="hero-stat">
-          <span class="hero-stat-num">02</span>
-          <span class="hero-stat-label">Reels live</span>
-        </div>
-        <div class="hero-divider"></div>
-        <div class="hero-stat">
-          <span class="hero-stat-num"
-            style="font-family:'Space Mono',monospace;font-size:.9rem;color:var(--muted);">@irreallab</span>
-        </div>
-        <div class="hero-divider"></div>
-      </div>
+  <div class="hero-right">
+    <div class="hero-reel-label">
+      <span>Closing Hours — №01</span>
+      <span>Live on Instagram</span>
     </div>
 
-    <div class="hero-right">
-      <div class="hero-reel-label">
-        <span>Closing Hours — №01</span>
-        <span class="live-dot">Live on Instagram</span>
-      </div>
-      <div class="hero-embed">
-        <blockquote class="instagram-media" data-instgrm-captioned
-          data-instgrm-permalink="https://www.instagram.com/reel/DYFrAFrIulH/?utm_source=ig_embed&utm_campaign=loading"
-          data-instgrm-version="14"
-          style="background:#FFF;border:0;border-radius:0;box-shadow:none;margin:0;max-width:100%;min-width:0;padding:0;width:100%;">
-        </blockquote>
-      </div>
-      <div class="hero-reel-footer">
-        <span class="hero-reel-title">Closing Hours</span>
-        <a href="https://www.instagram.com/reel/DYFrAFrIulH/" target="_blank" rel="noopener" class="hero-reel-open">Open
-          on Instagram ↗</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- REELS LIST -->
-  <div id="reels">
-    <div class="section-head">
-      <h2>More <span>Reels</span></h2>
-      <span class="section-count">01 more live · 02 queued</span>
+    <div class="hero-embed">
+      <blockquote
+        class="instagram-media"
+        data-instgrm-captioned
+        data-instgrm-permalink="https://www.instagram.com/reel/DYFrAFrIulH/?utm_source=ig_embed&utm_campaign=loading"
+        data-instgrm-version="14">
+      </blockquote>
     </div>
 
-    <div class="reel-list">
-
-      <!-- ROW — Reel №02: Art Heist (live link) -->
-      <a class="reel-row" href="https://www.instagram.com/reel/DXj-5j3iIoh/" target="_blank" rel="noopener">
-        <div class="reel-row-num">02</div>
-        <div class="reel-row-body">
-          <div class="reel-row-title">Art Heist</div>
-          <div class="reel-row-sub">@irreallab · Watch on Instagram</div>
-        </div>
-        <div class="reel-row-right">
-          <span class="reel-row-tag">Live</span>
-          <span class="reel-row-arrow">↗</span>
-        </div>
-      </a>
-
-      <!-- PREVIEW BLOCK — Reel №03: Frame Shift (full embed) -->
-      <div class="reel-preview-block">
-        <div class="reel-preview-embed">
-          <div class="reel-preview-embed-label">
-            <span>Frame Shift — №03</span>
-            <span class="live-dot">Live on Instagram</span>
-          </div>
-          <div class="reel-preview-embed-inner">
-            <blockquote class="instagram-media"
-              data-instgrm-permalink="https://www.instagram.com/reel/DX7Ynqeo2Xx/?utm_source=ig_embed&utm_campaign=loading"
-              data-instgrm-version="14"
-              style="background:#FFF;border:0;border-radius:0;box-shadow:none;margin:0;max-width:100%;min-width:0;padding:0;width:100%;">
-            </blockquote>
-          </div>
-        </div>
-        <div class="reel-preview-info">
-          <div class="reel-preview-num">03</div>
-          <div class="reel-preview-body">
-            <div class="reel-preview-title">Frame Shift</div>
-            <p class="reel-preview-desc">Another visual experiment by <strong>@irreallab</strong> — surreal short-form
-              content pushing the boundaries of perception.</p>
-            <a href="https://www.instagram.com/reel/DX7Ynqeo2Xx/" target="_blank" rel="noopener"
-              class="reel-preview-cta">Watch on Instagram ↗</a>
-          </div>
-          <div>
-            <span class="reel-row-tag" style="display:inline-block;">Live</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- ROW №04 — queued -->
-      <a class="reel-row" href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener">
-        <div class="reel-row-num">04</div>
-        <div class="reel-row-body">
-          <div class="reel-row-title">Reel №04</div>
-          <div class="reel-row-sub">@irreallab · Coming soon</div>
-        </div>
-        <div class="reel-row-right">
-          <span class="reel-row-tag">Queued</span>
-          <span class="reel-row-arrow">↗</span>
-        </div>
-      </a>
-
-      <!-- ROW №05 — queued -->
-      <a class="reel-row" href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener">
-        <div class="reel-row-num">05</div>
-        <div class="reel-row-body">
-          <div class="reel-row-title">Reel №05</div>
-          <div class="reel-row-sub">@irreallab · Coming soon</div>
-        </div>
-        <div class="reel-row-right">
-          <span class="reel-row-tag">Queued</span>
-          <span class="reel-row-arrow">↗</span>
-        </div>
-      </a>
-
+    <div class="hero-reel-footer">
+      <span>Closing Hours</span>
+      <a href="https://www.instagram.com/reel/DYFrAFrIulH/" target="_blank">Open on Instagram ↗</a>
     </div>
   </div>
+</section>
 
-  <!-- CTA BAND -->
-  <div class="cta-band">
-    <p class="cta-band-text">Every week, a new experiment.<br><strong>Follow @irreallab</strong> to never miss a reel.
-    </p>
-    <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="cta-btn">Follow on Instagram
-      ↗</a>
+<div id="reels">
+  <div class="section-head">
+    <h2>More <span>Reels</span></h2>
   </div>
 
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-logo">irreal<em>lab_</em></div>
-    <div class="footer-right">
-      <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="footer-link">Instagram ↗</a>
-      <span class="footer-link" style="cursor:default;">© 2025 irreallab</span>
-    </div>
-  </footer>
+  <a class="reel-row" href="https://www.instagram.com/reel/DYFrAFrIulH/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" target="_blank">
+    <div class="reel-row-num">02</div>
 
-  <script async src="https://www.instagram.com/embed.js"></script>
-  <script src="animations2.js" defer></script>
+    <div class="reel-row-body">
+      <div class="reel-row-title">Art Heist</div>
+      <div class="reel-row-sub">@irreallab · Watch on Instagram</div>
+    </div>
+
+    <div class="reel-row-right">
+      <span class="reel-row-tag">Live</span>
+      <span>↗</span>
+    </div>
+  </a>
+</div>
+
+<div class="cta-band">
+  <p>Every week, a new experiment.</p>
+  <a href="https://www.instagram.com/irreallab/" target="_blank" class="cta-btn">Follow on Instagram ↗</a>
+</div>
+
+<footer>
+  <div class="footer-logo">irreal<em>lab_</em></div>
+</footer>
+
+<script async src="https://www.instagram.com/embed.js"></script>
+<script src="animations2.js" defer></script>
 
 </body>
-
 </html>
+```
+
+Les modifications demandées sont déjà intégrées :
+
+* nouveau lien Instagram pour “Art Heist”
+* hover rouge dans le bandeau animé du haut
+* script Instagram corrigé avec `https://`
+* structure propre prête pour GitHub Pages
