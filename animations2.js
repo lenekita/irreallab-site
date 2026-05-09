@@ -532,7 +532,18 @@
       btn.setAttribute('aria-label', isOn ? 'Couper la musique' : 'Activer la musique');
     };
 
-    setState(false);
+    setState(true);
+
+    const autoStartAudio = async () => {
+      try {
+        await audio.play();
+        setState(true);
+      } catch (err) {
+        setState(true);
+      }
+    };
+
+    autoStartAudio();
 
     btn.addEventListener('click', async () => {
       try {
@@ -541,11 +552,33 @@
           setState(true);
         } else {
           audio.pause();
-          setState(false);
+          setState(true);
+
+    const autoStartAudio = async () => {
+      try {
+        await audio.play();
+        setState(true);
+      } catch (err) {
+        setState(true);
+      }
+    };
+
+    autoStartAudio();
         }
       } catch (err) {
         console.log('Audio blocked until user interaction', err);
-        setState(false);
+        setState(true);
+
+    const autoStartAudio = async () => {
+      try {
+        await audio.play();
+        setState(true);
+      } catch (err) {
+        setState(true);
+      }
+    };
+
+    autoStartAudio();
       }
     });
   }
@@ -718,120 +751,40 @@
   });
 })();
 
+
+
 /* ─────────────────────────────────────────
-   TYPEWRITER PARAGRAPHS — intro + hero
-   Safe add-on: does not touch reels, Instagram embeds or audio.
+   TYPEWRITER EFFECT — slower cinematic typing
 ───────────────────────────────────────── */
 (function () {
-  'use strict';
+  function initTypewriter() {
+    const elements = document.querySelectorAll('.intro-copy, .hero-sub');
 
-  function initIrrealTypewriter() {
-    const introText = document.querySelector('.intro-copy');
-    const heroText = document.querySelector('.hero-sub');
-
-    const style = document.createElement('style');
-    style.textContent = `
-      .intro-copy,
-      .hero-sub {
-        font-family: 'Space Mono', 'Courier New', monospace !important;
-        font-style: normal !important;
-        font-weight: 400 !important;
-        letter-spacing: .035em !important;
-        text-transform: none !important;
-      }
-
-      .ir-typewriter {
-        position: relative;
-        white-space: pre-wrap;
-      }
-
-      .ir-typewriter::after {
-        content: '_';
-        display: inline-block;
-        margin-left: .12em;
-        color: var(--accent, #d4f03a);
-        text-shadow:
-          0 0 8px rgba(212,240,58,.55),
-          0 0 22px rgba(212,240,58,.22);
-        animation: ir-typewriter-cursor .8s step-end infinite;
-      }
-
-      .ir-typewriter.is-done::after {
-        opacity: .72;
-      }
-
-      @keyframes ir-typewriter-cursor {
-        0%, 48% { opacity: 1; }
-        49%, 100% { opacity: 0; }
-      }
-
-      @media (prefers-reduced-motion: reduce) {
-        .ir-typewriter::after { display: none; }
-      }
-    `;
-    document.head.appendChild(style);
-
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    function typeElement(el, options) {
-      if (!el || el.dataset.irTyped === 'true') return;
-
-      const text = (el.dataset.typewriterText || el.textContent || '').replace(/\s+/g, ' ').trim();
-      if (!text) return;
-
-      el.dataset.irTyped = 'true';
-      el.dataset.typewriterText = text;
-
-      if (prefersReducedMotion) {
-        el.textContent = text;
-        return;
-      }
-
-      const speed = options.speed || 24;
-      const startDelay = options.delay || 0;
-
+    elements.forEach((el, index) => {
+      const original = el.textContent.trim();
+      el.setAttribute('data-text', original);
       el.textContent = '';
       el.classList.add('ir-typewriter');
 
       let i = 0;
 
-      const step = () => {
-        el.textContent = text.slice(0, i);
-        i += 1;
-
-        if (i <= text.length) {
-          window.setTimeout(step, speed);
+      const type = () => {
+        if (i < original.length) {
+          el.textContent += original.charAt(i);
+          i++;
+          setTimeout(type, 42 + Math.random() * 28);
         } else {
           el.classList.add('is-done');
         }
       };
 
-      window.setTimeout(step, startDelay);
-    }
-
-    typeElement(introText, { speed: 24, delay: 650 });
-
-    if (heroText) {
-      if ('IntersectionObserver' in window) {
-        const heroObserver = new IntersectionObserver((entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              typeElement(heroText, { speed: 22, delay: 250 });
-              heroObserver.disconnect();
-            }
-          });
-        }, { threshold: 0.25 });
-
-        heroObserver.observe(heroText);
-      } else {
-        typeElement(heroText, { speed: 22, delay: 1200 });
-      }
-    }
+      setTimeout(type, 700 + (index * 350));
+    });
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initIrrealTypewriter);
+    document.addEventListener('DOMContentLoaded', initTypewriter);
   } else {
-    initIrrealTypewriter();
+    initTypewriter();
   }
 })();
