@@ -46,8 +46,29 @@
     .marquee {
       background: var(--accent);
       overflow: hidden;
-      position: sticky; top: 0; z-index: 200;
+      position: relative;
+      top: auto;
+      z-index: 200;
       border-bottom: 1.5px solid #000;
+    }
+
+    /* Yellow banner becomes fixed only after the fullscreen intro/home is passed */
+    .marquee.is-sticky {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 100000;
+      box-shadow: 0 10px 30px rgba(0,0,0,.22);
+    }
+
+    .marquee-spacer {
+      height: 0;
+      pointer-events: none;
+    }
+
+    .marquee-spacer.is-active {
+      height: var(--marquee-height, 34px);
     }
     .marquee-track {
       display: inline-flex; white-space: nowrap;
@@ -1838,6 +1859,7 @@ video {
 
 
 <!-- MARQUEE -->
+<div id="marquee-spacer" class="marquee-spacer" aria-hidden="true"></div>
 <div id="site-content" class="marquee">
   <div class="marquee-track">
     <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="marquee-item">@irreallab on Instagram</a>
@@ -2060,6 +2082,32 @@ video {
 
 <audio id="site-audio" src="velvet-circuit.mp3" loop preload="auto"></audio>
 <button id="audio-toggle" class="audio-toggle" type="button" aria-label="Activer la musique">SOUND OFF</button>
+
+
+<script>
+  /* Sticky yellow banner after intro/home */
+  const introSection = document.querySelector('.intro-video');
+  const marquee = document.querySelector('.marquee');
+  const marqueeSpacer = document.getElementById('marquee-spacer');
+
+  function updateMarqueeSticky() {
+    if (!introSection || !marquee || !marqueeSpacer) return;
+
+    const marqueeHeight = marquee.offsetHeight;
+    document.documentElement.style.setProperty('--marquee-height', `${marqueeHeight}px`);
+
+    const triggerPoint = introSection.offsetTop + introSection.offsetHeight;
+    const shouldStick = window.scrollY >= triggerPoint;
+
+    marquee.classList.toggle('is-sticky', shouldStick);
+    marqueeSpacer.classList.toggle('is-active', shouldStick);
+  }
+
+  window.addEventListener('scroll', updateMarqueeSticky, { passive: true });
+  window.addEventListener('resize', updateMarqueeSticky);
+  window.addEventListener('load', updateMarqueeSticky);
+  updateMarqueeSticky();
+</script>
 
 <script async src="https://www.instagram.com/embed.js"></script>
 <script src="animations2.js" defer></script>
