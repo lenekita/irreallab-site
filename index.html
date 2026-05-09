@@ -99,6 +99,29 @@
     @media (max-width: 600px) { .nav-links .nav-hide { display: none; } }
     @media (max-width: 420px) { .nav-links { gap: 1rem; } .nav-logo { font-size: 1.2rem; } }
 
+
+    /* Sticky header: nav sticks under the yellow marquee after the intro */
+    nav.is-sticky {
+      position: fixed;
+      left: 0;
+      top: var(--marquee-height, 34px);
+      width: 100%;
+      z-index: 99999;
+      background: rgba(6,6,6,.82);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 14px 40px rgba(0,0,0,.34);
+    }
+
+    .nav-spacer {
+      height: 0;
+      pointer-events: none;
+    }
+
+    .nav-spacer.is-active {
+      height: var(--nav-height, 60px);
+    }
+
     /* HERO */
     .hero {
       display: grid;
@@ -426,7 +449,8 @@
 </div>
 
 <!-- NAV -->
-<nav>
+<div id="nav-spacer" class="nav-spacer" aria-hidden="true"></div>
+<nav id="main-nav">
   <a href="#" class="nav-logo">irreal<em>lab_</em></a>
   <div class="nav-links">
     <a href="#reels" class="nav-hide">Reels</a>
