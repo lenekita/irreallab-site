@@ -575,6 +575,88 @@
       .reel-row-preview-panel { display: none; }
     }
 
+
+    /* ══════════════════════════════
+       FEATURED REEL — fitted hero preview only
+       Keeps the global structure + all reel hover effects unchanged.
+    ══════════════════════════════ */
+    .hero-right {
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      padding: clamp(1rem, 3vw, 2.2rem) 0;
+      background:
+        radial-gradient(circle at 50% 30%, rgba(212,240,58,.08), transparent 36%),
+        var(--bg2);
+    }
+
+    .hero-reel-label,
+    .hero-embed,
+    .hero-reel-footer {
+      width: min(360px, calc(100% - 2rem));
+      margin-inline: auto;
+      background: rgba(6,6,6,.55);
+      border-left: 1px solid var(--line);
+      border-right: 1px solid var(--line);
+    }
+
+    .hero-reel-label {
+      border-top: 1px solid var(--line);
+    }
+
+    .hero-embed {
+      flex: 0 0 auto;
+      height: 284px;
+      min-height: 284px;
+      padding: .75rem;
+      align-items: flex-start;
+      justify-content: center;
+    }
+
+    .hero-reel-footer {
+      border-bottom: 1px solid var(--line);
+    }
+
+    .hero-embed .instagram-media {
+      transform: scale(.5);
+      transform-origin: top center;
+      width: 540px !important;
+      min-width: 326px !important;
+      max-width: 540px !important;
+      margin: 0 auto !important;
+    }
+
+    @media (max-width: 900px) {
+      .hero-right {
+        padding: 1.4rem 0;
+      }
+
+      .hero-reel-label,
+      .hero-embed,
+      .hero-reel-footer {
+        width: min(360px, calc(100% - 1.6rem));
+      }
+
+      .hero-embed {
+        height: 270px;
+        min-height: 270px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero-reel-label,
+      .hero-embed,
+      .hero-reel-footer {
+        width: calc(100% - 1.2rem);
+      }
+
+      .hero-embed {
+        height: 255px;
+        min-height: 255px;
+        padding: .55rem;
+      }
+    }
+
   </style>
 </head>
 <body>
