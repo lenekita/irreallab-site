@@ -29,7 +29,6 @@
     initIntroEnterButton();
     initReelsReveal();
     initTypewriterLoop();
-    initCopyTypewriterLoop();
     initScrambleTitles();
     initAudioToggle();
     initMobileVideoAutoplay();
@@ -309,69 +308,6 @@
 
       el.textContent = '';
       setTimeout(tick, 500 + Math.random() * 300);
-    });
-  }
-
-
-  /* ─────────────────────────────────────────────────────────
-   * 7B. SAFE COPY TYPEWRITER — isolated for hero + CTA only
-   * Does not modify reels, Instagram embeds, audio, or existing typewriters.
-   * ─────────────────────────────────────────────────────────*/
-  function initCopyTypewriterLoop() {
-    const elements = document.querySelectorAll('.ir-copy-typewriter');
-    if (!elements.length) return;
-
-    elements.forEach(function (el) {
-      const fullText = el.dataset.typewriterText || el.textContent.trim();
-      el.dataset.typewriterText = fullText;
-
-      if (prefersReducedMotion) {
-        el.textContent = fullText;
-        return;
-      }
-
-      const typeSpeed    = Number(el.dataset.typeSpeed || 54);
-      const deleteSpeed  = Number(el.dataset.deleteSpeed || 24);
-      const pauseAtEnd   = Number(el.dataset.pauseEnd || 28);
-      const pauseAtStart = Number(el.dataset.pauseStart || 8);
-
-      let index = 0;
-      let deleting = false;
-      let pauseTicks = 0;
-
-      function tick() {
-        if (!deleting) {
-          index += 1;
-          el.textContent = fullText.slice(0, index);
-
-          if (index >= fullText.length) {
-            el.classList.add('is-done');
-            pauseTicks += 1;
-            if (pauseTicks >= pauseAtEnd) {
-              deleting = true;
-              pauseTicks = 0;
-            }
-          }
-        } else {
-          index = Math.max(0, index - 1);
-          el.textContent = fullText.slice(0, index);
-
-          if (index <= 0) {
-            el.classList.remove('is-done');
-            pauseTicks += 1;
-            if (pauseTicks >= pauseAtStart) {
-              deleting = false;
-              pauseTicks = 0;
-            }
-          }
-        }
-
-        const jitter = (Math.random() - 0.5) * 10;
-        setTimeout(tick, (deleting ? deleteSpeed : typeSpeed) + jitter);
-      }
-
-      el.textContent = '';
-      setTimeout(tick, 450);
     });
   }
 
