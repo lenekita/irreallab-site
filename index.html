@@ -390,7 +390,20 @@
     .audio-toggle { position: fixed; right: 22px; top: 50%; transform: translateY(-50%); z-index: 100000; background: rgba(6,6,6,.72); color: var(--accent); border: 1px solid rgba(212,240,58,.72); padding: 10px 14px; font-family: 'Space Mono', monospace; font-size: .58rem; letter-spacing: .16em; text-transform: uppercase; cursor: pointer; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); transition: background .25s ease, color .25s ease, border-color .25s ease, transform .25s ease, box-shadow .25s ease; }
     .audio-toggle:hover { transform: translateY(calc(-50% - 2px)); box-shadow: 0 0 22px rgba(212,240,58,.22); border-color: var(--accent); }
     .audio-toggle.is-on { background: var(--accent); color: #060606; border-color: var(--accent); box-shadow: 0 0 28px rgba(212,240,58,.24); }
-    @media (max-width: 768px) { .audio-toggle { position: fixed !important; right: 1rem !important; top: auto !important; bottom: 1.25rem !important; transform: none !important; z-index: 999999 !important; padding: .75rem .95rem !important; font-size: .58rem !important; letter-spacing: .14em !important; } }
+    @media (max-width: 768px) {
+      .audio-toggle {
+        position: fixed !important;
+        right: 14px !important;
+        left: auto !important;
+        top: 50% !important;
+        bottom: auto !important;
+        transform: translateY(-50%) !important;
+        z-index: 999999 !important;
+        padding: .75rem .95rem !important;
+        font-size: .58rem !important;
+        letter-spacing: .14em !important;
+      }
+    }
     @media (prefers-reduced-motion: reduce) { .ir-typewriter::after { display: none; } }
   </style>
 </head>
