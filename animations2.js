@@ -554,3 +554,47 @@
     ? document.addEventListener('DOMContentLoaded', initSiteAudio)
     : initSiteAudio();
 })();
+
+
+/* ─────────────────────────────────────────
+   MORE REELS — page 2 arrival animation
+   Safe add-on: only toggles a class when the reels archive enters view.
+───────────────────────────────────────── */
+(function () {
+  'use strict';
+
+  function initReelsPageArrival() {
+    const page = document.querySelector('.reels-page');
+    if (!page) return;
+
+    const enter = () => page.classList.add('ir-reels-in');
+
+    if (!('IntersectionObserver' in window)) {
+      enter();
+      return;
+    }
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          enter();
+          io.disconnect();
+          if (window.instgrm && window.instgrm.Embeds && typeof window.instgrm.Embeds.process === 'function') {
+            setTimeout(() => window.instgrm.Embeds.process(), 180);
+          }
+        }
+      });
+    }, { threshold: 0.16, rootMargin: '0px 0px -12% 0px' });
+
+    io.observe(page);
+
+    setTimeout(() => {
+      const r = page.getBoundingClientRect();
+      if (r.top < window.innerHeight * .86) enter();
+    }, 600);
+  }
+
+  document.readyState === 'loading'
+    ? document.addEventListener('DOMContentLoaded', initReelsPageArrival)
+    : initReelsPageArrival();
+})();
