@@ -70,6 +70,8 @@
       font-size: 0.9rem; letter-spacing: 0.15em;
       color: #060606; text-decoration: none;
       padding: 8px 24px; display: inline-block;
+      width: fit-content;
+      max-width: 100%;
       transition: opacity .2s;
     }
     .marquee-item:hover { opacity: 1; color: #ff0000; }
@@ -226,8 +228,10 @@
     .reel-list { border-bottom: 1px solid var(--line); }
     .reel-row { display: grid; grid-template-columns: 80px 1fr auto; align-items: center; border-bottom: 1px solid var(--line); text-decoration: none; color: var(--text); position: relative; overflow: hidden; }
     .reel-row:last-child { border-bottom: none; }
-    .reel-row::before { content: ''; position: absolute; inset: 0; background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform .45s cubic-bezier(.16,1,.3,1); z-index: 0; }
+    .reel-row::before { content: ''; position: absolute; inset: 0; background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform .55s cubic-bezier(.16,1,.3,1); z-index: 0; }
     .reel-row:hover::before { transform: scaleX(1); }
+    .reel-row::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(212,240,58,.18) 0%, transparent 60%); opacity: 0; transition: opacity .4s ease; z-index: 0; pointer-events: none; }
+    .reel-row:hover::after { opacity: 1; }
     .reel-row:hover, .reel-row:hover .reel-row-num, .reel-row:hover .reel-row-sub, .reel-row:hover .reel-row-arrow { color: #060606; }
     .reel-row:hover .reel-row-tag { background: #06060618; color: #060606; }
     .reel-row-num { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2rem, 4vw, 3rem); color: var(--muted2); padding: 1.6rem 1.5rem 1.6rem var(--pad-x); line-height: 1; position: relative; z-index: 1; transition: color .3s; }
@@ -425,7 +429,7 @@
       max-width: none !important;
       width: 100% !important;
       min-height: calc(1em * 1.4);
-      white-space: nowrap !important;
+      white-space: normal !important;
       overflow: hidden;
     }
     .ir-typewriter {
@@ -446,6 +450,19 @@
     }
     .ir-typewriter.is-done::after { opacity: .75; }
     @keyframes ir-typewriter-cursor { 0%, 48% { opacity: 1; } 49%, 100% { opacity: 0; } }
+
+    
+    .hero-sub.ir-typewriter,
+    .cta-band-text.ir-typewriter {
+      display: inline-block;
+      overflow: hidden;
+    }
+
+    .hero-sub.ir-typewriter::after,
+    .cta-band-text.ir-typewriter::after {
+      color: var(--accent);
+    }
+
 
     .intro-enter { border: 1px solid var(--accent); background: rgba(212,240,58,.08); color: var(--accent); padding: 12px 18px; font-family: 'Space Mono', monospace; font-size: .58rem; letter-spacing: .16em; text-transform: uppercase; cursor: pointer; transition: background .25s, color .25s, transform .25s; white-space: nowrap; }
     .intro-enter:hover { background: var(--accent); color: #060606; transform: translateY(-2px); }
@@ -591,29 +608,383 @@
 
 
 
-/* TOP LEFT LOGO — exact same visual behavior as footer logo */
-.nav-logo {
+
+/* TOP LEFT NAV LOGO — same flicker as footer, scoped only to nav */
+#main-nav .nav-logo {
   color: var(--muted) !important;
 }
 
-.nav-logo em {
+#main-nav .nav-logo em {
   color: var(--accent) !important;
   font-style: normal !important;
 }
 
-.nav-logo:hover {
+#main-nav .nav-logo:hover {
   color: var(--muted) !important;
   text-shadow: none !important;
   filter: none !important;
 }
 
-.nav-logo:hover .footer-irreal {
-  color: inherit;
+#main-nav .nav-logo:hover .footer-irreal {
+  color: inherit !important;
 }
 
-.nav-logo:hover::after {
-  transform: scaleX(0) !important;
-  opacity: 0 !important;
+#main-nav .nav-logo::after,
+#main-nav .nav-logo:hover::after {
+  display: none !important;
+  content: none !important;
+}
+
+/* MORE REELS — restore original electric title behavior */
+.reels-page .section-head h2 {
+  position: relative !important;
+  display: inline-block !important;
+  cursor: default !important;
+  text-shadow: 0 0 0 rgba(212,240,58,0) !important;
+  transition: text-shadow .35s ease, filter .35s ease !important;
+}
+
+.reels-page .section-head h2 span {
+  position: relative !important;
+  display: inline-block !important;
+  color: var(--accent) !important;
+  text-shadow:
+    0 0 10px rgba(212,240,58,.16),
+    0 0 22px rgba(212,240,58,.06) !important;
+}
+
+.reels-page .section-head h2 span::after {
+  content: "_" !important;
+  display: inline-block !important;
+  margin-left: .08em !important;
+  color: var(--accent) !important;
+  animation: ir-more-title-blink .85s step-end infinite !important;
+  text-shadow:
+    0 0 10px rgba(212,240,58,.55),
+    0 0 24px rgba(212,240,58,.28),
+    0 0 44px rgba(212,240,58,.14) !important;
+}
+
+.reels-page .section-head h2::before {
+  content: attr(data-glitch) !important;
+  position: absolute !important;
+  left: 0 !important;
+  top: 0 !important;
+  width: 100% !important;
+  color: var(--accent) !important;
+  opacity: 0;
+  pointer-events: none !important;
+  mix-blend-mode: screen !important;
+  transform: translateX(0);
+  clip-path: inset(0 0 72% 0);
+}
+
+.reels-page .section-head h2:hover {
+  filter: brightness(1.08) !important;
+  text-shadow:
+    0 0 12px rgba(237,233,223,.10),
+    0 0 26px rgba(212,240,58,.16) !important;
+}
+
+.reels-page .section-head h2:hover::before {
+  animation: ir-more-title-electric .72s steps(2,end) both !important;
+}
+
+
+
+/* MORE REELS ROW NUMBERS — restore electric hover animation */
+.reels-page .reel-row-num {
+  position: relative !important;
+  transition:
+    color .3s ease,
+    text-shadow .3s ease,
+    transform .35s cubic-bezier(.16,1,.3,1) !important;
+}
+
+.reels-page .reel-row-num::after {
+  content: attr(data-num);
+  position: absolute;
+  left: var(--pad-x);
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--accent);
+  opacity: 0;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  clip-path: inset(0 0 70% 0);
+}
+
+.reels-page .reel-row:hover .reel-row-num {
+  color: #060606 !important;
+  transform: translateX(4px);
+  text-shadow:
+    0 0 10px rgba(212,240,58,.35),
+    0 0 24px rgba(212,240,58,.16);
+}
+
+.reels-page .reel-row:hover .reel-row-num::after {
+  animation: ir-reel-number-electric .68s steps(2,end) both;
+}
+
+@keyframes ir-reel-number-electric {
+  0%   { opacity:0; transform:translateY(-50%) translate(0,0); clip-path:inset(0 0 90% 0); }
+  14%  { opacity:.85; transform:translateY(-50%) translate(-2px,-1px); clip-path:inset(8% 0 65% 0); }
+  28%  { opacity:.35; transform:translateY(-50%) translate(3px,1px); clip-path:inset(45% 0 34% 0); }
+  42%  { opacity:.75; transform:translateY(-50%) translate(-1px,0); clip-path:inset(22% 0 52% 0); }
+  58%  { opacity:.22; transform:translateY(-50%) translate(2px,-1px); clip-path:inset(70% 0 12% 0); }
+  72%  { opacity:.65; transform:translateY(-50%) translate(-1px,1px); clip-path:inset(34% 0 41% 0); }
+  100% { opacity:0; transform:translateY(-50%) translate(0,0); clip-path:inset(0 0 100% 0); }
+}
+
+@media (max-width: 768px) {
+  .reels-page .reel-row-num::after {
+    left: .95rem;
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   CINEMATIC ANIMATION SYSTEM — v3
+   All new motion layers injected below
+═══════════════════════════════════════════════════════════ */
+
+/* ── REEL ROWS — enhanced reveal transition ── */
+.reels-page .section-head,
+.reels-page .reel-list {
+  opacity: 0;
+  transform: translateY(42px) scale(.985);
+  transition:
+    opacity   1.1s cubic-bezier(.16,1,.3,1),
+    transform 1.1s cubic-bezier(.16,1,.3,1);
+}
+.reels-page.ir-reels-in .section-head { opacity: 1; transform: none; }
+.reels-page.ir-reels-in .reel-list    { opacity: 1; transform: none; transition-delay: .2s; }
+
+/* ── REEL ROW NUMBER — scale pop on hover ── */
+.reels-page .reel-row:hover .reel-row-num {
+  transform: translateX(4px) scale(1.04) !important;
+}
+
+/* ── MARQUEE — variable speed on sticky ── */
+.marquee.is-sticky .marquee-track {
+  animation-duration: 16s;
+}
+
+/* ── HERO EMBED — inner glow reveal ── */
+.hero-embed {
+  position: relative;
+  overflow: hidden;
+}
+.hero-embed::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(212,240,58,.10), transparent 55%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .6s ease;
+}
+.hero-right:hover .hero-embed::after {
+  opacity: 1;
+}
+
+/* ── LIVE DOT — enhanced ring pulse ── */
+.live-dot::after {
+  content: '';
+  display: inline-block;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  position: absolute;
+  background: transparent;
+  border: 1px solid rgba(212,240,58,.6);
+  animation: ir-ring-expand 2s ease-out infinite;
+  margin-left: -6px;
+}
+@keyframes ir-ring-expand {
+  0%   { transform: scale(1);   opacity: .7; }
+  100% { transform: scale(3.2); opacity: 0;  }
+}
+
+/* ── INTRO CONTENT — staggered fade-in on load ── */
+.intro-topline {
+  opacity: 0;
+  transform: translateY(-12px);
+  animation: ir-fade-down .9s cubic-bezier(.16,1,.3,1) .3s forwards;
+}
+.intro-brand {
+  opacity: 0;
+  animation: ir-fade-up 1s cubic-bezier(.16,1,.3,1) .55s forwards;
+}
+/* intro-bottom NOT animated — must stay interactive for audio first-click */
+@keyframes ir-fade-down {
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes ir-fade-up {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── NAV — slide-down reveal ── */
+nav {
+  animation: ir-nav-in .7s cubic-bezier(.16,1,.3,1) .15s both;
+}
+@keyframes ir-nav-in {
+  from { opacity: 0; transform: translateY(-16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── HERO LEFT — staggered entry ── */
+.hero-eyebrow  { opacity: 0; animation: ir-fade-up .7s cubic-bezier(.16,1,.3,1) .4s forwards; }
+.hero-title    { opacity: 0; animation: ir-fade-up .85s cubic-bezier(.16,1,.3,1) .55s forwards; }
+.hero-sub      { opacity: 0; animation: ir-fade-up .8s cubic-bezier(.16,1,.3,1) .7s forwards; }
+.hero-meta     { opacity: 0; animation: ir-fade-up .8s cubic-bezier(.16,1,.3,1) .85s forwards; }
+/* hero-right: fade in, but fallback to visible after 2s in case animation fails */
+.hero-right    { opacity: 0; animation: ir-hero-right-in 1s cubic-bezier(.16,1,.3,1) .65s forwards; }
+
+@keyframes ir-hero-right-in {
+  from { opacity: 0; transform: translateX(28px) scale(.97); }
+  to   { opacity: 1; transform: translateX(0) scale(1); }
+}
+
+/* ── CTA BAND — fade-in on scroll (safe: starts visible if no JS) ── */
+.cta-band {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity .9s cubic-bezier(.16,1,.3,1), transform .9s cubic-bezier(.16,1,.3,1);
+}
+.cta-band.ir-in-view {
+  opacity: 1;
+  transform: none;
+}
+/* Hard fallback: always show after 3s regardless */
+@keyframes ir-cta-fallback { to { opacity: 1; transform: none; } }
+.cta-band { animation: ir-cta-fallback 0s 3s forwards; }
+.cta-band.ir-in-view { animation: none; }
+
+/* ── CTA BUTTON — shimmer on hover ── */
+.cta-btn {
+  position: relative;
+  overflow: hidden;
+}
+.cta-btn::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.22), transparent);
+  transform: skewX(-18deg);
+  transition: left .6s cubic-bezier(.16,1,.3,1);
+  pointer-events: none;
+}
+.cta-btn:hover::after { left: 160%; }
+
+/* ── FOOTER — fade-in on scroll (safe fallback) ── */
+footer {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity .8s ease, transform .8s ease;
+}
+footer.ir-in-view {
+  opacity: 1;
+  transform: none;
+}
+@keyframes ir-footer-fallback { to { opacity: 1; transform: none; } }
+footer { animation: ir-footer-fallback 0s 4s forwards; }
+footer.ir-in-view { animation: none; }
+
+/* ── SECTION HEAD DIVIDER — animated underline ── */
+.section-head::after {
+  content: '';
+  display: block;
+  position: absolute;
+  bottom: -1px; left: 0;
+  height: 1px;
+  width: 0;
+  background: linear-gradient(90deg, var(--accent), transparent);
+  transition: width 1.2s cubic-bezier(.16,1,.3,1);
+}
+.section-head { position: relative; }
+.ir-reels-in .section-head::after { width: 100%; }
+
+/* ── AUDIO TOGGLE — neon glow breathe ── */
+@keyframes ir-audio-breathe {
+  0%, 100% { box-shadow: 0 0 8px rgba(212,240,58,.18), 0 0 18px rgba(212,240,58,.06); }
+  50%       { box-shadow: 0 0 18px rgba(212,240,58,.4),  0 0 36px rgba(212,240,58,.18); }
+}
+.audio-toggle.is-on {
+  animation: ir-audio-breathe 3s ease-in-out infinite !important;
+}
+
+/* ── REEL ROW ARROW — elastic bounce ── */
+.reel-row:hover .reel-row-arrow {
+  transform: translate(5px, -5px) rotate(-2deg) !important;
+  transition: transform .35s cubic-bezier(.34,1.56,.64,1) !important;
+}
+
+/* ── MARQUEE ITEMS — underline on hover ── */
+.marquee-item {
+  position: relative;
+}
+.marquee-item::after {
+  content: '';
+  position: absolute;
+  bottom: 3px; left: 24px; right: 24px;
+  height: 1px;
+  background: #060606;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .28s cubic-bezier(.16,1,.3,1);
+}
+.marquee-item:hover::after { transform: scaleX(1); }
+
+/* ── TRANSMISSION PULSE — enhanced ── */
+@keyframes ir-transmission-pulse {
+  0%, 100% { opacity: .28; transform: scaleX(.42); }
+  50%       { opacity: 1;   transform: scaleX(1);   }
+}
+
+/* ── HERO FEATURED VIDEO — hover desaturate lift ── */
+.hero-featured-video {
+  transition: filter .5s ease, transform .5s cubic-bezier(.16,1,.3,1);
+}
+.hero-right:hover .hero-featured-video {
+  filter: saturate(1.1) contrast(1.04) brightness(1.04);
+  transform: scale(1.012);
+}
+
+/* ── REELS PAGE BG GRID — animated drift ── */
+.reels-page::before {
+  animation: ir-grid-drift 22s linear infinite;
+}
+@keyframes ir-grid-drift {
+  from { background-position: 0 0; }
+  to   { background-position: 82px 82px; }
+}
+
+/* ── PREVIEW PANEL — slide from above ── */
+.reel-row-preview-panel {
+  transform: translateY(-6px);
+  transition:
+    max-height .55s cubic-bezier(.16,1,.3,1),
+    opacity    .35s cubic-bezier(.16,1,.3,1),
+    transform  .45s cubic-bezier(.16,1,.3,1) !important;
+}
+.reel-row:hover + .reel-row-preview-panel,
+.reel-row:focus-within + .reel-row-preview-panel,
+.reel-row-preview-panel:hover {
+  transform: translateY(0) !important;
+}
+
+/* ── REDUCED MOTION — disable all ── */
+@media (prefers-reduced-motion: reduce) {
+  .intro-topline, .intro-brand,
+  nav, .hero-eyebrow, .hero-title, .hero-sub,
+  .hero-meta, .hero-right, .cta-band, footer {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
 }
 
 </style>
@@ -689,7 +1060,13 @@
     <div class="hero-eyebrow">Featured Reel</div>
     <div>
       <h1 class="hero-title ir-electric-title" data-glitch="IRREAL LAB">Irreal<em>Lab</em></h1>
-      <p class="hero-sub">Visual experiments in short-form. Motion, surrealism &amp; the art of the unreal.</p>
+      <p class="hero-sub ir-typewriter"
+   data-typewriter-text="Visual experiments in short-form. Motion, surrealism &amp; the art of the unreal."
+   data-type-speed="42"
+   data-delete-speed="18"
+   data-pause-end="34">
+   Visual experiments in short-form. Motion, surrealism &amp; the art of the unreal.
+</p>
     </div>
     <div class="hero-meta">
       <div class="hero-divider"></div>
@@ -732,7 +1109,7 @@
 
   <div class="reel-list">
     <a class="reel-row" data-preview-url="https://www.instagram.com/reel/DYFrAFrIulH/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" href="https://www.instagram.com/reel/DYFrAFrIulH/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" target="_blank" rel="noopener">
-      <div class="reel-row-num">01</div>
+      <div class="reel-row-num" data-num="01">01</div>
       <div class="reel-row-body">
         <div class="reel-row-title">Closing Hours</div>
         <div class="reel-row-sub">@irreallab · Watch on Instagram</div>
@@ -750,7 +1127,7 @@
     </div>
 
     <a class="reel-row" data-preview-url="https://www.instagram.com/reel/DX7Ynqeo2Xx/" href="https://www.instagram.com/reel/DX7Ynqeo2Xx/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" target="_blank" rel="noopener">
-      <div class="reel-row-num">02</div>
+      <div class="reel-row-num" data-num="02">02</div>
       <div class="reel-row-body">
         <div class="reel-row-title">Frame Shift</div>
         <div class="reel-row-sub">@irreallab · Watch on Instagram</div>
@@ -768,7 +1145,7 @@
     </div>
 
     <a class="reel-row" data-preview-url="https://www.instagram.com/reel/DXj-5j3iIoh/" href="https://www.instagram.com/reel/DXj-5j3iIoh/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" target="_blank" rel="noopener">
-      <div class="reel-row-num">03</div>
+      <div class="reel-row-num" data-num="03">03</div>
       <div class="reel-row-body">
         <div class="reel-row-title">Art Heist</div>
         <div class="reel-row-sub">@irreallab · Watch on Instagram</div>
@@ -786,7 +1163,7 @@
     </div>
 
     <a class="reel-row" data-preview-url="https://www.instagram.com/reel/DXZxbCWiFPa/" href="https://www.instagram.com/reel/DXZxbCWiFPa/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" target="_blank" rel="noopener">
-      <div class="reel-row-num">04</div>
+      <div class="reel-row-num" data-num="04">04</div>
       <div class="reel-row-body">
         <div class="reel-row-title">Drifting through</div>
         <div class="reel-row-sub">@irreallab · Watch on Instagram</div>
@@ -807,7 +1184,13 @@
 
 <!-- CTA BAND -->
 <div class="cta-band">
-  <p class="cta-band-text cta-typewriter">Every week, a new experiment.<br><strong>Follow @irreallab</strong> to never miss a reel.</p>
+  <p class="cta-band-text ir-typewriter"
+   data-typewriter-text="Every week, a new experiment. Follow @irreallab to never miss a reel."
+   data-type-speed="40"
+   data-delete-speed="18"
+   data-pause-end="36">
+   Every week, a new experiment. Follow @irreallab to never miss a reel.
+</p>
   <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="cta-btn">Follow on Instagram ↗</a>
 </div>
 
@@ -825,5 +1208,27 @@
 
 <script async src="https://www.instagram.com/embed.js"></script>
 <script src="animations2.js" defer></script>
+<script>
+/* Scroll-reveal for CTA band + footer */
+(function() {
+  if (!('IntersectionObserver' in window)) {
+    document.querySelectorAll('.cta-band, footer').forEach(function(el) {
+      el.classList.add('ir-in-view');
+    });
+    return;
+  }
+  var obs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('ir-in-view');
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.cta-band, footer').forEach(function(el) {
+    obs.observe(el);
+  });
+})();
+</script>
 </body>
 </html>
