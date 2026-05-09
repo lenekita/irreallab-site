@@ -148,6 +148,64 @@
       text-transform: uppercase; color: var(--muted);
     }
 
+    .hero-transmission {
+      display: grid;
+      gap: 1rem;
+      padding: .15rem 0;
+      position: relative;
+    }
+    .hero-transmission::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: -10px;
+      width: 42px;
+      height: 1px;
+      background: var(--accent);
+      box-shadow: 0 0 18px rgba(212,240,58,.55);
+      opacity: .75;
+      animation: ir-transmission-pulse 2.2s ease-in-out infinite;
+    }
+    .transmission-kicker {
+      font-size: .58rem;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .transmission-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      line-height: .9;
+      letter-spacing: .04em;
+      color: var(--text);
+    }
+    .transmission-details {
+      display: grid;
+      gap: .35rem;
+      font-size: .58rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .transmission-details span {
+      display: inline-flex;
+      align-items: center;
+      gap: .65rem;
+    }
+    .transmission-details span::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      opacity: .75;
+      box-shadow: 0 0 14px rgba(212,240,58,.55);
+    }
+    @keyframes ir-transmission-pulse {
+      0%,100% { opacity: .35; transform: scaleX(.5); }
+      50% { opacity: 1; transform: scaleX(1); }
+    }
+
     /* RIGHT */
     .hero-right {
       display: flex; flex-direction: column;
@@ -936,13 +994,13 @@
     </div>
     <div class="hero-meta">
       <div class="hero-divider"></div>
-      <div class="hero-stat">
-        <span class="hero-stat-num">04</span>
-        <span class="hero-stat-label">Reels live</span>
-      </div>
-      <div class="hero-divider"></div>
-      <div class="hero-stat">
-        <span class="hero-stat-num" style="font-family:'Space Mono',monospace;font-size:.9rem;color:var(--muted);">@irreallab</span>
+      <div class="hero-transmission">
+        <div class="transmission-kicker">Current Transmission</div>
+        <div class="transmission-title">Sky Runway</div>
+        <div class="transmission-details">
+          <span>Motion study 04</span>
+          <span>Above the clouds</span>
+        </div>
       </div>
       <div class="hero-divider"></div>
     </div>
