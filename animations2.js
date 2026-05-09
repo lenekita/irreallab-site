@@ -598,3 +598,59 @@
     ? document.addEventListener('DOMContentLoaded', initReelsPageArrival)
     : initReelsPageArrival();
 })();
+
+
+
+/* ─────────────────────────────────────────
+   MOBILE VIDEO + INSTAGRAM SAFETY FIX
+───────────────────────────────────────── */
+(function () {
+  function hardenVideosForMobile() {
+    document.querySelectorAll('video').forEach(function (video) {
+      video.muted = true;
+      video.defaultMuted = true;
+      video.loop = true;
+      video.autoplay = true;
+      video.playsInline = true;
+      video.setAttribute('muted', '');
+      video.setAttribute('loop', '');
+      video.setAttribute('autoplay', '');
+      video.setAttribute('playsinline', '');
+      video.setAttribute('webkit-playsinline', '');
+      video.setAttribute('preload', 'auto');
+
+      var tryPlay = function () {
+        var p = video.play();
+        if (p && typeof p.catch === 'function') p.catch(function () {});
+      };
+
+      if (video.readyState >= 2) tryPlay();
+      video.addEventListener('loadeddata', tryPlay, { once: true });
+      document.addEventListener('touchstart', tryPlay, { once: true, passive: true });
+      document.addEventListener('click', tryPlay, { once: true });
+    });
+  }
+
+  function refreshInstagramEmbeds() {
+    if (window.instgrm && window.instgrm.Embeds) {
+      try { window.instgrm.Embeds.process(); } catch (e) {}
+    }
+  }
+
+  function initMobileFixes() {
+    hardenVideosForMobile();
+    setTimeout(refreshInstagramEmbeds, 500);
+    setTimeout(refreshInstagramEmbeds, 1600);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMobileFixes);
+  } else {
+    initMobileFixes();
+  }
+
+  window.addEventListener('pageshow', initMobileFixes);
+  window.addEventListener('orientationchange', function () {
+    setTimeout(initMobileFixes, 400);
+  });
+})();
