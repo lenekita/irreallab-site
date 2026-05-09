@@ -954,6 +954,7 @@
 
     /* ══════════════════════════════
        INTRO VIDEO — fullscreen landing
+       Big cinematic center video + blurred background fill
     ══════════════════════════════ */
     .intro-video {
       position: relative;
@@ -965,45 +966,48 @@
       border-bottom: 1px solid var(--line);
     }
 
-    /* Intro video display — old visual feeling restored
-       - blurred cover layer fills the screen
-       - main vertical reel stays fully visible in the center
-       - no aggressive crop on the actual intro video */
-    .intro-video-bg,
-    .intro-video-media {
+    .intro-video-bg {
       position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
+      inset: -8%;
+      width: 116%;
+      height: 116%;
+      object-fit: cover;
+      object-position: center center;
+      z-index: 0;
+      opacity: .38;
+      filter: blur(62px) brightness(.42) contrast(1.08) saturate(.82);
+      transform: scale(1.12);
       pointer-events: none;
     }
 
-    .intro-video-bg {
-      object-fit: cover;
-      object-position: center center;
-      opacity: .34;
-      filter: blur(24px) contrast(1.1) saturate(.85) brightness(.48);
-      transform: scale(1.08);
-      z-index: 0;
-    }
-
     .intro-video-media {
+      position: absolute;
+      top: 50%;
+      left: 52%;
+      width: min(50vw, 880px);
+      height: min(78svh, 820px);
       object-fit: contain;
       object-position: center center;
-      opacity: .92;
-      filter: contrast(1.06) saturate(.92) brightness(.78);
-      transform: none;
-      z-index: 0;
+      z-index: 1;
+      opacity: .94;
+      filter: contrast(1.06) saturate(.9) brightness(.78);
+      transform: translate(-50%, -50%);
+      box-shadow:
+        0 0 0 1px rgba(237,233,223,.045),
+        0 32px 120px rgba(0,0,0,.44),
+        0 0 95px rgba(212,240,58,.075);
+      background: #000;
     }
 
     .intro-video::before {
       content: '';
       position: absolute;
       inset: 0;
-      z-index: 1;
+      z-index: 2;
       background:
-        radial-gradient(circle at 50% 50%, rgba(212,240,58,.08), transparent 34%),
-        linear-gradient(to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5) 72%, rgba(0,0,0,.92));
+        radial-gradient(circle at 53% 50%, transparent 0%, rgba(0,0,0,.08) 36%, rgba(0,0,0,.36) 74%, rgba(0,0,0,.62) 100%),
+        radial-gradient(circle at 50% 50%, rgba(212,240,58,.075), transparent 34%),
+        linear-gradient(to bottom, rgba(0,0,0,.10), rgba(0,0,0,.34) 72%, rgba(0,0,0,.82));
       pointer-events: none;
     }
 
@@ -1011,7 +1015,7 @@
       content: '';
       position: absolute;
       inset: 0;
-      z-index: 2;
+      z-index: 3;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
       opacity: .045;
       pointer-events: none;
@@ -1019,7 +1023,7 @@
 
     .intro-video-content {
       position: relative;
-      z-index: 3;
+      z-index: 4;
       height: 100%;
       padding: 2.2rem var(--pad-x);
       display: flex;
@@ -1073,7 +1077,6 @@
       filter: saturate(1.55) contrast(1.1);
     }
 
-    /* Intro title: underline removed; electric hover effects preserved */
     .intro-brand::after,
     .intro-brand:hover::after {
       display: none;
@@ -1145,33 +1148,25 @@
       50% { opacity: .25; transform: scale(.65); }
     }
 
-    @media (max-width: 700px) {
-      .intro-video { min-height: 560px; }
-      .intro-bottom { flex-direction: column; align-items: flex-start; }
-      .intro-enter { width: 100%; }
+    @media (max-width: 1100px) {
+      .intro-video-media {
+        left: 55%;
+        width: min(58vw, 760px);
+        height: min(72svh, 760px);
+      }
     }
 
-
-    @media (max-width: 768px) {
-      .intro-video {
-        height: 100svh;
-        min-height: 100svh;
-      }
-
-      .intro-video-bg {
-        opacity: .26;
-        filter: blur(18px) contrast(1.08) saturate(.88) brightness(.45);
-        transform: scale(1.12);
-      }
-
+    @media (max-width: 700px) {
+      .intro-video { min-height: 560px; }
       .intro-video-media {
-        object-fit: contain !important;
-        object-position: center center !important;
-        width: 100% !important;
-        height: 100svh !important;
-        max-width: 100% !important;
-        max-height: 100svh !important;
+        top: 46%;
+        left: 50%;
+        width: 92vw;
+        height: 58svh;
+        max-height: 620px;
       }
+      .intro-bottom { flex-direction: column; align-items: flex-start; }
+      .intro-enter { width: 100%; }
     }
 
 
@@ -1850,24 +1845,6 @@ video {
     letter-spacing:.08em !important;
     text-transform:uppercase !important;
     color:#8c8c8c !important;
-}
-
-
-/* FINAL INTRO VIDEO LOCK — keeps the new intro displayed like the previous reel */
-.intro-video .intro-video-bg {
-  object-fit: cover !important;
-}
-
-.intro-video .intro-video-media {
-  object-fit: contain !important;
-  object-position: center center !important;
-}
-
-@media (max-width: 768px) {
-  .intro-video .intro-video-media {
-    object-fit: contain !important;
-    height: 100svh !important;
-  }
 }
 
 </style>
