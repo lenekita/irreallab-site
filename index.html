@@ -260,6 +260,74 @@
     .reels-page .section-head h2:hover::before { animation: ir-more-title-electric .72s steps(2,end) both; }
     @keyframes ir-more-title-blink { 0%, 48% { opacity: 1; } 49%, 100% { opacity: 0; } }
     @keyframes ir-more-title-electric { 0% { opacity:0; transform:translate(0,0); clip-path:inset(0 0 85% 0); } 12% { opacity:.85; transform:translate(-3px,-1px); clip-path:inset(8% 0 68% 0); } 24% { opacity:.35; transform:translate(4px,1px); clip-path:inset(46% 0 33% 0); } 36% { opacity:.75; transform:translate(-2px,0); clip-path:inset(22% 0 54% 0); } 48% { opacity:.18; transform:translate(3px,-1px); clip-path:inset(70% 0 12% 0); } 60% { opacity:.65; transform:translate(-1px,1px); clip-path:inset(34% 0 41% 0); } 100% { opacity:0; transform:translate(0,0); clip-path:inset(0 0 100% 0); } }
+
+    /* IRREAL LAB TITLES — same electric effect as MORE REELS, no green hover fill */
+    .intro-brand,
+    .hero-title {
+      position: relative;
+      display: inline-block;
+      cursor: default;
+      color: var(--text);
+      text-shadow: 0 0 0 rgba(212,240,58,0);
+      transition: text-shadow .35s ease, filter .35s ease;
+    }
+
+    .intro-brand span,
+    .hero-title em {
+      position: relative;
+      display: block;
+      color: var(--accent);
+      text-shadow:
+        0 0 10px rgba(212,240,58,.16),
+        0 0 22px rgba(212,240,58,.06);
+    }
+
+    .intro-brand span::after,
+    .hero-title em::after {
+      content: "_";
+      display: inline-block;
+      margin-left: .08em;
+      color: var(--accent);
+      animation: ir-more-title-blink .85s step-end infinite;
+      text-shadow:
+        0 0 10px rgba(212,240,58,.55),
+        0 0 24px rgba(212,240,58,.28),
+        0 0 44px rgba(212,240,58,.14);
+    }
+
+    .intro-brand::before,
+    .hero-title::before {
+      content: attr(data-glitch);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      color: var(--accent);
+      opacity: 0;
+      pointer-events: none;
+      mix-blend-mode: screen;
+      transform: translateX(0);
+      clip-path: inset(0 0 72% 0);
+    }
+
+    .intro-brand:hover,
+    .hero-title:hover {
+      color: var(--text);
+      filter: brightness(1.08);
+      text-shadow:
+        0 0 12px rgba(237,233,223,.10),
+        0 0 26px rgba(212,240,58,.16);
+    }
+
+    .intro-brand:hover span,
+    .hero-title:hover em {
+      color: var(--accent);
+    }
+
+    .intro-brand:hover::before,
+    .hero-title:hover::before {
+      animation: ir-more-title-electric .72s steps(2,end) both;
+    }
     .reels-page .section-count { color: rgba(237,233,223,.45); font-size: .56rem !important; }
     .reels-page .reel-list { width: min(1180px, calc(100% - var(--pad-x) * 2)); margin: 0 auto; border: 1px solid rgba(237,233,223,.1); background: rgba(8,8,8,.72); backdrop-filter: blur(18px); box-shadow: 0 36px 90px rgba(0,0,0,.38); }
     .reels-page .section-head, .reels-page .reel-list { opacity: 0; transform: translateY(42px) scale(.985); transition: opacity .95s cubic-bezier(.16,1,.3,1), transform .95s cubic-bezier(.16,1,.3,1); }
@@ -318,8 +386,8 @@
     .footer-link:hover { color: var(--accent); }
 
     /* LOGO HOVER */
-    .nav-logo, .footer-logo, .hero-title em, .intro-brand, .intro-brand span { position: relative; transition: color .22s ease, text-shadow .22s ease, filter .22s ease; }
-    .nav-logo:hover, .footer-logo:hover, .hero-title:hover em, .intro-brand:hover, .intro-brand:hover span { color: var(--accent); text-shadow: 0 0 6px rgba(212,240,58,.75), 0 0 18px rgba(212,240,58,.35), 0 0 36px rgba(212,240,58,.18); filter: saturate(1.25); }
+    .nav-logo, .footer-logo { position: relative; transition: color .22s ease, text-shadow .22s ease, filter .22s ease; }
+    .nav-logo:hover, .footer-logo:hover { color: var(--accent); text-shadow: 0 0 6px rgba(212,240,58,.75), 0 0 18px rgba(212,240,58,.35), 0 0 36px rgba(212,240,58,.18); filter: saturate(1.25); }
     .nav-logo::after, .footer-logo::after { content: ''; position: absolute; left: 0; right: 0; bottom: -5px; height: 1px; background: linear-gradient(90deg, transparent, var(--accent), transparent); transform: scaleX(0); transform-origin: center; opacity: 0; transition: transform .28s cubic-bezier(.16,1,.3,1), opacity .28s; }
     .nav-logo:hover::after, .footer-logo:hover::after { transform: scaleX(1); opacity: 1; }
 
@@ -332,9 +400,7 @@
     .intro-topline { display: flex; align-items: center; justify-content: space-between; gap: 1rem; font-size: .58rem; letter-spacing: .18em; text-transform: uppercase; color: rgba(237,233,223,.58); }
     .intro-brand { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3.7rem, 9.2vw, 9.5rem); line-height: .86; letter-spacing: -.02em; max-width: 820px; text-transform: uppercase; white-space: normal; text-shadow: 0 0 20px rgba(212,240,58,.16), 0 0 44px rgba(212,240,58,.08); }
     .intro-brand span { display: block; color: var(--accent); }
-    .intro-brand:hover { animation: introElectricJitter .22s steps(2,end) 1; text-shadow: 0 0 4px rgba(255,255,255,.95), 0 0 10px rgba(212,240,58,.95), 0 0 26px rgba(212,240,58,.62), 0 0 54px rgba(212,240,58,.32), 0 0 92px rgba(212,240,58,.18); filter: saturate(1.55) contrast(1.1); }
     .intro-brand::after, .intro-brand:hover::after { display: none; content: none; }
-    @keyframes introElectricJitter { 0%,100% { transform: translate(0,0); } 25% { transform: translate(.01em,-.006em); } 55% { transform: translate(-.008em,.006em); } 75% { transform: translate(.006em,0); } }
     .intro-bottom { display: flex; justify-content: space-between; align-items: end; gap: 2rem; border-top: 1px solid rgba(237,233,223,.16); padding-top: 1.3rem; }
 
     /* IMPORTANT FIX — intro typewriter stays on one line */
@@ -419,8 +485,8 @@
       <span class="intro-scroll-hint">Scroll to enter</span>
     </div>
 
-    <div class="intro-brand">
-      Irreal<br><span>Lab_</span>
+    <div class="intro-brand" data-glitch="IRREAL LAB">
+      Irreal<br><span>Lab</span>
     </div>
 
     <div class="intro-bottom">
@@ -477,7 +543,7 @@
   <div class="hero-left">
     <div class="hero-eyebrow">Featured Reel</div>
     <div>
-      <h1 class="hero-title">Irreal<em>Lab_</em></h1>
+      <h1 class="hero-title ir-electric-title" data-glitch="IRREAL LAB">Irreal<em>Lab</em></h1>
       <p class="hero-sub">Visual experiments in short-form. Motion, surrealism &amp; the art of the unreal.</p>
     </div>
     <div class="hero-meta">
