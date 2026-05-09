@@ -1833,6 +1833,66 @@ video {
     color:#8c8c8c !important;
 }
 
+
+/* ─────────────────────────────────────────
+   INTRO + HERO COPY — courier typewriter refinement
+   Only changes the two requested paragraphs.
+───────────────────────────────────────── */
+.intro-copy,
+.hero-sub {
+  font-family: 'Space Mono', 'Courier New', monospace !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  letter-spacing: .035em !important;
+  text-transform: none !important;
+}
+
+.intro-copy {
+  font-size: clamp(1rem, 1.7vw, 1.45rem) !important;
+  line-height: 1.55 !important;
+  color: rgba(237,233,223,.72) !important;
+  max-width: 420px !important;
+  min-height: calc(1em * 1.55 * 2);
+}
+
+.hero-sub {
+  font-size: 1rem !important;
+  line-height: 1.7 !important;
+  color: var(--muted) !important;
+  max-width: 300px !important;
+  margin-top: 1.2rem !important;
+  min-height: calc(1em * 1.7 * 3);
+}
+
+.ir-typewriter {
+  position: relative;
+  white-space: pre-wrap;
+}
+
+.ir-typewriter::after {
+  content: '_';
+  display: inline-block;
+  margin-left: .12em;
+  color: var(--accent);
+  text-shadow:
+    0 0 8px rgba(212,240,58,.55),
+    0 0 22px rgba(212,240,58,.22);
+  animation: ir-typewriter-cursor .8s step-end infinite;
+}
+
+.ir-typewriter.is-done::after {
+  opacity: .75;
+}
+
+@keyframes ir-typewriter-cursor {
+  0%, 48% { opacity: 1; }
+  49%, 100% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ir-typewriter::after { display: none; }
+}
+
 </style>
   <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
 </head>
@@ -2115,7 +2175,7 @@ video {
 </script>
 
 <script async src="https://www.instagram.com/embed.js"></script>
-<script src="animations2.js" defer></script>
+<script src="animations2_typewriter.js" defer></script>
 
 </body>
 </html>
