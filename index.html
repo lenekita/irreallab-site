@@ -632,27 +632,18 @@
 }
 
 
-/* MOBILE HOME TITLE — keep same size/layout, move first Irreal Lab title top-left */
-@media (max-width: 768px) {
-  .intro-video-content {
-    justify-content: flex-start !important;
-  }
-
-  .intro-topline {
-    margin-bottom: 1.1rem !important;
-  }
-
-  .intro-brand {
-    align-self: flex-start !important;
-    margin-top: 0 !important;
-    margin-left: 0 !important;
-    text-align: left !important;
-  }
-
-  .intro-bottom {
-    margin-top: auto !important;
-  }
-}
+    @media (max-width: 768px) {
+      .cta-band-text.ir-typewriter,
+      .cta-band-text.ir-typewriter .ir-typewriter,
+      .cta-band-text.cta-typewriter.ir-typewriter {
+        white-space: normal !important;
+        overflow: visible !important;
+        display: block !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        line-height: 1.6 !important;
+      }
+    }
 
 </style>
 </head>
