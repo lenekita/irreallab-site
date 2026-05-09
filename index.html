@@ -545,9 +545,19 @@
   font-size: clamp(.78rem, 1.15vw, 1rem) !important;
   line-height: 1.4 !important;
   color: rgba(237,233,223,.72) !important;
+  width: 100%;
   max-width: 100%;
-  white-space: nowrap !important;
-  overflow: hidden;
+  white-space: normal !important;
+  overflow: visible;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+.reel-hashtags.ir-typewriter {
+  display: inline;
+  white-space: normal !important;
+  overflow: visible;
+  max-width: 100%;
 }
 
 </style>
