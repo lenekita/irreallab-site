@@ -480,7 +480,57 @@
       }
     }
     @media (prefers-reduced-motion: reduce) { .ir-typewriter::after { display: none; } }
-  </style>
+  
+
+/* FOOTER IRREAL — subtle electric blink */
+.footer-irreal {
+  position: relative;
+  display: inline-block;
+  animation: footerIrrealBlink 7.5s infinite;
+}
+
+@keyframes footerIrrealBlink {
+  0%, 82%, 100% {
+    opacity: 1;
+    text-shadow: none;
+    filter: none;
+  }
+
+  83% {
+    opacity: .45;
+  }
+
+  84% {
+    opacity: 1;
+    text-shadow:
+      0 0 4px rgba(237,233,223,.35),
+      0 0 12px rgba(237,233,223,.18);
+  }
+
+  85% {
+    opacity: .3;
+  }
+
+  86% {
+    opacity: 1;
+    text-shadow:
+      0 0 6px rgba(237,233,223,.45),
+      0 0 16px rgba(237,233,223,.22);
+  }
+
+  87% {
+    opacity: .75;
+  }
+
+  88% {
+    opacity: 1;
+    text-shadow:
+      0 0 3px rgba(237,233,223,.25),
+      0 0 10px rgba(237,233,223,.12);
+  }
+}
+
+</style>
 </head>
 <body>
 
@@ -677,7 +727,7 @@
 
 <!-- FOOTER -->
 <footer>
-  <div class="footer-logo">irreal<em>lab_</em></div>
+  <div class="footer-logo"><span class="footer-irreal">irreal</span><em>lab_</em></div>
   <div class="footer-right">
     <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="footer-link">Instagram ↗</a>
     <span class="footer-link" style="cursor:default;">© 2025 irreallab</span>
