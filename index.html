@@ -664,6 +664,72 @@
       }
     }
 
+
+/* REEL NUMBERS — digital glitch effect restored */
+.reel-row-num {
+  overflow: visible;
+  text-shadow:
+    0 0 8px rgba(212,240,58,.10),
+    0 0 18px rgba(212,240,58,.05);
+}
+
+.reel-row-num::before,
+.reel-row-num::after {
+  content: attr(data-num);
+  position: absolute;
+  left: var(--pad-x);
+  top: 1.6rem;
+  line-height: 1;
+  opacity: 0;
+  pointer-events: none;
+  color: var(--accent);
+  mix-blend-mode: screen;
+}
+
+.reel-row-num::before {
+  transform: translate(-2px, 0);
+  clip-path: inset(0 0 58% 0);
+}
+
+.reel-row-num::after {
+  transform: translate(2px, 0);
+  clip-path: inset(48% 0 0 0);
+}
+
+.reel-row:hover .reel-row-num,
+.reel-row-num.ir-num-glitch {
+  color: var(--accent) !important;
+  text-shadow:
+    0 0 7px rgba(212,240,58,.65),
+    0 0 18px rgba(212,240,58,.28),
+    0 0 34px rgba(212,240,58,.13);
+}
+
+.reel-row:hover .reel-row-num::before,
+.reel-row:hover .reel-row-num::after,
+.reel-row-num.ir-num-glitch::before,
+.reel-row-num.ir-num-glitch::after {
+  animation: ir-reel-num-glitch .62s steps(2,end) both;
+}
+
+@keyframes ir-reel-num-glitch {
+  0% { opacity: 0; transform: translate(0,0); }
+  12% { opacity: .9; transform: translate(-3px,-1px); }
+  24% { opacity: .45; transform: translate(4px,1px); }
+  36% { opacity: .8; transform: translate(-2px,0); }
+  48% { opacity: .25; transform: translate(3px,-1px); }
+  60% { opacity: .75; transform: translate(-1px,1px); }
+  100% { opacity: 0; transform: translate(0,0); }
+}
+
+@media (max-width: 768px) {
+  .reel-row-num::before,
+  .reel-row-num::after {
+    left: .95rem;
+    top: 1.6rem;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -780,7 +846,7 @@
 
   <div class="reel-list">
     <a class="reel-row" data-preview-url="https://www.instagram.com/reel/DYFrAFrIulH/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" href="https://www.instagram.com/reel/DYFrAFrIulH/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" target="_blank" rel="noopener">
-      <div class="reel-row-num">01</div>
+      <div class="reel-row-num" data-num="01">01</div>
       <div class="reel-row-body">
         <div class="reel-row-title">Closing Hours</div>
         <div class="reel-row-sub">@irreallab · Watch on Instagram</div>
@@ -798,7 +864,7 @@
     </div>
 
     <a class="reel-row" data-preview-url="https://www.instagram.com/reel/DX7Ynqeo2Xx/" href="https://www.instagram.com/reel/DX7Ynqeo2Xx/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" target="_blank" rel="noopener">
-      <div class="reel-row-num">02</div>
+      <div class="reel-row-num" data-num="02">02</div>
       <div class="reel-row-body">
         <div class="reel-row-title">Frame Shift</div>
         <div class="reel-row-sub">@irreallab · Watch on Instagram</div>
@@ -816,7 +882,7 @@
     </div>
 
     <a class="reel-row" data-preview-url="https://www.instagram.com/reel/DXj-5j3iIoh/" href="https://www.instagram.com/reel/DXj-5j3iIoh/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" target="_blank" rel="noopener">
-      <div class="reel-row-num">03</div>
+      <div class="reel-row-num" data-num="03">03</div>
       <div class="reel-row-body">
         <div class="reel-row-title">Art Heist</div>
         <div class="reel-row-sub">@irreallab · Watch on Instagram</div>
@@ -834,7 +900,7 @@
     </div>
 
     <a class="reel-row" data-preview-url="https://www.instagram.com/reel/DXZxbCWiFPa/" href="https://www.instagram.com/reel/DXZxbCWiFPa/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" target="_blank" rel="noopener">
-      <div class="reel-row-num">04</div>
+      <div class="reel-row-num" data-num="04">04</div>
       <div class="reel-row-body">
         <div class="reel-row-title">Drifting through</div>
         <div class="reel-row-sub">@irreallab · Watch on Instagram</div>
