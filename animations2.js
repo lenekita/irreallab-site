@@ -183,24 +183,26 @@
     if (prefersReducedMotion) return;
 
     titles.forEach(function (title, titleIndex) {
-      const firstTarget = title.dataset.titleFirst || '';
-      const secondTarget = title.dataset.titleSecond || '';
-      const fullText = firstTarget + secondTarget;
-
+      const firstText = title.dataset.titleFirst || '';
+      const secondText = title.dataset.titleSecond || '';
       const secondElement = title.querySelector('span, em');
 
-      function getFirstTextNode(element) {
-        for (let i = 0; i < element.childNodes.length; i += 1) {
-          if (element.childNodes[i].nodeType === Node.TEXT_NODE) {
-            return element.childNodes[i];
-          }
+      if (!secondElement) return;
+
+      let firstNode = null;
+
+      for (let i = 0; i < title.childNodes.length; i += 1) {
+        const node = title.childNodes[i];
+
+        if (node.nodeType === 3 && node.nodeValue.trim().length > 0) {
+          firstNode = node;
+          break;
         }
-        return null;
       }
 
-      const firstNode = getFirstTextNode(title);
-      if (!firstNode || !secondElement) return;
+      if (!firstNode) return;
 
+      const totalLength = firstText.length + secondText.length;
       let index = 0;
       let deleting = false;
       let pauseTicks = 0;
@@ -210,20 +212,20 @@
       const pauseAtEnd = 18;
       const pauseAtStart = 6;
 
-      function render() {
-        const firstLength = Math.min(index, firstTarget.length);
-        const secondLength = Math.max(0, index - firstTarget.length);
+      function renderTitle() {
+        const firstCount = Math.min(index, firstText.length);
+        const secondCount = Math.max(0, index - firstText.length);
 
-        firstNode.nodeValue = firstTarget.slice(0, firstLength);
-        secondElement.textContent = secondTarget.slice(0, secondLength);
+        firstNode.nodeValue = firstText.slice(0, firstCount);
+        secondElement.textContent = secondText.slice(0, secondCount);
       }
 
       function tick() {
         if (!deleting) {
           index += 1;
 
-          if (index >= fullText.length) {
-            index = fullText.length;
+          if (index >= totalLength) {
+            index = totalLength;
             pauseTicks += 1;
 
             if (pauseTicks >= pauseAtEnd) {
@@ -245,16 +247,15 @@
           }
         }
 
-        render();
+        renderTitle();
 
-        const nextDelay = deleting ? deleteSpeed : typeSpeed;
-        window.setTimeout(tick, nextDelay);
+        window.setTimeout(tick, deleting ? deleteSpeed : typeSpeed);
       }
 
       firstNode.nodeValue = '';
       secondElement.textContent = '';
 
-      window.setTimeout(tick, 600 + (titleIndex * 250));
+      window.setTimeout(tick, 450 + (titleIndex * 220));
     });
   }
 
