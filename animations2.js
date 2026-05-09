@@ -20,6 +20,7 @@
     initTypewriterLoop();
     initAudioToggle();
     initMobileVideoAutoplay();
+    initCustomCursor();
     initReelNumberGlitch();
   });
 
@@ -254,4 +255,61 @@
       }, { once: true, passive: true });
     });
   }
+
+
+  function initCustomCursor() {
+    const cursor = document.querySelector('.ir-cursor');
+    const trail = document.querySelector('.ir-cursor-trail');
+
+    if (!cursor || !trail) return;
+
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+
+    let trailX = mouseX;
+    let trailY = mouseY;
+
+    window.addEventListener('mousemove', function (e) {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+
+      cursor.style.left = mouseX + 'px';
+      cursor.style.top = mouseY + 'px';
+    });
+
+    function animateTrail() {
+      trailX += (mouseX - trailX) * 0.14;
+      trailY += (mouseY - trailY) * 0.14;
+
+      trail.style.left = trailX + 'px';
+      trail.style.top = trailY + 'px';
+
+      requestAnimationFrame(animateTrail);
+    }
+
+    animateTrail();
+
+    const hoverTargets = document.querySelectorAll('a, button, .reel-row');
+
+    hoverTargets.forEach(function (el) {
+      el.addEventListener('mouseenter', function () {
+        cursor.style.width = '24px';
+        cursor.style.height = '24px';
+
+        trail.style.width = '58px';
+        trail.style.height = '58px';
+        trail.style.borderColor = 'rgba(212,240,58,.75)';
+      });
+
+      el.addEventListener('mouseleave', function () {
+        cursor.style.width = '16px';
+        cursor.style.height = '16px';
+
+        trail.style.width = '42px';
+        trail.style.height = '42px';
+        trail.style.borderColor = 'rgba(212,240,58,.42)';
+      });
+    });
+  }
+
 })();
