@@ -652,6 +652,31 @@
       }
     }
 
+    /* FEATURED HERO VIDEO — replaces Instagram preview only in the hero block */
+    .hero-featured-video {
+      display: block;
+      width: 100%;
+      max-width: 430px;
+      aspect-ratio: 9 / 16;
+      object-fit: cover;
+      object-position: center center;
+      background: #000;
+      border: none;
+      outline: none;
+    }
+
+    .hero-embed:has(.hero-featured-video) {
+      padding: 1rem;
+      align-items: center;
+    }
+
+    @media (max-width: 480px) {
+      .hero-featured-video {
+        max-width: 100%;
+      }
+    }
+
+
 
 
     /* ══════════════════════════════
@@ -901,7 +926,7 @@
   </div>
 </nav>
 
-<!-- HERO — Reel №01: Closing Hours -->
+<!-- HERO — Featured video: Sky Runway -->
 <section class="hero">
   <div class="hero-left">
     <div class="hero-eyebrow">Featured Reel</div>
@@ -925,21 +950,18 @@
 
   <div class="hero-right">
     <div class="hero-reel-label">
-      <span>Closing Hours — №01</span>
+      <span>Sky Runway — Featured</span>
       <span class="live-dot">Live on Instagram</span>
     </div>
     <div class="hero-embed">
-      <blockquote
-        class="instagram-media"
-        data-instgrm-captioned
-        data-instgrm-permalink="https://www.instagram.com/reel/DYFrAFrIulH/?utm_source=ig_embed&utm_campaign=loading"
-        data-instgrm-version="14"
-        style="background:#FFF;border:0;border-radius:0;box-shadow:none;margin:0;max-width:100%;min-width:0;padding:0;width:100%;">
-      </blockquote>
+      <video class="hero-featured-video" autoplay muted loop playsinline preload="metadata" poster="">
+        <source src="sky-runway.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
     </div>
     <div class="hero-reel-footer">
-      <span class="hero-reel-title">Closing Hours</span>
-      <a href="https://www.instagram.com/reel/DYFrAFrIulH/" target="_blank" rel="noopener" class="hero-reel-open">Open on Instagram ↗</a>
+      <span class="hero-reel-title">Sky Runway</span>
+      <a href="#reels" class="hero-reel-open">See all reels ↓</a>
     </div>
   </div>
 </section>
