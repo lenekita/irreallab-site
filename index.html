@@ -432,11 +432,20 @@
     }
     .ir-typewriter {
       position: relative;
-      white-space: nowrap !important;
       overflow: hidden;
       display: inline-block;
       max-width: 100%;
       vertical-align: bottom;
+    }
+
+    .hero-sub.ir-typewriter,
+    .cta-band-text.ir-typewriter {
+      white-space: normal !important;
+      display: block;
+    }
+
+    .intro-copy.ir-typewriter {
+      white-space: nowrap !important;
     }
     .ir-typewriter::after {
       content: '_';
@@ -1045,7 +1054,7 @@ footer.ir-in-view { animation: none; }
     <div class="hero-eyebrow">Featured Reel</div>
     <div>
       <h1 class="hero-title ir-electric-title" data-glitch="IRREAL LAB">Irreal<em>Lab</em></h1>
-      <p class="hero-sub ir-typewriter" data-typewriter-text="Visual experiments in short-form. Motion, surrealism &amp; the art of the unreal.">Visual experiments in short-form. Motion, surrealism &amp; the art of the unreal.</p>
+      <p class="hero-sub ir-typewriter" data-typewriter-text="Visual experiments in short-form. Motion, surrealism &amp; the art of the unreal." data-type-speed="42" data-delete-speed="18" data-pause-end="34">Visual experiments in short-form. Motion, surrealism &amp; the art of the unreal.</p>
     </div>
     <div class="hero-meta">
       <div class="hero-divider"></div>
@@ -1163,7 +1172,7 @@ footer.ir-in-view { animation: none; }
 
 <!-- CTA BAND -->
 <div class="cta-band">
-  <p class="cta-band-text cta-typewriter ir-typewriter" data-typewriter-text="Every week, a new experiment. Follow @irreallab to never miss a reel.">Every week, a new experiment. Follow @irreallab to never miss a reel.</p>
+  <p class="cta-band-text cta-typewriter ir-typewriter" data-typewriter-text="Every week, a new experiment. Follow @irreallab to never miss a reel." data-type-speed="40" data-delete-speed="18" data-pause-end="36">Every week, a new experiment. Follow @irreallab to never miss a reel.</p>
   <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="cta-btn">Follow on Instagram ↗</a>
 </div>
 
