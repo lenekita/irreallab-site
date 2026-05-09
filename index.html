@@ -482,74 +482,52 @@
     @media (prefers-reduced-motion: reduce) { .ir-typewriter::after { display: none; } }
   
 
-/* FOOTER IRREAL — subtle electric blink */
+/* FOOTER IRREAL — clean electric flicker */
 .footer-irreal {
   position: relative;
   display: inline-block;
-  animation: footerIrrealBlink 4.2s infinite;
+  animation: footerIrrealBlink 3.8s infinite;
+  will-change: opacity, text-shadow;
 }
 
 @keyframes footerIrrealBlink {
-  0%, 12% {
+  0%, 68%, 100% {
+    opacity: 1;
+    text-shadow: none;
+  }
+
+  70% {
+    opacity: .35;
+  }
+
+  71% {
     opacity: 1;
     text-shadow:
-      0 0 4px rgba(237,233,223,.25),
-      0 0 10px rgba(237,233,223,.10);
+      0 0 4px rgba(255,255,255,.18),
+      0 0 8px rgba(255,255,255,.08);
   }
 
-  13% {
-    opacity: .25;
+  72% {
+    opacity: .55;
+    text-shadow: none;
   }
 
-  14% {
+  73% {
     opacity: 1;
     text-shadow:
-      0 0 6px rgba(237,233,223,.45),
-      0 0 16px rgba(237,233,223,.22);
+      0 0 5px rgba(255,255,255,.22),
+      0 0 10px rgba(255,255,255,.12);
   }
 
-  16% {
-    opacity: .4;
+  75% {
+    opacity: .8;
+    text-shadow: none;
   }
 
-  18%, 32% {
+  76%, 92% {
     opacity: 1;
     text-shadow:
-      0 0 7px rgba(237,233,223,.52),
-      0 0 18px rgba(237,233,223,.28);
-  }
-
-  33% {
-    opacity: .3;
-  }
-
-  34%, 52% {
-    opacity: 1;
-    text-shadow:
-      0 0 5px rgba(237,233,223,.38),
-      0 0 14px rgba(237,233,223,.18);
-  }
-
-  53% {
-    opacity: .2;
-  }
-
-  54%, 76% {
-    opacity: 1;
-    text-shadow:
-      0 0 8px rgba(237,233,223,.58),
-      0 0 22px rgba(237,233,223,.30);
-  }
-
-  77% {
-    opacity: .45;
-  }
-
-  78%, 100% {
-    opacity: 1;
-    text-shadow:
-      0 0 4px rgba(237,233,223,.24),
-      0 0 10px rgba(237,233,223,.12);
+      0 0 2px rgba(255,255,255,.12);
   }
 }
 
