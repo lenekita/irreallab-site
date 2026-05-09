@@ -423,14 +423,18 @@
     ══════════════════════════════ */
     .nav-logo,
     .footer-logo,
-    .hero-title em {
+    .hero-title em,
+    .intro-brand,
+    .intro-brand span {
       position: relative;
       transition: color .22s ease, text-shadow .22s ease, filter .22s ease;
     }
 
     .nav-logo:hover,
     .footer-logo:hover,
-    .hero-title:hover em {
+    .hero-title:hover em,
+    .intro-brand:hover,
+    .intro-brand:hover span {
       color: var(--accent);
       text-shadow:
         0 0 6px rgba(212,240,58,.75),
@@ -730,6 +734,37 @@
     .intro-brand span {
       display: block;
       color: var(--accent);
+    }
+
+    .intro-brand:hover {
+      animation: introElectricJitter .22s steps(2,end) 1;
+    }
+
+    .intro-brand::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 10%;
+      bottom: -.18em;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent), #fff, var(--accent), transparent);
+      transform: scaleX(0);
+      transform-origin: left;
+      opacity: 0;
+      filter: drop-shadow(0 0 8px rgba(212,240,58,.8));
+      transition: transform .36s cubic-bezier(.16,1,.3,1), opacity .22s;
+    }
+
+    .intro-brand:hover::after {
+      transform: scaleX(1);
+      opacity: .9;
+    }
+
+    @keyframes introElectricJitter {
+      0%,100% { transform: translate(0,0); }
+      25% { transform: translate(.01em,-.006em); }
+      55% { transform: translate(-.008em,.006em); }
+      75% { transform: translate(.006em,0); }
     }
 
     .intro-bottom {
