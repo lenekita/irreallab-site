@@ -654,3 +654,66 @@
     setTimeout(initMobileFixes, 400);
   });
 })();
+
+
+/* ─────────────────────────────────────────
+   FINAL iOS / Safari VIDEO AUTOPLAY FIX
+   Keeps videos muted + inline and retries play after first user gesture.
+───────────────────────────────────────── */
+(function () {
+  function forceIOSVideos() {
+    const videos = document.querySelectorAll('video');
+
+    videos.forEach(video => {
+      video.muted = true;
+      video.defaultMuted = true;
+      video.loop = true;
+      video.autoplay = true;
+      video.playsInline = true;
+
+      video.setAttribute('muted', '');
+      video.setAttribute('defaultMuted', '');
+      video.setAttribute('loop', '');
+      video.setAttribute('autoplay', '');
+      video.setAttribute('playsinline', '');
+      video.setAttribute('webkit-playsinline', '');
+      video.setAttribute('preload', 'auto');
+      video.setAttribute('x5-playsinline', '');
+      video.setAttribute('x5-video-player-type', 'h5');
+      video.setAttribute('x5-video-player-fullscreen', 'false');
+      video.setAttribute('disablepictureinpicture', '');
+
+      const playVideo = () => {
+        try {
+          const promise = video.play();
+          if (promise && typeof promise.catch === 'function') {
+            promise.catch(() => {});
+          }
+        } catch (e) {}
+      };
+
+      playVideo();
+
+      video.addEventListener('loadedmetadata', playVideo, { once: true });
+      video.addEventListener('loadeddata', playVideo);
+      video.addEventListener('canplay', playVideo);
+      video.addEventListener('canplaythrough', playVideo);
+
+      document.addEventListener('touchstart', playVideo, { once: true, passive: true });
+      document.addEventListener('pointerdown', playVideo, { once: true, passive: true });
+      document.addEventListener('click', playVideo, { once: true });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', forceIOSVideos);
+  } else {
+    forceIOSVideos();
+  }
+
+  window.addEventListener('load', forceIOSVideos);
+  window.addEventListener('pageshow', forceIOSVideos);
+  window.addEventListener('orientationchange', () => {
+    setTimeout(forceIOSVideos, 450);
+  });
+})();
