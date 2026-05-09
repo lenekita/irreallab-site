@@ -383,6 +383,49 @@
     });
   }
 
+
+
+  /* ─────────────────────────────────────────
+     15. INTRO VIDEO — scroll to site content
+  ───────────────────────────────────────── */
+  function initIntroVideo() {
+    const intro = qs('.intro-video');
+    const target = qs('#site-content');
+    if (!intro || !target) return;
+
+    const go = () => {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+
+    const btn = qs('.intro-enter', intro);
+    if (btn) btn.addEventListener('click', go);
+
+    let locked = false;
+    intro.addEventListener('wheel', e => {
+      if (e.deltaY <= 8 || locked) return;
+      e.preventDefault();
+      locked = true;
+      go();
+      setTimeout(() => { locked = false; }, 900);
+    }, { passive: false });
+
+    let touchStartY = null;
+    intro.addEventListener('touchstart', e => {
+      touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+
+    intro.addEventListener('touchmove', e => {
+      if (touchStartY === null || locked) return;
+      const diff = touchStartY - e.touches[0].clientY;
+      if (diff > 28) {
+        e.preventDefault();
+        locked = true;
+        go();
+        setTimeout(() => { locked = false; }, 900);
+      }
+    }, { passive: false });
+  }
+
   /* ─────────────────────────────────────────
      INIT
   ───────────────────────────────────────── */
@@ -401,6 +444,7 @@
     initCounters();
     initMobileNav();
     initTouchRipple();
+    initIntroVideo();
   }
 
   document.readyState === 'loading'
