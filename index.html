@@ -821,19 +821,10 @@
 }
 
 
-/* LARGE TITLES — keep existing effects + add typewriter */
-.intro-brand.ir-typewriter,
-.hero-title.ir-typewriter,
-.section-head h2.ir-typewriter {
+/* TITLE TYPEWRITER — preserves existing color, layout and electric effects */
+.ir-title-typewriter {
   white-space: normal !important;
   overflow: visible !important;
-  display: inline-block;
-}
-
-.intro-brand.ir-typewriter::after,
-.hero-title.ir-typewriter::after,
-.section-head h2.ir-typewriter::after {
-  content: none !important;
 }
 
 </style>
@@ -850,7 +841,7 @@
       <span class="intro-scroll-hint">Scroll to enter</span>
     </div>
 
-    <div class="intro-brand ir-typewriter" data-glitch="IRREAL LAB" data-typewriter-text="Irreal Lab">
+    <div class="intro-brand ir-title-typewriter" data-glitch="IRREAL LAB" data-title-first="Irreal" data-title-second="Lab">
       Irreal<br><span>Lab</span>
     </div>
 
@@ -908,7 +899,7 @@
   <div class="hero-left">
     <div class="hero-eyebrow">Featured Reel</div>
     <div>
-      <h1 class="hero-title ir-electric-title ir-typewriter" data-glitch="IRREAL LAB" data-typewriter-text="IrrealLab">Irreal<em>Lab</em></h1>
+      <h1 class="hero-title ir-electric-title ir-title-typewriter" data-glitch="IRREAL LAB" data-title-first="Irreal" data-title-second="Lab">Irreal<em>Lab</em></h1>
       <p class="hero-sub ir-typewriter" data-typewriter-text="Visual experiments in short-form. Motion, surrealism &amp; the art of the unreal.">Visual experiments in short-form. Motion, surrealism &amp; the art of the unreal.</p>
     </div>
     <div class="hero-meta">
@@ -946,7 +937,7 @@
 <!-- REELS LIST -->
 <section id="reels" class="reels-page">
   <div class="section-head">
-    <h2 class="ir-typewriter" data-glitch="MORE REELS" data-typewriter-text="More Reels">More <span>Reels</span></h2>
+    <h2 class="ir-title-typewriter" data-glitch="MORE REELS" data-title-first="More" data-title-second="Reels">More <span>Reels</span></h2>
     <span class="section-count">Scroll archive · 04 live reels</span>
   </div>
 
