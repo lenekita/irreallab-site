@@ -748,55 +748,75 @@
 }
 
 
-/* CUSTOM CURSOR — cinematic round cursor with soft trail */
-@media (pointer: fine) {
-  body {
-    cursor: none;
+/* CUSTOM CURSOR — modern round cursor with soft trail */
+@media (hover: hover) and (pointer: fine) {
+  html,
+  body,
+  a,
+  button,
+  .reel-row,
+  .audio-toggle,
+  .intro-enter {
+    cursor: none !important;
   }
 
   .ir-cursor,
   .ir-cursor-trail {
     position: fixed;
-    left: 0;
     top: 0;
+    left: 0;
     pointer-events: none;
     border-radius: 50%;
-    z-index: 9999999;
-    transform: translate(-50%, -50%);
-    mix-blend-mode: difference;
+    transform: translate3d(-100px, -100px, 0) translate(-50%, -50%);
+    z-index: 2147483647;
+    will-change: transform, width, height, opacity;
   }
 
   .ir-cursor {
-    width: 16px;
-    height: 16px;
-    background: rgba(212,240,58,.95);
+    width: 13px;
+    height: 13px;
+    background: var(--accent);
     box-shadow:
-      0 0 12px rgba(212,240,58,.45),
-      0 0 28px rgba(212,240,58,.18);
-    transition:
-      width .18s ease,
-      height .18s ease,
-      background .18s ease,
-      opacity .2s ease;
+      0 0 10px rgba(212,240,58,.55),
+      0 0 24px rgba(212,240,58,.22);
   }
 
   .ir-cursor-trail {
     width: 42px;
     height: 42px;
     border: 1px solid rgba(212,240,58,.42);
-    background: rgba(212,240,58,.04);
+    background: rgba(212,240,58,.035);
     backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
     transition:
-      width .22s ease,
-      height .22s ease,
-      border-color .22s ease,
-      opacity .2s ease;
+      width .18s ease,
+      height .18s ease,
+      border-color .18s ease,
+      background .18s ease;
   }
 
-  a:hover ~ .ir-cursor,
-  button:hover ~ .ir-cursor {
-    width: 22px;
-    height: 22px;
+  body.ir-cursor-hover .ir-cursor {
+    width: 20px;
+    height: 20px;
+  }
+
+  body.ir-cursor-hover .ir-cursor-trail {
+    width: 58px;
+    height: 58px;
+    border-color: rgba(212,240,58,.75);
+    background: rgba(212,240,58,.06);
+  }
+
+  body.ir-cursor-hidden .ir-cursor,
+  body.ir-cursor-hidden .ir-cursor-trail {
+    opacity: 0;
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .ir-cursor,
+  .ir-cursor-trail {
+    display: none !important;
   }
 }
 
@@ -1007,11 +1027,11 @@
 <audio id="site-audio" src="velvet-circuit.mp3" loop preload="auto"></audio>
 <button id="audio-toggle" class="audio-toggle" type="button" aria-label="Activer la musique">SOUND OFF</button>
 
+
+<div class="ir-cursor" aria-hidden="true"></div>
+<div class="ir-cursor-trail" aria-hidden="true"></div>
+
 <script async src="https://www.instagram.com/embed.js"></script>
 <script src="animations2.js" defer></script>
-
-<div class="ir-cursor"></div>
-<div class="ir-cursor-trail"></div>
-
 </body>
 </html>
