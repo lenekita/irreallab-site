@@ -589,6 +589,33 @@
   will-change: opacity, text-shadow;
 }
 
+
+
+/* TOP LEFT LOGO — exact same visual behavior as footer logo */
+.nav-logo {
+  color: var(--muted) !important;
+}
+
+.nav-logo em {
+  color: var(--accent) !important;
+  font-style: normal !important;
+}
+
+.nav-logo:hover {
+  color: var(--muted) !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+
+.nav-logo:hover .footer-irreal {
+  color: inherit;
+}
+
+.nav-logo:hover::after {
+  transform: scaleX(0) !important;
+  opacity: 0 !important;
+}
+
 </style>
 </head>
 <body>
