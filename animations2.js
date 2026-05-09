@@ -512,49 +512,6 @@
 })();
 
 
-
-
-/* ─────────────────────────────────────────
-   MORE REELS PAGE — entry animation
-   Makes the archive behave like a second screen after Sky Runway.
-───────────────────────────────────────── */
-(function () {
-  'use strict';
-
-  function initMoreReelsPage() {
-    const page = document.querySelector('.reels-page');
-    if (!page) return;
-
-    const rows = [...page.querySelectorAll('.reel-row')];
-    rows.forEach((row, index) => {
-      row.style.transitionDelay = `${index * 65}ms`;
-    });
-
-    const io = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          page.classList.add('reels-page-in');
-          io.disconnect();
-        }
-      });
-    }, { threshold: 0.22, rootMargin: '0px 0px -18% 0px' });
-
-    io.observe(page);
-
-    const links = document.querySelectorAll('a[href="#reels"], .hero-reel-open[href="#reels"]');
-    links.forEach(link => {
-      link.addEventListener('click', () => {
-        setTimeout(() => page.classList.add('reels-page-in'), 220);
-      });
-    });
-  }
-
-  document.readyState === 'loading'
-    ? document.addEventListener('DOMContentLoaded', initMoreReelsPage)
-    : initMoreReelsPage();
-})();
-
-
 /* ─────────────────────────────────────────
    SITE AUDIO — Velvet Circuit loop
    Browser-safe: starts only after user click.
