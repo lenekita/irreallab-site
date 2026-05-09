@@ -514,8 +514,7 @@
 
 /* ─────────────────────────────────────────
    SITE AUDIO — Velvet Circuit loop
-   Browser-safe: tries autoplay, then unlocks at first user gesture.
-   NOTE: unmuted autoplay is blocked by most modern browsers unless the site is trusted/allowed.
+   Browser-safe: starts only after user click.
 ───────────────────────────────────────── */
 (function () {
   'use strict';
@@ -526,9 +525,6 @@
     if (!audio || !btn) return;
 
     audio.volume = 0.35;
-    audio.loop = true;
-    audio.preload = 'auto';
-    audio.autoplay = true;
 
     const setState = (isOn) => {
       btn.textContent = isOn ? 'SOUND ON' : 'SOUND OFF';
@@ -536,55 +532,20 @@
       btn.setAttribute('aria-label', isOn ? 'Couper la musique' : 'Activer la musique');
     };
 
-    const playAudio = async () => {
-      try {
-        await audio.play();
-        setState(true);
-        return true;
-      } catch (err) {
-        // Browser blocked unmuted autoplay. This is normal on Chrome/Safari/Firefox.
-        setState(false);
-        return false;
-      }
-    };
+    setState(false);
 
-    const pauseAudio = () => {
-      audio.pause();
-      setState(false);
-    };
-
-    // Try immediately when the page loads.
-    setState(true);
-    playAudio();
-
-    // Try again after the full page is loaded.
-    window.addEventListener('load', () => {
-      if (audio.paused) playAudio();
-    }, { once: true });
-
-    // Try again on the first possible user gesture anywhere on the page.
-    const unlockOnce = () => {
-      if (audio.paused) playAudio();
-    };
-
-    document.addEventListener('pointerdown', unlockOnce, { once: true, passive: true });
-    document.addEventListener('touchstart', unlockOnce, { once: true, passive: true });
-    document.addEventListener('keydown', unlockOnce, { once: true });
-
-    // Also start sound when clicking the intro enter button.
-    const enterBtn = document.querySelector('.intro-enter');
-    if (enterBtn) {
-      enterBtn.addEventListener('click', () => {
-        if (audio.paused) playAudio();
-      });
-    }
-
-    // Manual toggle stays fully functional.
     btn.addEventListener('click', async () => {
-      if (audio.paused) {
-        await playAudio();
-      } else {
-        pauseAudio();
+      try {
+        if (audio.paused) {
+          await audio.play();
+          setState(true);
+        } else {
+          audio.pause();
+          setState(false);
+        }
+      } catch (err) {
+        console.log('Audio blocked until user interaction', err);
+        setState(false);
       }
     });
   }
@@ -593,7 +554,6 @@
     ? document.addEventListener('DOMContentLoaded', initSiteAudio)
     : initSiteAudio();
 })();
-
 
 
 /* ─────────────────────────────────────────
@@ -760,7 +720,7 @@
 
 /* ─────────────────────────────────────────
    TYPEWRITER PARAGRAPHS — intro + hero
-   Safe add-on: does not touch reels, Instagram embeds or audio.
+   LOOP MODE — same speed, no other site changes.
 ───────────────────────────────────────── */
 (function () {
   'use strict';
@@ -813,7 +773,7 @@
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    function typeElement(el, options) {
+    function typeElementLoop(el, options) {
       if (!el || el.dataset.irTyped === 'true') return;
 
       const text = (el.dataset.typewriterText || el.textContent || '').replace(/\s+/g, ' ').trim();
@@ -827,36 +787,61 @@
         return;
       }
 
-      const speed = options.speed || 24;
+      const speed = options.speed || 54;
       const startDelay = options.delay || 0;
+      const holdDelay = options.holdDelay || 1800;
+      const restartDelay = options.restartDelay || 450;
 
-      el.textContent = '';
       el.classList.add('ir-typewriter');
 
-      let i = 0;
+      const startLoop = () => {
+        el.classList.remove('is-done');
+        el.textContent = '';
 
-      const step = () => {
-        el.textContent = text.slice(0, i);
-        i += 1;
+        let i = 0;
 
-        if (i <= text.length) {
-          window.setTimeout(step, speed);
-        } else {
-          el.classList.add('is-done');
-        }
+        const step = () => {
+          el.textContent = text.slice(0, i);
+          i += 1;
+
+          if (i <= text.length) {
+            window.setTimeout(step, speed);
+          } else {
+            el.classList.add('is-done');
+
+            window.setTimeout(() => {
+              el.classList.remove('is-done');
+              el.textContent = '';
+
+              window.setTimeout(startLoop, restartDelay);
+            }, holdDelay);
+          }
+        };
+
+        step();
       };
 
-      window.setTimeout(step, startDelay);
+      window.setTimeout(startLoop, startDelay);
     }
 
-    typeElement(introText, { speed: 54, delay: 750 });
+    typeElementLoop(introText, {
+      speed: 54,
+      delay: 750,
+      holdDelay: 1800,
+      restartDelay: 450
+    });
 
     if (heroText) {
       if ('IntersectionObserver' in window) {
         const heroObserver = new IntersectionObserver((entries) => {
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
-              typeElement(heroText, { speed: 52, delay: 350 });
+              typeElementLoop(heroText, {
+                speed: 52,
+                delay: 350,
+                holdDelay: 1800,
+                restartDelay: 450
+              });
               heroObserver.disconnect();
             }
           });
@@ -864,7 +849,12 @@
 
         heroObserver.observe(heroText);
       } else {
-        typeElement(heroText, { speed: 52, delay: 1200 });
+        typeElementLoop(heroText, {
+          speed: 52,
+          delay: 1200,
+          holdDelay: 1800,
+          restartDelay: 450
+        });
       }
     }
   }
