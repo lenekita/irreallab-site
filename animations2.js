@@ -452,38 +452,35 @@
   function initReelRowStagger() {
     if (prefersReducedMotion) return;
 
+    /* Rows are NOT set opacity:0 upfront — that risks permanent invisibility
+       if the observer misfires. Instead we add ir-row-ready (makes them
+       transparent) only once the section is in view, then stagger reveal. */
     injectStyle(`
-      .reel-row, .reels-page .reel-row {
+      .reels-page.ir-reels-in .reel-row.ir-row-ready {
         opacity: 0;
-        transform: translateY(28px);
-        transition: opacity .6s cubic-bezier(.16,1,.3,1), transform .6s cubic-bezier(.16,1,.3,1);
+        transform: translateY(24px);
+        transition: opacity .55s cubic-bezier(.16,1,.3,1), transform .55s cubic-bezier(.16,1,.3,1);
       }
-      .reel-row.ir-row-visible {
+      .reels-page.ir-reels-in .reel-row.ir-row-visible {
         opacity: 1 !important;
         transform: none !important;
       }
     `);
 
-    const rows = document.querySelectorAll('.reel-row');
-    if (!('IntersectionObserver' in window)) {
-      rows.forEach(function (r) { r.classList.add('ir-row-visible'); });
-      return;
-    }
+    const rows      = document.querySelectorAll('.reel-row');
+    const reelsPage = document.querySelector('.reels-page');
+    if (!rows.length || !reelsPage || !('IntersectionObserver' in window)) return;
 
-    const obs = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          const row   = entry.target;
-          const index = Array.from(rows).indexOf(row);
-          setTimeout(function () {
-            row.classList.add('ir-row-visible');
-          }, index * 80);
-          obs.unobserve(row);
-        }
+    const sectionObs = new IntersectionObserver(function (entries) {
+      if (!entries[0].isIntersecting) return;
+      sectionObs.disconnect();
+      rows.forEach(function (row) { row.classList.add('ir-row-ready'); });
+      rows.forEach(function (row, i) {
+        setTimeout(function () { row.classList.add('ir-row-visible'); }, 60 + i * 90);
       });
-    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    }, { threshold: 0.08 });
 
-    rows.forEach(function (row) { obs.observe(row); });
+    sectionObs.observe(reelsPage);
   }
 
   /* ─────────────────────────────────────────────────────────
