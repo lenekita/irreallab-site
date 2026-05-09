@@ -134,7 +134,7 @@
     `;
     document.head.appendChild(css);
 
-    qsa('.nav-logo em, .footer-logo em, .hero-title em').forEach(el => {
+    qsa('.nav-logo em, .footer-logo em, .hero-title em, .intro-brand span').forEach(el => {
       const t = el.textContent;
       if (t.endsWith('_')) {
         el.textContent = t.slice(0, -1);
