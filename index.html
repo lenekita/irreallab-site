@@ -972,35 +972,6 @@ footer.ir-in-view { animation: none; }
   }
 }
 
-
-/* SAFE COPY TYPEWRITER — isolated, does not touch reels / audio / Instagram embeds */
-.ir-copy-typewriter {
-  position: relative;
-  display: inline;
-  white-space: normal !important;
-  overflow-wrap: normal;
-  word-break: normal;
-}
-
-.ir-copy-typewriter::after {
-  content: '_';
-  display: inline-block;
-  margin-left: .12em;
-  color: var(--accent);
-  text-shadow: 0 0 8px rgba(212,240,58,.55), 0 0 22px rgba(212,240,58,.22);
-  animation: ir-typewriter-cursor .8s step-end infinite;
-}
-
-.ir-copy-typewriter.is-done::after {
-  opacity: .75;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .ir-copy-typewriter::after {
-    display: none;
-  }
-}
-
 </style>
 </head>
 <body>
@@ -1074,7 +1045,7 @@ footer.ir-in-view { animation: none; }
     <div class="hero-eyebrow">Featured Reel</div>
     <div>
       <h1 class="hero-title ir-electric-title" data-glitch="IRREAL LAB">Irreal<em>Lab</em></h1>
-      <p class="hero-sub"><span class="ir-copy-typewriter" data-typewriter-text="Visual experiments in short-form. Motion, surrealism &amp; the art of the unreal.">Visual experiments in short-form. Motion, surrealism &amp; the art of the unreal.</span></p>
+      <p class="hero-sub">Visual experiments in short-form. Motion, surrealism &amp; the art of the unreal.</p>
     </div>
     <div class="hero-meta">
       <div class="hero-divider"></div>
@@ -1192,7 +1163,7 @@ footer.ir-in-view { animation: none; }
 
 <!-- CTA BAND -->
 <div class="cta-band">
-  <p class="cta-band-text cta-typewriter"><span class="ir-copy-typewriter" data-typewriter-text="Every week, a new experiment. Follow @irreallab to never miss a reel.">Every week, a new experiment. Follow @irreallab to never miss a reel.</span></p>
+  <p class="cta-band-text cta-typewriter">Every week, a new experiment.<br><strong>Follow @irreallab</strong> to never miss a reel.</p>
   <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="cta-btn">Follow on Instagram ↗</a>
 </div>
 
