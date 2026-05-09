@@ -20,6 +20,7 @@
     initTypewriterLoop();
     initAudioToggle();
     initMobileVideoAutoplay();
+    initReelNumberGlitch();
   });
 
   function initStickyMarquee() {
@@ -145,6 +146,29 @@
 
       el.textContent = '';
       window.setTimeout(tick, 400);
+    });
+  }
+
+
+  function initReelNumberGlitch() {
+    const numbers = document.querySelectorAll('.reel-row-num');
+    if (!numbers.length) return;
+
+    const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
+
+    numbers.forEach(function (num, index) {
+      function trigger() {
+        num.classList.add('ir-num-glitch');
+        window.setTimeout(function () {
+          num.classList.remove('ir-num-glitch');
+        }, 650);
+
+        const nextDelay = 2600 + (index * 420) + Math.random() * 1900;
+        window.setTimeout(trigger, nextDelay);
+      }
+
+      window.setTimeout(trigger, 900 + (index * 380));
     });
   }
 
