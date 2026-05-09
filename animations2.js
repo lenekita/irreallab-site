@@ -26,24 +26,34 @@
     const introSection = document.querySelector('.intro-video');
     const marquee = document.querySelector('.marquee');
     const marqueeSpacer = document.getElementById('marquee-spacer');
+    const nav = document.getElementById('main-nav') || document.querySelector('nav');
+    const navSpacer = document.getElementById('nav-spacer');
 
-    function updateMarqueeSticky() {
+    function updateStickyHeader() {
       if (!introSection || !marquee || !marqueeSpacer) return;
 
       const marqueeHeight = marquee.offsetHeight || 34;
+      const navHeight = nav ? (nav.offsetHeight || 60) : 60;
+
       document.documentElement.style.setProperty('--marquee-height', `${marqueeHeight}px`);
+      document.documentElement.style.setProperty('--nav-height', `${navHeight}px`);
 
       const triggerPoint = introSection.offsetTop + introSection.offsetHeight;
       const shouldStick = window.scrollY >= triggerPoint;
 
       marquee.classList.toggle('is-sticky', shouldStick);
       marqueeSpacer.classList.toggle('is-active', shouldStick);
+
+      if (nav && navSpacer) {
+        nav.classList.toggle('is-sticky', shouldStick);
+        navSpacer.classList.toggle('is-active', shouldStick);
+      }
     }
 
-    window.addEventListener('scroll', updateMarqueeSticky, { passive: true });
-    window.addEventListener('resize', updateMarqueeSticky);
-    window.addEventListener('load', updateMarqueeSticky);
-    updateMarqueeSticky();
+    window.addEventListener('scroll', updateStickyHeader, { passive: true });
+    window.addEventListener('resize', updateStickyHeader);
+    window.addEventListener('load', updateStickyHeader);
+    updateStickyHeader();
   }
 
   function initIntroEnterButton() {
