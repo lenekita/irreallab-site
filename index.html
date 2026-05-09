@@ -486,46 +486,69 @@
 .footer-irreal {
   position: relative;
   display: inline-block;
-  animation: footerIrrealBlink 7.5s infinite;
+  animation: footerIrrealBlink 4.2s infinite;
 }
 
 @keyframes footerIrrealBlink {
-  0%, 82%, 100% {
-    opacity: 1;
-    text-shadow: none;
-    filter: none;
-  }
-
-  83% {
-    opacity: .45;
-  }
-
-  84% {
+  0%, 12% {
     opacity: 1;
     text-shadow:
-      0 0 4px rgba(237,233,223,.35),
-      0 0 12px rgba(237,233,223,.18);
+      0 0 4px rgba(237,233,223,.25),
+      0 0 10px rgba(237,233,223,.10);
   }
 
-  85% {
-    opacity: .3;
+  13% {
+    opacity: .25;
   }
 
-  86% {
+  14% {
     opacity: 1;
     text-shadow:
       0 0 6px rgba(237,233,223,.45),
       0 0 16px rgba(237,233,223,.22);
   }
 
-  87% {
-    opacity: .75;
+  16% {
+    opacity: .4;
   }
 
-  88% {
+  18%, 32% {
     opacity: 1;
     text-shadow:
-      0 0 3px rgba(237,233,223,.25),
+      0 0 7px rgba(237,233,223,.52),
+      0 0 18px rgba(237,233,223,.28);
+  }
+
+  33% {
+    opacity: .3;
+  }
+
+  34%, 52% {
+    opacity: 1;
+    text-shadow:
+      0 0 5px rgba(237,233,223,.38),
+      0 0 14px rgba(237,233,223,.18);
+  }
+
+  53% {
+    opacity: .2;
+  }
+
+  54%, 76% {
+    opacity: 1;
+    text-shadow:
+      0 0 8px rgba(237,233,223,.58),
+      0 0 22px rgba(237,233,223,.30);
+  }
+
+  77% {
+    opacity: .45;
+  }
+
+  78%, 100% {
+    opacity: 1;
+    text-shadow:
+      0 0 4px rgba(237,233,223,.24),
       0 0 10px rgba(237,233,223,.12);
   }
 }
