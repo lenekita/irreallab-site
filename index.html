@@ -657,6 +657,64 @@
       }
     }
 
+
+    /* ══════════════════════════════
+       FIX — Featured reel container only
+       Keep the Instagram preview at its normal size.
+       Shrink only the surrounding hero container to fit it.
+    ══════════════════════════════ */
+    .hero-right {
+      align-items: center !important;
+      justify-content: center !important;
+      padding: clamp(1.5rem, 4vw, 3rem) 0 !important;
+    }
+
+    .hero-reel-label,
+    .hero-embed,
+    .hero-reel-footer {
+      width: min(370px, calc(100% - 2rem)) !important;
+      margin-inline: auto !important;
+    }
+
+    .hero-embed {
+      flex: 0 0 auto !important;
+      height: auto !important;
+      min-height: 0 !important;
+      max-height: none !important;
+      padding: 1rem !important;
+      align-items: flex-start !important;
+      justify-content: center !important;
+      overflow: hidden !important;
+    }
+
+    .hero-embed .instagram-media {
+      transform: none !important;
+      transform-origin: top center !important;
+      width: 326px !important;
+      min-width: 326px !important;
+      max-width: 326px !important;
+      margin: 0 auto !important;
+    }
+
+    .hero-embed iframe {
+      transform: none !important;
+      width: 326px !important;
+      max-width: 326px !important;
+      margin: 0 auto !important;
+    }
+
+    @media (max-width: 480px) {
+      .hero-reel-label,
+      .hero-embed,
+      .hero-reel-footer {
+        width: min(350px, calc(100% - 1rem)) !important;
+      }
+
+      .hero-embed {
+        padding: .75rem !important;
+      }
+    }
+
   </style>
 </head>
 <body>
