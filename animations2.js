@@ -408,3 +408,56 @@
     : init();
 
 })();
+
+
+/* ============================================================
+   irreallab — compact Instagram embeds + inline row preview
+   Does not replace the original reel-row hover animation.
+   ============================================================ */
+(function () {
+  'use strict';
+
+  function processInstagramEmbeds() {
+    if (window.instgrm && window.instgrm.Embeds && typeof window.instgrm.Embeds.process === 'function') {
+      window.instgrm.Embeds.process();
+    }
+  }
+
+  function compactEmbeds() {
+    document.querySelectorAll('.hero-embed, .reel-preview-embed-inner, .reel-row-preview-frame').forEach(box => {
+      box.style.overflow = 'hidden';
+    });
+  }
+
+  function initInlinePreviewProcessing() {
+    const panels = [...document.querySelectorAll('.reel-row-preview-panel')];
+    panels.forEach(panel => {
+      const row = panel.previousElementSibling;
+      if (!row || !row.classList.contains('reel-row')) return;
+      const run = () => {
+        processInstagramEmbeds();
+        setTimeout(compactEmbeds, 650);
+        setTimeout(compactEmbeds, 1400);
+      };
+      row.addEventListener('mouseenter', run, { once: false });
+      row.addEventListener('focusin', run, { once: false });
+    });
+  }
+
+  function initCompactInstagram() {
+    compactEmbeds();
+    processInstagramEmbeds();
+    setTimeout(compactEmbeds, 700);
+    setTimeout(compactEmbeds, 1600);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      initCompactInstagram();
+      initInlinePreviewProcessing();
+    });
+  } else {
+    initCompactInstagram();
+    initInlinePreviewProcessing();
+  }
+})();
