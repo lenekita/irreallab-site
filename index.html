@@ -1458,13 +1458,336 @@
   width: auto !important;
 }
 
+
+/* ─────────────────────────────────────────
+   MOBILE RESPONSIVE FIX — iPhone / Safari
+   Keeps desktop unchanged, fixes intro video, hero video and reels archive.
+───────────────────────────────────────── */
+html, body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+video {
+  display: block;
+  max-width: 100%;
+  background: #060606;
+}
+
+/* Safer viewport units for mobile browser bars */
+.intro,
+.intro-video-page,
+.video-intro,
+.hero-intro,
+.landing-video,
+.fullscreen-video,
+#intro,
+#intro-video {
+  min-height: 100svh !important;
+}
+
+/* Mobile sound button: no overlap with top UI */
+@media (max-width: 768px) {
+  .audio-toggle,
+  #audio-toggle,
+  .sound-toggle {
+    position: fixed !important;
+    right: 1rem !important;
+    top: auto !important;
+    bottom: 1.25rem !important;
+    transform: none !important;
+    z-index: 999999 !important;
+    padding: .75rem .95rem !important;
+    font-size: .58rem !important;
+    letter-spacing: .14em !important;
+  }
+}
+
+/* Intro page video: readable full-screen on iPhone */
+@media (max-width: 768px) {
+  .intro-video,
+  .intro-bg video,
+  .intro video,
+  .video-intro video,
+  .landing-video video,
+  .fullscreen-video video,
+  #intro video,
+  #intro-video video {
+    width: 100% !important;
+    height: 100svh !important;
+    object-fit: cover !important;
+    object-position: center center !important;
+  }
+
+  .intro-content,
+  .intro-copy,
+  .intro-overlay,
+  .intro-left {
+    width: 100% !important;
+    max-width: none !important;
+    padding: 1.4rem !important;
+  }
+
+  .intro-title,
+  .intro-logo,
+  .intro-heading {
+    font-size: clamp(4.8rem, 22vw, 7.2rem) !important;
+    line-height: .78 !important;
+  }
+
+  .intro-sub,
+  .intro-text {
+    max-width: 82vw !important;
+    font-size: .95rem !important;
+    line-height: 1.45 !important;
+  }
+}
+
+/* Main hero page: stack properly on mobile */
+@media (max-width: 900px) {
+  .hero {
+    grid-template-columns: 1fr !important;
+    min-height: auto !important;
+  }
+
+  .hero-left {
+    min-height: auto !important;
+    padding: 5.8rem var(--pad-x, 1.1rem) 2.6rem !important;
+    border-right: none !important;
+    border-bottom: 1px solid var(--line, #1c1c1c) !important;
+  }
+
+  .hero-title {
+    font-size: clamp(4.8rem, 23vw, 7.4rem) !important;
+    line-height: .78 !important;
+  }
+
+  .hero-sub {
+    max-width: 86vw !important;
+  }
+
+  .hero-right {
+    min-height: auto !important;
+    padding: 0 !important;
+  }
+
+  .hero-video,
+  .hero-embed,
+  .featured-video,
+  .featured-media {
+    min-height: auto !important;
+    height: auto !important;
+    padding: 1.1rem !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+  }
+
+  .hero-video-container,
+  .featured-video-container,
+  .hero-media-container {
+    width: 100% !important;
+    max-width: 420px !important;
+    height: auto !important;
+    margin: 0 auto !important;
+  }
+
+  .hero-video video,
+  .featured-video video,
+  .hero-media-container video,
+  .hero-embed video {
+    width: 100% !important;
+    height: auto !important;
+    max-height: 72svh !important;
+    object-fit: contain !important;
+    object-position: center center !important;
+  }
+
+  .hero-reel-label,
+  .hero-reel-footer {
+    padding: .9rem 1.1rem !important;
+    gap: .75rem !important;
+    flex-wrap: wrap !important;
+  }
+}
+
+/* More reels archive: less massive and stacked on mobile */
+@media (max-width: 768px) {
+  #reels,
+  .more-reels-page,
+  .reels-archive,
+  .reels-page {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  #reels .section-head,
+  .more-reels-page .section-head,
+  .reels-archive .section-head,
+  .reels-page .section-head {
+    padding: 4.8rem 1.1rem 2rem !important;
+    display: block !important;
+  }
+
+  #reels .section-head h2,
+  .more-reels-page .section-head h2,
+  .reels-archive .section-head h2,
+  .reels-page .section-head h2 {
+    font-size: clamp(3.5rem, 18vw, 5.3rem) !important;
+    line-height: .82 !important;
+  }
+
+  #reels .section-count,
+  .more-reels-page .section-count,
+  .reels-archive .section-count,
+  .reels-page .section-count {
+    display: block !important;
+    margin-top: 1rem !important;
+    font-size: .56rem !important;
+  }
+
+  #reels .reel-row,
+  #reels .reel-card,
+  .more-reels-page .reel-row,
+  .more-reels-page .reel-card,
+  .reels-archive .reel-row,
+  .reels-archive .reel-card,
+  .reels-page .reel-row,
+  .reels-page .reel-card {
+    max-width: calc(100vw - 1.2rem) !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  #reels .reel-row {
+    grid-template-columns: 54px 1fr auto !important;
+  }
+
+  #reels .reel-row-num,
+  .more-reels-page .reel-row-num,
+  .reels-archive .reel-row-num,
+  .reels-page .reel-row-num {
+    font-size: 2.15rem !important;
+    padding-left: .95rem !important;
+    padding-right: .65rem !important;
+  }
+
+  #reels .reel-row-title,
+  .more-reels-page .reel-row-title,
+  .reels-archive .reel-row-title,
+  .reels-page .reel-row-title {
+    font-size: clamp(1.35rem, 8vw, 2rem) !important;
+    line-height: .95 !important;
+  }
+
+  #reels .reel-row-sub,
+  .more-reels-page .reel-row-sub,
+  .reels-archive .reel-row-sub,
+  .reels-page .reel-row-sub {
+    font-size: .58rem !important;
+    line-height: 1.45 !important;
+  }
+
+  #reels .reel-row-right {
+    padding-right: .95rem !important;
+  }
+
+  #reels .reel-row-tag {
+    display: none !important;
+  }
+
+  #reels .reel-reveal,
+  #reels .reel-preview-reveal,
+  #reels .reel-preview-panel,
+  .more-reels-page .reel-reveal,
+  .more-reels-page .reel-preview-reveal,
+  .more-reels-page .reel-preview-panel,
+  .reels-archive .reel-reveal,
+  .reels-archive .reel-preview-reveal,
+  .reels-archive .reel-preview-panel,
+  .reels-page .reel-reveal,
+  .reels-page .reel-preview-reveal,
+  .reels-page .reel-preview-panel {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 1.2rem !important;
+    padding: 1.2rem !important;
+  }
+
+  #reels .reel-preview-shell,
+  #reels .instagram-preview-shell,
+  #reels .reel-embed-shell,
+  .more-reels-page .reel-preview-shell,
+  .more-reels-page .instagram-preview-shell,
+  .more-reels-page .reel-embed-shell,
+  .reels-archive .reel-preview-shell,
+  .reels-archive .instagram-preview-shell,
+  .reels-archive .reel-embed-shell,
+  .reels-page .reel-preview-shell,
+  .reels-page .instagram-preview-shell,
+  .reels-page .reel-embed-shell {
+    width: 100% !important;
+    max-width: 330px !important;
+    margin: 0 auto !important;
+    transform: none !important;
+  }
+
+  #reels .instagram-media,
+  .more-reels-page .instagram-media,
+  .reels-archive .instagram-media,
+  .reels-page .instagram-media {
+    min-width: 0 !important;
+    width: 100% !important;
+    max-width: 330px !important;
+  }
+
+  #reels .reel-preview-copy,
+  #reels .reel-card-copy,
+  .more-reels-page .reel-preview-copy,
+  .more-reels-page .reel-card-copy,
+  .reels-archive .reel-preview-copy,
+  .reels-archive .reel-card-copy,
+  .reels-page .reel-preview-copy,
+  .reels-page .reel-card-copy {
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+
+  #reels .reel-preview-copy p,
+  #reels .reel-card-copy p,
+  .more-reels-page .reel-preview-copy p,
+  .more-reels-page .reel-card-copy p,
+  .reels-archive .reel-preview-copy p,
+  .reels-archive .reel-card-copy p,
+  .reels-page .reel-preview-copy p,
+  .reels-page .reel-card-copy p {
+    font-size: 1rem !important;
+    line-height: 1.6 !important;
+  }
+}
+
+/* Instagram embeds are unstable on mobile: prevent layout explosion */
+@media (max-width: 480px) {
+  .instagram-media {
+    min-width: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  iframe.instagram-media-rendered,
+  .instagram-media-rendered iframe {
+    max-width: 100% !important;
+  }
+}
+
 </style>
 </head>
 <body>
 
 <!-- INTRO VIDEO — fullscreen landing -->
 <section class="intro-video" aria-label="Irreallab video intro">
-  <video class="intro-video-media" src="intro-reel.mp4" autoplay muted loop playsinline preload="metadata"></video>
+  <video class="intro-video-media" src="intro-reel.mp4" autoplay muted loop playsinline webkit-playsinline preload="auto"></video>
 
   <div class="intro-video-content">
     <div class="intro-topline">
@@ -1553,7 +1876,7 @@
       <span class="live-dot">Live on Instagram</span>
     </div>
     <div class="hero-embed">
-      <video class="hero-featured-video" autoplay muted loop playsinline preload="metadata" poster="">
+      <video class="hero-featured-video" autoplay muted loop playsinline poster="" webkit-playsinline preload="auto">
         <source src="sky-runway.mp4" type="video/mp4">
         Your browser does not support the video tag.
       </video>
