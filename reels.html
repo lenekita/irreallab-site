@@ -295,13 +295,40 @@
   }
 
   function render(reels){
-    grid.innerHTML=reels.map((r,i)=>`<article class="card"><div class="card-top"><div class="num">${String(i+1).padStart(2,'0')}</div><div class="tag">${esc(r.status||'Live')}</div></div><div class="embed"><blockquote class="instagram-media" data-instgrm-permalink="${esc(r.url)}" data-instgrm-version="14" style="background:#FFF;border:0;border-radius:0;box-shadow:none;margin:0;max-width:540px;min-width:326px;padding:0;width:100%;"></blockquote></div><div class="info"><h2>${esc(r.title)}</h2><div class="sub">${esc(r.subtitle||'@irreallab · Watch on Instagram')}</div><p class="hashtags">${esc(r.hashtags)}</p><a class="open" href="${esc(r.url)}" target="_blank" rel="noopener">Open reel ↗</a></div></article>`).join('');
+    grid.innerHTML=reels.map((r,i)=>{
+      const embedHtml = r.video_url
+        ? `<video src="${esc(r.video_url)}" poster="${esc(r.thumbnail_url)}" muted loop onmouseover="this.play()" onmouseout="this.pause()" style="width:100%;height:100%;object-fit:cover;border-radius:0;"></video>`
+        : `<blockquote class="instagram-media" data-instgrm-permalink="${esc(r.url)}" data-instgrm-version="14" style="background:#FFF;border:0;border-radius:0;box-shadow:none;margin:0;max-width:540px;min-width:326px;padding:0;width:100%;"></blockquote>`;
+      return `<article class="card"><div class="card-top"><div class="num">${String(i+1).padStart(2,'0')}</div><div class="tag">${esc(r.status||'Live')}</div></div><div class="embed">${embedHtml}</div><div class="info"><h2>${esc(r.title)}</h2><div class="sub">${esc(r.subtitle||'@irreallab · Watch on Instagram')}</div><p class="hashtags">${esc(r.hashtags)}</p><a class="open" href="${esc(r.url)}" target="_blank" rel="noopener">Open reel ↗</a></div></article>`;
+    }).join('');
     count.textContent=String(reels.length).padStart(2,'0')+' live reels';
     grid.classList.add('ir-in');
     if(window.instgrm&&window.instgrm.Embeds){window.instgrm.Embeds.process();}
   }
 
   function loadReels(){
+    // Try to load from Firebase first, fall back to reels.json
+    loadFromFirebase().catch(()=>loadFromStatic());
+  }
+
+  async function loadFromFirebase(){
+    try {
+      const { db } = await import('./firebase-config.js');
+      const { collection, getDocs, query, orderBy } = await import('https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js');
+
+      const reelsCollection = collection(db, 'reels');
+      const q = query(reelsCollection, orderBy('order', 'asc'));
+      const snapshot = await getDocs(q);
+      const reels = [];
+      snapshot.forEach(doc=>{reels.push({...doc.data()})});
+      render(reels);
+    } catch(error){
+      console.warn('Firebase unavailable, using static JSON:', error);
+      throw error;
+    }
+  }
+
+  function loadFromStatic(){
     fetch('reels.json',{cache:'no-store'}).then(r=>r.json()).then(render).catch(()=>{count.textContent='Unable to load reels.json';});
   }
   function initCursor(){

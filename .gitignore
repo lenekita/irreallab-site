@@ -1,0 +1,19 @@
+# Firebase credentials - never commit
+firebase-config.js
+
+# Dependencies
+node_modules/
+package-lock.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Local testing
+*.local
+.env
+.env.local
