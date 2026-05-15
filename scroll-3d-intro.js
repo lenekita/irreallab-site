@@ -276,8 +276,8 @@ class ScrollIntro3D {
         geometry.attributes.position.needsUpdate = true;
       }
 
-      // Elegant scale pulsing
-      const scale = 1 + Math.sin(this.time * 0.4 + progress * Math.PI * 2) * 0.2 + progress * 0.15;
+      // Shape shrinks as scroll progresses
+      const scale = 1.2 + Math.sin(this.time * 0.4 + progress * Math.PI * 2) * 0.15 - progress * 0.8;
       this.mainMesh.scale.set(scale, scale, scale);
 
       // Vibrant neon color shift: lime → cyan → lime
@@ -294,7 +294,8 @@ class ScrollIntro3D {
     // Text animation - LARGER and MORE VISIBLE
     if (this.textMesh) {
       const textProgress = Math.max(0, progress - 0.08) / 0.35;
-      const textScale = Math.min(1, Math.max(0, textProgress));
+      // Text grows from 0 to ~2.5 by the end of scroll
+      const textScale = Math.max(0, Math.min(2.5, textProgress * 2.5));
 
       this.textMesh.scale.set(textScale, textScale, 1);
       this.textMesh.rotation.y = progress * Math.PI * 1.5;
