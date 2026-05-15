@@ -74,7 +74,7 @@
 
     /* SUBTITLE — same typography and typewriter rhythm as the front page copy */
     .intro{font-family:'Space Mono','Courier New',monospace!important;font-style:normal!important;font-weight:400!important;letter-spacing:.035em!important;text-transform:none!important;font-size:clamp(.78rem,1.15vw,1rem)!important;line-height:1.7!important;color:rgba(237,233,223,.72)!important;max-width:520px!important;margin-top:1.2rem!important;min-height:calc(1em * 1.7 * 3);white-space:normal!important;overflow:visible!important}
-    .ir-typewriter{position:relative;white-space:normal!important;overflow:visible;display:inline-block;max-width:100%;vertical-align:bottom}
+    .ir-typewriter{position:relative;white-space:normal!important;overflow:visible;display:block;max-width:100%;vertical-align:bottom}
     .ir-typewriter:after{content:'_';display:inline-block;margin-left:.12em;color:var(--accent);text-shadow:0 0 8px rgba(212,240,58,.55),0 0 22px rgba(212,240,58,.22);animation:ir-typewriter-cursor .8s step-end infinite}
     .ir-typewriter.is-done:after{opacity:.75}
     @keyframes ir-typewriter-cursor{0%,48%{opacity:1}49%,100%{opacity:0}}
@@ -99,7 +99,49 @@
     @media(max-width:900px){.head{display:block}.intro{margin-top:1.3rem}.count{display:block;margin-top:1rem}.grid{grid-template-columns:1fr}.embed{min-height:480px}}
     @media(max-width:600px){.nav-links{gap:1rem}.nav-hide{display:none}.nav-logo{font-size:1.2rem}.title{font-size:clamp(3.8rem,17vw,6rem)}.embed{min-height:430px;padding:.6rem}.instagram-media{min-width:0!important}.card-top,.info{padding:1rem}}
     @media(prefers-reduced-motion:reduce){.ir-typewriter:after{display:none}.head,.grid{opacity:1;transform:none}.title span:after{display:none}}
-  </style>
+  
+    /* CUSTOM CURSOR */
+    @media (hover:hover) and (pointer:fine){
+      html,body,a,button,.card,.open,.nav-logo,.footer-link,.nav-cta{cursor:none!important}
+
+      .ir-cursor,
+      .ir-cursor-trail{
+        position:fixed;
+        top:0;
+        left:0;
+        pointer-events:none;
+        border-radius:50%;
+        transform:translate(-50%,-50%);
+        z-index:999999;
+      }
+
+      .ir-cursor{
+        width:12px;
+        height:12px;
+        background:var(--accent);
+        box-shadow:0 0 10px rgba(212,240,58,.6);
+      }
+
+      .ir-cursor-trail{
+        width:40px;
+        height:40px;
+        border:1px solid rgba(212,240,58,.45);
+        background:rgba(212,240,58,.03);
+        transition:width .2s,height .2s;
+      }
+
+      body.ir-hover .ir-cursor{
+        width:18px;
+        height:18px;
+      }
+
+      body.ir-hover .ir-cursor-trail{
+        width:56px;
+        height:56px;
+      }
+    }
+
+</style>
 </head>
 <body>
 <nav>
@@ -118,6 +160,10 @@
   <section class="grid" id="reels-grid" aria-label="Irreallab reels archive"></section>
 </main>
 <footer><div class="footer-logo"><span class="footer-irreal">irreal</span><em>lab_</em></div><div class="footer-right"><a href="index.html" class="footer-link">Home</a><a href="contact.html" class="footer-link">Contact</a><a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="footer-link">Instagram</a></div><p class="footer-copyright">© irreallab — Radu Nechita (Instagram) · Site rédaction : © Hélène Nechita · Tous droits réservés.</p></footer>
+
+<div class="ir-cursor"></div>
+<div class="ir-cursor-trail"></div>
+
 <script>
 (function(){
   'use strict';
@@ -135,6 +181,7 @@
     initTypewriterLoop();
     initLargeTitleTypewriter();
     loadReels();
+    initCursor();
   });
 
   function initPageReveal(){
@@ -257,6 +304,35 @@
   function loadReels(){
     fetch('reels.json',{cache:'no-store'}).then(r=>r.json()).then(render).catch(()=>{count.textContent='Unable to load reels.json';});
   }
+  function initCursor(){
+    const cursor=document.querySelector('.ir-cursor');
+    const trail=document.querySelector('.ir-cursor-trail');
+    if(!cursor||!trail) return;
+
+    let tx=0,ty=0,mx=0,my=0;
+
+    document.addEventListener('mousemove',e=>{
+      mx=e.clientX;
+      my=e.clientY;
+      cursor.style.left=mx+'px';
+      cursor.style.top=my+'px';
+    });
+
+    function animate(){
+      tx+=(mx-tx)*0.14;
+      ty+=(my-ty)*0.14;
+      trail.style.left=tx+'px';
+      trail.style.top=ty+'px';
+      requestAnimationFrame(animate);
+    }
+    animate();
+
+    document.querySelectorAll('a,button,.card,.open').forEach(el=>{
+      el.addEventListener('mouseenter',()=>document.body.classList.add('ir-hover'));
+      el.addEventListener('mouseleave',()=>document.body.classList.remove('ir-hover'));
+    });
+  }
+
 })();
 </script>
 <script async src="https://www.instagram.com/embed.js"></script>
