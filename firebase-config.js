@@ -1,24 +1,27 @@
 // firebase-config.js
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-import {
-  getAuth
-} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
-import {
-  getFirestore
-} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
 
-// REPLACE WITH YOUR FIREBASE VALUES
+import { getAuth }
+from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+
+import { getFirestore }
+from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+
+// Firebase config
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "123456789",
-  appId: "1:123456:web:abc123"
+  apiKey: "AIzaSyDugHMiSJZBW6Yi5BelkubbHOa7j0sLfmw",
+  authDomain: "irreallab-57207.firebaseapp.com",
+  projectId: "irreallab-57207",
+  storageBucket: "irreallab-57207.firebasestorage.app",
+  messagingSenderId: "715250762800",
+  appId: "1:715250762800:web:73b2d09492e4d67e5899f5",
+  measurementId: "G-628Q19EM44"
 };
 
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
+// Export services
 export const auth = getAuth(app);
 export const db = getFirestore(app);
