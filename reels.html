@@ -257,13 +257,14 @@
         const embedHtml = r.video_url
           ? `<video src="${esc(r.video_url)}" poster="${esc(r.thumbnail_url)}" muted loop onmouseover="this.play()" onmouseout="this.pause()" style="width:100%;height:100%;object-fit:cover;border-radius:0;"></video>`
           : `<blockquote class="instagram-media" data-instgrm-permalink="${esc(r.url)}" data-instgrm-version="14" style="background:#FFF;border:0;border-radius:0;box-shadow:none;margin:0;max-width:540px;min-width:326px;padding:0;width:100%;"></blockquote>`;
-        return `<article class="card"><div class="card-top"><div class="num">${String(i+1).padStart(2,'0')}</div><div class="tag">${esc(r.status||'Live')}</div></div><div class="embed">${embedHtml}</div><div class="info"><h2>${esc(r.title)}</h2><div class="sub">${esc(r.subtitle||'@irreallab · Watch on Instagram')}</div><p class="hashtags">${esc(r.hashtags)}</p><a class="open" href="${esc(r.url)}" target="_blank" rel="noopener">Open reel ↗</a></div></article>`;
+        const audioAttr = r.audio_url ? ` data-audio-url="${esc(r.audio_url)}"` : '';
+        return `<article class="card"${audioAttr}><div class="card-top"><div class="num">${String(i+1).padStart(2,'0')}</div><div class="tag">${esc(r.status||'Live')}</div></div><div class="embed">${embedHtml}</div><div class="info"><h2>${esc(r.title)}</h2><div class="sub">${esc(r.subtitle||'@irreallab · Watch on Instagram')}</div><p class="hashtags">${esc(r.hashtags)}</p><a class="open" href="${esc(r.url)}" target="_blank" rel="noopener">Open reel ↗</a></div></article>`;
       }).join('');
       count.textContent = String(reels.length).padStart(2,'0') + ' live reels';
       grid.classList.add('ir-in');
       if(window.instgrm&&window.instgrm.Embeds){window.instgrm.Embeds.process();}
-      
-      // Initialize audio sync after reels are rendered - FIXED
+
+      // Initialize audio sync after reels are rendered
       setTimeout(()=>{
         if(window.initializeReelsAudioFromAttributes){
           window.initializeReelsAudioFromAttributes();
