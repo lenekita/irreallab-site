@@ -183,6 +183,8 @@ All audio files are stored in the repo root and referenced in `reels.json`:
 
 All original artwork © irreallab. All rights reserved.
 
+Audio tracks used in the reels are licensed tracks sourced from music libraries and available through Instagram's audio library.
+
 ---
 
 ## Contact
