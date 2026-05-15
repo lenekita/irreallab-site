@@ -749,58 +749,27 @@
     }
 
   
-    .reels-intro {
-      max-width: 680px;
-      margin: -1rem 0 3.2rem;
+    .typewriter-subtitle {
+      font-family: 'Satoshi','Inter',sans-serif;
+      font-size: .62rem;
+      font-weight: 600;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: rgba(212,240,58,.8);
+      margin: .85rem 0 1rem;
     }
 
-    .typewriter-line {
-      width: 0;
-      overflow: hidden;
-      white-space: nowrap;
-      font-family: 'Space Mono', monospace;
-      font-size: clamp(.72rem, 1vw, .92rem);
-      line-height: 1.9;
-      letter-spacing: .04em;
-      color: rgba(237,233,223,.72);
-      border-right: 1px solid rgba(212,240,58,.75);
-      animation:
-        typing 4s steps(70, end) forwards,
-        caretBlink .8s step-end infinite;
-    }
-
-    .typewriter-line.delay-2 {
-      margin-top: .6rem;
-      animation-delay: 3.6s;
-    }
-
-    @keyframes typing {
-      from { width: 0; }
-      to { width: 100%; }
-    }
-
-    @keyframes caretBlink {
-      0%, 50% { border-color: rgba(212,240,58,.75); }
-      51%, 100% { border-color: transparent; }
-    }
-
-    @media (max-width: 700px) {
-      .typewriter-line {
-        white-space: normal;
-        width: 100%;
-        animation:
-          fadeMobile .8s ease forwards;
-        border-right: none;
-      }
-
-      .typewriter-line.delay-2 {
-        animation-delay: .3s;
-      }
-
-      @keyframes fadeMobile {
-        from { opacity: 0; transform: translateY(8px); }
-        to { opacity: 1; transform: translateY(0); }
-      }
+    .reels-page .intro.ir-typewriter {
+      display: block !important;
+      max-width: 620px !important;
+      min-height: calc(1em * 1.7 * 2) !important;
+      font-family: 'Space Mono','Courier New',monospace !important;
+      font-size: clamp(.78rem, 1.15vw, 1rem) !important;
+      line-height: 1.7 !important;
+      letter-spacing: .035em !important;
+      color: rgba(237,233,223,.72) !important;
+      white-space: normal !important;
+      overflow: visible !important;
     }
 
 </style>
@@ -852,11 +821,17 @@
   <main class="reels-page">
     <div class="head section-head">
       <div>
-        <div class="kicker">Archive</div>
-        <h1 class="title" data-glitch="REELS"><span>REELS</span></h1>
-        <div class="intro ir-typewriter" data-typewriter-text="Irreallab's reel archive: experimental motion studies, surreal visual narratives, and cinematic fragments from imagined worlds.">Irreallab's reel archive: experimental motion studies, surreal visual narratives, and cinematic fragments from imagined worlds.</div>
+        <div class="kicker">Archive / Motion / Visual experiments</div>
+        <h1 class="title" data-glitch="MORE&#10;REELS">
+          MORE
+          <span>REELS</span>
+        </h1>
+        <div class="typewriter-subtitle">Selected fragments from the unreal archive.</div>
+        <div class="intro ir-typewriter" data-typewriter-text="Visual experiments in short-form. Motion, surrealism & the art of the unreal. Every week, a new experiment from @irreallab.">
+          Visual experiments in short-form. Motion, surrealism & the art of the unreal. Every week, a new experiment from @irreallab.
+        </div>
       </div>
-      <div class="count"></div>
+      <div class="count">Curated archive / cinematic fragments</div>
     </div>
     <div class="grid reel-list"></div>
   </main>
