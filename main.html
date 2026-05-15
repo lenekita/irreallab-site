@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>irreallab — surreal visual experiments</title>
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <meta name="description" content="Visual experiments in short-form. Motion, surrealism & the art of the unreal.">
+
+  <meta property="og:title" content="irreallab — surreal visual experiments">
+  <meta property="og:description" content="Visual experiments in short-form. Motion, surrealism & the art of the unreal.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://irreallab.fr">
+  <meta property="og:image" content="https://irreallab.fr/preview.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="irreallab — surreal visual experiments">
+<meta name="twitter:description" content="Visual experiments in short-form. Motion, surrealism & the art of the unreal.">
+<meta name="twitter:image" content="https://irreallab.fr/preview.jpg">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
+  <style>
+    /* ── TOKENS ── */
+    :root {
+      --bg:      #060606;
+      --bg2:     #0d0d0d;
+      --line:    #1c1c1c;
+      --line2:   #242424;
+      --accent:  #d4f03a;
+      --text:    #ede9df;
+      --muted:   #4a4a4a;
+      --muted2:  #222;
+      --pad-x:   3.5rem;
+    }
+    @media (max-width: 900px) { :root { --pad-x: 1.5rem; } }
+    @media (max-width: 480px) { :root { --pad-x: 1.1rem; } }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Space Mono', monospace;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity: 0.035; pointer-events: none; z-index: 9999;
+    }
+
+    /* MARQUEE */
+    .marquee {
+      background: var(--accent);
+      overflow: hidden;
+      position: relative;
+      top: auto;
+      z-index: 200;
+      border-bottom: 1.5px solid #000;
+      transition: box-shadow .25s ease;
+    }
+    .marquee.is-sticky {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 100000;
+      box-shadow: 0 10px 30px rgba(0,0,0,.28);
+    }
+    .marquee-spacer { height: 0; pointer-events: none; }
+    .marquee-spacer.is-active { height: var(--marquee-height, 34px); }
+    .marquee-track {
+      display: inline-flex; white-space: nowrap;
+      animation: mscroll 22s linear infinite;
+    }
+    .marquee:hover .marquee-track { animation-play-state: paused; }
+    .marquee-item {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.9rem; letter-spacing: 0.15em;
+      color: #060606; text-decoration: none;
+      padding: 8px 24px; display: inline-block;
+      transition: opacity .2s;
+    }
+    .marquee-item:hover { opacity: 1; color: #ff0000; }
+    .marquee-dot { color: #06060650; padding: 8px 4px; font-size: .7rem; }
+    @keyframes mscroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* NAV */
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 var(--pad-x); height: 60px;
+      border-bottom: 1px solid var(--line);
+      position: relative; z-index: 100;
+    }
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem; letter-spacing: .04em;
+      color: var(--text); text-decoration: none;
+    }
+    .nav-logo em { color: var(--accent); font-style: normal; }
+    .nav-links { display: flex; gap: 2rem; align-items: center; }
+    .nav-links a {
+      font-size: .6rem; letter-spacing: .16em; text-transform: uppercase;
+      color: var(--muted); text-decoration: none; transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta { background: var(--accent) !important; color: #060606 !important; padding: 6px 14px; }
+    @media (max-width: 600px) { .nav-links .nav-hide { display: none; } }
+    @media (max-width: 420px) { .nav-links { gap: 1rem; } .nav-logo { font-size: 1.2rem; } }
+
+
+    /* Sticky header: nav sticks under the yellow marquee after the intro */
+    nav.is-sticky {
+      position: fixed;
+      left: 0;
+      top: var(--marquee-height, 34px);
+      width: 100%;
+      z-index: 99999;
+      background: rgba(6,6,6,.82);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 14px 40px rgba(0,0,0,.34);
+    }
+
+    .nav-spacer {
+      height: 0;
+      pointer-events: none;
+    }
+
+    .nav-spacer.is-active {
+      height: var(--nav-height, 60px);
+    }
+
+    /* HERO */
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 92vh;
+      border-bottom: 1px solid var(--line);
+    }
+    .hero-left {
+      display: flex; flex-direction: column;
+      justify-content: space-between;
+      padding: 3.5rem var(--pad-x);
+      border-right: 1px solid var(--line);
+    }
+    .hero-eyebrow {
+      font-size: .58rem; letter-spacing: .22em; text-transform: uppercase;
+      color: var(--muted); display: flex; align-items: center; gap: .8rem;
+    }
+    .hero-eyebrow::before { content: ''; width: 28px; height: 1px; background: var(--muted); flex-shrink: 0; }
+    .hero-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(4rem, 8.5vw, 9.5rem);
+      line-height: .86; letter-spacing: -.01em;
+    }
+    .hero-title em { color: var(--accent); display: block; font-style: normal; }
+    .hero-sub {
+      font-family: 'Space Mono', 'Courier New', monospace !important;
+      font-style: normal !important;
+      font-size: 1rem !important;
+      line-height: 1.7 !important;
+      color: var(--muted) !important;
+      max-width: 300px !important;
+      margin-top: 1.2rem !important;
+      min-height: calc(1em * 1.7 * 3);
+      font-weight: 400 !important;
+      letter-spacing: .035em !important;
+      text-transform: none !important;
+    }
+    .hero-divider { width: 100%; height: 1px; background: var(--line2); }
+    .hero-meta { display: flex; flex-direction: column; gap: .9rem; }
+    .hero-transmission { display: grid; gap: 1rem; padding: .15rem 0; position: relative; }
+    .hero-transmission::before {
+      content: ''; position: absolute; left: 0; top: -10px; width: 42px; height: 1px;
+      background: var(--accent); box-shadow: 0 0 18px rgba(212,240,58,.55); opacity: .75;
+      animation: ir-transmission-pulse 2.2s ease-in-out infinite;
+    }
+    .transmission-kicker { font-size: .58rem; letter-spacing: .22em; text-transform: uppercase; color: var(--accent); }
+    .transmission-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(1.8rem, 3vw, 2.6rem); line-height: .9; letter-spacing: .04em; color: var(--text); }
+    .transmission-details { display: grid; gap: .35rem; font-size: .58rem; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+    .transmission-details span { display: inline-flex; align-items: center; gap: .65rem; }
+    .transmission-details span::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); opacity: .75; box-shadow: 0 0 14px rgba(212,240,58,.55); }
+    @keyframes ir-transmission-pulse { 0%,100% { opacity: .35; transform: scaleX(.5); } 50% { opacity: 1; transform: scaleX(1); } }
+
+    .hero-right {
+      align-self: center;
+      justify-self: center;
+      width: min(460px, calc(100% - 4rem));
+      max-width: 460px;
+      margin: 3rem auto;
+      flex: 0 0 auto;
+      border: 1px solid rgba(237,233,223,.12);
+      background: radial-gradient(circle at 50% 0%, rgba(212,240,58,.075), transparent 36%), var(--bg2);
+      box-shadow: 0 24px 70px rgba(0,0,0,.28);
+      display: flex; flex-direction: column;
+    }
+    .hero-reel-label {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 1.4rem;
+      border-bottom: 1px solid var(--line);
+      font-size: .58rem; letter-spacing: .16em; text-transform: uppercase;
+      color: var(--muted);
+      gap: 1rem;
+    }
+    .live-dot { display: inline-flex; align-items: center; gap: 6px; color: var(--accent); }
+    .live-dot::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: lpulse 2s ease infinite; }
+    @keyframes lpulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:.3; transform:scale(.6); } }
+    .hero-embed { flex: 0 0 auto; min-height: 0; height: auto; display: flex; justify-content: center; align-items: center; padding: 1rem; overflow: hidden; background: transparent; }
+    .hero-video { display: block; width: 100%; max-width: 360px; aspect-ratio: 9 / 16; object-fit: cover; object-position: center center; background: #000; border: none; outline: none; }
+    .hero-reel-footer { padding: 1rem 1.4rem; border-top: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+    .hero-reel-title { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: .05em; }
+    .hero-reel-open { font-size: .58rem; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent); padding-bottom: 1px; transition: opacity .2s; white-space: nowrap; }
+    .hero-reel-open:hover { opacity: .6; }
+
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr !important; min-height: auto !important; }
+      .hero-left { min-height: auto !important; padding: 5.8rem var(--pad-x) 2.6rem !important; border-right: none !important; border-bottom: 1px solid var(--line) !important; }
+      .hero-title { font-size: clamp(4.8rem, 23vw, 7.4rem) !important; line-height: .78 !important; }
+      .hero-sub { max-width: 86vw !important; }
+      .hero-right { width: min(390px, calc(100% - 2rem)); margin: 2rem auto; min-height: auto !important; padding: 0 !important; }
+      .hero-embed { min-height: auto !important; height: auto !important; padding: 1.1rem !important; display: flex !important; justify-content: center !important; align-items: center !important; }
+      .hero-embed video { width: 100% !important; height: auto !important; max-height: 72svh !important; object-fit: contain !important; object-position: center center !important; }
+      .hero-reel-label, .hero-reel-footer { padding: .9rem 1.1rem !important; gap: .75rem !important; flex-wrap: wrap !important; }
+    }
+    @media (max-width: 420px) { .hero-right { width: calc(100% - 1rem); } }
+
+    /* SECTION HEAD */
+    .section-head { padding: 2.5rem var(--pad-x) 1.8rem; display: flex; align-items: baseline; justify-content: space-between; border-bottom: 1px solid var(--line); }
+    .section-head h2 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2rem, 5vw, 3rem); line-height: 1; letter-spacing: -.01em; }
+    .section-head h2 span { color: var(--accent); }
+    .section-count { font-size: .58rem; letter-spacing: .15em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+
+    /* REELS */
+    .reel-list { border-bottom: 1px solid var(--line); }
+    .reel-row { display: grid; grid-template-columns: 80px 1fr auto; align-items: center; border-bottom: 1px solid var(--line); text-decoration: none; color: var(--text); position: relative; overflow: hidden; }
+    .reel-row:last-child { border-bottom: none; }
+    .reel-row::before { content: ''; position: absolute; inset: 0; background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform .45s cubic-bezier(.16,1,.3,1); z-index: 0; }
+    .reel-row:hover::before { transform: scaleX(1); }
+    .reel-row:hover, .reel-row:hover .reel-row-num, .reel-row:hover .reel-row-sub, .reel-row:hover .reel-row-arrow { color: #060606; }
+    .reel-row:hover .reel-row-tag { background: #06060618; color: #060606; }
+    .reel-row-num { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2rem, 4vw, 3rem); color: var(--muted2); padding: 1.6rem 1.5rem 1.6rem var(--pad-x); line-height: 1; position: relative; z-index: 1; transition: color .3s; }
+    .reel-row-body { padding: 1.6rem 1.5rem; position: relative; z-index: 1; }
+    .reel-row-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(1.1rem, 2.5vw, 1.4rem); letter-spacing: .03em; line-height: 1.1; margin-bottom: .3rem; }
+    .reel-row-sub { font-family:'Satoshi','Inter',sans-serif !important; font-weight:600 !important; letter-spacing:.08em !important; text-transform:uppercase !important; color:#8c8c8c !important; font-size: .56rem; transition: color .3s; }
+    .reel-row-right { padding: 1.6rem var(--pad-x) 1.6rem 1.5rem; display: flex; align-items: center; gap: 1.2rem; position: relative; z-index: 1; }
+    .reel-row-tag { font-size: .52rem; letter-spacing: .14em; text-transform: uppercase; background: var(--line2); color: var(--muted); padding: 3px 9px; transition: background .3s, color .3s; }
+    .reel-row-arrow { font-size: 1.2rem; color: var(--muted2); transition: color .3s, transform .3s; line-height: 1; }
+    .reel-row:hover .reel-row-arrow { transform: translate(4px,-4px); }
+
+    .reel-row-preview-panel { max-height: 0; overflow: hidden; border-bottom: 1px solid var(--line); background: #080808; transition: max-height .55s cubic-bezier(.16,1,.3,1), opacity .35s cubic-bezier(.16,1,.3,1); opacity: 0; }
+    .reel-row:hover + .reel-row-preview-panel, .reel-row:focus-within + .reel-row-preview-panel, .reel-row-preview-panel:hover { max-height: 340px; opacity: 1; }
+    .reel-row-preview-shell { display: grid; grid-template-columns: 80px minmax(260px, 420px) 1fr; gap: 1.5rem; align-items: start; padding: 1.2rem var(--pad-x) 1.4rem; border-top: 1px solid rgba(212,240,58,.16); background: linear-gradient(90deg, rgba(212,240,58,.055), transparent 38%), var(--bg2); }
+    .reel-row-preview-label { font-size: .52rem; letter-spacing: .16em; text-transform: uppercase; color: var(--accent); padding-top: .2rem; }
+    .reel-row-preview-frame { height: 260px; display: flex; justify-content: center; align-items: flex-start; overflow: hidden; border: 1px solid rgba(212,240,58,.18); background: #050505; }
+    .reel-row-preview-frame .instagram-media { transform: scale(.46); transform-origin: top center; min-width: 326px !important; width: 540px !important; max-width: 540px !important; margin: 0 auto !important; }
+    .reel-row-preview-text { align-self: center; max-width: 420px; color: var(--muted); font-family: 'Cormorant Garamond', serif; font-style: italic; line-height: 1.7; font-size: 1.08rem; }
+    .reel-row-preview-text strong { color: var(--text); font-style: normal; font-family: 'Space Mono', monospace; font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; }
+
+    .reels-page { min-height: 100vh; position: relative; padding: clamp(4.5rem, 8vw, 7rem) 0 clamp(5rem, 8vw, 7rem); border-bottom: 1px solid var(--line); background: radial-gradient(circle at 85% 12%, rgba(212,240,58,.12), transparent 24%), radial-gradient(circle at 12% 72%, rgba(237,233,223,.045), transparent 28%), linear-gradient(180deg, #060606 0%, #0b0b0b 48%, #060606 100%); overflow: hidden; isolation: isolate; }
+    .reels-page::before { content: ''; position: absolute; inset: 0; pointer-events: none; z-index: -1; background: linear-gradient(90deg, rgba(212,240,58,.06) 1px, transparent 1px), linear-gradient(0deg, rgba(255,255,255,.025) 1px, transparent 1px); background-size: 82px 82px; mask-image: radial-gradient(circle at 50% 38%, black, transparent 72%); opacity: .45; }
+    .reels-page::after { content: 'REELS ARCHIVE'; position: absolute; right: var(--pad-x); top: clamp(2rem, 4vw, 3.3rem); font-family: 'Bebas Neue', sans-serif; font-size: clamp(4rem, 12vw, 13rem); line-height: .8; letter-spacing: -.03em; color: rgba(255,255,255,.018); pointer-events: none; z-index: -1; }
+    .reels-page .section-head { width: min(1180px, calc(100% - var(--pad-x) * 2)); margin: 0 auto clamp(2rem, 4vw, 3.5rem); padding: 0 0 2rem; border-bottom: 1px solid rgba(212,240,58,.18); }
+    .reels-page .section-head h2 { font-size: clamp(4.2rem, 8.5vw, 8rem) !important; letter-spacing: -.025em; position: relative; display: inline-block; cursor: default; text-shadow: 0 0 0 rgba(212,240,58,0); transition: text-shadow .35s ease, filter .35s ease; line-height: .82 !important; }
+    .reels-page .section-head h2 span { position: relative; display: inline-block; color: var(--accent); text-shadow: 0 0 10px rgba(212,240,58,.16), 0 0 22px rgba(212,240,58,.06); }
+    .reels-page .section-head h2 span::after { content: "_"; display: inline-block; margin-left: .08em; color: var(--accent); animation: ir-more-title-blink .85s step-end infinite; text-shadow: 0 0 10px rgba(212,240,58,.55), 0 0 24px rgba(212,240,58,.28), 0 0 44px rgba(212,240,58,.14); }
+    .reels-page .section-head h2::before { content: attr(data-glitch); position: absolute; left: 0; top: 0; width: 100%; color: var(--accent); opacity: 0; pointer-events: none; mix-blend-mode: screen; transform: translateX(0); clip-path: inset(0 0 72% 0); }
+    .reels-page .section-head h2:hover { filter: brightness(1.08); text-shadow: 0 0 12px rgba(237,233,223,.10), 0 0 26px rgba(212,240,58,.16); }
+    .reels-page .section-head h2:hover::before { animation: ir-more-title-electric .72s steps(2,end) both; }
+    @keyframes ir-more-title-blink { 0%, 48% { opacity: 1; } 49%, 100% { opacity: 0; } }
+    @keyframes ir-more-title-electric { 0% { opacity:0; transform:translate(0,0); clip-path:inset(0 0 85% 0); } 12% { opacity:.85; transform:translate(-3px,-1px); clip-path:inset(8% 0 68% 0); } 24% { opacity:.35; transform:translate(4px,1px); clip-path:inset(46% 0 33% 0); } 36% { opacity:.75; transform:translate(-2px,0); clip-path:inset(22% 0 54% 0); } 48% { opacity:.18; transform:translate(3px,-1px); clip-path:inset(70% 0 12% 0); } 60% { opacity:.65; transform:translate(-1px,1px); clip-path:inset(34% 0 41% 0); } 100% { opacity:0; transform:translate(0,0); clip-path:inset(0 0 100% 0); } }
+
+    /* IRREAL LAB TITLES — same electric effect as MORE REELS, no green hover fill */
+    .intro-brand,
+    .hero-title {
+      position: relative;
+      display: inline-block;
+      cursor: default;
+      color: var(--text);
+      text-shadow: 0 0 0 rgba(212,240,58,0);
+      transition: text-shadow .35s ease, filter .35s ease;
+    }
+
+    .intro-brand span,
+    .hero-title em {
+      position: relative;
+      display: block;
+      color: var(--accent);
+      text-shadow:
+        0 0 10px rgba(212,240,58,.16),
+        0 0 22px rgba(212,240,58,.06);
+    }
+
+    .intro-brand span::after,
+    .hero-title em::after {
+      content: "_";
+      display: inline-block;
+      margin-left: .08em;
+      color: var(--accent);
+      animation: ir-more-title-blink .85s step-end infinite;
+      text-shadow:
+        0 0 10px rgba(212,240,58,.55),
+        0 0 24px rgba(212,240,58,.28),
+        0 0 44px rgba(212,240,58,.14);
+    }
+
+    .intro-brand::before,
+    .hero-title::before {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      color: var(--accent);
+      opacity: 0;
+      pointer-events: none;
+      mix-blend-mode: screen;
+      transform: translateX(0);
+      clip-path: inset(0 0 72% 0);
+    }
+
+    .intro-brand::before {
+      content: "Irreal\A Lab";
+      white-space: pre;
+      line-height: inherit;
+    }
+
+    .hero-title::before {
+      content: attr(data-glitch);
+    }
+
+    .intro-brand:hover,
+    .hero-title:hover {
+      color: var(--text);
+      filter: brightness(1.08);
+      text-shadow:
+        0 0 12px rgba(237,233,223,.10),
+        0 0 26px rgba(212,240,58,.16);
+    }
+
+    .intro-brand:hover span,
+    .hero-title:hover em {
+      color: var(--accent);
+    }
+
+    .intro-brand:hover::before,
+    .hero-title:hover::before {
+      animation: ir-more-title-electric .72s steps(2,end) both;
+    }
+    .reels-page .section-count { color: rgba(237,233,223,.45); font-size: .56rem !important; }
+    .reels-page .reel-list { width: min(1180px, calc(100% - var(--pad-x) * 2)); margin: 0 auto; border: 1px solid rgba(237,233,223,.1); background: rgba(8,8,8,.72); backdrop-filter: blur(18px); box-shadow: 0 36px 90px rgba(0,0,0,.38); }
+    .reels-page .section-head, .reels-page .reel-list { opacity: 0; transform: translateY(42px) scale(.985); transition: opacity .95s cubic-bezier(.16,1,.3,1), transform .95s cubic-bezier(.16,1,.3,1); }
+    .reels-page.ir-reels-in .section-head, .reels-page.ir-reels-in .reel-list { opacity: 1; transform: none; }
+    .reels-page.ir-reels-in .reel-list { transition-delay: .16s; }
+    .reels-page .reel-row { min-height: unset !important; background: linear-gradient(90deg, rgba(255,255,255,.018), transparent 52%); max-width: min(1320px, calc(100vw - 8rem)) !important; margin-left: auto !important; margin-right: auto !important; }
+    .reels-page .reel-row-num { font-size: clamp(2.4rem, 4vw, 4rem) !important; }
+    .reels-page .reel-row-title { font-size: clamp(1.45rem, 2.3vw, 2.35rem) !important; letter-spacing: .035em !important; }
+    .reels-page .reel-row-sub { font-size: .6rem !important; line-height: 1.6; color: rgba(237,233,223,.55); }
+    .reels-page .reel-row-preview-panel { background: #050505; }
+    .reels-page .reel-row:hover + .reel-row-preview-panel, .reels-page .reel-row:focus-within + .reel-row-preview-panel, .reels-page .reel-row-preview-panel:hover { max-height: 430px; opacity: 1; }
+    .reels-page .reel-row-preview-shell { grid-template-columns: 96px minmax(260px, 360px) 1fr; gap: clamp(1.2rem, 3vw, 2.4rem); padding: clamp(1.3rem, 2.8vw, 2.2rem) var(--pad-x) clamp(1.5rem, 3vw, 2.4rem); background: radial-gradient(circle at 23% 0%, rgba(212,240,58,.13), transparent 28%), linear-gradient(135deg, rgba(212,240,58,.06), transparent 36%), #090909; }
+    .reels-page .reel-row-preview-label { writing-mode: vertical-rl; transform: rotate(180deg); justify-self: start; padding-top: 0; font-size: .58rem; color: rgba(212,240,58,.88); }
+    .reels-page .reel-row-preview-frame { position: relative; width: 100%; height: 310px; border: 1px solid rgba(212,240,58,.28); border-radius: 18px; background: linear-gradient(180deg, rgba(255,255,255,.055), transparent 18%), #020202; box-shadow: inset 0 0 0 1px rgba(255,255,255,.035), 0 22px 60px rgba(0,0,0,.48), 0 0 34px rgba(212,240,58,.07); }
+    .reels-page .reel-row-preview-frame::before { content: 'IRREALLAB PREVIEW'; position: absolute; left: 14px; top: 12px; z-index: 4; font-size: .48rem; letter-spacing: .16em; color: rgba(212,240,58,.72); background: rgba(0,0,0,.62); padding: 5px 7px; backdrop-filter: blur(8px); }
+    .reels-page .reel-row-preview-frame::after { content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 3; border-radius: 18px; background: linear-gradient(transparent 0 92%, rgba(212,240,58,.08) 93% 100%), radial-gradient(circle at 50% 18%, transparent 0%, rgba(0,0,0,.22) 78%); background-size: 100% 7px, 100% 100%; mix-blend-mode: screen; opacity: .42; }
+    .reels-page .reel-row-preview-frame .instagram-media { transform: scale(.54); transform-origin: top center; min-width: 326px !important; width: 540px !important; max-width: 540px !important; margin: 46px auto 0 !important; filter: saturate(.92) contrast(1.04); }
+    .reels-page .reel-row-preview-text { max-width: 520px; font-size: clamp(1.15rem, 2vw, 1.42rem); color: rgba(237,233,223,.68); }
+    .reels-page .reel-row-preview-text strong { display: inline-block; margin-bottom: .7rem; font-size: .88rem; color: var(--accent); }
+
+    @media (max-width: 900px) {
+      .reel-row-preview-panel { display: none; }
+      .reels-page { padding-top: 4rem; }
+      .reels-page .section-head, .reels-page .reel-list { width: calc(100% - var(--pad-x) * 2); }
+      .reels-page .reel-row { max-width: calc(100vw - 2rem) !important; }
+      .reels-page .section-head h2 { font-size: clamp(3.4rem, 17vw, 5.6rem) !important; }
+      .reels-page .reel-row-sub { font-size: .6rem; }
+    }
+    @media (max-width: 600px) { .reel-row { grid-template-columns: 60px 1fr; } .reel-row-right { display: none; } .reel-row-num { padding-left: var(--pad-x); font-size: 2rem; } }
+    @media (max-width: 768px) {
+      .reels-page { padding-left: 0 !important; padding-right: 0 !important; }
+      .reels-page .section-head { padding: 4.8rem 1.1rem 2rem !important; display: block !important; }
+      .reels-page .section-head h2 { font-size: clamp(3.5rem, 18vw, 5.3rem) !important; line-height: .82 !important; }
+      .reels-page .section-count { display: block !important; margin-top: 1rem !important; font-size: .56rem !important; }
+      .reels-page .reel-row { max-width: calc(100vw - 1.2rem) !important; margin-left: auto !important; margin-right: auto !important; }
+      .reels-page .reel-row-num { font-size: 2.15rem !important; padding-left: .95rem !important; padding-right: .65rem !important; }
+      .reels-page .reel-row-title { font-size: clamp(1.35rem, 8vw, 2rem) !important; line-height: .95 !important; }
+      .reels-page .reel-row-sub { font-size: .58rem !important; line-height: 1.45 !important; }
+    }
+    @media (max-width: 480px) { .instagram-media { min-width: 0 !important; width: 100% !important; max-width: 100% !important; } iframe.instagram-media-rendered, .instagram-media-rendered iframe { max-width: 100% !important; } }
+
+    /* CTA */
+    .cta-band { display: flex; align-items: center; justify-content: space-between; padding: 2.5rem var(--pad-x); background: var(--bg2); border-bottom: 1px solid var(--line); gap: 2rem; flex-wrap: wrap; }
+    .cta-band-text { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.2rem; color: var(--muted); line-height: 1.6; }
+    .cta-band-text strong { color: var(--text); font-style: normal; font-weight: 600; }
+    .cta-btn { font-family: 'Bebas Neue', sans-serif; font-size: 1.08rem; letter-spacing: .12em; color: #060606; background: var(--accent); text-decoration: none; padding: 13px 32px; transition: opacity .2s, transform .2s; white-space: nowrap; display: inline-block; }
+    .cta-btn:hover { opacity: .82; transform: translateY(-2px); }
+    @media (max-width: 480px) { .cta-band { flex-direction: column; align-items: flex-start; } .cta-btn { width: 100%; text-align: center; } }
+
+    /* FOOTER */
+    footer { display: flex; align-items: center; justify-content: space-between; padding: 1.8rem var(--pad-x); flex-wrap: wrap; gap: 1rem; }
+    .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; color: var(--muted); }
+    .footer-logo em { color: var(--accent); font-style: normal; }
+    .footer-right { display: flex; gap: 2rem; align-items: center; flex-wrap: wrap; }
+    .footer-link { font-size: .58rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color .2s; }
+    .footer-link:hover { color: var(--accent); }
+
+    /* LOGO HOVER */
+    .nav-logo, .footer-logo { position: relative; transition: color .22s ease, text-shadow .22s ease, filter .22s ease; }
+    .nav-logo:hover, .footer-logo:hover { color: var(--accent); text-shadow: 0 0 6px rgba(212,240,58,.75), 0 0 18px rgba(212,240,58,.35), 0 0 36px rgba(212,240,58,.18); filter: saturate(1.25); }
+    .nav-logo::after, .footer-logo::after { content: ''; position: absolute; left: 0; right: 0; bottom: -5px; height: 1px; background: linear-gradient(90deg, transparent, var(--accent), transparent); transform: scaleX(0); transform-origin: center; opacity: 0; transition: transform .28s cubic-bezier(.16,1,.3,1), opacity .28s; }
+    .nav-logo:hover::after, .footer-logo:hover::after { transform: scaleX(1); opacity: 1; }
+
+    /* INTRO VIDEO */
+    .intro-video { position: relative; height: 100svh; min-height: 620px; overflow: hidden; background: #000; isolation: isolate; border-bottom: 1px solid var(--line); }
+    .intro-video-media { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center center; opacity: .86; filter: contrast(1.08) saturate(.9) brightness(.72); transform: none; z-index: 0; }
+    .intro-video::before { content: ''; position: absolute; inset: 0; z-index: 1; background: radial-gradient(circle at 50% 50%, rgba(212,240,58,.08), transparent 34%), linear-gradient(to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5) 72%, rgba(0,0,0,.92)); pointer-events: none; }
+    .intro-video::after { content: ''; position: absolute; inset: 0; z-index: 2; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); opacity: .045; pointer-events: none; }
+    .intro-video-content { position: relative; z-index: 3; height: 100%; padding: 2.2rem var(--pad-x); display: flex; flex-direction: column; justify-content: space-between; }
+    .intro-topline { display: flex; align-items: center; justify-content: space-between; gap: 1rem; font-size: .58rem; letter-spacing: .18em; text-transform: uppercase; color: rgba(237,233,223,.58); }
+    .intro-brand { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3.7rem, 9.2vw, 9.5rem); line-height: .86; letter-spacing: -.02em; max-width: 820px; text-transform: uppercase; white-space: normal; text-shadow: 0 0 20px rgba(212,240,58,.16), 0 0 44px rgba(212,240,58,.08); }
+    .intro-brand span { display: block; color: var(--accent); }
+    .intro-brand::after, .intro-brand:hover::after { display: none; content: none; }
+    .intro-bottom { display: flex; justify-content: space-between; align-items: end; gap: 2rem; border-top: 1px solid rgba(237,233,223,.16); padding-top: 1.3rem; }
+
+    /* IMPORTANT FIX — intro typewriter stays on one line */
+    .intro-copy {
+      font-family: 'Space Mono', 'Courier New', monospace !important;
+      font-style: normal !important;
+      font-weight: 400 !important;
+      letter-spacing: .035em !important;
+      text-transform: none !important;
+      font-size: clamp(.78rem, 1.15vw, 1rem) !important;
+      line-height: 1.4 !important;
+      color: rgba(237,233,223,.72) !important;
+      max-width: none !important;
+      width: 100% !important;
+      min-height: calc(1em * 1.4);
+      white-space: nowrap !important;
+      overflow: hidden;
+    }
+    .ir-typewriter {
+      position: relative;
+      white-space: nowrap !important;
+      overflow: hidden;
+      display: inline-block;
+      max-width: 100%;
+      vertical-align: bottom;
+    }
+    .ir-typewriter::after {
+      content: '_';
+      display: inline-block;
+      margin-left: .12em;
+      color: var(--accent);
+      text-shadow: 0 0 8px rgba(212,240,58,.55), 0 0 22px rgba(212,240,58,.22);
+      animation: ir-typewriter-cursor .8s step-end infinite;
+    }
+    .ir-typewriter.is-done::after { opacity: .75; }
+    @keyframes ir-typewriter-cursor { 0%, 48% { opacity: 1; } 49%, 100% { opacity: 0; } }
+
+    .intro-enter { border: 1px solid var(--accent); background: rgba(212,240,58,.08); color: var(--accent); padding: 12px 18px; font-family: 'Space Mono', monospace; font-size: .58rem; letter-spacing: .16em; text-transform: uppercase; cursor: pointer; transition: background .25s, color .25s, transform .25s; white-space: nowrap; }
+    .intro-enter:hover { background: var(--accent); color: #060606; transform: translateY(-2px); }
+    .intro-scroll-hint { display: inline-flex; align-items: center; gap: .65rem; color: var(--accent); }
+    .intro-scroll-hint::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); animation: introPulse 1.4s ease-in-out infinite; }
+    @keyframes introPulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: .25; transform: scale(.65); } }
+
+    @media (max-width: 700px) { .intro-video { min-height: 560px; } .intro-bottom { flex-direction: column; align-items: flex-start; } .intro-enter { width: 100%; } }
+    @media (max-width: 768px) {
+      .intro-video, .intro-video-media { width: 100% !important; height: 100svh !important; object-fit: cover !important; object-position: center center !important; }
+      .intro-video-content { width: 100% !important; max-width: none !important; padding: 1.4rem !important; }
+      .intro-brand { font-size: clamp(4.8rem, 22vw, 7.2rem) !important; line-height: .78 !important; }
+      .intro-copy { max-width: 100% !important; font-size: clamp(.62rem, 2.45vw, .82rem) !important; line-height: 1.35 !important; }
+    }
+
+    /* AUDIO */
+    .audio-toggle { position: fixed; right: 22px; top: 50%; transform: translateY(-50%); z-index: 100000; background: rgba(6,6,6,.72); color: var(--accent); border: 1px solid rgba(212,240,58,.72); padding: 10px 14px; font-family: 'Space Mono', monospace; font-size: .58rem; letter-spacing: .16em; text-transform: uppercase; cursor: pointer; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); transition: background .25s ease, color .25s ease, border-color .25s ease, transform .25s ease, box-shadow .25s ease; }
+    .audio-toggle:hover { transform: translateY(calc(-50% - 2px)); box-shadow: 0 0 22px rgba(212,240,58,.22); border-color: var(--accent); }
+    .audio-toggle.is-on { background: var(--accent); color: #060606; border-color: var(--accent); box-shadow: 0 0 28px rgba(212,240,58,.24); }
+    @media (max-width: 768px) {
+      .audio-toggle {
+        position: fixed !important;
+        right: 14px !important;
+        left: auto !important;
+        top: 50% !important;
+        bottom: auto !important;
+        transform: translateY(-50%) !important;
+        z-index: 999999 !important;
+        padding: .75rem .95rem !important;
+        font-size: .58rem !important;
+        letter-spacing: .14em !important;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) { .ir-typewriter::after { display: none; } }
+  
+
+/* FOOTER IRREAL — clean electric flicker */
+.footer-irreal {
+  position: relative;
+  display: inline-block;
+  animation: footerIrrealBlink 2.2s infinite;
+  will-change: opacity, text-shadow;
+}
+
+@keyframes footerIrrealBlink {
+  0%, 74%, 100% {
+    color: inherit;
+    opacity: 1;
+    text-shadow: none;
+  }
+
+  76% {
+    color: var(--accent);
+    opacity: 1;
+    text-shadow:
+      0 0 4px rgba(212,240,58,.45),
+      0 0 10px rgba(212,240,58,.22),
+      0 0 18px rgba(212,240,58,.12);
+  }
+
+  78% {
+    color: inherit;
+    text-shadow: none;
+  }
+
+  80% {
+    color: var(--accent);
+    opacity: 1;
+    text-shadow:
+      0 0 5px rgba(212,240,58,.55),
+      0 0 12px rgba(212,240,58,.28),
+      0 0 20px rgba(212,240,58,.16);
+  }
+
+  82% {
+    color: inherit;
+    text-shadow: none;
+  }
+
+  84% {
+    color: var(--accent);
+    opacity: 1;
+    text-shadow:
+      0 0 4px rgba(212,240,58,.42),
+      0 0 10px rgba(212,240,58,.20);
+  }
+}
+
+
+/* REEL HASHTAGS — same typewriter style as intro motion text */
+.reel-hashtags {
+  font-family: 'Space Mono', 'Courier New', monospace !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  letter-spacing: .035em !important;
+  text-transform: none !important;
+  font-size: clamp(.78rem, 1.15vw, 1rem) !important;
+  line-height: 1.4 !important;
+  color: rgba(237,233,223,.72) !important;
+  width: 100%;
+  max-width: 100%;
+  white-space: normal !important;
+  overflow: visible;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+.reel-hashtags.ir-typewriter {
+  display: inline;
+  white-space: normal !important;
+  overflow: visible;
+  max-width: 100%;
+}
+
+
+
+/* CTA TEXT — same typography as intro typewriter */
+.cta-typewriter {
+  font-family: 'Space Mono', 'Courier New', monospace !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  letter-spacing: .035em !important;
+  text-transform: none !important;
+  font-size: clamp(.95rem, 1.4vw, 1.2rem) !important;
+  line-height: 1.55 !important;
+  color: rgba(237,233,223,.72) !important;
+}
+
+.cta-typewriter strong {
+  font-family: inherit !important;
+  font-style: normal !important;
+  font-weight: 700 !important;
+  color: var(--text) !important;
+}
+
+/* TOP LEFT LOGO — same electric flicker as footer */
+.nav-logo .footer-irreal {
+  position: relative;
+  display: inline-block;
+  animation: footerIrrealBlink 2.2s infinite;
+  will-change: opacity, text-shadow;
+}
+
+
+
+/* TOP LEFT LOGO — exact same visual behavior as footer logo */
+.nav-logo {
+  color: var(--muted) !important;
+}
+
+.nav-logo em {
+  color: var(--accent) !important;
+  font-style: normal !important;
+}
+
+.nav-logo:hover {
+  color: var(--muted) !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+
+.nav-logo:hover .footer-irreal {
+  color: inherit;
+}
+
+.nav-logo:hover::after {
+  transform: scaleX(0) !important;
+  opacity: 0 !important;
+}
+
+
+/* HERO SUB TYPEWRITER — allow full sentence to wrap, no clipping */
+.hero-sub.ir-typewriter {
+  display: block !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  max-width: 420px !important;
+}
+
+@media (max-width: 900px) {
+  .hero-sub.ir-typewriter {
+    max-width: 86vw !important;
+  }
+}
+
+
+    @media (max-width: 768px) {
+      .cta-band-text.ir-typewriter,
+      .cta-band-text.ir-typewriter .ir-typewriter,
+      .cta-band-text.cta-typewriter.ir-typewriter {
+        white-space: normal !important;
+        overflow: visible !important;
+        display: block !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        line-height: 1.6 !important;
+      }
+    }
+
+
+    @media (max-width: 768px) {
+      .intro-video-content {
+        justify-content: flex-start !important;
+        padding-top: 1.4rem !important;
+      }
+
+      .intro-brand {
+        margin-top: 2.2rem !important;
+        margin-bottom: auto !important;
+        align-self: flex-start !important;
+        text-align: left !important;
+      }
+
+      .intro-bottom {
+        margin-top: auto !important;
+      }
+    }
+
+
+/* REEL NUMBERS — digital glitch effect restored */
+.reel-row-num {
+  overflow: visible;
+  text-shadow:
+    0 0 8px rgba(212,240,58,.10),
+    0 0 18px rgba(212,240,58,.05);
+}
+
+.reel-row-num::before,
+.reel-row-num::after {
+  content: attr(data-num);
+  position: absolute;
+  left: var(--pad-x);
+  top: 1.6rem;
+  line-height: 1;
+  opacity: 0;
+  pointer-events: none;
+  color: var(--accent);
+  mix-blend-mode: screen;
+}
+
+.reel-row-num::before {
+  transform: translate(-2px, 0);
+  clip-path: inset(0 0 58% 0);
+}
+
+.reel-row-num::after {
+  transform: translate(2px, 0);
+  clip-path: inset(48% 0 0 0);
+}
+
+.reel-row:hover .reel-row-num,
+.reel-row-num.ir-num-glitch {
+  color: var(--accent) !important;
+  text-shadow:
+    0 0 7px rgba(212,240,58,.65),
+    0 0 18px rgba(212,240,58,.28),
+    0 0 34px rgba(212,240,58,.13);
+}
+
+.reel-row:hover .reel-row-num::before,
+.reel-row:hover .reel-row-num::after,
+.reel-row-num.ir-num-glitch::before,
+.reel-row-num.ir-num-glitch::after {
+  animation: ir-reel-num-glitch .62s steps(2,end) both;
+}
+
+@keyframes ir-reel-num-glitch {
+  0% { opacity: 0; transform: translate(0,0); }
+  12% { opacity: .9; transform: translate(-3px,-1px); }
+  24% { opacity: .45; transform: translate(4px,1px); }
+  36% { opacity: .8; transform: translate(-2px,0); }
+  48% { opacity: .25; transform: translate(3px,-1px); }
+  60% { opacity: .75; transform: translate(-1px,1px); }
+  100% { opacity: 0; transform: translate(0,0); }
+}
+
+@media (max-width: 768px) {
+  .reel-row-num::before,
+  .reel-row-num::after {
+    left: .95rem;
+    top: 1.6rem;
+  }
+}
+
+
+/* FIX — keep reel numbers visible on hover */
+.reel-row:hover .reel-row-num,
+.reel-row-num.ir-num-glitch {
+  color: #060606 !important;
+  text-shadow:
+    0 0 7px rgba(212,240,58,.35),
+    0 0 18px rgba(212,240,58,.12);
+}
+
+.reel-row:hover .reel-row-num::before,
+.reel-row:hover .reel-row-num::after,
+.reel-row-num.ir-num-glitch::before,
+.reel-row-num.ir-num-glitch::after {
+  color: #060606 !important;
+}
+
+
+/* CUSTOM CURSOR — modern round cursor with soft trail */
+@media (hover: hover) and (pointer: fine) {
+  html,
+  body,
+  a,
+  button,
+  .reel-row,
+  .audio-toggle,
+  .intro-enter {
+    cursor: none !important;
+  }
+
+  .ir-cursor,
+  .ir-cursor-trail {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    border-radius: 50%;
+    transform: translate3d(-100px, -100px, 0) translate(-50%, -50%);
+    z-index: 2147483647;
+    will-change: transform, width, height, opacity;
+  }
+
+  .ir-cursor {
+    width: 13px;
+    height: 13px;
+    background: var(--accent);
+    box-shadow:
+      0 0 10px rgba(212,240,58,.55),
+      0 0 24px rgba(212,240,58,.22);
+  }
+
+  .ir-cursor-trail {
+    width: 42px;
+    height: 42px;
+    border: 1px solid rgba(212,240,58,.42);
+    background: rgba(212,240,58,.035);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    transition:
+      width .18s ease,
+      height .18s ease,
+      border-color .18s ease,
+      background .18s ease;
+  }
+
+  body.ir-cursor-hover .ir-cursor {
+    width: 20px;
+    height: 20px;
+  }
+
+  body.ir-cursor-hover .ir-cursor-trail {
+    width: 58px;
+    height: 58px;
+    border-color: rgba(212,240,58,.75);
+    background: rgba(212,240,58,.06);
+  }
+
+  body.ir-cursor-hidden .ir-cursor,
+  body.ir-cursor-hidden .ir-cursor-trail {
+    opacity: 0;
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .ir-cursor,
+  .ir-cursor-trail {
+    display: none !important;
+  }
+}
+
+</style>
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "wr62xdtgob");
+</script>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZDN63BSS5T"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-ZDN63BSS5T');
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "VideoObject",
+  "name": "Sky Runway",
+  "description": "Surreal cinematic runway above the clouds by irreallab.",
+  "thumbnailUrl": "https://irreallab.fr/preview.jpg",
+  "uploadDate": "2026-05-09",
+  "contentUrl": "https://irreallab.fr/sky-runway.mp4",
+  "embedUrl": "https://irreallab.fr/",
+  "publisher": {
+    "@type": "Organization",
+    "name": "irreallab",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://irreallab.fr/logo.png"
+    }
+  }
+}
+</script>
+</head>
+<body>
+
+<!-- INTRO VIDEO — fullscreen landing -->
+<section class="intro-video" aria-label="Irreallab video intro">
+  <video class="intro-video-media" src="intro-reel.mp4" autoplay muted loop playsinline webkit-playsinline preload="auto" x5-playsinline x5-video-player-type="h5" x5-video-player-fullscreen="false" disablepictureinpicture></video>
+
+  <div class="intro-video-content">
+    <div class="intro-topline">
+      <span>@irreallab</span>
+      <span class="intro-scroll-hint">Scroll to enter</span>
+    </div>
+
+    <div class="intro-brand ir-title-typewriter" data-glitch="IRREAL LAB" data-title-first="Irreal" data-title-second="Lab">
+      Irreal<br><span>Lab</span>
+    </div>
+
+    <div class="intro-bottom">
+      <p class="intro-copy ir-typewriter" data-typewriter-text="Creativity and motion combined into Re-(els)-ality">Creativity and motion combined into Re-(els)-ality</p>
+      <button class="intro-enter" type="button">Enter the reels ↓</button>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div id="marquee-spacer" class="marquee-spacer" aria-hidden="true"></div>
+<div id="site-content" class="marquee">
+  <div class="marquee-track">
+    <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="marquee-item">@irreallab on Instagram</a>
+    <span class="marquee-dot">✦</span>
+    <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="marquee-item">Visual Experiments</a>
+    <span class="marquee-dot">✦</span>
+    <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="marquee-item">Follow on Instagram</a>
+    <span class="marquee-dot">✦</span>
+    <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="marquee-item">Short-form / Reels</a>
+    <span class="marquee-dot">✦</span>
+    <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="marquee-item">@irreallab</a>
+    <span class="marquee-dot">✦</span>
+    <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="marquee-item">New Reels Every Week</a>
+    <span class="marquee-dot">✦</span>
+    <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="marquee-item">@irreallab on Instagram</a>
+    <span class="marquee-dot">✦</span>
+    <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="marquee-item">Visual Experiments</a>
+    <span class="marquee-dot">✦</span>
+    <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="marquee-item">Follow on Instagram</a>
+    <span class="marquee-dot">✦</span>
+    <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="marquee-item">Short-form / Reels</a>
+    <span class="marquee-dot">✦</span>
+    <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="marquee-item">@irreallab</a>
+    <span class="marquee-dot">✦</span>
+    <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="marquee-item">New Reels Every Week</a>
+    <span class="marquee-dot">✦</span>
+  </div>
+</div>
+
+<!-- NAV -->
+<div id="nav-spacer" class="nav-spacer" aria-hidden="true"></div>
+<nav id="main-nav">
+  <a href="#" class="nav-logo"><span class="footer-irreal">irreal</span><em>lab_</em></a>
+  <div class="nav-links">
+    <a href="reels.html">Reels</a>
+    <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="nav-hide">About</a>
+    <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="nav-cta">↗ Instagram</a>
+  </div>
+</nav>
+
+<!-- HERO video: Sky Runway -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow"></div>
+    <div>
+      <h1 class="hero-title ir-electric-title ir-title-typewriter" data-glitch="IRREAL LAB" data-title-first="Irreal" data-title-second="Lab">Irreal<em>Lab</em></h1>
+      <p style="margin-top:1rem;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);opacity:.9;">AI-driven cinematic worlds.</p>
+      <p class="hero-sub ir-typewriter" data-typewriter-text="Visual experiments in short-form. Motion, surrealism &amp; the art of the unreal.">Visual experiments in short-form. Motion, surrealism &amp; the art of the unreal.</p>
+    </div>
+    <div class="hero-meta">
+      <div class="hero-divider"></div>
+      <div class="hero-transmission">
+        <div class="transmission-kicker">Current Transmission</div>
+        <div class="transmission-title">Sky Runway</div>
+        <div class="transmission-details">
+          <span>Motion study 04</span>
+          <span>Above the clouds</span>
+        </div>
+      </div>
+      <div class="hero-divider"></div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-reel-label">
+      <span>Sky Runway</span>
+      <span class="live-dot">Live on Instagram</span>
+    </div>
+    <div class="hero-embed">
+      <video class="hero-video" controls autoplay muted loop playsinline poster="https://irreallab.fr/preview.jpg" webkit-playsinline preload="metadata" x5-playsinline x5-video-player-type="h5" x5-video-player-fullscreen="false" disablepictureinpicture>
+        <source src="https://irreallab.fr/sky-runway.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+    <div class="hero-reel-footer">
+      <span class="hero-reel-title">Sky Runway</span>
+      <a href="reels.html" class="hero-reel-open">See all reels ↗</a>
+    </div>
+  </div>
+</section>
+
+<!-- REELS LIST -->
+<section id="reels" class="reels-page">
+  <div class="section-head">
+    <h2 class="ir-title-typewriter" data-glitch="MORE REELS" data-title-first="More" data-title-second="Reels">More <span>Reels</span></h2>
+    <span class="section-count">Scroll archive · 04 live reels</span>
+  </div>
+
+  <div class="reel-list">
+    <a class="reel-row" data-preview-url="https://www.instagram.com/reel/DYFrAFrIulH/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" href="https://www.instagram.com/reel/DYFrAFrIulH/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" target="_blank" rel="noopener">
+      <div class="reel-row-num" data-num="01">01</div>
+      <div class="reel-row-body">
+        <div class="reel-row-title">Closing Hours</div>
+        <div class="reel-row-sub">@irreallab · Watch on Instagram</div>
+      </div>
+      <div class="reel-row-right"><span class="reel-row-tag">Live</span><span class="reel-row-arrow">↗</span></div>
+    </a>
+    <div class="reel-row-preview-panel" aria-hidden="true">
+      <div class="reel-row-preview-shell">
+        <div class="reel-row-preview-label">Preview</div>
+        <div class="reel-row-preview-frame">
+          <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/DYFrAFrIulH/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" data-instgrm-version="14" style="background:#FFF;border:0;border-radius:0;box-shadow:none;margin:0;max-width:100%;min-width:326px;padding:0;width:540px;"></blockquote>
+        </div>
+        <p class="reel-row-preview-text"><strong>Closing Hours</strong><br><span class="reel-hashtags ir-typewriter" data-typewriter-text="#closinghours #museumafterdark #surrealwater #nightarchive #visualpoetry #irreallab">#closinghours #museumafterdark #surrealwater #nightarchive #visualpoetry #irreallab</span></p>
+      </div>
+    </div>
+
+    <a class="reel-row" data-preview-url="https://www.instagram.com/reel/DX7Ynqeo2Xx/" href="https://www.instagram.com/reel/DX7Ynqeo2Xx/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" target="_blank" rel="noopener">
+      <div class="reel-row-num" data-num="02">02</div>
+      <div class="reel-row-body">
+        <div class="reel-row-title">Frame Shift</div>
+        <div class="reel-row-sub">@irreallab · Watch on Instagram</div>
+      </div>
+      <div class="reel-row-right"><span class="reel-row-tag">Live</span><span class="reel-row-arrow">↗</span></div>
+    </a>
+    <div class="reel-row-preview-panel" aria-hidden="true">
+      <div class="reel-row-preview-shell">
+        <div class="reel-row-preview-label">Preview</div>
+        <div class="reel-row-preview-frame">
+          <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/DX7Ynqeo2Xx/?utm_source=ig_embed&utm_campaign=loading" data-instgrm-version="14" style="background:#FFF;border:0;border-radius:0;box-shadow:none;margin:0;max-width:100%;min-width:326px;padding:0;width:540px;"></blockquote>
+        </div>
+        <p class="reel-row-preview-text"><strong>Frame Shift</strong><br><span class="reel-hashtags ir-typewriter" data-typewriter-text="#frameshift #alteredperspective #dreamlogic #surrealvisuals #cinematicreel #irreallab">#frameshift #alteredperspective #dreamlogic #surrealvisuals #cinematicreel #irreallab</span></p>
+      </div>
+    </div>
+
+    <a class="reel-row" data-preview-url="https://www.instagram.com/reel/DXj-5j3iIoh/" href="https://www.instagram.com/reel/DXj-5j3iIoh/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" target="_blank" rel="noopener">
+      <div class="reel-row-num" data-num="03">03</div>
+      <div class="reel-row-body">
+        <div class="reel-row-title">Art Heist</div>
+        <div class="reel-row-sub">@irreallab · Watch on Instagram</div>
+      </div>
+      <div class="reel-row-right"><span class="reel-row-tag">Live</span><span class="reel-row-arrow">↗</span></div>
+    </a>
+    <div class="reel-row-preview-panel" aria-hidden="true">
+      <div class="reel-row-preview-shell">
+        <div class="reel-row-preview-label">Preview</div>
+        <div class="reel-row-preview-frame">
+          <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/DXj-5j3iIoh/?utm_source=ig_embed&utm_campaign=loading" data-instgrm-version="14" style="background:#FFF;border:0;border-radius:0;box-shadow:none;margin:0;max-width:100%;min-width:326px;padding:0;width:540px;"></blockquote>
+        </div>
+        <p class="reel-row-preview-text"><strong>Art Heist</strong><br><span class="reel-hashtags ir-typewriter" data-typewriter-text="#artheist #stolenvision #creativecrime #museumreel #visualexperiment #irreallab">#artheist #stolenvision #creativecrime #museumreel #visualexperiment #irreallab</span></p>
+      </div>
+    </div>
+
+    <a class="reel-row" data-preview-url="https://www.instagram.com/reel/DXZxbCWiFPa/" href="https://www.instagram.com/reel/DXZxbCWiFPa/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" target="_blank" rel="noopener">
+      <div class="reel-row-num" data-num="04">04</div>
+      <div class="reel-row-body">
+        <div class="reel-row-title">Drifting through</div>
+        <div class="reel-row-sub">@irreallab · Watch on Instagram</div>
+      </div>
+      <div class="reel-row-right"><span class="reel-row-tag">Live</span><span class="reel-row-arrow">↗</span></div>
+    </a>
+    <div class="reel-row-preview-panel" aria-hidden="true">
+      <div class="reel-row-preview-shell">
+        <div class="reel-row-preview-label">Preview</div>
+        <div class="reel-row-preview-frame">
+          <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/DXZxbCWiFPa/?utm_source=ig_embed&utm_campaign=loading" data-instgrm-version="14" style="background:#FFF;border:0;border-radius:0;box-shadow:none;margin:0;max-width:100%;min-width:326px;padding:0;width:540px;"></blockquote>
+        </div>
+        <p class="reel-row-preview-text"><strong>Drifting through</strong><br><span class="reel-hashtags ir-typewriter" data-typewriter-text="#driftingthrough #cloudroad #highspeeddream #surrealmotion #cinematicdrive #irreallab">#driftingthrough #cloudroad #highspeeddream #surrealmotion #cinematicdrive #irreallab</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BAND -->
+<div class="cta-band">
+  <p class="cta-band-text cta-typewriter ir-typewriter" data-typewriter-text="Every week, a new experiment. Follow @irreallab to never miss a reel.">Every week, a new experiment.<br><strong>Follow @irreallab</strong> to never miss a reel.</p>
+  <a href="contact.html" class="cta-btn">Start a collaboration ↗</a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo"><span class="footer-irreal">irreal</span><em>lab_</em></div>
+  <div class="footer-right">
+    <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="footer-link">Instagram ↗</a>
+    <span class="footer-link" style="cursor:default;">© 2025 irreallab</span>
+  </div>
+
+  <p class="footer-copyright" style="width:100%;margin-top:.8rem;font-size:.58rem;letter-spacing:.08em;color:var(--muted);text-transform:uppercase;">
+    © irreallab — Radu Nechita (Instagram) · Site rédaction : © Hélène Nechita · Tous droits réservés.
+  </p>
+
+</footer>
+
+<audio id="site-audio" src="velvet-circuit.mp3" loop preload="auto"></audio>
+<button id="audio-toggle" class="audio-toggle" type="button" aria-label="Activer la musique">SOUND OFF</button>
+
+
+<div class="ir-cursor" aria-hidden="true"></div>
+<div class="ir-cursor-trail" aria-hidden="true"></div>
+
+<script async src="https://www.instagram.com/embed.js"></script>
+<script src="animations2.js" defer></script>
+</body>
+</html>
