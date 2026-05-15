@@ -107,10 +107,10 @@ class ScrollIntro3D {
     baseGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
     baseGeometry.computeVertexNormals();
 
-    // Vibrant neon material with magenta base
+    // Vibrant neon material with lime-green base
     const material = new THREE.MeshStandardMaterial({
-      color: 0x4d0066,
-      emissive: 0xff1493,
+      color: 0x2d3a1a,
+      emissive: 0xd4f03a,
       emissiveIntensity: 2.8,
       metalness: 0.6,
       roughness: 0.2,
@@ -202,21 +202,21 @@ class ScrollIntro3D {
 
   createLighting() {
     // Minimal ambient light for maximum contrast
-    const ambientLight = new THREE.AmbientLight(0x1a0033, 0.15);
+    const ambientLight = new THREE.AmbientLight(0x1a2a0a, 0.15);
     this.scene.add(ambientLight);
 
-    // Main light - bright magenta (neon)
-    this.mainLight = new THREE.PointLight(0xff00ff, 6, 40);
+    // Main light - bright neon lime-green
+    this.mainLight = new THREE.PointLight(0xd4f03a, 6, 40);
     this.mainLight.position.set(6, 7, 9);
     this.scene.add(this.mainLight);
 
-    // Secondary light - bright cyan (neon)
-    this.secondLight = new THREE.PointLight(0x00ffff, 5, 38);
+    // Secondary light - bright cyan accent
+    this.secondLight = new THREE.PointLight(0x00ffff, 4, 38);
     this.secondLight.position.set(-7, -6, 8);
     this.scene.add(this.secondLight);
 
-    // Tertiary light - vibrant lime (neon)
-    const thirdLight = new THREE.PointLight(0xd4f03a, 4, 35);
+    // Tertiary light - magenta accent
+    const thirdLight = new THREE.PointLight(0xff00ff, 3, 35);
     thirdLight.position.set(4, -7, -9);
     this.scene.add(thirdLight);
 
@@ -280,12 +280,12 @@ class ScrollIntro3D {
       const scale = 1 + Math.sin(this.time * 0.4 + progress * Math.PI * 2) * 0.2 + progress * 0.15;
       this.mainMesh.scale.set(scale, scale, scale);
 
-      // Vibrant neon color shift: magenta → cyan → lime
+      // Vibrant neon color shift: lime → cyan → lime
       let neonHue;
       if (progress < 0.5) {
-        neonHue = 0.8 + progress; // Magenta → Cyan
+        neonHue = 0.25 + progress * 0.5; // Lime → Cyan
       } else {
-        neonHue = 0.3 + (progress - 0.5) * 0.4; // Cyan → Lime
+        neonHue = 0.25 + (1 - (progress - 0.5) * 2) * 0.5; // Cyan → Lime
       }
       this.mainMesh.material.emissive.setHSL(neonHue, 1, 0.55);
       this.mainMesh.material.emissiveIntensity = 1.8 + progress * 0.8;
