@@ -749,27 +749,107 @@
     }
 
   
-    .typewriter-subtitle {
-      font-family: 'Satoshi','Inter',sans-serif;
-      font-size: .62rem;
-      font-weight: 600;
-      letter-spacing: .16em;
-      text-transform: uppercase;
-      color: rgba(212,240,58,.8);
-      margin: .85rem 0 1rem;
+    /* Visible title + paragraphs under title, matched to main page */
+    .reels-page .head.section-head {
+      width: min(1180px, calc(100% - var(--pad-x) * 2));
+      margin: 0 auto 3.2rem;
+      padding: clamp(3.8rem, 7vw, 6.2rem) 0 2.4rem;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 3rem;
+      border-bottom: 1px solid rgba(212,240,58,.18);
     }
 
-    .reels-page .intro.ir-typewriter {
-      display: block !important;
-      max-width: 620px !important;
-      min-height: calc(1em * 1.7 * 2) !important;
-      font-family: 'Space Mono','Courier New',monospace !important;
-      font-size: clamp(.78rem, 1.15vw, 1rem) !important;
+    .reels-page .head.section-head > div:first-child {
+      max-width: 760px;
+    }
+
+    .reels-page .kicker {
+      font-size: .58rem;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: .8rem;
+      margin-bottom: 1.4rem;
+    }
+
+    .reels-page .kicker::before {
+      content: '';
+      width: 28px;
+      height: 1px;
+      background: var(--muted);
+      flex-shrink: 0;
+    }
+
+    .reels-page .title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(4.8rem, 9.5vw, 9rem);
+      line-height: .86;
+      letter-spacing: -.01em;
+      color: var(--text);
+      position: relative;
+      display: inline-block;
+      cursor: default;
+      text-transform: uppercase;
+    }
+
+    .reels-page .title span {
+      color: var(--accent);
+      display: block;
+      font-style: normal;
+      text-shadow: 0 0 10px rgba(212,240,58,.16), 0 0 22px rgba(212,240,58,.06);
+    }
+
+    .reels-page .title span::after {
+      content: "_";
+      display: inline-block;
+      margin-left: .08em;
+      color: var(--accent);
+      animation: ir-more-title-blink .85s step-end infinite;
+      text-shadow: 0 0 10px rgba(212,240,58,.55), 0 0 24px rgba(212,240,58,.28), 0 0 44px rgba(212,240,58,.14);
+    }
+
+    .reels-page .hero-sub {
+      font-family: 'Space Mono', 'Courier New', monospace !important;
+      font-style: normal !important;
+      font-size: 1rem !important;
       line-height: 1.7 !important;
+      color: var(--muted) !important;
+      max-width: 560px !important;
+      margin-top: 1.2rem !important;
+      min-height: auto !important;
+      font-weight: 400 !important;
       letter-spacing: .035em !important;
-      color: rgba(237,233,223,.72) !important;
+      text-transform: none !important;
+      display: block !important;
       white-space: normal !important;
       overflow: visible !important;
+    }
+
+    .reels-page .ir-typewriter-second {
+      margin-top: .2rem !important;
+    }
+
+    @media (max-width: 900px) {
+      .reels-page .head.section-head {
+        width: calc(100% - var(--pad-x) * 2);
+        padding-top: 4rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.4rem;
+      }
+
+      .reels-page .title {
+        font-size: clamp(4.8rem, 23vw, 7.4rem);
+        line-height: .78;
+      }
+
+      .reels-page .hero-sub {
+        max-width: 86vw !important;
+      }
     }
 
 </style>
@@ -822,14 +902,16 @@
     <div class="head section-head">
       <div>
         <div class="kicker">Archive / Motion / Visual experiments</div>
-        <h1 class="title" data-glitch="MORE&#10;REELS">
+        <h1 class="title" data-glitch="MORE\A REELS">
           MORE
           <span>REELS</span>
         </h1>
-        <div class="typewriter-subtitle">Selected fragments from the unreal archive.</div>
-        <div class="intro ir-typewriter" data-typewriter-text="Visual experiments in short-form. Motion, surrealism & the art of the unreal. Every week, a new experiment from @irreallab.">
-          Visual experiments in short-form. Motion, surrealism & the art of the unreal. Every week, a new experiment from @irreallab.
-        </div>
+        <p class="hero-sub ir-typewriter" data-typewriter-text="Visual experiments in short-form. Motion, surrealism & the art of the unreal.">
+          Visual experiments in short-form. Motion, surrealism &amp; the art of the unreal.
+        </p>
+        <p class="hero-sub ir-typewriter ir-typewriter-second" data-typewriter-text="Every week, a new experiment. Follow @irreallab to never miss a reel.">
+          Every week, a new experiment. Follow @irreallab to never miss a reel.
+        </p>
       </div>
       <div class="count">Curated archive / cinematic fragments</div>
     </div>
