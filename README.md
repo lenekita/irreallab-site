@@ -181,7 +181,7 @@ All audio files are stored in the repo root and referenced in `reels.json`:
 
 ## License
 
-All original artwork and audio © irreallab. All rights reserved.
+All original artwork © irreallab. All rights reserved.
 
 ---
 
