@@ -6,13 +6,14 @@
   <title>Reels Archive — irreallab</title>
   <meta name="description" content="Irreallab reels archive: surreal visual experiments, motion studies and cinematic AI-driven worlds.">
   <link rel="icon" href="/favicon.ico" sizes="any">
-  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <meta property="og:title" content="Reels Archive — irreallab">
   <meta property="og:description" content="Surreal visual experiments and short-form cinematic reels by irreallab.">
   <meta property="og:image" content="https://irreallab.fr/preview.jpg">
   <meta name="twitter:card" content="summary_large_image">
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300&display=swap" rel="stylesheet">
   <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
   <style>
     /* ── TOKENS ── */
@@ -573,6 +574,180 @@
     @media (hover: none), (pointer: coarse) {
       .ir-cursor, .ir-cursor-trail { display: none !important; }
     }
+
+
+    /* REELS PAGE PATCH — aligned with main.html visual system */
+    .footer-irreal {
+      position: relative;
+      display: inline-block;
+      animation: footerIrrealBlink 2.2s infinite;
+      will-change: opacity, text-shadow;
+    }
+
+    .reels-page {
+      flex: 1;
+      min-height: 100vh;
+      position: relative;
+      padding: clamp(4.5rem, 8vw, 7rem) 0 clamp(5rem, 8vw, 7rem);
+      border-bottom: 1px solid var(--line);
+      background:
+        radial-gradient(circle at 85% 12%, rgba(212,240,58,.12), transparent 24%),
+        radial-gradient(circle at 12% 72%, rgba(237,233,223,.045), transparent 28%),
+        linear-gradient(180deg, #060606 0%, #0b0b0b 48%, #060606 100%);
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    .reels-page::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+      background:
+        linear-gradient(90deg, rgba(212,240,58,.06) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(255,255,255,.025) 1px, transparent 1px);
+      background-size: 82px 82px;
+      mask-image: radial-gradient(circle at 50% 38%, black, transparent 72%);
+      -webkit-mask-image: radial-gradient(circle at 50% 38%, black, transparent 72%);
+      opacity: .45;
+    }
+
+    .reels-page::after {
+      content: 'REELS ARCHIVE';
+      position: absolute;
+      right: var(--pad-x);
+      top: clamp(2rem, 4vw, 3.3rem);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(4rem, 12vw, 13rem);
+      line-height: .8;
+      letter-spacing: -.03em;
+      color: rgba(255,255,255,.018);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .reels-page .head {
+      width: min(1180px, calc(100% - var(--pad-x) * 2));
+      margin: 0 auto clamp(2rem, 4vw, 3.5rem);
+      padding: 0 0 2rem;
+      border-bottom: 1px solid rgba(212,240,58,.18);
+      align-items: flex-end;
+    }
+
+    .reels-page .kicker {
+      font-size: .58rem;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: .8rem;
+      margin-bottom: 1rem;
+    }
+
+    .reels-page .kicker::before {
+      content: '';
+      width: 28px;
+      height: 1px;
+      background: var(--muted);
+      flex-shrink: 0;
+    }
+
+    .reels-page .title {
+      font-size: clamp(4.8rem, 11vw, 9.5rem);
+      line-height: .78;
+      letter-spacing: -.01em;
+      min-height: auto;
+      text-transform: uppercase;
+    }
+
+    .reels-page .title span {
+      display: inline-block;
+      color: var(--accent);
+    }
+
+    .reels-page .intro {
+      max-width: 560px !important;
+      color: rgba(237,233,223,.72) !important;
+    }
+
+    .reels-page .count {
+      color: rgba(237,233,223,.45);
+      font-size: .56rem;
+    }
+
+    .reels-page .grid {
+      width: min(1180px, calc(100% - var(--pad-x) * 2));
+      border: 1px solid rgba(237,233,223,.1);
+      background: rgba(8,8,8,.72);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      box-shadow: 0 36px 90px rgba(0,0,0,.38);
+      padding: clamp(1rem, 2vw, 1.4rem);
+      gap: clamp(1rem, 2vw, 1.4rem);
+    }
+
+    .reels-page .card {
+      background: linear-gradient(180deg, rgba(255,255,255,.028), rgba(255,255,255,.01)), rgba(6,6,6,.78);
+      border-color: rgba(237,233,223,.105);
+      box-shadow: none;
+    }
+
+    .reels-page .card:hover {
+      border-color: rgba(212,240,58,.72);
+      box-shadow: 0 24px 80px rgba(212,240,58,.13);
+    }
+
+    .reels-page .info h2 {
+      font-size: clamp(1.45rem, 2.3vw, 2.35rem);
+      letter-spacing: .035em;
+    }
+
+    .reels-page .sub {
+      font-family:'Satoshi','Inter',sans-serif !important;
+      font-weight:600 !important;
+      letter-spacing:.08em !important;
+      text-transform:uppercase !important;
+      color:rgba(237,233,223,.55) !important;
+    }
+
+    .reels-page .hashtags {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1rem;
+      line-height: 1.55;
+      color: rgba(237,233,223,.6);
+    }
+
+    .reels-page .open {
+      font-size: .58rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid var(--accent);
+      padding-bottom: 1px;
+      transition: opacity .2s;
+    }
+
+    .reels-page .open:hover { opacity: .6; }
+
+    @media (max-width: 900px) {
+      .reels-page .head {
+        display: block;
+        width: calc(100% - var(--pad-x) * 2);
+      }
+      .reels-page .count { margin-top: 1.3rem; display: block; }
+      .reels-page .grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 600px) {
+      .reels-page { padding-top: 4rem; }
+      .reels-page .title { font-size: clamp(4.2rem, 23vw, 7.4rem); }
+      .reels-page .grid { width: calc(100% - 1rem); padding: .55rem; }
+    }
+
   </style>
 </head>
 <body>
@@ -613,14 +788,14 @@
     <a href="/main.html" class="nav-logo"><span class="footer-irreal">irreal</span><em>lab_</em></a>
     <div class="nav-links">
       <a href="/main.html">Home</a>
-      <a href="/journal">Journal</a>
       <a href="reels.html">Reels</a>
-      <a class="nav-cta" href="mailto:contact@irreallab.fr">Contact</a>
+      <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="nav-hide">About</a>
+      <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="nav-cta">↗ Instagram</a>
     </div>
   </nav>
 
-  <main>
-    <div class="head">
+  <main class="reels-page">
+    <div class="head section-head">
       <div>
         <div class="kicker">Archive</div>
         <h1 class="title" data-glitch="REELS"><span>REELS</span></h1>
@@ -628,19 +803,20 @@
       </div>
       <div class="count"></div>
     </div>
-    <div class="grid"></div>
+    <div class="grid reel-list"></div>
   </main>
 
   <footer>
-    <div><a href="/main.html" class="footer-logo"><span class="footer-irreal">irreal</span><em>lab</em></a></div>
+    <div class="footer-logo"><span class="footer-irreal">irreal</span><em>lab_</em></div>
     <div class="footer-right">
-      <a class="footer-link" href="/main.html">Home</a>
-      <a class="footer-link" href="/journal">Journal</a>
-      <a class="footer-link" href="reels.html">Reels</a>
-      <a class="footer-link" href="mailto:contact@irreallab.fr">Contact</a>
-      <span style="font-size:.58rem;letter-spacing:.08em;color:var(--muted);text-transform:uppercase">© 2026 <span class="footer-irreal">irreal</span>lab</span>
+      <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="footer-link">Instagram ↗</a>
+      <span class="footer-link" style="cursor:default;">© 2025 irreallab</span>
     </div>
-    <div class="footer-copyright">Surreal visual experiments, cinematic AI-driven worlds</div>
+
+    <p class="footer-copyright" style="width:100%;margin-top:.8rem;font-size:.58rem;letter-spacing:.08em;color:var(--muted);text-transform:uppercase;">
+      © irreallab — Radu Nechita (Instagram) · Site rédaction : © Hélène Nechita · Tous droits réservés.
+    </p>
+
   </footer>
 
   <script>
