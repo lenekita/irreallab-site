@@ -193,7 +193,8 @@ class ScrollIntro3D {
       side: THREE.DoubleSide
     });
 
-    const geometry = new THREE.PlaneGeometry(6, 3);
+    // Create 3D hexagon geometry (cylinder with 6 segments)
+    const geometry = new THREE.CylinderGeometry(3, 3, 0.5, 6, 1);
     this.textMesh = new THREE.Mesh(geometry, material);
     this.textMesh.position.z = 1;
     this.textMesh.scale.set(0, 0, 1);
@@ -276,8 +277,8 @@ class ScrollIntro3D {
         geometry.attributes.position.needsUpdate = true;
       }
 
-      // Shape shrinks as scroll progresses
-      const scale = 1.2 + Math.sin(this.time * 0.4 + progress * Math.PI * 2) * 0.15 - progress * 0.8;
+      // Shape shrinks dramatically as scroll progresses
+      const scale = 1.2 + Math.sin(this.time * 0.4 + progress * Math.PI * 2) * 0.15 - progress * 1.15;
       this.mainMesh.scale.set(scale, scale, scale);
 
       // Vibrant neon color shift: lime → cyan → lime
@@ -294,10 +295,10 @@ class ScrollIntro3D {
     // Text animation - LARGER and MORE VISIBLE
     if (this.textMesh) {
       const textProgress = Math.max(0, progress - 0.08) / 0.35;
-      // Text grows from 0 to ~2.5 by the end of scroll
-      const textScale = Math.max(0, Math.min(2.5, textProgress * 2.5));
+      // Text grows from 0 to ~4 by the end of scroll
+      const textScale = Math.max(0, Math.min(4, textProgress * 4));
 
-      this.textMesh.scale.set(textScale, textScale, 1);
+      this.textMesh.scale.set(textScale, textScale, textScale);
       this.textMesh.rotation.y = progress * Math.PI * 1.5;
       this.textMesh.rotation.x = Math.sin(this.time * 0.4) * 0.2 * textScale;
       this.textMesh.position.z = 1 + progress * 1;
