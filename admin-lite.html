@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Reel — irreallab</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #060606;
+      --accent: #d4f03a;
+      --text: #ede9df;
+      --border: #1c1c1c;
+      --input-bg: #0d0d0d;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Space Mono', monospace;
+      min-height: 100vh;
+      padding: 2rem 1rem;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 3rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.05em;
+    }
+
+    .subtitle {
+      font-size: 0.85rem;
+      color: #999;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .form-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    @media (max-width: 768px) {
+      .form-wrapper { grid-template-columns: 1fr; }
+    }
+
+    .form-section h2 {
+      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+      letter-spacing: 0.05em;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+      color: var(--accent);
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 0.8rem;
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: 'Space Mono', monospace;
+      font-size: 0.9rem;
+      transition: border-color 0.2s;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 8px rgba(212, 240, 58, 0.2);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .preview-section {
+      background: rgba(13, 13, 13, 0.8);
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+      display: none;
+    }
+
+    .preview-section.active {
+      display: block;
+    }
+
+    .preview-card {
+      border: 1px solid var(--border);
+      padding: 1rem;
+      margin-bottom: 1rem;
+      background: rgba(0,0,0,0.5);
+    }
+
+    .preview-title {
+      font-size: 1.1rem;
+      font-weight: bold;
+      margin-bottom: 0.3rem;
+    }
+
+    .preview-sub {
+      font-size: 0.75rem;
+      color: #999;
+      margin-bottom: 0.6rem;
+    }
+
+    .preview-hashtags {
+      font-size: 0.85rem;
+      color: var(--accent);
+      margin-bottom: 0.6rem;
+      word-break: break-word;
+    }
+
+    .preview-link {
+      font-size: 0.8rem;
+      color: var(--accent);
+      text-decoration: none;
+      word-break: break-all;
+    }
+
+    .json-output {
+      background: #000;
+      padding: 1rem;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      margin: 1rem 0;
+      font-size: 0.75rem;
+      overflow-x: auto;
+      max-height: 350px;
+      overflow-y: auto;
+      font-family: 'Courier New', monospace;
+    }
+
+    .json-output code {
+      color: var(--accent);
+    }
+
+    button {
+      padding: 0.8rem 1.5rem;
+      background: var(--accent);
+      color: #000;
+      border: none;
+      cursor: pointer;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.9rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: transform 0.2s, box-shadow 0.2s;
+      margin-right: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(212, 240, 58, 0.3);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    .button-group {
+      margin-top: 1.5rem;
+    }
+
+    .status {
+      padding: 1rem;
+      border-radius: 4px;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+      display: none;
+    }
+
+    .status.show { display: block; }
+    .status.success { background: rgba(212, 240, 58, 0.1); color: var(--accent); }
+    .status.error { background: rgba(255, 100, 100, 0.1); color: #ff6464; }
+
+    .help-text {
+      font-size: 0.75rem;
+      color: #999;
+      margin-top: 0.3rem;
+      line-height: 1.4;
+    }
+
+    .instructions {
+      background: rgba(13, 13, 13, 0.8);
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      border-radius: 4px;
+    }
+
+    .instructions h3 {
+      margin-bottom: 0.8rem;
+      color: var(--accent);
+    }
+
+    .instructions ol {
+      margin-left: 1.5rem;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    .instructions li {
+      margin-bottom: 0.5rem;
+    }
+
+    .instructions code {
+      background: #000;
+      padding: 0.2rem 0.4rem;
+      border-radius: 2px;
+      color: var(--accent);
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1><span style="color: var(--accent);">irreallab</span> / Add Reel</h1>
+      <div class="subtitle">Quick reel submission form</div>
+    </header>
+
+    <div class="instructions">
+      <h3>How it works:</h3>
+      <ol>
+        <li>Paste your Instagram reel URL</li>
+        <li>Add title and hashtags</li>
+        <li>Click "Generate JSON"</li>
+        <li>Copy the JSON code</li>
+        <li>Paste into <code>reels.json</code> on GitHub</li>
+      </ol>
+    </div>
+
+    <div class="form-wrapper">
+      <!-- Left: Form -->
+      <div class="form-section">
+        <h2>Reel Details</h2>
+        
+        <div id="status" class="status"></div>
+
+        <div class="form-group">
+          <label for="reelUrl">Instagram Reel URL *</label>
+          <input 
+            type="url" 
+            id="reelUrl" 
+            placeholder="https://www.instagram.com/reel/DYFrAFrIulH/"
+            required
+          >
+          <div class="help-text">Example: instagram.com/reel/ABC123def/</div>
+        </div>
+
+        <div class="form-group">
+          <label for="reelTitle">Title *</label>
+          <input 
+            type="text" 
+            id="reelTitle" 
+            placeholder="Closing Hours"
+            required
+          >
+          <div class="help-text">Keep it short (under 60 characters)</div>
+        </div>
+
+        <div class="form-group">
+          <label for="reelHashtags">Hashtags</label>
+          <textarea 
+            id="reelHashtags" 
+            placeholder="#closinghours #surrealwater #irreallab"
+          ></textarea>
+          <div class="help-text">Space-separated hashtags from your Instagram caption</div>
+        </div>
+
+        <div class="form-group">
+          <label for="reelStatus">Status</label>
+          <select id="reelStatus">
+            <option value="Live">Live</option>
+            <option value="Draft">Draft</option>
+            <option value="Archived">Archived</option>
+          </select>
+        </div>
+
+        <div class="button-group">
+          <button onclick="generateJSON()">Generate JSON</button>
+          <button onclick="resetForm()" style="background: #555;">Reset</button>
+        </div>
+      </div>
+
+      <!-- Right: Preview -->
+      <div class="form-section">
+        <h2>Preview & Copy</h2>
+        
+        <div id="preview" class="preview-section">
+          <div class="preview-card">
+            <div class="preview-title" id="previewTitle">Your Reel Title</div>
+            <div class="preview-sub">@irreallab · Watch on Instagram</div>
+            <div class="preview-hashtags" id="previewHashtags">#hashtags</div>
+            <a href="#" id="previewLink" class="preview-link" target="_blank">View on Instagram ↗</a>
+          </div>
+        </div>
+
+        <h3 style="margin-top: 1rem; margin-bottom: 0.8rem; font-size: 0.9rem; letter-spacing: 0.05em; text-transform: uppercase;">JSON Code</h3>
+        <div class="json-output" id="jsonOutput">
+          <code id="jsonCode">// Generated JSON will appear here</code>
+        </div>
+
+        <button onclick="copyJSON()" style="width: 100%; background: var(--accent); margin-bottom: 1rem;">
+          📋 Copy JSON Code
+        </button>
+
+        <div class="help-text" style="background: rgba(212, 240, 58, 0.05); padding: 1rem; border-radius: 4px; line-height: 1.6;">
+          <strong>To add to your site:</strong><br>
+          1. Go to GitHub repo<br>
+          2. Open <code>reels.json</code><br>
+          3. Click pencil to edit<br>
+          4. Scroll to end of array (before <code>]</code>)<br>
+          5. Add comma after last reel<br>
+          6. Paste this JSON<br>
+          7. Click "Commit changes"
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function showStatus(message, type) {
+      const status = document.getElementById('status');
+      status.textContent = message;
+      status.className = `status show ${type}`;
+      setTimeout(() => status.classList.remove('show'), 4000);
+    }
+
+    function updatePreview() {
+      const title = document.getElementById('reelTitle').value || 'Your Reel Title';
+      const hashtags = document.getElementById('reelHashtags').value || '#hashtags';
+      const url = document.getElementById('reelUrl').value || '#';
+
+      document.getElementById('previewTitle').textContent = title;
+      document.getElementById('previewHashtags').textContent = hashtags;
+      document.getElementById('previewLink').href = url;
+      document.getElementById('preview').classList.add('active');
+    }
+
+    function generateJSON() {
+      const url = document.getElementById('reelUrl').value.trim();
+      const title = document.getElementById('reelTitle').value.trim();
+      const hashtags = document.getElementById('reelHashtags').value.trim();
+      const status = document.getElementById('reelStatus').value;
+
+      if (!url || !title) {
+        showStatus('Title and URL are required', 'error');
+        return;
+      }
+
+      // Validate URL
+      if (!url.includes('instagram.com/reel/') && !url.includes('instagram.com/p/')) {
+        showStatus('Must be a valid Instagram reel URL', 'error');
+        return;
+      }
+
+      const reel = {
+        title,
+        subtitle: '@irreallab · Watch on Instagram',
+        url,
+        hashtags,
+        status,
+        video_url: '',
+        thumbnail_url: '',
+        posted_at: new Date().toISOString()
+      };
+
+      const jsonStr = JSON.stringify(reel, null, 2);
+      document.getElementById('jsonCode').textContent = jsonStr;
+      updatePreview();
+      showStatus('✓ JSON ready to copy!', 'success');
+    }
+
+    function copyJSON() {
+      const code = document.getElementById('jsonCode').textContent;
+      if (code.includes('Generated JSON')) {
+        showStatus('Generate JSON first!', 'error');
+        return;
+      }
+      navigator.clipboard.writeText(code).then(() => {
+        showStatus('✓ Copied to clipboard! 📋', 'success');
+      }).catch(() => {
+        showStatus('Copy failed - try manual copy', 'error');
+      });
+    }
+
+    function resetForm() {
+      document.getElementById('reelUrl').value = '';
+      document.getElementById('reelTitle').value = '';
+      document.getElementById('reelHashtags').value = '';
+      document.getElementById('reelStatus').value = 'Live';
+      document.getElementById('preview').classList.remove('active');
+      document.getElementById('jsonCode').textContent = '// Generated JSON will appear here';
+    }
+
+    // Update preview as user types
+    document.getElementById('reelUrl').addEventListener('input', updatePreview);
+    document.getElementById('reelTitle').addEventListener('input', updatePreview);
+    document.getElementById('reelHashtags').addEventListener('input', updatePreview);
+  </script>
+</body>
+</html>

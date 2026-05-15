@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Extract Instagram Video URL — irreallab</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #060606;
+      --accent: #d4f03a;
+      --text: #ede9df;
+      --border: #1c1c1c;
+      --input-bg: #0d0d0d;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Space Mono', monospace;
+      min-height: 100vh;
+      padding: 2rem 1rem;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 3rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.05em;
+    }
+
+    .form-group {
+      margin-bottom: 2rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+      color: var(--accent);
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 0.8rem;
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: 'Space Mono', monospace;
+      font-size: 0.9rem;
+    }
+
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 8px rgba(212, 240, 58, 0.2);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 200px;
+    }
+
+    button {
+      padding: 0.8rem 2rem;
+      background: var(--accent);
+      color: #000;
+      border: none;
+      cursor: pointer;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.9rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(212, 240, 58, 0.3);
+    }
+
+    .status {
+      padding: 1rem;
+      border-radius: 4px;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+      display: none;
+    }
+
+    .status.show { display: block; }
+    .status.success { background: rgba(212, 240, 58, 0.1); color: var(--accent); }
+    .status.error { background: rgba(255, 100, 100, 0.1); color: #ff6464; }
+
+    .instructions {
+      background: rgba(13, 13, 13, 0.8);
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      border-radius: 4px;
+    }
+
+    .instructions h3 {
+      margin-bottom: 0.8rem;
+      color: var(--accent);
+    }
+
+    .instructions ol {
+      margin-left: 1.5rem;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    .instructions li {
+      margin-bottom: 0.8rem;
+    }
+
+    .instructions code {
+      background: #000;
+      padding: 0.2rem 0.4rem;
+      border-radius: 2px;
+      color: var(--accent);
+      font-size: 0.85rem;
+    }
+
+    .help-text {
+      font-size: 0.75rem;
+      color: #999;
+      margin-top: 0.3rem;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1><span style="color: var(--accent);">irreallab</span> / Extract Video URL</h1>
+    </header>
+
+    <div class="instructions">
+      <h3>How to get Instagram video URL:</h3>
+      <ol>
+        <li>Go to your reel on Instagram (open in browser, not app)</li>
+        <li>Right-click the video → <code>Inspect</code> (or press F12)</li>
+        <li>Find the <code>&lt;video&gt;</code> tag in the HTML</li>
+        <li>Look for <code>src="https://..."</code> - copy that URL (the whole long link)</li>
+        <li>Paste it below</li>
+        <li>Click "Extract & Format"</li>
+        <li>Copy the formatted JSON</li>
+      </ol>
+    </div>
+
+    <div id="status" class="status"></div>
+
+    <div class="form-group">
+      <label for="videoUrl">Video URL from Instagram</label>
+      <textarea 
+        id="videoUrl" 
+        placeholder="Paste the full src= URL from the &lt;video&gt; tag here"
+      ></textarea>
+      <div class="help-text">The URL should start with https://scontent...</div>
+    </div>
+
+    <div class="form-group">
+      <label for="instagramUrl">Instagram Reel URL (for thumbnail)</label>
+      <input 
+        type="url" 
+        id="instagramUrl" 
+        placeholder="https://www.instagram.com/reel/XXXXX/"
+      >
+      <div class="help-text">Used to fetch thumbnail (optional)</div>
+    </div>
+
+    <button onclick="extractAndFormat()">Extract & Format</button>
+
+    <div class="form-group" style="margin-top: 3rem; border-top: 1px solid var(--border); padding-top: 2rem;">
+      <label for="output">Formatted JSON</label>
+      <textarea 
+        id="output" 
+        readonly
+        placeholder="Formatted JSON will appear here"
+      ></textarea>
+      <button onclick="copyOutput()" style="width: 100%; margin-top: 1rem;">📋 Copy JSON</button>
+    </div>
+  </div>
+
+  <script>
+    function showStatus(message, type) {
+      const status = document.getElementById('status');
+      status.textContent = message;
+      status.className = `status show ${type}`;
+      setTimeout(() => status.classList.remove('show'), 4000);
+    }
+
+    async function extractAndFormat() {
+      const videoUrl = document.getElementById('videoUrl').value.trim();
+      const instagramUrl = document.getElementById('instagramUrl').value.trim();
+
+      if (!videoUrl) {
+        showStatus('Please paste the video URL', 'error');
+        return;
+      }
+
+      showStatus('Processing...', 'success');
+
+      try {
+        // Get thumbnail from Instagram if URL provided
+        let thumbnailUrl = '';
+        if (instagramUrl) {
+          try {
+            const response = await fetch(instagramUrl);
+            const html = await response.text();
+            const thumbMatch = html.match(/og:image[^>]*content="([^"]+)"/);
+            if (thumbMatch) {
+              thumbnailUrl = thumbMatch[1];
+            }
+          } catch (e) {
+            // Thumbnail extraction failed, continue anyway
+          }
+        }
+
+        // Format as JSON
+        const output = {
+          video_url: videoUrl,
+          thumbnail_url: thumbnailUrl,
+          note: 'Update your reel in reels.json with these values'
+        };
+
+        document.getElementById('output').value = JSON.stringify(output, null, 2);
+        showStatus('✓ Formatted! Copy the JSON below.', 'success');
+      } catch (error) {
+        showStatus('Error: ' + error.message, 'error');
+      }
+    }
+
+    function copyOutput() {
+      const output = document.getElementById('output').value;
+      if (!output) {
+        showStatus('Extract a URL first', 'error');
+        return;
+      }
+      navigator.clipboard.writeText(output).then(() => {
+        showStatus('✓ Copied!', 'success');
+      });
+    }
+  </script>
+</body>
+</html>
