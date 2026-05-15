@@ -17,14 +17,88 @@
   <meta name="twitter:image" content="https://irreallab.fr/preview.jpg">
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300&display=swap" rel="stylesheet">
   <style>
-    :root{--bg:#060606;--bg2:#0d0d0d;--line:#1c1c1c;--accent:#d4f03a;--text:#ede9df;--muted:#6d6d6d;--pad-x:3.5rem} @media(max-width:900px){:root{--pad-x:1.5rem}} @media(max-width:480px){:root{--pad-x:1.1rem}}
-    *{box-sizing:border-box;margin:0;padding:0} html{scroll-behavior:smooth} body{background:var(--bg);color:var(--text);font-family:'Space Mono',monospace;min-height:100vh;overflow-x:hidden} body:after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");opacity:.035;pointer-events:none;z-index:9999}
-    nav{height:60px;padding:0 var(--pad-x);display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);background:rgba(6,6,6,.82);backdrop-filter:blur(16px);position:sticky;top:0;z-index:100} .nav-logo,.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:.04em;color:var(--muted);text-decoration:none}.nav-logo em,.footer-logo em{color:var(--accent);font-style:normal}.nav-links{display:flex;gap:2rem;align-items:center}.nav-links a,.footer-link{font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);text-decoration:none}.nav-links a:hover,.footer-link:hover{color:var(--accent)}.nav-cta{background:var(--accent)!important;color:#060606!important;padding:6px 14px}.footer-irreal{animation:blink 2.2s infinite}@keyframes blink{0%,74%,100%{color:inherit;text-shadow:none}76%,80%,84%{color:var(--accent);text-shadow:0 0 5px rgba(212,240,58,.55),0 0 18px rgba(212,240,58,.2)}78%,82%{color:inherit;text-shadow:none}}
-    main{position:relative;padding:clamp(4.5rem,8vw,7rem) var(--pad-x);background:radial-gradient(circle at 85% 12%,rgba(212,240,58,.12),transparent 24%),radial-gradient(circle at 12% 72%,rgba(237,233,223,.045),transparent 28%),linear-gradient(180deg,#060606 0%,#0b0b0b 48%,#060606 100%);isolation:isolate;overflow:hidden} main:before{content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(212,240,58,.06) 1px,transparent 1px),linear-gradient(0deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:82px 82px;mask-image:radial-gradient(circle at 50% 38%,black,transparent 72%);opacity:.45} main:after{content:'REELS ARCHIVE';position:absolute;right:var(--pad-x);top:2rem;font-family:'Bebas Neue',sans-serif;font-size:clamp(5rem,14vw,15rem);line-height:.8;color:rgba(255,255,255,.018);z-index:-1}
-    .head{width:min(1180px,100%);margin:0 auto 2.4rem;border-bottom:1px solid rgba(212,240,58,.18);padding-bottom:2rem;display:flex;justify-content:space-between;gap:2rem;align-items:end}.kicker{font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}.title{font-family:'Bebas Neue',sans-serif;font-size:clamp(4.2rem,8.5vw,8rem);line-height:.82;letter-spacing:-.025em}.title span{color:var(--accent);display:block}.title span:after{content:'_';margin-left:.08em;animation:cursor .85s step-end infinite;text-shadow:0 0 18px rgba(212,240,58,.4)}@keyframes cursor{0%,48%{opacity:1}49%,100%{opacity:0}}.intro{max-width:480px;color:rgba(237,233,223,.72);font-size:.78rem;line-height:1.7;letter-spacing:.035em}.count{font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(237,233,223,.45);white-space:nowrap}
-    .grid{width:min(1180px,100%);margin:0 auto;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.4rem}.card{border:1px solid rgba(237,233,223,.1);background:rgba(8,8,8,.72);backdrop-filter:blur(18px);box-shadow:0 24px 60px rgba(0,0,0,.28);overflow:hidden}.card-top{display:flex;justify-content:space-between;gap:1rem;align-items:center;padding:1rem 1.2rem;border-bottom:1px solid var(--line)}.num{font-family:'Bebas Neue',sans-serif;font-size:2.3rem;color:rgba(212,240,58,.9);line-height:1}.tag{font-size:.52rem;letter-spacing:.14em;text-transform:uppercase;background:rgba(212,240,58,.1);color:var(--accent);padding:4px 9px}.embed{min-height:520px;background:#050505;display:flex;align-items:flex-start;justify-content:center;padding:1rem;overflow:hidden}.instagram-media{margin:0 auto!important;max-width:540px!important;min-width:326px!important;width:100%!important}.info{padding:1.2rem}.info h2{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.035em;line-height:.95;margin-bottom:.5rem}.sub{font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem}.hashtags{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.12rem;line-height:1.6;color:rgba(237,233,223,.68);margin-bottom:1rem}.open{display:inline-block;color:var(--accent);font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;border-bottom:1px solid var(--accent);padding-bottom:2px}
+    :root{
+      --bg:#060606;
+      --bg2:#0d0d0d;
+      --line:#1c1c1c;
+      --line2:#242424;
+      --accent:#d4f03a;
+      --text:#ede9df;
+      --muted:#6d6d6d;
+      --muted2:#222;
+      --pad-x:3.5rem;
+    }
+    @media(max-width:900px){:root{--pad-x:1.5rem}}
+    @media(max-width:480px){:root{--pad-x:1.1rem}}
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{background:var(--bg);color:var(--text);font-family:'Space Mono',monospace;min-height:100vh;overflow-x:hidden}
+    body:after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");opacity:.035;pointer-events:none;z-index:9999}
+
+    nav{height:60px;padding:0 var(--pad-x);display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);background:rgba(6,6,6,.82);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);position:sticky;top:0;z-index:100}
+    .nav-logo,.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:.04em;color:var(--muted);text-decoration:none}
+    .nav-logo em,.footer-logo em{color:var(--accent);font-style:normal}
+    .nav-links{display:flex;gap:2rem;align-items:center}
+    .nav-links a,.footer-link{font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s}
+    .nav-links a:hover,.footer-link:hover{color:var(--accent)}
+    .nav-cta{background:var(--accent)!important;color:#060606!important;padding:6px 14px}
+
+    .footer-irreal{position:relative;display:inline-block;animation:footerIrrealBlink 2.2s infinite;will-change:opacity,text-shadow}
+    @keyframes footerIrrealBlink{
+      0%,74%,100%{color:inherit;opacity:1;text-shadow:none}
+      76%{color:var(--accent);opacity:1;text-shadow:0 0 4px rgba(212,240,58,.45),0 0 10px rgba(212,240,58,.22),0 0 18px rgba(212,240,58,.12)}
+      78%{color:inherit;text-shadow:none}
+      80%{color:var(--accent);opacity:1;text-shadow:0 0 5px rgba(212,240,58,.55),0 0 12px rgba(212,240,58,.28),0 0 20px rgba(212,240,58,.16)}
+      82%{color:inherit;text-shadow:none}
+      84%{color:var(--accent);opacity:1;text-shadow:0 0 4px rgba(212,240,58,.42),0 0 10px rgba(212,240,58,.20)}
+    }
+
+    main{position:relative;padding:clamp(4.5rem,8vw,7rem) var(--pad-x);background:radial-gradient(circle at 85% 12%,rgba(212,240,58,.12),transparent 24%),radial-gradient(circle at 12% 72%,rgba(237,233,223,.045),transparent 28%),linear-gradient(180deg,#060606 0%,#0b0b0b 48%,#060606 100%);isolation:isolate;overflow:hidden}
+    main:before{content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(212,240,58,.06) 1px,transparent 1px),linear-gradient(0deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:82px 82px;mask-image:radial-gradient(circle at 50% 38%,black,transparent 72%);opacity:.45}
+    main:after{content:'REELS ARCHIVE';position:absolute;right:var(--pad-x);top:2rem;font-family:'Bebas Neue',sans-serif;font-size:clamp(5rem,14vw,15rem);line-height:.8;color:rgba(255,255,255,.018);z-index:-1;pointer-events:none}
+
+    .head{width:min(1180px,100%);margin:0 auto 2.4rem;border-bottom:1px solid rgba(212,240,58,.18);padding-bottom:2rem;display:flex;justify-content:space-between;gap:2rem;align-items:end;opacity:0;transform:translateY(42px) scale(.985);transition:opacity .95s cubic-bezier(.16,1,.3,1),transform .95s cubic-bezier(.16,1,.3,1)}
+    .head.ir-in{opacity:1;transform:none}
+    .kicker{font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+
+    /* TITLE — copied from the front page large electric title rhythm */
+    .title{font-family:'Bebas Neue',sans-serif;font-size:clamp(4.2rem,8.5vw,8rem);line-height:.82;letter-spacing:-.025em;position:relative;display:inline-block;cursor:default;color:var(--text);text-shadow:0 0 0 rgba(212,240,58,0);transition:text-shadow .35s ease,filter .35s ease;min-height:1.64em}
+    .title span{position:relative;display:block;color:var(--accent);text-shadow:0 0 10px rgba(212,240,58,.16),0 0 22px rgba(212,240,58,.06)}
+    .title span:after{content:'_';display:inline-block;margin-left:.08em;color:var(--accent);animation:ir-more-title-blink .85s step-end infinite;text-shadow:0 0 10px rgba(212,240,58,.55),0 0 24px rgba(212,240,58,.28),0 0 44px rgba(212,240,58,.14)}
+    .title:before{content:attr(data-glitch);position:absolute;left:0;top:0;width:100%;color:var(--accent);opacity:0;pointer-events:none;mix-blend-mode:screen;transform:translateX(0);clip-path:inset(0 0 72% 0);white-space:pre;line-height:inherit}
+    .title:hover{filter:brightness(1.08);text-shadow:0 0 12px rgba(237,233,223,.10),0 0 26px rgba(212,240,58,.16)}
+    .title:hover:before{animation:ir-more-title-electric .72s steps(2,end) both}
+    @keyframes ir-more-title-blink{0%,48%{opacity:1}49%,100%{opacity:0}}
+    @keyframes ir-more-title-electric{0%{opacity:0;transform:translate(0,0);clip-path:inset(0 0 85% 0)}12%{opacity:.85;transform:translate(-3px,-1px);clip-path:inset(8% 0 68% 0)}24%{opacity:.35;transform:translate(4px,1px);clip-path:inset(46% 0 33% 0)}36%{opacity:.75;transform:translate(-2px,0);clip-path:inset(22% 0 54% 0)}48%{opacity:.18;transform:translate(3px,-1px);clip-path:inset(70% 0 12% 0)}60%{opacity:.65;transform:translate(-1px,1px);clip-path:inset(34% 0 41% 0)}100%{opacity:0;transform:translate(0,0);clip-path:inset(0 0 100% 0)}}
+
+    /* SUBTITLE — same typography and typewriter rhythm as the front page copy */
+    .intro{font-family:'Space Mono','Courier New',monospace!important;font-style:normal!important;font-weight:400!important;letter-spacing:.035em!important;text-transform:none!important;font-size:clamp(.78rem,1.15vw,1rem)!important;line-height:1.7!important;color:rgba(237,233,223,.72)!important;max-width:520px!important;margin-top:1.2rem!important;min-height:calc(1em * 1.7 * 3);white-space:normal!important;overflow:visible!important}
+    .ir-typewriter{position:relative;white-space:normal!important;overflow:visible;display:block;max-width:100%;vertical-align:bottom}
+    .ir-typewriter:after{content:'_';display:inline-block;margin-left:.12em;color:var(--accent);text-shadow:0 0 8px rgba(212,240,58,.55),0 0 22px rgba(212,240,58,.22);animation:ir-typewriter-cursor .8s step-end infinite}
+    .ir-typewriter.is-done:after{opacity:.75}
+    @keyframes ir-typewriter-cursor{0%,48%{opacity:1}49%,100%{opacity:0}}
+
+    .count{font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(237,233,223,.45);white-space:nowrap}
+    .grid{width:min(1180px,100%);margin:0 auto;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.4rem;opacity:0;transform:translateY(42px) scale(.985);transition:opacity .95s cubic-bezier(.16,1,.3,1),transform .95s cubic-bezier(.16,1,.3,1)}
+    .grid.ir-in{opacity:1;transform:none;transition-delay:.16s}
+    .card{border:1px solid rgba(237,233,223,.1);background:rgba(8,8,8,.72);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 24px 60px rgba(0,0,0,.28);overflow:hidden}
+    .card-top{display:flex;justify-content:space-between;gap:1rem;align-items:center;padding:1rem 1.2rem;border-bottom:1px solid var(--line)}
+    .num{font-family:'Bebas Neue',sans-serif;font-size:2.3rem;color:rgba(212,240,58,.9);line-height:1;text-shadow:0 0 8px rgba(212,240,58,.10),0 0 18px rgba(212,240,58,.05)}
+    .tag{font-size:.52rem;letter-spacing:.14em;text-transform:uppercase;background:rgba(212,240,58,.1);color:var(--accent);padding:4px 9px}
+    .embed{min-height:520px;background:#050505;display:flex;align-items:flex-start;justify-content:center;padding:1rem;overflow:hidden}
+    .instagram-media{margin:0 auto!important;max-width:540px!important;min-width:326px!important;width:100%!important}
+    .info{padding:1.2rem}
+    .info h2{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.035em;line-height:.95;margin-bottom:.5rem}
+    .sub{font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem}
+    .hashtags{font-family:'Space Mono','Courier New',monospace!important;font-style:normal!important;font-weight:400!important;letter-spacing:.035em!important;text-transform:none!important;font-size:clamp(.78rem,1.15vw,1rem)!important;line-height:1.4!important;color:rgba(237,233,223,.72)!important;margin-bottom:1rem;overflow-wrap:anywhere}
+    .open{display:inline-block;color:var(--accent);font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;border-bottom:1px solid var(--accent);padding-bottom:2px}
+
     footer{display:flex;align-items:center;justify-content:space-between;padding:1.8rem var(--pad-x);flex-wrap:wrap;gap:1rem}.footer-logo{font-size:1.2rem}.footer-right{display:flex;gap:2rem;align-items:center;flex-wrap:wrap}.footer-copyright{width:100%;margin-top:.8rem;font-size:.58rem;letter-spacing:.08em;color:var(--muted);text-transform:uppercase}
-    @media(max-width:900px){.head{display:block}.intro{margin-top:1.3rem}.count{display:block;margin-top:1rem}.grid{grid-template-columns:1fr}.embed{min-height:480px}}@media(max-width:600px){.nav-links{gap:1rem}.nav-hide{display:none}.nav-logo{font-size:1.2rem}.title{font-size:clamp(3.8rem,17vw,6rem)}.embed{min-height:430px;padding:.6rem}.instagram-media{min-width:0!important}.card-top,.info{padding:1rem}}
+
+    @media(max-width:900px){.head{display:block}.intro{margin-top:1.3rem}.count{display:block;margin-top:1rem}.grid{grid-template-columns:1fr}.embed{min-height:480px}}
+    @media(max-width:600px){.nav-links{gap:1rem}.nav-hide{display:none}.nav-logo{font-size:1.2rem}.title{font-size:clamp(3.8rem,17vw,6rem)}.embed{min-height:430px;padding:.6rem}.instagram-media{min-width:0!important}.card-top,.info{padding:1rem}}
+    @media(prefers-reduced-motion:reduce){.ir-typewriter:after{display:none}.head,.grid{opacity:1;transform:none}.title span:after{display:none}}
   </style>
 </head>
 <body>
@@ -33,8 +107,12 @@
   <div class="nav-links"><a href="index.html" class="nav-hide">Home</a><a href="contact.html" class="nav-hide">Contact</a><a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="nav-cta">↗ Instagram</a></div>
 </nav>
 <main>
-  <section class="head">
-    <div><div class="kicker">Archive transmission</div><h1 class="title">All <span>Reels</span></h1><p class="intro">A living archive of irreallab short-form visual experiments. Add new Instagram Reel links in <strong>reels.json</strong>, or connect this page to a Google Sheet later so Radu can update it without touching the website code.</p></div>
+  <section class="head" id="reels-head">
+    <div>
+      <div class="kicker">Archive transmission</div>
+      <h1 class="title ir-title-typewriter" data-glitch="ALL REELS" data-title-first="All" data-title-second="Reels">All <span>Reels</span></h1>
+      <p class="intro ir-typewriter" data-typewriter-text="A living archive of irreallab short-form visual experiments. New transmissions added as the unreal keeps moving.">A living archive of irreallab short-form visual experiments. New transmissions added as the unreal keeps moving.</p>
+    </div>
     <span class="count" id="reel-count">Loading reels</span>
   </section>
   <section class="grid" id="reels-grid" aria-label="Irreallab reels archive"></section>
@@ -42,15 +120,143 @@
 <footer><div class="footer-logo"><span class="footer-irreal">irreal</span><em>lab_</em></div><div class="footer-right"><a href="index.html" class="footer-link">Home</a><a href="contact.html" class="footer-link">Contact</a><a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="footer-link">Instagram</a></div><p class="footer-copyright">© irreallab — Radu Nechita (Instagram) · Site rédaction : © Hélène Nechita · Tous droits réservés.</p></footer>
 <script>
 (function(){
+  'use strict';
+
   const grid=document.getElementById('reels-grid');
   const count=document.getElementById('reel-count');
   const esc=s=>(s||'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+
+  function ready(fn){
+    if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',fn);}else{fn();}
+  }
+
+  ready(function(){
+    initPageReveal();
+    initTypewriterLoop();
+    initLargeTitleTypewriter();
+    loadReels();
+  });
+
+  function initPageReveal(){
+    const head=document.getElementById('reels-head');
+    if(head) window.setTimeout(()=>head.classList.add('ir-in'),120);
+  }
+
+  function initTypewriterLoop(){
+    const elements=document.querySelectorAll('.ir-typewriter');
+    if(!elements.length) return;
+    const reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    elements.forEach(function(el){
+      const fullText=el.dataset.typewriterText||el.textContent.trim();
+      el.dataset.typewriterText=fullText;
+      if(reduced){el.textContent=fullText;return;}
+
+      let index=0;
+      let deleting=false;
+      let pauseTicks=0;
+      const typeSpeed=Number(el.dataset.typeSpeed||85);
+      const deleteSpeed=Number(el.dataset.deleteSpeed||38);
+      const pauseAtEnd=Number(el.dataset.pauseEnd||18);
+      const pauseAtStart=Number(el.dataset.pauseStart||6);
+
+      function tick(){
+        if(!deleting){
+          index+=1;
+          el.textContent=fullText.slice(0,index);
+          if(index>=fullText.length){
+            el.classList.add('is-done');
+            pauseTicks+=1;
+            if(pauseTicks>=pauseAtEnd){deleting=true;pauseTicks=0;}
+          }
+        }else{
+          index-=1;
+          el.textContent=fullText.slice(0,Math.max(index,0));
+          if(index<=0){
+            el.classList.remove('is-done');
+            pauseTicks+=1;
+            if(pauseTicks>=pauseAtStart){deleting=false;pauseTicks=0;}
+          }
+        }
+        window.setTimeout(tick,deleting?deleteSpeed:typeSpeed);
+      }
+
+      el.textContent='';
+      window.setTimeout(tick,400);
+    });
+  }
+
+  function initLargeTitleTypewriter(){
+    const titles=document.querySelectorAll('.ir-title-typewriter');
+    if(!titles.length) return;
+    const reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(reduced) return;
+
+    titles.forEach(function(title,titleIndex){
+      const firstText=title.dataset.titleFirst||'';
+      const secondText=title.dataset.titleSecond||'';
+      const secondElement=title.querySelector('span, em');
+      if(!secondElement) return;
+
+      let firstNode=null;
+      for(let i=0;i<title.childNodes.length;i+=1){
+        const node=title.childNodes[i];
+        if(node.nodeType===3&&node.nodeValue.trim().length>0){firstNode=node;break;}
+      }
+      if(!firstNode) return;
+
+      const totalLength=firstText.length+secondText.length;
+      let index=0;
+      let deleting=false;
+      let pauseTicks=0;
+      const typeSpeed=115;
+      const deleteSpeed=45;
+      const pauseAtEnd=18;
+      const pauseAtStart=6;
+
+      function renderTitle(){
+        const firstCount=Math.min(index,firstText.length);
+        const secondCount=Math.max(0,index-firstText.length);
+        firstNode.nodeValue=firstText.slice(0,firstCount);
+        secondElement.textContent=secondText.slice(0,secondCount);
+      }
+
+      function tick(){
+        if(!deleting){
+          index+=1;
+          if(index>=totalLength){
+            index=totalLength;
+            pauseTicks+=1;
+            if(pauseTicks>=pauseAtEnd){deleting=true;pauseTicks=0;}
+          }
+        }else{
+          index-=1;
+          if(index<=0){
+            index=0;
+            pauseTicks+=1;
+            if(pauseTicks>=pauseAtStart){deleting=false;pauseTicks=0;}
+          }
+        }
+        renderTitle();
+        window.setTimeout(tick,deleting?deleteSpeed:typeSpeed);
+      }
+
+      firstNode.nodeValue='';
+      secondElement.textContent='';
+      window.setTimeout(tick,450+(titleIndex*220));
+    });
+  }
+
   function render(reels){
     grid.innerHTML=reels.map((r,i)=>`<article class="card"><div class="card-top"><div class="num">${String(i+1).padStart(2,'0')}</div><div class="tag">${esc(r.status||'Live')}</div></div><div class="embed"><blockquote class="instagram-media" data-instgrm-permalink="${esc(r.url)}" data-instgrm-version="14" style="background:#FFF;border:0;border-radius:0;box-shadow:none;margin:0;max-width:540px;min-width:326px;padding:0;width:100%;"></blockquote></div><div class="info"><h2>${esc(r.title)}</h2><div class="sub">${esc(r.subtitle||'@irreallab · Watch on Instagram')}</div><p class="hashtags">${esc(r.hashtags)}</p><a class="open" href="${esc(r.url)}" target="_blank" rel="noopener">Open reel ↗</a></div></article>`).join('');
     count.textContent=String(reels.length).padStart(2,'0')+' live reels';
+    grid.classList.add('ir-in');
     if(window.instgrm&&window.instgrm.Embeds){window.instgrm.Embeds.process();}
   }
-  fetch('reels.json',{cache:'no-store'}).then(r=>r.json()).then(render).catch(()=>{count.textContent='Unable to load reels.json';});
+
+  function loadReels(){
+    fetch('reels.json',{cache:'no-store'}).then(r=>r.json()).then(render).catch(()=>{count.textContent='Unable to load reels.json';});
+  }
 })();
 </script>
 <script async src="https://www.instagram.com/embed.js"></script>
