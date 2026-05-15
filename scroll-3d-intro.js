@@ -34,7 +34,7 @@ class ScrollIntro3D {
     this.renderer.setSize(width, height);
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 1.5;
+    this.renderer.toneMappingExposure = 2;
 
     // Create 3D elements
     this.createOrganicShape();
@@ -60,6 +60,33 @@ class ScrollIntro3D {
     const positions = baseGeometry.getAttribute('position').array;
     const originalPositions = new Float32Array(positions);
 
+    // Add vibrant neon vertex colors
+    const colors = new Float32Array(positions.length);
+    for (let i = 0; i < positions.length; i += 3) {
+      const x = positions[i];
+      const y = positions[i + 1];
+      const z = positions[i + 2];
+
+      // Create neon color gradient: magenta → cyan → lime based on position
+      const angle = Math.atan2(y, x);
+      const hue = (angle / Math.PI + 1) * 0.5;
+
+      // Map to neon colors: magenta (0.8) → cyan (0.5) → lime (0.3)
+      let neonHue;
+      if (hue < 0.33) {
+        neonHue = 0.8 + hue * 0.6; // Magenta range
+      } else if (hue < 0.66) {
+        neonHue = 0.5 + (hue - 0.33) * 0.3; // Cyan range
+      } else {
+        neonHue = 0.3 + (hue - 0.66) * 0.5; // Lime range
+      }
+
+      const color = new THREE.Color().setHSL(neonHue, 1.0, 0.6);
+      colors[i] = color.r;
+      colors[i + 1] = color.g;
+      colors[i + 2] = color.b;
+    }
+
     // Apply subtle organic deformation
     for (let i = 0; i < positions.length; i += 3) {
       const x = positions[i];
@@ -77,15 +104,17 @@ class ScrollIntro3D {
     }
 
     baseGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    baseGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
     baseGeometry.computeVertexNormals();
 
-    // Vibrant material with strong emissive properties
+    // Vibrant neon material with magenta base
     const material = new THREE.MeshStandardMaterial({
-      color: 0x1a1a2e,
-      emissive: 0xd4f03a,
-      emissiveIntensity: 2.3,
+      color: 0x4d0066,
+      emissive: 0xff1493,
+      emissiveIntensity: 2.8,
       metalness: 0.6,
       roughness: 0.2,
+      vertexColors: true,
       wireframe: false
     });
 
@@ -173,26 +202,26 @@ class ScrollIntro3D {
 
   createLighting() {
     // Minimal ambient light for maximum contrast
-    const ambientLight = new THREE.AmbientLight(0x000000, 0.1);
+    const ambientLight = new THREE.AmbientLight(0x1a0033, 0.15);
     this.scene.add(ambientLight);
 
-    // Main point light - vibrant neon lime (very bright)
-    this.mainLight = new THREE.PointLight(0xd4f03a, 5, 35);
-    this.mainLight.position.set(5, 6, 8);
+    // Main light - bright magenta (neon)
+    this.mainLight = new THREE.PointLight(0xff00ff, 6, 40);
+    this.mainLight.position.set(6, 7, 9);
     this.scene.add(this.mainLight);
 
-    // Secondary light - bright magenta/pink
-    this.secondLight = new THREE.PointLight(0xff00ff, 3, 30);
-    this.secondLight.position.set(-6, -5, 7);
+    // Secondary light - bright cyan (neon)
+    this.secondLight = new THREE.PointLight(0x00ffff, 5, 38);
+    this.secondLight.position.set(-7, -6, 8);
     this.scene.add(this.secondLight);
 
-    // Tertiary light - cyan accent for color separation
-    const thirdLight = new THREE.PointLight(0x00ffff, 2.5, 25);
-    thirdLight.position.set(3, -6, -8);
+    // Tertiary light - vibrant lime (neon)
+    const thirdLight = new THREE.PointLight(0xd4f03a, 4, 35);
+    thirdLight.position.set(4, -7, -9);
     this.scene.add(thirdLight);
 
     // Directional light for subtle volume
-    const dirLight = new THREE.DirectionalLight(0xffffff, 0.2);
+    const dirLight = new THREE.DirectionalLight(0xffffff, 0.15);
     dirLight.position.set(5, 5, 5);
     this.scene.add(dirLight);
   }
@@ -251,10 +280,15 @@ class ScrollIntro3D {
       const scale = 1 + Math.sin(this.time * 0.4 + progress * Math.PI * 2) * 0.2 + progress * 0.15;
       this.mainMesh.scale.set(scale, scale, scale);
 
-      // Vibrant color shift through spectrum
-      const hue = 0.18 + progress * 0.5; // Lime to magenta
-      this.mainMesh.material.emissive.setHSL(hue, 1, 0.65);
-      this.mainMesh.material.emissiveIntensity = 1.2 + progress * 0.6;
+      // Vibrant neon color shift: magenta → cyan → lime
+      let neonHue;
+      if (progress < 0.5) {
+        neonHue = 0.8 + progress; // Magenta → Cyan
+      } else {
+        neonHue = 0.3 + (progress - 0.5) * 0.4; // Cyan → Lime
+      }
+      this.mainMesh.material.emissive.setHSL(neonHue, 1, 0.55);
+      this.mainMesh.material.emissiveIntensity = 1.8 + progress * 0.8;
     }
 
     // Text animation - LARGER and MORE VISIBLE
