@@ -852,6 +852,142 @@
       }
     }
 
+
+    /* FINAL REELS HERO FIX — forced visible title + typewriter paragraph */
+    .reels-page {
+      padding-top: 0 !important;
+    }
+
+    .reels-hero-visible {
+      width: min(1180px, calc(100% - var(--pad-x) * 2)) !important;
+      margin: 0 auto 3.2rem !important;
+      padding: clamp(4rem, 7vw, 6.5rem) 0 2.6rem !important;
+      display: flex !important;
+      align-items: flex-end !important;
+      justify-content: space-between !important;
+      gap: 3rem !important;
+      border-bottom: 1px solid rgba(212,240,58,.22) !important;
+      position: relative !important;
+      z-index: 20 !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+      transform: none !important;
+    }
+
+    .reels-hero-copy {
+      max-width: 760px !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+    }
+
+    .reels-kicker {
+      font-family: 'Space Mono', monospace !important;
+      font-size: .58rem !important;
+      letter-spacing: .22em !important;
+      text-transform: uppercase !important;
+      color: rgba(237,233,223,.45) !important;
+      display: flex !important;
+      align-items: center !important;
+      gap: .8rem !important;
+      margin-bottom: 1.45rem !important;
+    }
+
+    .reels-kicker::before {
+      content: '' !important;
+      width: 28px !important;
+      height: 1px !important;
+      background: rgba(237,233,223,.35) !important;
+      flex-shrink: 0 !important;
+    }
+
+    .reels-main-title {
+      font-family: 'Bebas Neue', sans-serif !important;
+      font-size: clamp(5rem, 10vw, 9.5rem) !important;
+      line-height: .86 !important;
+      letter-spacing: -.01em !important;
+      color: var(--text) !important;
+      text-transform: uppercase !important;
+      position: relative !important;
+      display: inline-block !important;
+      margin: 0 !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+      z-index: 30 !important;
+    }
+
+    .reels-main-title span {
+      display: block !important;
+      color: var(--accent) !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+      text-shadow: 0 0 10px rgba(212,240,58,.18), 0 0 24px rgba(212,240,58,.08) !important;
+    }
+
+    .reels-main-title span::after {
+      content: "_" !important;
+      display: inline-block !important;
+      margin-left: .08em !important;
+      color: var(--accent) !important;
+      animation: ir-more-title-blink .85s step-end infinite !important;
+      text-shadow: 0 0 10px rgba(212,240,58,.55), 0 0 24px rgba(212,240,58,.28), 0 0 44px rgba(212,240,58,.14) !important;
+    }
+
+    .reels-typewriter-line {
+      font-family: 'Space Mono', 'Courier New', monospace !important;
+      font-size: clamp(.82rem, 1.1vw, 1rem) !important;
+      line-height: 1.7 !important;
+      letter-spacing: .035em !important;
+      color: rgba(237,233,223,.68) !important;
+      max-width: 610px !important;
+      margin: 1.2rem 0 0 !important;
+      display: block !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+      white-space: normal !important;
+      overflow: visible !important;
+      text-transform: none !important;
+      position: relative !important;
+      z-index: 30 !important;
+    }
+
+    .reels-typewriter-line-2 {
+      margin-top: .25rem !important;
+      color: rgba(237,233,223,.54) !important;
+    }
+
+    .reels-archive-label {
+      font-family: 'Space Mono', monospace !important;
+      font-size: .58rem !important;
+      letter-spacing: .16em !important;
+      text-transform: uppercase !important;
+      color: rgba(237,233,223,.45) !important;
+      white-space: nowrap !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+    }
+
+    .reels-page .grid.reel-list {
+      position: relative !important;
+      z-index: 15 !important;
+    }
+
+    @media (max-width: 900px) {
+      .reels-hero-visible {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        padding-top: 4rem !important;
+      }
+
+      .reels-main-title {
+        font-size: clamp(4.8rem, 23vw, 7.4rem) !important;
+        line-height: .78 !important;
+      }
+
+      .reels-archive-label {
+        white-space: normal !important;
+      }
+    }
+
 </style>
 </head>
 <body>
@@ -899,22 +1035,28 @@
   </nav>
 
   <main class="reels-page">
-    <div class="head section-head">
-      <div>
-        <div class="kicker">Archive / Motion / Visual experiments</div>
-        <h1 class="title" data-glitch="MORE\A REELS">
+    
+    <section class="reels-hero-visible">
+      <div class="reels-hero-copy">
+        <div class="reels-kicker">Archive / Motion / Visual experiments</div>
+
+        <h1 class="reels-main-title" data-glitch="MORE&#10;REELS">
           MORE
           <span>REELS</span>
         </h1>
-        <p class="hero-sub ir-typewriter" data-typewriter-text="Visual experiments in short-form. Motion, surrealism & the art of the unreal.">
+
+        <p class="reels-typewriter-line" data-typewriter-text="Visual experiments in short-form. Motion, surrealism & the art of the unreal.">
           Visual experiments in short-form. Motion, surrealism &amp; the art of the unreal.
         </p>
-        <p class="hero-sub ir-typewriter ir-typewriter-second" data-typewriter-text="Every week, a new experiment. Follow @irreallab to never miss a reel.">
+
+        <p class="reels-typewriter-line reels-typewriter-line-2" data-typewriter-text="Every week, a new experiment. Follow @irreallab to never miss a reel.">
           Every week, a new experiment. Follow @irreallab to never miss a reel.
         </p>
       </div>
-      <div class="count">Curated archive / cinematic fragments</div>
-    </div>
+
+      <div class="reels-archive-label">Curated archive / cinematic fragments</div>
+    </section>
+
     <div class="grid reel-list"></div>
   </main>
 
