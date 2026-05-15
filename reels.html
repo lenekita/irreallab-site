@@ -617,7 +617,7 @@
         <h1 class="title" data-glitch="REELS"><span>REELS</span></h1>
         <div class="intro ir-typewriter" data-typewriter-text="Irreallab's reel archive: experimental motion studies, surreal visual narratives, and cinematic fragments from imagined worlds.">Irreallab's reel archive: experimental motion studies, surreal visual narratives, and cinematic fragments from imagined worlds.</div>
       </div>
-      <div class="count ir-typewriter" data-typewriter-text=""></div>
+      <div class="count"></div>
     </div>
     <div class="grid"></div>
   </main>
@@ -660,9 +660,7 @@
           </article>`;
         }).join('');
 
-        const countText = String(reels.length).padStart(2,'0') + ' live reels';
-        count.textContent = countText;
-        count.setAttribute('data-typewriter-text', countText);
+        count.textContent = String(reels.length).padStart(2,'0') + ' live reels';
 
         if (window.instgrm && window.instgrm.Embeds) {
           window.instgrm.Embeds.process();
