@@ -1,24 +1,57 @@
-name: 📺 Sync Instagram Reels
+name: Sync Instagram Reels
+
 on:
   schedule:
-    - cron: '0 2 * * *'  # Every day at 2 AM UTC
-  workflow_dispatch:      # Manual trigger
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
 jobs:
   sync-reels:
     runs-on: ubuntu-latest
-    
+
     steps:
-      - name: 📥 Checkout code
-        uses: actions/checkout@v3
-      - name: 🔧 Setup Node.js
-        uses: actions/setup-node@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: '18'
-      - name: 📺 Fetch Instagram reels
+
+      - name: Run Instagram sync
+        env:
+          INSTAGRAM_TOKEN: ${{ secrets.INSTAGRAM_TOKEN }}
+          INSTAGRAM_BUSINESS_ACCOUNT_ID: ${{ secrets.INSTAGRAM_BUSINESS_ACCOUNT_ID }}
         run: node scripts/sync-instagram.js
-      - name: 📤 Commit changes
+
+      - name: Check if reels.json changed
+        id: check-changes
         run: |
-          git config user.name "GitHub Actions Bot"
-          git config user.email "actions@github.com"
+          if git diff --quiet reels.json; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Configure git
+        if: steps.check-changes.outputs.changed == 'true'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action Bot"
+
+      - name: Commit and push changes
+        if: steps.check-changes.outputs.changed == 'true'
+        run: |
           git add reels.json
-          git diff --quiet && git diff --staged --quiet || (git commit -m "🔄 Auto-sync Instagram reels" && git push)
+          git commit -m "chore: auto-sync Instagram reels from @irreallab [${{ github.run_number }}]"
+          git push
+
+      - name: Create GitHub deployment
+        if: steps.check-changes.outputs.changed == 'true'
+        uses: chrnorm/deployment-action@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          environment: production
+          environment-url: https://irreallab.fr/reels.html

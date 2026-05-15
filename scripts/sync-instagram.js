@@ -3,10 +3,12 @@
 /**
  * scripts/sync-instagram.js
  * 
- * Syncs Instagram reels from @irreallab to reels.json
+ * Syncs Instagram reels from @irreallab to reels.json using Instagram Graph API
  * Run with: node scripts/sync-instagram.js
  * 
- * This script is executed by GitHub Actions workflow automatically
+ * Required environment variables:
+ * - INSTAGRAM_TOKEN: Long-lived access token with instagram_basic, instagram_content_publishing
+ * - INSTAGRAM_BUSINESS_ACCOUNT_ID: Business account ID (get from Graph API Explorer)
  */
 
 const fs = require('fs');
@@ -14,30 +16,35 @@ const path = require('path');
 const https = require('https');
 
 const REELS_FILE = path.join(__dirname, '../reels.json');
-const USERNAME = 'irreallab';
+const API_VERSION = 'v18.0';
+const BASE_URL = `https://graph.instagram.com/${API_VERSION}`;
 
-console.log(`\n🎬 === INSTAGRAM REELS SYNC ===`);
-console.log(`📍 Username: @${USERNAME}`);
+const TOKEN = process.env.INSTAGRAM_TOKEN;
+const ACCOUNT_ID = process.env.INSTAGRAM_BUSINESS_ACCOUNT_ID;
+
+console.log(`\n🎬 === INSTAGRAM REELS SYNC (Graph API) ===`);
 console.log(`⏰ Time: ${new Date().toLocaleString()}\n`);
 
-/**
- * Fetch Instagram profile data
- */
-function fetchInstagramProfile(username) {
+if (!TOKEN || !ACCOUNT_ID) {
+  console.error('❌ Error: Missing required environment variables:');
+  console.error('   - INSTAGRAM_TOKEN');
+  console.error('   - INSTAGRAM_BUSINESS_ACCOUNT_ID\n');
+  process.exit(1);
+}
+
+function makeGraphAPIRequest(endpoint, fields = '') {
   return new Promise((resolve, reject) => {
-    const url = `https://www.instagram.com/${username}/?__a=1&__d=dis`;
-    
-    console.log(`🔍 Fetching Instagram profile...`);
-    
+    const url = new URL(`${BASE_URL}${endpoint}`);
+    if (fields) url.searchParams.append('fields', fields);
+    url.searchParams.append('access_token', TOKEN);
+
     const options = {
-      hostname: 'www.instagram.com',
-      path: `/${username}/?__a=1&__d=dis`,
+      hostname: 'graph.instagram.com',
+      path: url.pathname + url.search,
       method: 'GET',
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
         'Accept': 'application/json',
-        'Accept-Language': 'en-US,en;q=0.9',
-        'Referer': `https://www.instagram.com/${username}/`
+        'User-Agent': 'irreallab-sync/1.0'
       }
     };
 
@@ -51,87 +58,104 @@ function fetchInstagramProfile(username) {
       res.on('end', () => {
         try {
           const json = JSON.parse(data);
-          console.log('✅ Successfully fetched Instagram profile');
-          resolve(json);
+          if (res.statusCode >= 400) {
+            console.error(`❌ API Error (${res.statusCode}):`, json.error?.message || data);
+            reject(new Error(json.error?.message || `HTTP ${res.statusCode}`));
+          } else {
+            resolve(json);
+          }
         } catch (e) {
-          console.error('❌ Failed to parse Instagram response');
-          console.error('Response:', data.substring(0, 200));
-          reject(new Error('Invalid JSON from Instagram'));
+          console.error('❌ Failed to parse API response:', data.substring(0, 200));
+          reject(new Error('Invalid JSON from Instagram API'));
         }
       });
-    }).on('error', (err) => {
-      console.error('❌ Network error:', err.message);
-      reject(err);
-    });
+    }).on('error', reject);
   });
 }
 
-/**
- * Extract hashtags from caption
- */
-function extractHashtags(captionEdges) {
+function extractHashtags(caption) {
+  if (!caption) return '';
+  const hashtags = caption.match(/#\w+/g) || [];
+  return hashtags.join(' ');
+}
+
+function extractTitle(caption) {
+  if (!caption) return 'Untitled Reel';
+  
+  const lines = caption.split('\n');
+  const firstLine = lines[0];
+  
+  if (firstLine.length > 50) {
+    return firstLine.substring(0, 50).trim();
+  }
+  return firstLine.trim();
+}
+
+async function fetchMediaDetails(mediaId) {
   try {
-    if (!captionEdges || captionEdges.length === 0) return '';
-    
-    const caption = captionEdges[0]?.node?.text || '';
-    const hashtags = caption.match(/#\w+/g) || [];
-    
-    return hashtags.join(' ');
+    const fields = 'id,media_type,caption,media_product_type,permalink,media_url,thumbnail_url,timestamp,like_count,comments_count';
+    const response = await makeGraphAPIRequest(`/${mediaId}`, fields);
+    return response;
   } catch (error) {
-    return '';
+    console.warn(`⚠️ Failed to fetch details for ${mediaId}:`, error.message);
+    return null;
   }
 }
 
-/**
- * Extract reels from Instagram data
- */
-function extractReels(instagramData) {
+async function fetchInstagramReels() {
   try {
-    const reels = [];
-    const user = instagramData.graphql?.user;
+    console.log(`🔍 Fetching reels from Instagram Business Account...`);
     
-    if (!user) {
-      console.warn('⚠️ No user data found in Instagram response');
-      return reels;
+    const fields = 'id,media_type,caption,media_product_type,permalink,media_url,thumbnail_url,timestamp';
+    const response = await makeGraphAPIRequest(`/${ACCOUNT_ID}/media`, fields);
+    
+    if (!response.data) {
+      console.warn('⚠️ No media data in response');
+      return [];
     }
 
-    const posts = user.edge_owner_to_timeline_media?.edges || [];
-    console.log(`📊 Found ${posts.length} posts, extracting videos...`);
+    const reels = [];
+    console.log(`📊 Processing ${response.data.length} media items...`);
 
-    posts.forEach((edge, index) => {
-      const node = edge.node;
-      
-      // Only include videos (reels)
-      if (node.is_video) {
-        const reel = {
-          title: node.accessibility_caption?.substring(0, 50) || `Reel ${reels.length + 1}`,
-          subtitle: '@irreallab · Watch on Instagram',
-          url: `https://www.instagram.com/p/${node.shortcode}/`,
-          hashtags: extractHashtags(node.edge_media_to_caption?.edges || []),
-          status: 'Live',
-          video_url: node.video_url || node.display_url,
-          thumbnail_url: node.display_url,
-          order: reels.length + 1,
-          instagram_id: node.id,
-          instagram_shortcode: node.shortcode,
-          posted_at: new Date(node.taken_at_timestamp * 1000).toISOString()
-        };
+    for (const media of response.data) {
+      try {
+        // Filter for video reels only
+        if (media.media_type !== 'VIDEO' && media.media_type !== 'CAROUSEL') {
+          continue;
+        }
         
+        if (media.media_product_type !== 'REELS') {
+          continue;
+        }
+
+        const reel = {
+          title: extractTitle(media.caption),
+          subtitle: '@irreallab · Watch on Instagram',
+          url: media.permalink,
+          hashtags: extractHashtags(media.caption),
+          status: 'Live',
+          video_url: media.media_url || '',
+          thumbnail_url: media.thumbnail_url || '',
+          posted_at: media.timestamp || new Date().toISOString(),
+          instagram_id: media.id,
+          order: reels.length + 1
+        };
+
         reels.push(reel);
+        console.log(`✓ Added: "${reel.title}"`);
+      } catch (err) {
+        console.warn(`⚠️ Error processing media ${media.id}:`, err.message);
       }
-    });
+    }
 
     console.log(`✅ Extracted ${reels.length} video reels`);
     return reels;
   } catch (error) {
-    console.error('❌ Error extracting reels:', error.message);
+    console.error('❌ Error fetching Instagram reels:', error.message);
     throw error;
   }
 }
 
-/**
- * Save reels to reels.json
- */
 function saveReelsFile(reels) {
   try {
     fs.writeFileSync(REELS_FILE, JSON.stringify(reels, null, 2), 'utf8');
@@ -143,41 +167,38 @@ function saveReelsFile(reels) {
   }
 }
 
-/**
- * Main sync function
- */
 async function syncInstagramReels() {
   try {
-    // Fetch Instagram profile
-    const profileData = await fetchInstagramProfile(USERNAME);
-    
-    // Extract reels
-    const reels = extractReels(profileData);
+    const reels = await fetchInstagramReels();
     
     if (reels.length === 0) {
-      console.warn('⚠️ No video reels found');
-      console.log('ℹ️  Make sure @irreallab profile is public\n');
+      console.warn('⚠️ No reels found. Checking account...');
+      console.log('ℹ️  Make sure:');
+      console.log('   1. Account is a Business/Creator account');
+      console.log('   2. Account is publicly visible');
+      console.log('   3. Token has correct permissions\n');
       process.exit(1);
     }
-    
-    // Save to file
+
     saveReelsFile(reels);
     
     console.log('✨ Instagram reels sync complete!');
     console.log(`📊 Total reels: ${reels.length}`);
-    console.log(`📍 File: ${REELS_FILE}\n`);
+    console.log(`📍 File: ${REELS_FILE}`);
+    console.log(`📅 Last updated: ${new Date().toISOString()}\n`);
     
     process.exit(0);
   } catch (error) {
     console.error('\n❌ Sync failed:', error.message);
-    console.error('\n💡 Possible solutions:');
-    console.error('  1. Check @irreallab profile is public');
-    console.error('  2. Wait a few minutes (rate limiting)');
-    console.error('  3. Check network connection\n');
+    console.error('\n💡 Troubleshooting:');
+    console.error('  1. Verify INSTAGRAM_TOKEN is valid and not expired');
+    console.error('  2. Check INSTAGRAM_BUSINESS_ACCOUNT_ID is correct');
+    console.error('  3. Ensure token has instagram_basic & instagram_content_publishing scopes');
+    console.error('  4. Check network connection');
+    console.error('  5. Instagram API may be rate-limited — try again in a few minutes\n');
     
     process.exit(1);
   }
 }
 
-// Run sync
 syncInstagramReels();
