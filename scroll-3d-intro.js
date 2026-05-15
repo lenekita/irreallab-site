@@ -6,7 +6,6 @@ class ScrollIntro3D {
     this.isNavigating = false;
     this.mainMesh = null;
     this.particles = null;
-    this.composer = null;
     this.textMesh = null;
     this.time = 0;
 
@@ -16,32 +15,32 @@ class ScrollIntro3D {
   init() {
     // Scene setup
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0x060606);
-    this.scene.fog = new THREE.Fog(0x060606, 20, 50);
+    this.scene.background = new THREE.Color(0x0a0a0a);
+    this.scene.fog = new THREE.Fog(0x0a0a0a, 30, 50);
 
     // Camera setup
     const width = window.innerWidth;
     const height = window.innerHeight;
-    this.camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-    this.camera.position.z = 5;
+    this.camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000);
+    this.camera.position.z = 6;
 
-    // Renderer setup
+    // Renderer setup - HIGH QUALITY
     this.renderer = new THREE.WebGLRenderer({
       canvas: document.getElementById('canvas-3d'),
       antialias: true,
-      alpha: false
+      alpha: false,
+      precision: 'highp'
     });
     this.renderer.setSize(width, height);
-    this.renderer.setPixelRatio(window.devicePixelRatio);
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 1.2;
+    this.renderer.toneMappingExposure = 1.5;
 
-    // Create geometries
+    // Create 3D elements
     this.createOrganicShape();
     this.createParticles();
     this.createText();
     this.createLighting();
-    this.setupPostProcessing();
 
     // Event listeners
     window.addEventListener('resize', () => this.onWindowResize(), { passive: true });
@@ -55,53 +54,54 @@ class ScrollIntro3D {
   }
 
   createOrganicShape() {
-    // Create a custom organic shape using IcosahedronGeometry with displacement
-    const baseGeometry = new THREE.IcosahedronGeometry(1.2, 6);
+    // Create highly deformable organic shape
+    const baseGeometry = new THREE.IcosahedronGeometry(1.5, 4);
 
-    // Apply wave displacement to vertices for organic look
-    const positionAttribute = baseGeometry.getAttribute('position');
-    const positions = positionAttribute.array;
+    const positions = baseGeometry.getAttribute('position').array;
     const originalPositions = new Float32Array(positions);
 
+    // Apply strong wave displacement
     for (let i = 0; i < positions.length; i += 3) {
       const x = positions[i];
       const y = positions[i + 1];
       const z = positions[i + 2];
-
-      // Apply sine waves for organic morphing
-      const wave = Math.sin(x * 3) * 0.08 + Math.sin(y * 3) * 0.08 + Math.sin(z * 3) * 0.08;
       const length = Math.sqrt(x * x + y * y + z * z);
 
-      positions[i] = x / length * (length + wave);
-      positions[i + 1] = y / length * (length + wave);
-      positions[i + 2] = z / length * (length + wave);
+      const wave = Math.sin(x * 5) * 0.15 + Math.sin(y * 5) * 0.15 + Math.sin(z * 5) * 0.15;
+      const newLength = length + wave;
+
+      positions[i] = (x / length) * newLength;
+      positions[i + 1] = (y / length) * newLength;
+      positions[i + 2] = (z / length) * newLength;
     }
 
-    baseGeometry.userData.originalPositions = originalPositions;
-    baseGeometry.userData.positions = positions;
+    baseGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    baseGeometry.computeVertexNormals();
 
-    const material = new THREE.MeshPhongMaterial({
-      color: 0xffffff,
+    // Strong emissive material
+    const material = new THREE.MeshStandardMaterial({
+      color: 0xcccccc,
       emissive: 0xd4f03a,
-      emissiveIntensity: 0.4,
-      shininess: 80,
-      wireframe: false,
-      flatShading: false
+      emissiveIntensity: 1.2,
+      metalness: 0.2,
+      roughness: 0.3,
+      wireframe: false
     });
 
     this.mainMesh = new THREE.Mesh(baseGeometry, material);
-    this.mainMesh.scale.set(0.8, 0.8, 0.8);
+    this.mainMesh.scale.set(1, 1, 1);
+    this.mainMesh.userData.originalPositions = originalPositions;
     this.scene.add(this.mainMesh);
   }
 
   createParticles() {
-    const particleCount = 800;
+    const particleCount = 1200;
     const geometry = new THREE.BufferGeometry();
     const positions = new Float32Array(particleCount * 3);
-    const sizes = new Float32Array(particleCount);
+    const colors = new Float32Array(particleCount * 3);
 
     for (let i = 0; i < particleCount * 3; i += 3) {
-      const radius = 2.5 + Math.random() * 1.5;
+      const radius = 2.5 + Math.random() * 3;
       const theta = Math.random() * Math.PI * 2;
       const phi = Math.acos(Math.random() * 2 - 1);
 
@@ -109,19 +109,24 @@ class ScrollIntro3D {
       positions[i + 1] = radius * Math.sin(phi) * Math.sin(theta);
       positions[i + 2] = radius * Math.cos(phi);
 
-      sizes[i / 3] = Math.random() * 1.5 + 0.5;
+      // Yellow-green particles with variation
+      const hue = 0.2 + Math.random() * 0.1;
+      const color = new THREE.Color().setHSL(hue, 1, 0.6);
+      colors[i] = color.r;
+      colors[i + 1] = color.g;
+      colors[i + 2] = color.b;
     }
 
     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
     geometry.userData.initialPositions = positions.slice();
 
     const material = new THREE.PointsMaterial({
-      color: 0xd4f03a,
-      size: 0.03,
+      size: 0.08,
       sizeAttenuation: true,
+      vertexColors: true,
       transparent: true,
-      opacity: 0.6
+      opacity: 0.8
     });
 
     this.particles = new THREE.Points(geometry, material);
@@ -131,16 +136,22 @@ class ScrollIntro3D {
   createText() {
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
-    canvas.width = 512;
-    canvas.height = 256;
+    canvas.width = 1024;
+    canvas.height = 512;
 
+    // Transparent background
     ctx.fillStyle = 'rgba(0, 0, 0, 0)';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+    // Large glowing text
     ctx.fillStyle = '#d4f03a';
-    ctx.font = 'bold 100px Bebas Neue';
+    ctx.font = 'bold 180px Bebas Neue, sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
+    ctx.shadowColor = 'rgba(212, 240, 58, 0.8)';
+    ctx.shadowBlur = 30;
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 0;
     ctx.fillText('irreallab', canvas.width / 2, canvas.height / 2);
 
     const texture = new THREE.CanvasTexture(canvas);
@@ -150,51 +161,32 @@ class ScrollIntro3D {
       side: THREE.DoubleSide
     });
 
-    const geometry = new THREE.PlaneGeometry(4, 2);
+    const geometry = new THREE.PlaneGeometry(6, 3);
     this.textMesh = new THREE.Mesh(geometry, material);
-    this.textMesh.position.z = 0.5;
+    this.textMesh.position.z = 1;
     this.textMesh.scale.set(0, 0, 1);
-    this.textMesh.rotation.z = 0.1;
     this.scene.add(this.textMesh);
   }
 
   createLighting() {
-    // Ambient light - soft and diffuse
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+    // Ambient light
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
     this.scene.add(ambientLight);
 
-    // Main point light - moving with scroll
-    this.mainLight = new THREE.PointLight(0xd4f03a, 2.5, 15);
-    this.mainLight.position.set(3, 4, 5);
+    // Main point light - strong yellow glow
+    this.mainLight = new THREE.PointLight(0xd4f03a, 3, 25);
+    this.mainLight.position.set(4, 5, 7);
     this.scene.add(this.mainLight);
 
     // Secondary light - cool blue accent
-    this.secondLight = new THREE.PointLight(0x4488ff, 1.2, 12);
-    this.secondLight.position.set(-4, -3, 4);
+    this.secondLight = new THREE.PointLight(0x4488ff, 1.5, 20);
+    this.secondLight.position.set(-5, -4, 6);
     this.scene.add(this.secondLight);
 
-    // Directional light for additional depth
-    const dirLight = new THREE.DirectionalLight(0xffffff, 0.4);
+    // Directional light for volume
+    const dirLight = new THREE.DirectionalLight(0xffffff, 0.6);
     dirLight.position.set(5, 5, 5);
     this.scene.add(dirLight);
-  }
-
-  setupPostProcessing() {
-    this.composer = new THREE.EffectComposer(this.renderer);
-    const renderPass = new THREE.RenderPass(this.scene, this.camera);
-    this.composer.addPass(renderPass);
-
-    // Bloom effect for glow
-    const bloomPass = new THREE.UnrealBloomPass(
-      new THREE.Vector2(window.innerWidth, window.innerHeight),
-      1.5,
-      0.4,
-      0.85
-    );
-    this.composer.addPass(bloomPass);
-
-    // Store bloom pass for dynamic adjustment
-    this.bloomPass = bloomPass;
   }
 
   onScroll() {
@@ -205,7 +197,7 @@ class ScrollIntro3D {
     this.scrollProgress = scrollHeight > 0 ? window.scrollY / scrollHeight : 0;
     this.scrollProgress = Math.min(Math.max(this.scrollProgress, 0), 1);
 
-    // Trigger navigation at the end
+    // Auto-navigate at the very end
     if (this.scrollProgress >= 0.99 && !this.isNavigating) {
       this.triggerNavigation();
     }
@@ -213,105 +205,105 @@ class ScrollIntro3D {
 
   updateAnimations() {
     const progress = this.scrollProgress;
-    this.time += 0.016; // Approximate 60fps
+    this.time += 0.016;
 
-    // Organic mesh animation
+    // Organic shape animation - MORE DRAMATIC
     if (this.mainMesh) {
-      // Rotation - smooth and continuous
-      this.mainMesh.rotation.x += 0.0008;
-      this.mainMesh.rotation.y += 0.0012;
-      this.mainMesh.rotation.z += 0.0004;
+      // Fast continuous rotation
+      this.mainMesh.rotation.x += 0.002;
+      this.mainMesh.rotation.y += 0.003;
+      this.mainMesh.rotation.z += 0.001;
 
-      // Organic deformation based on scroll
+      // Strong organic deformation
       const geometry = this.mainMesh.geometry;
-      const positions = geometry.attributes.position.array;
-      const originalPositions = geometry.userData.originalPositions;
+      const positions = geometry.getAttribute('position').array;
+      const originalPositions = this.mainMesh.userData.originalPositions;
 
-      for (let i = 0; i < positions.length; i += 3) {
-        const x = originalPositions[i];
-        const y = originalPositions[i + 1];
-        const z = originalPositions[i + 2];
+      if (originalPositions) {
+        for (let i = 0; i < positions.length; i += 3) {
+          const x = originalPositions[i];
+          const y = originalPositions[i + 1];
+          const z = originalPositions[i + 2];
+          const length = Math.sqrt(x * x + y * y + z * z);
 
-        // Sine wave displacement
-        const waveAmount = Math.sin(this.time + x * 2) * 0.05 * (0.5 + progress);
-        const length = Math.sqrt(x * x + y * y + z * z);
+          // Strong dynamic deformation
+          const waveAmount = Math.sin(this.time + x * 3) * 0.15 * (0.6 + progress * 0.8);
+          const newLength = length + waveAmount;
 
-        positions[i] = (x / length) * (length + waveAmount);
-        positions[i + 1] = (y / length) * (length + waveAmount);
-        positions[i + 2] = (z / length) * (length + waveAmount);
+          positions[i] = (x / length) * newLength;
+          positions[i + 1] = (y / length) * newLength;
+          positions[i + 2] = (z / length) * newLength;
+        }
+
+        geometry.attributes.position.needsUpdate = true;
       }
 
-      geometry.attributes.position.needsUpdate = true;
-
-      // Scale animation
-      const baseScale = 0.8;
-      const scaleVariation = Math.sin(progress * Math.PI * 2) * 0.15;
-      const scale = baseScale + scaleVariation;
+      // Strong scale variation
+      const scale = 0.85 + Math.sin(progress * Math.PI * 3) * 0.35;
       this.mainMesh.scale.set(scale, scale, scale);
 
-      // Color shift based on scroll
-      const hueShift = progress * 0.4;
-      this.mainMesh.material.emissive.setHSL(0.25 + hueShift, 1, 0.5);
+      // Strong color shift
+      const hue = 0.25 + progress * 0.4;
+      this.mainMesh.material.emissive.setHSL(hue, 1, 0.6);
+      this.mainMesh.material.emissiveIntensity = 1 + progress * 0.5;
     }
 
-    // Text animation
+    // Text animation - LARGER and MORE VISIBLE
     if (this.textMesh) {
-      const textProgress = Math.max(0, progress - 0.1) / 0.35;
+      const textProgress = Math.max(0, progress - 0.08) / 0.35;
       const textScale = Math.min(1, Math.max(0, textProgress));
 
       this.textMesh.scale.set(textScale, textScale, 1);
       this.textMesh.rotation.y = progress * Math.PI * 1.5;
-      this.textMesh.rotation.x = Math.sin(this.time * 0.5) * 0.1 * textScale;
-      this.textMesh.position.z = 0.5 + progress * 0.5;
+      this.textMesh.rotation.x = Math.sin(this.time * 0.4) * 0.2 * textScale;
+      this.textMesh.position.z = 1 + progress * 1;
+      this.textMesh.position.y = Math.sin(this.time * 0.3) * 0.3 * textScale;
     }
 
-    // Particle animation
+    // Particle animation - MORE DYNAMIC
     if (this.particles) {
       const positions = this.particles.geometry.attributes.position.array;
       const initialPositions = this.particles.geometry.userData.initialPositions;
-      const particleOpacity = Math.max(0, 1 - (progress - 0.7) / 0.3);
 
-      for (let i = 0; i < positions.length; i += 3) {
-        const idx = i / 3;
-        const angle = progress * Math.PI * 2 + idx;
-        const distance = 2 + progress * 1.5;
+      if (positions && initialPositions) {
+        for (let i = 0; i < positions.length; i += 3) {
+          const idx = i / 3;
+          const angle = progress * Math.PI * 3 + idx * 0.01;
+          const orbitDistance = 2.8 + progress * 1.8;
 
-        // Orbital motion
-        positions[i] = Math.cos(angle) * distance + (Math.random() - 0.5) * 0.3 * progress;
-        positions[i + 1] = Math.sin(angle) * distance * 0.7 + (Math.random() - 0.5) * 0.3 * progress;
-        positions[i + 2] = Math.sin(angle * 0.5) * distance * 0.5;
+          positions[i] = Math.cos(angle) * orbitDistance;
+          positions[i + 1] = Math.sin(angle) * orbitDistance * 0.8;
+          positions[i + 2] = Math.sin(angle * 0.5) * orbitDistance * 0.6;
+        }
+
+        this.particles.geometry.attributes.position.needsUpdate = true;
       }
 
-      this.particles.geometry.attributes.position.needsUpdate = true;
+      // Particle opacity
+      const particleOpacity = Math.max(0, 1 - (progress - 0.75) / 0.25);
       this.particles.material.opacity = particleOpacity;
     }
 
-    // Camera movement
-    const cameraZ = 5 + progress * 2.5;
-    const cameraX = Math.sin(progress * Math.PI) * 1.2;
-    const cameraY = Math.cos(progress * Math.PI * 0.5) * 0.8;
+    // Camera movement - MORE DRAMATIC
+    const cameraZ = 6 + progress * 3;
+    const cameraX = Math.sin(progress * Math.PI) * 2;
+    const cameraY = Math.cos(progress * Math.PI * 0.5) * 1.5;
 
     this.camera.position.x += (cameraX - this.camera.position.x) * 0.08;
     this.camera.position.y += (cameraY - this.camera.position.y) * 0.08;
     this.camera.position.z = cameraZ;
     this.camera.lookAt(0, 0, 0);
 
-    // Dynamic lighting
-    const lightIntensity = 2 + progress * 1.5;
+    // Dynamic lighting - STRONGER
+    const lightIntensity = 3 + progress * 2.5;
     this.mainLight.intensity = lightIntensity;
-    this.secondLight.intensity = 1 + progress * 0.5;
-
-    // Bloom intensity increases with scroll
-    if (this.bloomPass) {
-      this.bloomPass.strength = 1 + progress * 2;
-      this.bloomPass.radius = 0.4 + progress * 0.6;
-    }
+    this.secondLight.intensity = 1.2 + progress * 1;
 
     // Scene fade
     if (progress > 0.9) {
-      const fadeProgress = (progress - 0.9) / 0.1;
+      const fadeAmount = (progress - 0.9) / 0.1;
       this.scene.background.copy(
-        new THREE.Color(0x060606).lerp(new THREE.Color(0x000000), fadeProgress)
+        new THREE.Color(0x0a0a0a).lerp(new THREE.Color(0x000000), fadeAmount)
       );
     }
   }
@@ -349,7 +341,7 @@ class ScrollIntro3D {
       this.updateAnimations();
     }
 
-    this.composer.render();
+    this.renderer.render(this.scene, this.camera);
   }
 
   onWindowResize() {
@@ -359,7 +351,6 @@ class ScrollIntro3D {
     this.camera.aspect = width / height;
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(width, height);
-    this.composer.setSize(width, height);
   }
 }
 

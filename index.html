@@ -315,7 +315,7 @@
     #scroll-container {
       position: relative;
       width: 100%;
-      height: 600vh;
+      height: 800vh;
       z-index: 2;
       pointer-events: none;
     }
@@ -376,14 +376,11 @@
   <div class="ir-cursor" aria-hidden="true"></div>
   <div class="ir-cursor-trail" aria-hidden="true"></div>
 
-  <!-- Three.js library and post-processing effects -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/postprocessing/EffectComposer.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/postprocessing/RenderPass.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/postprocessing/UnrealBloomPass.js"></script>
+  <!-- Three.js library - load synchronously before other scripts -->
+  <script src="/three.min.js"></script>
 
-  <!-- 3D Scroll Intro Script -->
-  <script src="scroll-3d-intro.js" defer></script>
+  <!-- 3D Scroll Intro Script - defer until after Three.js loads -->
+  <script defer src="scroll-3d-intro.js"></script>
 
   <!-- Custom Cursor and other animations -->
   <script src="animations2.js" defer></script>
