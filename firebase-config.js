@@ -8,7 +8,6 @@ from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
 import { getFirestore }
 from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
 
-// Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyDugHMiSJZBW6Yi5BelkubbHOa7j0sLfmw",
   authDomain: "irreallab-57207.firebaseapp.com",
@@ -19,9 +18,7 @@ const firebaseConfig = {
   measurementId: "G-628Q19EM44"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// Export services
 export const auth = getAuth(app);
 export const db = getFirestore(app);
