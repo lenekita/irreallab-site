@@ -113,9 +113,7 @@ class ScrollIntro3D {
     const material = new THREE.PointsMaterial({
       color: 0xd4f03a,
       size: 0.02,
-      sizeAttenuation: true,
-      emissive: 0xd4f03a,
-      emissiveIntensity: 0.5
+      sizeAttenuation: true
     });
 
     this.particles = new THREE.Points(geometry, material);
