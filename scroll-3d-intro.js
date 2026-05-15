@@ -54,8 +54,8 @@ class ScrollIntro3D {
   }
 
   createOrganicShape() {
-    // Create elegant torus knot - more visually interesting than plain icosahedron
-    const baseGeometry = new THREE.TorusKnotGeometry(1, 0.35, 100, 16);
+    // Create elegant hexagon - 6-sided cylinder prism
+    const baseGeometry = new THREE.CylinderGeometry(0.6, 0.6, 0.35, 6, 4, false);
 
     const positions = baseGeometry.getAttribute('position').array;
     const originalPositions = new Float32Array(positions);
@@ -67,13 +67,15 @@ class ScrollIntro3D {
       const z = positions[i + 2];
       const length = Math.sqrt(x * x + y * y + z * z);
 
-      // More subtle waves - creates flowing distortion rather than lumpy shape
-      const wave = Math.sin(x * 8) * 0.08 + Math.cos(y * 6) * 0.06 + Math.sin(z * 7) * 0.05;
-      const newLength = length + wave;
+      if (length > 0.01) {
+        // More subtle waves - creates flowing distortion rather than lumpy shape
+        const wave = Math.sin(x * 8) * 0.08 + Math.cos(y * 6) * 0.06 + Math.sin(z * 7) * 0.05;
+        const newLength = length + wave;
 
-      positions[i] = (x / length) * newLength;
-      positions[i + 1] = (y / length) * newLength;
-      positions[i + 2] = (z / length) * newLength;
+        positions[i] = (x / length) * newLength;
+        positions[i + 1] = (y / length) * newLength;
+        positions[i + 2] = (z / length) * newLength;
+      }
     }
 
     baseGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
@@ -90,6 +92,7 @@ class ScrollIntro3D {
     });
 
     this.mainMesh = new THREE.Mesh(baseGeometry, material);
+    this.mainMesh.rotation.z = Math.PI / 6;
     this.mainMesh.scale.set(1.2, 1.2, 1.2);
     this.mainMesh.userData.originalPositions = originalPositions;
     this.scene.add(this.mainMesh);
