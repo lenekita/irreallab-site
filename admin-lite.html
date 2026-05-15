@@ -99,7 +99,7 @@
 
     textarea {
       resize: vertical;
-      min-height: 100px;
+      min-height: 80px;
     }
 
     .preview-section {
@@ -115,12 +115,13 @@
 
     .preview-card {
       border: 1px solid var(--border);
-      overflow: hidden;
+      padding: 1rem;
       margin-bottom: 1rem;
+      background: rgba(0,0,0,0.5);
     }
 
     .preview-title {
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       font-weight: bold;
       margin-bottom: 0.3rem;
     }
@@ -128,13 +129,13 @@
     .preview-sub {
       font-size: 0.75rem;
       color: #999;
-      margin-bottom: 0.8rem;
+      margin-bottom: 0.6rem;
     }
 
     .preview-hashtags {
       font-size: 0.85rem;
       color: var(--accent);
-      margin-bottom: 0.8rem;
+      margin-bottom: 0.6rem;
       word-break: break-word;
     }
 
@@ -153,8 +154,9 @@
       margin: 1rem 0;
       font-size: 0.75rem;
       overflow-x: auto;
-      max-height: 300px;
+      max-height: 350px;
       overflow-y: auto;
+      font-family: 'Courier New', monospace;
     }
 
     .json-output code {
@@ -238,37 +240,23 @@
       color: var(--accent);
       font-size: 0.85rem;
     }
-
-    .spinner {
-      display: inline-block;
-      width: 12px;
-      height: 12px;
-      border: 2px solid rgba(212, 240, 58, 0.3);
-      border-top-color: var(--accent);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
   </style>
 </head>
 <body>
   <div class="container">
     <header>
       <h1><span style="color: var(--accent);">irreallab</span> / Add Reel</h1>
-      <div class="subtitle">Simple reel submission form</div>
+      <div class="subtitle">Quick reel submission form</div>
     </header>
 
     <div class="instructions">
       <h3>How it works:</h3>
       <ol>
-        <li>Paste your Instagram reel URL below</li>
-        <li>Click "Fetch Reel Data" to auto-fill everything</li>
-        <li>Review the preview</li>
+        <li>Paste your Instagram reel URL</li>
+        <li>Add title and hashtags</li>
+        <li>Click "Generate JSON"</li>
         <li>Copy the JSON code</li>
-        <li>Paste it into <code>reels.json</code> on GitHub</li>
+        <li>Paste into <code>reels.json</code> on GitHub</li>
       </ol>
     </div>
 
@@ -287,7 +275,7 @@
             placeholder="https://www.instagram.com/reel/DYFrAFrIulH/"
             required
           >
-          <div class="help-text">Paste your Instagram reel link (should start with instagram.com/reel/)</div>
+          <div class="help-text">Example: instagram.com/reel/ABC123def/</div>
         </div>
 
         <div class="form-group">
@@ -295,19 +283,19 @@
           <input 
             type="text" 
             id="reelTitle" 
-            placeholder="e.g., Closing Hours"
+            placeholder="Closing Hours"
             required
           >
-          <div class="help-text">First line of your caption or custom title (max 60 chars)</div>
+          <div class="help-text">Keep it short (under 60 characters)</div>
         </div>
 
         <div class="form-group">
           <label for="reelHashtags">Hashtags</label>
           <textarea 
             id="reelHashtags" 
-            placeholder="#closinghours #museumafterdark #surrealwater"
+            placeholder="#closinghours #surrealwater #irreallab"
           ></textarea>
-          <div class="help-text">Hashtags from your caption (auto-extracted)</div>
+          <div class="help-text">Space-separated hashtags from your Instagram caption</div>
         </div>
 
         <div class="form-group">
@@ -320,112 +308,53 @@
         </div>
 
         <div class="button-group">
-          <button onclick="fetchReelData()">Fetch Reel Data</button>
-          <button onclick="generateJSON()" style="background: #555;">Generate JSON</button>
+          <button onclick="generateJSON()">Generate JSON</button>
+          <button onclick="resetForm()" style="background: #555;">Reset</button>
         </div>
       </div>
 
       <!-- Right: Preview -->
       <div class="form-section">
-        <h2>Preview & Output</h2>
+        <h2>Preview & Copy</h2>
         
         <div id="preview" class="preview-section">
           <div class="preview-card">
             <div class="preview-title" id="previewTitle">Your Reel Title</div>
             <div class="preview-sub">@irreallab · Watch on Instagram</div>
             <div class="preview-hashtags" id="previewHashtags">#hashtags</div>
-            <a href="#" id="previewLink" class="preview-link">View on Instagram ↗</a>
+            <a href="#" id="previewLink" class="preview-link" target="_blank">View on Instagram ↗</a>
           </div>
         </div>
 
-        <h3 style="margin-top: 2rem; margin-bottom: 1rem; font-size: 0.9rem; letter-spacing: 0.05em; text-transform: uppercase;">JSON Output</h3>
+        <h3 style="margin-top: 1rem; margin-bottom: 0.8rem; font-size: 0.9rem; letter-spacing: 0.05em; text-transform: uppercase;">JSON Code</h3>
         <div class="json-output" id="jsonOutput">
           <code id="jsonCode">// Generated JSON will appear here</code>
         </div>
 
-        <button onclick="copyJSON()" style="width: 100%; background: var(--accent);">
+        <button onclick="copyJSON()" style="width: 100%; background: var(--accent); margin-bottom: 1rem;">
           📋 Copy JSON Code
         </button>
 
-        <div class="help-text" style="margin-top: 1rem; background: rgba(212, 240, 58, 0.05); padding: 1rem; border-radius: 4px;">
-          <strong>Next step:</strong> Go to your GitHub repo → <code>reels.json</code> → Click edit pencil → Scroll to the end of the array (before <code>]</code>) → Add comma → Paste this JSON object → Commit
+        <div class="help-text" style="background: rgba(212, 240, 58, 0.05); padding: 1rem; border-radius: 4px; line-height: 1.6;">
+          <strong>To add to your site:</strong><br>
+          1. Go to GitHub repo<br>
+          2. Open <code>reels.json</code><br>
+          3. Click pencil to edit<br>
+          4. Scroll to end of array (before <code>]</code>)<br>
+          5. Add comma after last reel<br>
+          6. Paste this JSON<br>
+          7. Click "Commit changes"
         </div>
       </div>
     </div>
   </div>
 
-  <script src="https://www.instagram.com/embed.js"></script>
   <script>
     function showStatus(message, type) {
       const status = document.getElementById('status');
       status.textContent = message;
       status.className = `status show ${type}`;
-      setTimeout(() => status.classList.remove('show'), 5000);
-    }
-
-    async function fetchReelData() {
-      const url = document.getElementById('reelUrl').value.trim();
-      if (!url) {
-        showStatus('Please enter an Instagram URL', 'error');
-        return;
-      }
-
-      // Extract shortcode from URL
-      const match = url.match(/instagram\.com\/(?:reel|p)\/([A-Za-z0-9_-]+)/);
-      if (!match) {
-        showStatus('Invalid Instagram URL. Use: instagram.com/reel/XXXXX/', 'error');
-        return;
-      }
-
-      showStatus('Fetching reel data... ⏳', 'success');
-      
-      try {
-        const shortcode = match[1];
-        
-        // Fetch the reel's public data via Instagram API
-        const response = await fetch(`https://www.instagram.com/p/${shortcode}/?__a=1&__d=dis`, {
-          headers: {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-          }
-        });
-
-        if (!response.ok) {
-          throw new Error('Could not fetch reel data');
-        }
-
-        const data = await response.json();
-        const media = data.graphql?.shortcode_media;
-        
-        if (!media) {
-          throw new Error('Could not find media data');
-        }
-
-        // Extract title from caption
-        const caption = media.edge_media_to_caption?.edges?.[0]?.node?.text || '';
-        const title = (caption.split('\n')[0] || 'Untitled Reel').substring(0, 60).trim();
-        
-        // Extract hashtags
-        const hashtags = (caption.match(/#\w+/g) || []).slice(0, 10).join(' ');
-        
-        // Get video URL and thumbnail
-        const videoUrl = media.video_url || media.display_url || '';
-        const thumbnailUrl = media.display_url || '';
-
-        // Update form
-        document.getElementById('reelTitle').value = title;
-        document.getElementById('reelHashtags').value = hashtags;
-        
-        // Store the URLs in hidden data attributes
-        document.getElementById('reelUrl').dataset.videoUrl = videoUrl;
-        document.getElementById('reelUrl').dataset.thumbnailUrl = thumbnailUrl;
-        document.getElementById('reelUrl').dataset.postedAt = new Date(media.taken_at_timestamp * 1000).toISOString();
-
-        updatePreview();
-        showStatus('✓ Reel data loaded! Video & thumbnail extracted.', 'success');
-      } catch (error) {
-        showStatus('Error: Could not fetch from Instagram. Make sure the reel is public.', 'error');
-        console.error(error);
-      }
+      setTimeout(() => status.classList.remove('show'), 4000);
     }
 
     function updatePreview() {
@@ -436,7 +365,6 @@
       document.getElementById('previewTitle').textContent = title;
       document.getElementById('previewHashtags').textContent = hashtags;
       document.getElementById('previewLink').href = url;
-      
       document.getElementById('preview').classList.add('active');
     }
 
@@ -445,14 +373,15 @@
       const title = document.getElementById('reelTitle').value.trim();
       const hashtags = document.getElementById('reelHashtags').value.trim();
       const status = document.getElementById('reelStatus').value;
-      
-      // Get stored video data
-      const videoUrl = document.getElementById('reelUrl').dataset.videoUrl || '';
-      const thumbnailUrl = document.getElementById('reelUrl').dataset.thumbnailUrl || '';
-      const postedAt = document.getElementById('reelUrl').dataset.postedAt || new Date().toISOString();
 
       if (!url || !title) {
         showStatus('Title and URL are required', 'error');
+        return;
+      }
+
+      // Validate URL
+      if (!url.includes('instagram.com/reel/') && !url.includes('instagram.com/p/')) {
+        showStatus('Must be a valid Instagram reel URL', 'error');
         return;
       }
 
@@ -462,29 +391,41 @@
         url,
         hashtags,
         status,
-        video_url: videoUrl,
-        thumbnail_url: thumbnailUrl,
-        posted_at: postedAt
+        video_url: '',
+        thumbnail_url: '',
+        posted_at: new Date().toISOString()
       };
 
       const jsonStr = JSON.stringify(reel, null, 2);
       document.getElementById('jsonCode').textContent = jsonStr;
-      
       updatePreview();
-      showStatus('✓ JSON generated with video & thumbnail URLs!', 'success');
+      showStatus('✓ JSON ready to copy!', 'success');
     }
 
     function copyJSON() {
       const code = document.getElementById('jsonCode').textContent;
+      if (code.includes('Generated JSON')) {
+        showStatus('Generate JSON first!', 'error');
+        return;
+      }
       navigator.clipboard.writeText(code).then(() => {
-        showStatus('✓ JSON copied to clipboard! 📋', 'success');
+        showStatus('✓ Copied to clipboard! 📋', 'success');
       }).catch(() => {
-        showStatus('Could not copy. Try manual copy.', 'error');
+        showStatus('Copy failed - try manual copy', 'error');
       });
     }
 
+    function resetForm() {
+      document.getElementById('reelUrl').value = '';
+      document.getElementById('reelTitle').value = '';
+      document.getElementById('reelHashtags').value = '';
+      document.getElementById('reelStatus').value = 'Live';
+      document.getElementById('preview').classList.remove('active');
+      document.getElementById('jsonCode').textContent = '// Generated JSON will appear here';
+    }
+
     // Update preview as user types
-    document.getElementById('reelUrl').addEventListener('change', updatePreview);
+    document.getElementById('reelUrl').addEventListener('input', updatePreview);
     document.getElementById('reelTitle').addEventListener('input', updatePreview);
     document.getElementById('reelHashtags').addEventListener('input', updatePreview);
   </script>
