@@ -25,10 +25,7 @@
       color: var(--text);
       font-family: 'Space Mono', monospace;
       min-height: 100vh;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      overflow: auto;
       position: relative;
     }
 
@@ -304,9 +301,61 @@
     @media (hover: none), (pointer: coarse) {
       .ir-cursor, .ir-cursor-trail { display: none !important; }
     }
+
+    #canvas-3d {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      display: block;
+      z-index: 1;
+    }
+
+    #scroll-container {
+      position: relative;
+      width: 100%;
+      height: 600vh;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .intro-shell {
+      display: none;
+    }
+
+    .intro-footer {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: .58rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      z-index: 100;
+      pointer-events: auto;
+    }
+
+    .intro-footer a {
+      color: rgba(212,240,58,.75);
+      text-decoration: none;
+      transition: color .2s;
+    }
+
+    .intro-footer a:hover {
+      color: var(--accent);
+    }
   </style>
 </head>
 <body>
+  <!-- 3D Canvas for scroll animation -->
+  <canvas id="canvas-3d"></canvas>
+
+  <!-- Invisible scroll container for tracking scroll progress -->
+  <div id="scroll-container"></div>
+
+  <!-- Legacy intro content (hidden by CSS) -->
   <div class="intro-shell">
     <div class="intro-label">Visual Experiments</div>
     <div>
@@ -318,26 +367,22 @@
     </div>
   </div>
 
+  <!-- Fixed footer with Instagram link -->
   <div class="intro-footer">
-    <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener">Follow on Instagram</a>
+    <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener">Follow on Instagram ↗</a>
   </div>
 
+  <!-- Custom cursor elements -->
   <div class="ir-cursor" aria-hidden="true"></div>
   <div class="ir-cursor-trail" aria-hidden="true"></div>
 
-  <script>
-    // Glow effect follows mouse
-    document.addEventListener('mousemove', (e) => {
-      const brand = document.querySelector('.intro-brand');
-      const x = (e.clientX / window.innerWidth - 0.5) * 40;
-      const y = (e.clientY / window.innerHeight - 0.5) * 40;
-      brand.style.textShadow = `
-        0 0 10px rgba(212,240,58,.16),
-        0 0 22px rgba(212,240,58,.06),
-        ${x * 0.5}px ${y * 0.5}px 30px rgba(212,240,58,.12)
-      `;
-    });
-  </script>
+  <!-- Three.js library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <!-- 3D Scroll Intro Script -->
+  <script src="scroll-3d-intro.js" defer></script>
+
+  <!-- Custom Cursor and other animations -->
   <script src="animations2.js" defer></script>
 </body>
 </html>
