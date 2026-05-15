@@ -1,10 +1,11 @@
-// firestore-service.js
+// firestore-service.js - FIXED
 // Database operations for reels collection
 
 import { db } from "./firebase-config.js";
 import {
   collection,
   getDocs,
+  getDoc,
   addDoc,
   updateDoc,
   deleteDoc,
@@ -106,14 +107,13 @@ export async function updateReelOrder(docId, newOrder) {
   }
 }
 
-// Get single reel by ID
+// Get single reel by ID - FIXED VERSION
 export async function getReel(docId) {
   try {
     const reelRef = doc(db, "reels", docId);
-    const snapshot = await getDocs(query(collection(db, "reels"), (q) => q.where("__name__", "==", docId)));
-    if (snapshot.empty) return null;
-    const docSnap = snapshot.docs[0];
-    return { id: docSnap.id, ...docSnap.data() };
+    const snapshot = await getDoc(reelRef);
+    if (!snapshot.exists()) return null;
+    return { id: snapshot.id, ...snapshot.data() };
   } catch (error) {
     console.error("Error getting reel:", error);
     throw error;
