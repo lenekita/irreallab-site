@@ -324,19 +324,39 @@
       align-items: center;
       justify-content: center;
       overflow: hidden;
+      min-height: 450px;
     }
 
     .card-media video {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      background: #000;
+      display: block;
     }
 
     .card-media .instagram-media {
       margin: 0 auto !important;
-      max-width: 360px !important;
-      min-width: 280px !important;
+      max-width: 100% !important;
+      min-width: auto !important;
       width: 100% !important;
+      transform: scale(1) !important;
+      transform-origin: top center !important;
+      height: 100% !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+
+    .card-media .instagram-media-rendered {
+      max-width: 100% !important;
+      width: 100% !important;
+    }
+
+    .card-media .instagram-media-rendered iframe {
+      max-width: 100% !important;
+      width: 100% !important;
+      border: none !important;
     }
 
     .card-top {
@@ -506,12 +526,15 @@
       .intro { margin-top: 1.3rem; }
       .count { display: block; margin-top: 1rem; }
       .grid { grid-template-columns: 1fr; gap: 1.4rem; }
+      .card-media { min-height: 400px; }
     }
 
     @media (max-width: 600px) {
       .nav-links { gap: 1rem; }
       .nav-logo { font-size: 1.2rem; }
       .title { font-size: clamp(3.8rem, 17vw, 6rem); }
+      .card-media { min-height: 350px; aspect-ratio: auto; }
+      .card-media video { min-height: 350px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
