@@ -253,6 +253,57 @@
         width: 12px;
       }
     }
+
+    @media (hover: hover) and (pointer: fine) {
+      html,
+      body,
+      a,
+      button,
+      .reel-row,
+      .audio-toggle,
+      .intro-enter { cursor: none !important; }
+      .ir-cursor, .ir-cursor-trail {
+        position: fixed;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+        border-radius: 50%;
+        transform: translate3d(-100px, -100px, 0) translate(-50%, -50%);
+        z-index: 2147483647;
+        will-change: transform, width, height, opacity;
+      }
+      .ir-cursor {
+        width: 13px;
+        height: 13px;
+        background: var(--accent);
+        box-shadow: 0 0 10px rgba(212,240,58,.55), 0 0 24px rgba(212,240,58,.22);
+      }
+      .ir-cursor-trail {
+        width: 42px;
+        height: 42px;
+        border: 1px solid rgba(212,240,58,.42);
+        background: rgba(212,240,58,.035);
+        backdrop-filter: blur(2px);
+        -webkit-backdrop-filter: blur(2px);
+        transition: width .18s ease, height .18s ease, border-color .18s ease, background .18s ease;
+      }
+      body.ir-cursor-hover .ir-cursor {
+        width: 20px;
+        height: 20px;
+      }
+      body.ir-cursor-hover .ir-cursor-trail {
+        width: 58px;
+        height: 58px;
+        border-color: rgba(212,240,58,.75);
+        background: rgba(212,240,58,.06);
+      }
+      body.ir-cursor-hidden .ir-cursor, body.ir-cursor-hidden .ir-cursor-trail {
+        opacity: 0;
+      }
+    }
+    @media (hover: none), (pointer: coarse) {
+      .ir-cursor, .ir-cursor-trail { display: none !important; }
+    }
   </style>
 </head>
 <body>
@@ -271,6 +322,9 @@
     <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener">Follow on Instagram</a>
   </div>
 
+  <div class="ir-cursor" aria-hidden="true"></div>
+  <div class="ir-cursor-trail" aria-hidden="true"></div>
+
   <script>
     // Glow effect follows mouse
     document.addEventListener('mousemove', (e) => {
@@ -284,5 +338,6 @@
       `;
     });
   </script>
+  <script src="animations2.js" defer></script>
 </body>
 </html>

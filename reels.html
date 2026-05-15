@@ -13,17 +13,19 @@
   <meta property="og:image" content="https://irreallab.fr/preview.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
   <style>
+    /* ── TOKENS ── */
     :root {
-      --bg: #060606;
-      --bg2: #0d0d0d;
-      --line: #1c1c1c;
-      --line2: #242424;
-      --accent: #d4f03a;
-      --text: #ede9df;
-      --muted: #4a4a4a;
-      --muted2: #222;
-      --pad-x: 3.5rem;
+      --bg:      #060606;
+      --bg2:     #0d0d0d;
+      --line:    #1c1c1c;
+      --line2:   #242424;
+      --accent:  #d4f03a;
+      --text:    #ede9df;
+      --muted:   #4a4a4a;
+      --muted2:  #222;
+      --pad-x:   3.5rem;
     }
     @media (max-width: 900px) { :root { --pad-x: 1.5rem; } }
     @media (max-width: 480px) { :root { --pad-x: 1.1rem; } }
@@ -43,12 +45,9 @@
 
     body::after {
       content: '';
-      position: fixed;
-      inset: 0;
+      position: fixed; inset: 0;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-      opacity: 0.035;
-      pointer-events: none;
-      z-index: 9999;
+      opacity: 0.035; pointer-events: none; z-index: 9999;
     }
 
     /* MARQUEE */
@@ -56,6 +55,7 @@
       background: var(--accent);
       overflow: hidden;
       position: relative;
+      top: auto;
       z-index: 200;
       border-bottom: 1.5px solid #000;
       transition: box-shadow .25s ease;
@@ -71,54 +71,43 @@
     .marquee-spacer { height: 0; pointer-events: none; }
     .marquee-spacer.is-active { height: var(--marquee-height, 34px); }
     .marquee-track {
-      display: inline-flex;
-      white-space: nowrap;
+      display: inline-flex; white-space: nowrap;
       animation: mscroll 22s linear infinite;
     }
     .marquee:hover .marquee-track { animation-play-state: paused; }
     .marquee-item {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: 0.9rem;
-      letter-spacing: 0.15em;
-      color: #060606;
-      text-decoration: none;
-      padding: 8px 24px;
-      display: inline-block;
+      font-size: 0.9rem; letter-spacing: 0.15em;
+      color: #060606; text-decoration: none;
+      padding: 8px 24px; display: inline-block;
+      transition: opacity .2s;
     }
+    .marquee-item:hover { opacity: 1; color: #ff0000; }
     .marquee-dot { color: #06060650; padding: 8px 4px; font-size: .7rem; }
     @keyframes mscroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
     /* NAV */
     nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 var(--pad-x);
-      height: 60px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 var(--pad-x); height: 60px;
       border-bottom: 1px solid var(--line);
-      position: relative;
-      z-index: 100;
-      background: transparent;
+      position: relative; z-index: 100;
     }
     .nav-logo {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.5rem;
-      letter-spacing: .04em;
-      color: var(--text);
-      text-decoration: none;
+      font-size: 1.5rem; letter-spacing: .04em;
+      color: var(--text); text-decoration: none;
     }
     .nav-logo em { color: var(--accent); font-style: normal; }
     .nav-links { display: flex; gap: 2rem; align-items: center; }
     .nav-links a {
-      font-size: .6rem;
-      letter-spacing: .16em;
-      text-transform: uppercase;
-      color: var(--muted);
-      text-decoration: none;
-      transition: color .2s;
+      font-size: .6rem; letter-spacing: .16em; text-transform: uppercase;
+      color: var(--muted); text-decoration: none; transition: color .2s;
     }
     .nav-links a:hover { color: var(--text); }
     .nav-cta { background: var(--accent) !important; color: #060606 !important; padding: 6px 14px; }
+    @media (max-width: 600px) { .nav-links .nav-hide { display: none; } }
+    @media (max-width: 420px) { .nav-links { gap: 1rem; } .nav-logo { font-size: 1.2rem; } }
 
     nav.is-sticky {
       position: fixed;
@@ -136,71 +125,33 @@
       height: 0;
       pointer-events: none;
     }
+
     .nav-spacer.is-active {
       height: var(--nav-height, 60px);
     }
 
     /* MAIN CONTENT */
     main {
-      position: relative;
-      padding: clamp(4.5rem, 8vw, 7rem) var(--pad-x);
-      background: radial-gradient(circle at 85% 12%, rgba(212,240,58,.12), transparent 24%),
-                  radial-gradient(circle at 12% 72%, rgba(237,233,223,.045), transparent 28%),
-                  linear-gradient(180deg, #060606 0%, #0b0b0b 48%, #060606 100%);
-      isolation: isolate;
-      overflow: hidden;
       flex: 1;
-    }
-
-    main::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      z-index: -1;
-      background: linear-gradient(90deg, rgba(212,240,58,.06) 1px, transparent 1px),
-                  linear-gradient(0deg, rgba(255,255,255,.025) 1px, transparent 1px);
-      background-size: 82px 82px;
-      mask-image: radial-gradient(circle at 50% 38%, black, transparent 72%);
-      opacity: .45;
-    }
-
-    main::after {
-      content: 'REELS ARCHIVE';
-      position: absolute;
-      right: var(--pad-x);
-      top: 2rem;
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(5rem, 14vw, 15rem);
-      line-height: .8;
-      color: rgba(255,255,255,.018);
-      z-index: -1;
-      pointer-events: none;
+      padding: 4rem var(--pad-x) 3rem;
     }
 
     .head {
-      width: min(1180px, 100%);
-      margin: 0 auto 2.4rem;
-      border-bottom: 1px solid rgba(212,240,58,.18);
-      padding-bottom: 2rem;
       display: flex;
       justify-content: space-between;
-      gap: 2rem;
-      align-items: end;
+      align-items: baseline;
+      gap: 3rem;
+      margin-bottom: 3rem;
       opacity: 0;
-      transform: translateY(42px) scale(.985);
-      animation: headIn .95s cubic-bezier(.16,1,.3,1) forwards;
-    }
-
-    @keyframes headIn {
-      to { opacity: 1; transform: none; }
+      animation: fadeInUp .95s cubic-bezier(.16,1,.3,1) forwards;
     }
 
     .kicker {
       font-size: .58rem;
       letter-spacing: .22em;
       text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 1rem;
+      color: var(--muted);
+      margin-bottom: .4rem;
     }
 
     .title {
@@ -429,6 +380,7 @@
       padding-bottom: 2px;
     }
 
+    /* FOOTER */
     footer {
       display: flex;
       align-items: center;
@@ -542,6 +494,57 @@
       .head, .grid { opacity: 1; transform: none; }
       .title span::after { display: none; }
     }
+
+    @media (hover: hover) and (pointer: fine) {
+      html,
+      body,
+      a,
+      button,
+      .reel-row,
+      .audio-toggle,
+      .intro-enter { cursor: none !important; }
+      .ir-cursor, .ir-cursor-trail {
+        position: fixed;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+        border-radius: 50%;
+        transform: translate3d(-100px, -100px, 0) translate(-50%, -50%);
+        z-index: 2147483647;
+        will-change: transform, width, height, opacity;
+      }
+      .ir-cursor {
+        width: 13px;
+        height: 13px;
+        background: var(--accent);
+        box-shadow: 0 0 10px rgba(212,240,58,.55), 0 0 24px rgba(212,240,58,.22);
+      }
+      .ir-cursor-trail {
+        width: 42px;
+        height: 42px;
+        border: 1px solid rgba(212,240,58,.42);
+        background: rgba(212,240,58,.035);
+        backdrop-filter: blur(2px);
+        -webkit-backdrop-filter: blur(2px);
+        transition: width .18s ease, height .18s ease, border-color .18s ease, background .18s ease;
+      }
+      body.ir-cursor-hover .ir-cursor {
+        width: 20px;
+        height: 20px;
+      }
+      body.ir-cursor-hover .ir-cursor-trail {
+        width: 58px;
+        height: 58px;
+        border-color: rgba(212,240,58,.75);
+        background: rgba(212,240,58,.06);
+      }
+      body.ir-cursor-hidden .ir-cursor, body.ir-cursor-hidden .ir-cursor-trail {
+        opacity: 0;
+      }
+    }
+    @media (hover: none), (pointer: coarse) {
+      .ir-cursor, .ir-cursor-trail { display: none !important; }
+    }
   </style>
 </head>
 <body>
@@ -583,7 +586,7 @@
     <div class="nav-links">
       <a href="/main.html">Home</a>
       <a href="/journal">Journal</a>
-      <a href="/reels.html">Reels</a>
+      <a href="reels.html">Reels</a>
       <a class="nav-cta" href="mailto:contact@irreallab.fr">Contact</a>
     </div>
   </nav>
@@ -601,11 +604,11 @@
   </main>
 
   <footer>
-    <div><a href="/" class="footer-logo"><span class="footer-irreal">irreal</span><em>lab</em></a></div>
+    <div><a href="/main.html" class="footer-logo"><span class="footer-irreal">irreal</span><em>lab</em></a></div>
     <div class="footer-right">
-      <a class="footer-link" href="/">Home</a>
+      <a class="footer-link" href="/main.html">Home</a>
       <a class="footer-link" href="/journal">Journal</a>
-      <a class="footer-link" href="/reels.html">Reels</a>
+      <a class="footer-link" href="reels.html">Reels</a>
       <a class="footer-link" href="mailto:contact@irreallab.fr">Contact</a>
       <span style="font-size:.58rem;letter-spacing:.08em;color:var(--muted);text-transform:uppercase">© 2026 <span class="footer-irreal">irreal</span>lab</span>
     </div>
@@ -731,7 +734,11 @@
     })();
   </script>
 
+  <div class="ir-cursor" aria-hidden="true"></div>
+  <div class="ir-cursor-trail" aria-hidden="true"></div>
+
   <!-- Instagram embed script -->
   <script async src="https://www.instagram.com/embed.js"></script>
+  <script src="animations2.js" defer></script>
 </body>
 </html>
