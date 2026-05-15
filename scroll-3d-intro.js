@@ -54,20 +54,21 @@ class ScrollIntro3D {
   }
 
   createOrganicShape() {
-    // Create highly deformable organic shape
-    const baseGeometry = new THREE.IcosahedronGeometry(1.5, 4);
+    // Create elegant torus knot - more visually interesting than plain icosahedron
+    const baseGeometry = new THREE.TorusKnotGeometry(1, 0.35, 100, 16);
 
     const positions = baseGeometry.getAttribute('position').array;
     const originalPositions = new Float32Array(positions);
 
-    // Apply strong wave displacement
+    // Apply subtle, elegant wave displacement
     for (let i = 0; i < positions.length; i += 3) {
       const x = positions[i];
       const y = positions[i + 1];
       const z = positions[i + 2];
       const length = Math.sqrt(x * x + y * y + z * z);
 
-      const wave = Math.sin(x * 5) * 0.15 + Math.sin(y * 5) * 0.15 + Math.sin(z * 5) * 0.15;
+      // More subtle waves - creates flowing distortion rather than lumpy shape
+      const wave = Math.sin(x * 8) * 0.08 + Math.cos(y * 6) * 0.06 + Math.sin(z * 7) * 0.05;
       const newLength = length + wave;
 
       positions[i] = (x / length) * newLength;
@@ -78,30 +79,30 @@ class ScrollIntro3D {
     baseGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
     baseGeometry.computeVertexNormals();
 
-    // Strong emissive material
+    // Sophisticated material with vibrant accent color
     const material = new THREE.MeshStandardMaterial({
-      color: 0xcccccc,
+      color: 0x1a1a2e,
       emissive: 0xd4f03a,
-      emissiveIntensity: 1.2,
-      metalness: 0.2,
-      roughness: 0.3,
+      emissiveIntensity: 1.5,
+      metalness: 0.6,
+      roughness: 0.2,
       wireframe: false
     });
 
     this.mainMesh = new THREE.Mesh(baseGeometry, material);
-    this.mainMesh.scale.set(1, 1, 1);
+    this.mainMesh.scale.set(1.2, 1.2, 1.2);
     this.mainMesh.userData.originalPositions = originalPositions;
     this.scene.add(this.mainMesh);
   }
 
   createParticles() {
-    const particleCount = 1200;
+    const particleCount = 1500;
     const geometry = new THREE.BufferGeometry();
     const positions = new Float32Array(particleCount * 3);
     const colors = new Float32Array(particleCount * 3);
 
     for (let i = 0; i < particleCount * 3; i += 3) {
-      const radius = 2.5 + Math.random() * 3;
+      const radius = 2.5 + Math.random() * 3.5;
       const theta = Math.random() * Math.PI * 2;
       const phi = Math.acos(Math.random() * 2 - 1);
 
@@ -109,9 +110,11 @@ class ScrollIntro3D {
       positions[i + 1] = radius * Math.sin(phi) * Math.sin(theta);
       positions[i + 2] = radius * Math.cos(phi);
 
-      // Yellow-green particles with variation
-      const hue = 0.2 + Math.random() * 0.1;
-      const color = new THREE.Color().setHSL(hue, 1, 0.6);
+      // Vibrant lime-green to cyan gradient
+      const hue = 0.18 + Math.random() * 0.25; // Range from lime to cyan
+      const saturation = 0.9 + Math.random() * 0.1; // Very saturated
+      const lightness = 0.5 + Math.random() * 0.2; // Bright particles
+      const color = new THREE.Color().setHSL(hue, saturation, lightness);
       colors[i] = color.r;
       colors[i + 1] = color.g;
       colors[i + 2] = color.b;
@@ -122,11 +125,11 @@ class ScrollIntro3D {
     geometry.userData.initialPositions = positions.slice();
 
     const material = new THREE.PointsMaterial({
-      size: 0.08,
+      size: 0.12,
       sizeAttenuation: true,
       vertexColors: true,
       transparent: true,
-      opacity: 0.8
+      opacity: 0.85
     });
 
     this.particles = new THREE.Points(geometry, material);
@@ -169,22 +172,27 @@ class ScrollIntro3D {
   }
 
   createLighting() {
-    // Ambient light
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    // Dim ambient light for depth
+    const ambientLight = new THREE.AmbientLight(0x0a0a0a, 0.3);
     this.scene.add(ambientLight);
 
-    // Main point light - strong yellow glow
-    this.mainLight = new THREE.PointLight(0xd4f03a, 3, 25);
-    this.mainLight.position.set(4, 5, 7);
+    // Main point light - vibrant neon lime
+    this.mainLight = new THREE.PointLight(0xd4f03a, 4, 30);
+    this.mainLight.position.set(5, 6, 8);
     this.scene.add(this.mainLight);
 
-    // Secondary light - cool blue accent
-    this.secondLight = new THREE.PointLight(0x4488ff, 1.5, 20);
-    this.secondLight.position.set(-5, -4, 6);
+    // Secondary light - deep purple/magenta accent
+    this.secondLight = new THREE.PointLight(0xff00ff, 2, 25);
+    this.secondLight.position.set(-6, -5, 7);
     this.scene.add(this.secondLight);
 
-    // Directional light for volume
-    const dirLight = new THREE.DirectionalLight(0xffffff, 0.6);
+    // Tertiary light - cyan accent
+    const thirdLight = new THREE.PointLight(0x00ffff, 1.5, 20);
+    thirdLight.position.set(3, -6, -8);
+    this.scene.add(thirdLight);
+
+    // Directional light for subtle volume
+    const dirLight = new THREE.DirectionalLight(0xffffff, 0.3);
     dirLight.position.set(5, 5, 5);
     this.scene.add(dirLight);
   }
@@ -207,14 +215,14 @@ class ScrollIntro3D {
     const progress = this.scrollProgress;
     this.time += 0.016;
 
-    // Organic shape animation - MORE DRAMATIC
+    // Elegant shape animation
     if (this.mainMesh) {
-      // Fast continuous rotation
-      this.mainMesh.rotation.x += 0.002;
-      this.mainMesh.rotation.y += 0.003;
-      this.mainMesh.rotation.z += 0.001;
+      // Smooth, fluid rotation
+      this.mainMesh.rotation.x += 0.0015;
+      this.mainMesh.rotation.y += 0.0025;
+      this.mainMesh.rotation.z += 0.0008;
 
-      // Strong organic deformation
+      // Subtle, flowing deformation
       const geometry = this.mainMesh.geometry;
       const positions = geometry.getAttribute('position').array;
       const originalPositions = this.mainMesh.userData.originalPositions;
@@ -226,9 +234,10 @@ class ScrollIntro3D {
           const z = originalPositions[i + 2];
           const length = Math.sqrt(x * x + y * y + z * z);
 
-          // Strong dynamic deformation
-          const waveAmount = Math.sin(this.time + x * 3) * 0.15 * (0.6 + progress * 0.8);
-          const newLength = length + waveAmount;
+          // Elegant, flowing deformation
+          const waveAmount = Math.sin(this.time * 0.8 + x * 4) * 0.08 + Math.cos(this.time * 0.6 + y * 3) * 0.06;
+          const deformAmount = waveAmount * (0.5 + progress * 0.7);
+          const newLength = length + deformAmount;
 
           positions[i] = (x / length) * newLength;
           positions[i + 1] = (y / length) * newLength;
@@ -238,14 +247,14 @@ class ScrollIntro3D {
         geometry.attributes.position.needsUpdate = true;
       }
 
-      // Strong scale variation
-      const scale = 0.85 + Math.sin(progress * Math.PI * 3) * 0.35;
+      // Elegant scale pulsing
+      const scale = 1 + Math.sin(this.time * 0.4 + progress * Math.PI * 2) * 0.2 + progress * 0.15;
       this.mainMesh.scale.set(scale, scale, scale);
 
-      // Strong color shift
-      const hue = 0.25 + progress * 0.4;
-      this.mainMesh.material.emissive.setHSL(hue, 1, 0.6);
-      this.mainMesh.material.emissiveIntensity = 1 + progress * 0.5;
+      // Vibrant color shift through spectrum
+      const hue = 0.18 + progress * 0.5; // Lime to magenta
+      this.mainMesh.material.emissive.setHSL(hue, 1, 0.65);
+      this.mainMesh.material.emissiveIntensity = 1.2 + progress * 0.6;
     }
 
     // Text animation - LARGER and MORE VISIBLE
