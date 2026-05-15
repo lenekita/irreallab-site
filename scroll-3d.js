@@ -119,6 +119,7 @@
 
     sections.forEach((section, index) => {
       if (section.classList.contains('intro-video')) return; // Skip intro-video
+      if (section.classList.contains('reels-page')) return; // Skip reels-page
 
       const rect = section.getBoundingClientRect();
       const elementProgress = (windowHeight - rect.top) / (windowHeight + rect.height);
