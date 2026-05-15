@@ -489,6 +489,25 @@
       .card-media video { min-height: 350px; }
     }
 
+    .ir-typewriter {
+      position: relative;
+      white-space: nowrap !important;
+      overflow: hidden;
+      display: inline-block;
+      max-width: 100%;
+      vertical-align: bottom;
+    }
+    .ir-typewriter::after {
+      content: '_';
+      display: inline-block;
+      margin-left: .12em;
+      color: var(--accent);
+      text-shadow: 0 0 8px rgba(212,240,58,.55), 0 0 22px rgba(212,240,58,.22);
+      animation: ir-typewriter-cursor .8s step-end infinite;
+    }
+    .ir-typewriter.is-done::after { opacity: .75; }
+    @keyframes ir-typewriter-cursor { 0%, 48% { opacity: 1; } 49%, 100% { opacity: 0; } }
+
     @media (prefers-reduced-motion: reduce) {
       .ir-typewriter::after, .title span::after { display: none; }
       .head, .grid { opacity: 1; transform: none; }
@@ -596,9 +615,9 @@
       <div>
         <div class="kicker">Archive</div>
         <h1 class="title" data-glitch="REELS"><span>REELS</span></h1>
-        <div class="intro">Irreallab's reel archive: experimental motion studies, surreal visual narratives, and cinematic fragments from imagined worlds.</div>
+        <div class="intro ir-typewriter" data-typewriter-text="Irreallab's reel archive: experimental motion studies, surreal visual narratives, and cinematic fragments from imagined worlds.">Irreallab's reel archive: experimental motion studies, surreal visual narratives, and cinematic fragments from imagined worlds.</div>
       </div>
-      <div class="count"></div>
+      <div class="count ir-typewriter" data-typewriter-text=""></div>
     </div>
     <div class="grid"></div>
   </main>
@@ -641,7 +660,9 @@
           </article>`;
         }).join('');
 
-        count.textContent = String(reels.length).padStart(2,'0') + ' live reels';
+        const countText = String(reels.length).padStart(2,'0') + ' live reels';
+        count.textContent = countText;
+        count.setAttribute('data-typewriter-text', countText);
 
         if (window.instgrm && window.instgrm.Embeds) {
           window.instgrm.Embeds.process();
