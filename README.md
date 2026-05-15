@@ -15,11 +15,12 @@ irreallab showcases curated surreal visual reels with synchronized audio, direct
 
 ## Features
 
+🌀 **Immersive 3D Intro** — Scroll-triggered animations with rotating geometric shapes and particle effects  
 ✨ **Audio-Synced Reels** — Hover over any reel to play synchronized audio  
 🎬 **Direct Video Playback** — High-quality video players with custom thumbnails  
 🎨 **Surreal Design** — Dark theme with neon accents and smooth animations  
 📱 **Responsive Layout** — Optimized for desktop and mobile viewing  
-⚡ **Fast Loading** — Lightweight, no external dependencies  
+⚡ **Fast Loading** — Optimized Three.js scene with particle systems  
 
 ---
 
@@ -27,13 +28,14 @@ irreallab showcases curated surreal visual reels with synchronized audio, direct
 
 ```
 /
-├── index.html              # Landing page
+├── index.html              # Landing page with 3D scroll intro
+├── scroll-3d-intro.js      # Three.js 3D scene and scroll animation logic
 ├── main.html               # Main content hub
 ├── reels.html              # Reels gallery with audio sync
 ├── contact.html            # Contact page
 ├── reels.json              # Reel data (title, video URL, audio, etc.)
 ├── reels-audio-sync.js     # Audio sync functionality on hover
-├── animations2.js          # Smooth animations and transitions
+├── animations2.js          # Custom cursor and smooth animations
 ├── package.json            # Project dependencies
 ├── scripts/                # Backend utilities
 │   └── sync-instagram.js   # GitHub Actions script for syncing new reels
@@ -43,6 +45,27 @@ irreallab showcases curated surreal visual reels with synchronized audio, direct
 ├── *.mp3, *.mp4            # Media files
 └── robots.txt, sitemap.xml # SEO files
 ```
+
+---
+
+## 3D Scroll Intro Experience
+
+The landing page (index.html) features an immersive 3D scroll-triggered animation powered by **Three.js**:
+
+**What happens as you scroll:**
+- **Stage 1 (0-25%)**: Rotating cube appears with particles emerging
+- **Stage 2 (25-50%)**: Cube morphs into icosahedron, text "irreallab" fades in
+- **Stage 3 (50-75%)**: Shape evolves to dodecahedron, camera zooms inward
+- **Stage 4 (75-100%)**: Particles scatter, glow intensifies, fade to black
+- **Auto-navigation**: Smooth transition to main.html
+
+**Technical Details:**
+- Uses Three.js r128 for 3D rendering
+- 1500-particle system with orbit animation
+- Camera follows scroll progress (0-100%)
+- Dynamic lighting that responds to scroll
+- Accessible: respects `prefers-reduced-motion`
+- Mobile responsive (tested on mobile viewports)
 
 ---
 
