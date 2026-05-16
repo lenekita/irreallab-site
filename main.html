@@ -67,6 +67,7 @@
       z-index: 200;
       border-bottom: 1.5px solid #000;
       transition: box-shadow .25s ease;
+      contain: layout style paint;
     }
     .marquee.is-sticky {
       position: fixed;
@@ -76,7 +77,7 @@
       z-index: 100000;
       box-shadow: 0 10px 30px rgba(0,0,0,.28);
     }
-    .marquee-spacer { height: 0; pointer-events: none; }
+    .marquee-spacer { height: var(--marquee-height, 34px); pointer-events: none; }
     .marquee-spacer.is-active { height: var(--marquee-height, 34px); }
     .marquee-track {
       display: inline-flex; white-space: nowrap;
@@ -100,6 +101,7 @@
       padding: 0 var(--pad-x); height: 60px;
       border-bottom: 1px solid var(--line);
       position: relative; z-index: 100;
+      contain: layout style paint;
     }
     .nav-logo {
       font-family: 'Bebas Neue', sans-serif;
@@ -132,7 +134,7 @@
     }
 
     .nav-spacer {
-      height: 0;
+      height: var(--nav-height, 60px);
       pointer-events: none;
     }
 
@@ -146,6 +148,7 @@
       grid-template-columns: 1fr 1fr;
       min-height: 92vh;
       border-bottom: 1px solid var(--line);
+      contain: layout;
     }
     .hero-left {
       display: flex; flex-direction: column;
@@ -215,7 +218,7 @@
     .live-dot { display: inline-flex; align-items: center; gap: 6px; color: var(--accent); }
     .live-dot::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: lpulse 2s ease infinite; }
     @keyframes lpulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:.3; transform:scale(.6); } }
-    .hero-embed { flex: 0 0 auto; min-height: 0; height: auto; display: flex; justify-content: center; align-items: center; padding: 1rem; overflow: hidden; background: transparent; }
+    .hero-embed { flex: 0 0 auto; min-height: 0; height: auto; display: flex; justify-content: center; align-items: center; padding: 1rem; overflow: hidden; background: transparent; contain: layout style paint; }
     .hero-video { display: block; width: 100%; max-width: 360px; aspect-ratio: 9 / 16; object-fit: cover; object-position: center center; background: #000; border: none; outline: none; }
     .hero-reel-footer { padding: 1rem 1.4rem; border-top: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
     .hero-reel-title { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: .05em; }
