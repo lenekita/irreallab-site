@@ -333,6 +333,36 @@
       display: none !important;
     }
 
+    .card-media video::-webkit-media-controls-overlay-play-button {
+      display: none !important;
+    }
+
+    .card-media video::before {
+      content: none !important;
+      display: none !important;
+    }
+
+    .card-media video::after {
+      content: none !important;
+      display: none !important;
+    }
+
+    video::-webkit-media-controls {
+      display: none !important;
+    }
+
+    video::-webkit-media-controls-panel {
+      display: none !important;
+    }
+
+    video::-webkit-media-controls-mute-button {
+      display: none !important;
+    }
+
+    video::-webkit-media-controls-timeline {
+      display: none !important;
+    }
+
     .card-media video.is-reel-normalized {
       transform: scale(1.78);
       transform-origin: center center;
@@ -1094,6 +1124,9 @@
             if (video) {
               video.removeAttribute('controls');
               video.controlsList.add('nodownload');
+              video.style.objectFit = 'contain';
+              video.style.objectPosition = 'center';
+              video.setAttribute('disablePictureInPicture', '');
 
               let audio = null;
               if (audioUrl) {
@@ -1104,6 +1137,7 @@
               card.addEventListener('mouseenter', () => {
                 if (video) {
                   video.currentTime = 0;
+                  video.style.pointerEvents = 'none';
                   const playPromise = video.play();
                   if (playPromise !== undefined) {
                     playPromise.catch(() => {});
@@ -1116,7 +1150,10 @@
               });
 
               card.addEventListener('mouseleave', () => {
-                if (video) video.pause();
+                if (video) {
+                  video.pause();
+                  video.style.pointerEvents = 'auto';
+                }
                 if (audio) {
                   audio.pause();
                   audio.currentTime = 0;
