@@ -54,70 +54,47 @@ class ScrollIntro3D {
   }
 
   createOrganicShape() {
-    // Create elegant hexagon - 6-sided cylinder prism
-    const baseGeometry = new THREE.CylinderGeometry(0.6, 0.6, 0.35, 6, 4, false);
+    // Minimaliste: Wireframe Sphere
+    const baseGeometry = new THREE.IcosahedronGeometry(1, 4);
+    const originalPositions = new Float32Array(baseGeometry.getAttribute('position').array);
 
-    const positions = baseGeometry.getAttribute('position').array;
-    const originalPositions = new Float32Array(positions);
-
-    // Apply subtle, elegant wave displacement
-    for (let i = 0; i < positions.length; i += 3) {
-      const x = positions[i];
-      const y = positions[i + 1];
-      const z = positions[i + 2];
-      const length = Math.sqrt(x * x + y * y + z * z);
-
-      if (length > 0.01) {
-        // More subtle waves - creates flowing distortion rather than lumpy shape
-        const wave = Math.sin(x * 8) * 0.08 + Math.cos(y * 6) * 0.06 + Math.sin(z * 7) * 0.05;
-        const newLength = length + wave;
-
-        positions[i] = (x / length) * newLength;
-        positions[i + 1] = (y / length) * newLength;
-        positions[i + 2] = (z / length) * newLength;
-      }
-    }
-
-    baseGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    baseGeometry.computeVertexNormals();
-
-    // Sophisticated material with vibrant accent color
+    // Wireframe material - clean, minimal aesthetic
     const material = new THREE.MeshStandardMaterial({
-      color: 0x1a1a2e,
+      color: 0xd4f03a,
       emissive: 0xd4f03a,
-      emissiveIntensity: 1.5,
-      metalness: 0.6,
-      roughness: 0.2,
-      wireframe: false
+      emissiveIntensity: 0.8,
+      metalness: 0.3,
+      roughness: 0.8,
+      wireframe: true
     });
 
     this.mainMesh = new THREE.Mesh(baseGeometry, material);
-    this.mainMesh.rotation.z = Math.PI / 6;
-    this.mainMesh.scale.set(1.2, 1.2, 1.2);
+    this.mainMesh.scale.set(1, 1, 1);
     this.mainMesh.userData.originalPositions = originalPositions;
     this.scene.add(this.mainMesh);
   }
 
   createParticles() {
-    const particleCount = 1500;
+    // Minimaliste: 75 slow-floating points
+    const particleCount = 75;
     const geometry = new THREE.BufferGeometry();
     const positions = new Float32Array(particleCount * 3);
     const colors = new Float32Array(particleCount * 3);
+    const velocities = new Float32Array(particleCount * 3);
 
     for (let i = 0; i < particleCount * 3; i += 3) {
-      const radius = 2.5 + Math.random() * 3.5;
-      const theta = Math.random() * Math.PI * 2;
-      const phi = Math.acos(Math.random() * 2 - 1);
+      // Spread particles in space around origin
+      positions[i] = (Math.random() - 0.5) * 12;
+      positions[i + 1] = (Math.random() - 0.5) * 12;
+      positions[i + 2] = (Math.random() - 0.5) * 12;
 
-      positions[i] = radius * Math.sin(phi) * Math.cos(theta);
-      positions[i + 1] = radius * Math.sin(phi) * Math.sin(theta);
-      positions[i + 2] = radius * Math.cos(phi);
+      // Slow random velocities
+      velocities[i] = (Math.random() - 0.5) * 0.01;
+      velocities[i + 1] = (Math.random() - 0.5) * 0.01;
+      velocities[i + 2] = (Math.random() - 0.5) * 0.01;
 
-      // Vibrant lime-green to cyan gradient
-      const hue = 0.18 + Math.random() * 0.25; // Range from lime to cyan
-      const saturation = 0.9 + Math.random() * 0.1; // Very saturated
-      const lightness = 0.5 + Math.random() * 0.2; // Bright particles
-      const color = new THREE.Color().setHSL(hue, saturation, lightness);
+      // Subtle lime-green color with slight variation
+      const color = new THREE.Color().setHSL(0.22, 0.8, 0.55);
       colors[i] = color.r;
       colors[i + 1] = color.g;
       colors[i + 2] = color.b;
@@ -126,13 +103,14 @@ class ScrollIntro3D {
     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
     geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
     geometry.userData.initialPositions = positions.slice();
+    geometry.userData.velocities = velocities;
 
     const material = new THREE.PointsMaterial({
-      size: 0.12,
+      size: 0.08,
       sizeAttenuation: true,
       vertexColors: true,
       transparent: true,
-      opacity: 0.85
+      opacity: 0.6
     });
 
     this.particles = new THREE.Points(geometry, material);
@@ -175,29 +153,14 @@ class ScrollIntro3D {
   }
 
   createLighting() {
-    // Dim ambient light for depth
-    const ambientLight = new THREE.AmbientLight(0x0a0a0a, 0.3);
+    // Minimaliste: 2 lights only
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
     this.scene.add(ambientLight);
 
-    // Main point light - vibrant neon lime
-    this.mainLight = new THREE.PointLight(0xd4f03a, 4, 30);
-    this.mainLight.position.set(5, 6, 8);
+    // Single key light - lime accent
+    this.mainLight = new THREE.PointLight(0xd4f03a, 2, 40);
+    this.mainLight.position.set(5, 5, 8);
     this.scene.add(this.mainLight);
-
-    // Secondary light - deep purple/magenta accent
-    this.secondLight = new THREE.PointLight(0xff00ff, 2, 25);
-    this.secondLight.position.set(-6, -5, 7);
-    this.scene.add(this.secondLight);
-
-    // Tertiary light - cyan accent
-    const thirdLight = new THREE.PointLight(0x00ffff, 1.5, 20);
-    thirdLight.position.set(3, -6, -8);
-    this.scene.add(thirdLight);
-
-    // Directional light for subtle volume
-    const dirLight = new THREE.DirectionalLight(0xffffff, 0.3);
-    dirLight.position.set(5, 5, 5);
-    this.scene.add(dirLight);
   }
 
   onScroll() {
@@ -218,100 +181,69 @@ class ScrollIntro3D {
     const progress = this.scrollProgress;
     this.time += 0.016;
 
-    // Elegant shape animation
+    // Minimaliste: Slow, subtle rotation
     if (this.mainMesh) {
-      // Smooth, fluid rotation
-      this.mainMesh.rotation.x += 0.0015;
-      this.mainMesh.rotation.y += 0.0025;
-      this.mainMesh.rotation.z += 0.0008;
+      // Slow, gentle rotation - 1/3 current speed
+      this.mainMesh.rotation.x += 0.0005;
+      this.mainMesh.rotation.y += 0.0008;
+      this.mainMesh.rotation.z += 0.0002;
 
-      // Subtle, flowing deformation
-      const geometry = this.mainMesh.geometry;
-      const positions = geometry.getAttribute('position').array;
-      const originalPositions = this.mainMesh.userData.originalPositions;
+      // Minimal subtle breathing effect
+      const breathing = 1 + Math.sin(this.time * 0.1) * 0.05;
+      this.mainMesh.scale.set(breathing, breathing, breathing);
 
-      if (originalPositions) {
-        for (let i = 0; i < positions.length; i += 3) {
-          const x = originalPositions[i];
-          const y = originalPositions[i + 1];
-          const z = originalPositions[i + 2];
-          const length = Math.sqrt(x * x + y * y + z * z);
-
-          // Elegant, flowing deformation
-          const waveAmount = Math.sin(this.time * 0.8 + x * 4) * 0.08 + Math.cos(this.time * 0.6 + y * 3) * 0.06;
-          const deformAmount = waveAmount * (0.5 + progress * 0.7);
-          const newLength = length + deformAmount;
-
-          positions[i] = (x / length) * newLength;
-          positions[i + 1] = (y / length) * newLength;
-          positions[i + 2] = (z / length) * newLength;
-        }
-
-        geometry.attributes.position.needsUpdate = true;
-      }
-
-      // Elegant scale pulsing
-      const scale = 1 + Math.sin(this.time * 0.4 + progress * Math.PI * 2) * 0.2 + progress * 0.15;
-      this.mainMesh.scale.set(scale, scale, scale);
-
-      // Vibrant color shift through spectrum
-      const hue = 0.18 + progress * 0.5; // Lime to magenta
-      this.mainMesh.material.emissive.setHSL(hue, 1, 0.65);
-      this.mainMesh.material.emissiveIntensity = 1.2 + progress * 0.6;
+      // Keep color consistent - no shifting
+      this.mainMesh.material.emissiveIntensity = 0.8;
     }
 
-    // Text animation - LARGER and MORE VISIBLE
+    // Text animation - Fade in at 20%, minimal movement
     if (this.textMesh) {
-      const textProgress = Math.max(0, progress - 0.08) / 0.35;
+      const textProgress = Math.max(0, progress - 0.2) / 0.3;
       const textScale = Math.min(1, Math.max(0, textProgress));
 
       this.textMesh.scale.set(textScale, textScale, 1);
-      this.textMesh.rotation.y = progress * Math.PI * 1.5;
-      this.textMesh.rotation.x = Math.sin(this.time * 0.4) * 0.2 * textScale;
-      this.textMesh.position.z = 1 + progress * 1;
-      this.textMesh.position.y = Math.sin(this.time * 0.3) * 0.3 * textScale;
+      this.textMesh.rotation.y = 0; // No rotation - static
+      this.textMesh.rotation.x = 0;
+      this.textMesh.position.z = 1; // Static position
+      this.textMesh.position.y = 0;
     }
 
-    // Particle animation - MORE DYNAMIC
+    // Particle animation - Slow floating motion
     if (this.particles) {
       const positions = this.particles.geometry.attributes.position.array;
+      const velocities = this.particles.geometry.userData.velocities;
       const initialPositions = this.particles.geometry.userData.initialPositions;
 
-      if (positions && initialPositions) {
+      if (positions && velocities) {
         for (let i = 0; i < positions.length; i += 3) {
-          const idx = i / 3;
-          const angle = progress * Math.PI * 3 + idx * 0.01;
-          const orbitDistance = 2.8 + progress * 1.8;
+          // Apply slow velocity
+          positions[i] += velocities[i];
+          positions[i + 1] += velocities[i + 1];
+          positions[i + 2] += velocities[i + 2];
 
-          positions[i] = Math.cos(angle) * orbitDistance;
-          positions[i + 1] = Math.sin(angle) * orbitDistance * 0.8;
-          positions[i + 2] = Math.sin(angle * 0.5) * orbitDistance * 0.6;
+          // Wrap around boundaries to keep particles visible
+          if (Math.abs(positions[i]) > 6) positions[i] = -positions[i];
+          if (Math.abs(positions[i + 1]) > 6) positions[i + 1] = -positions[i + 1];
+          if (Math.abs(positions[i + 2]) > 6) positions[i + 2] = -positions[i + 2];
         }
 
         this.particles.geometry.attributes.position.needsUpdate = true;
       }
 
-      // Particle opacity
-      const particleOpacity = Math.max(0, 1 - (progress - 0.75) / 0.25);
-      this.particles.material.opacity = particleOpacity;
+      // Particles fade out slightly near end
+      const particleOpacity = Math.max(0, 1 - (progress - 0.85) / 0.15);
+      this.particles.material.opacity = particleOpacity * 0.6;
     }
 
-    // Camera movement - MORE DRAMATIC
-    const cameraZ = 6 + progress * 3;
-    const cameraX = Math.sin(progress * Math.PI) * 2;
-    const cameraY = Math.cos(progress * Math.PI * 0.5) * 1.5;
-
-    this.camera.position.x += (cameraX - this.camera.position.x) * 0.08;
-    this.camera.position.y += (cameraY - this.camera.position.y) * 0.08;
+    // Camera: Gentle approach (subtle zoom in)
+    const cameraZ = 6 + progress * (-2); // Slow zoom from 6 to 4
     this.camera.position.z = cameraZ;
     this.camera.lookAt(0, 0, 0);
 
-    // Dynamic lighting - STRONGER
-    const lightIntensity = 3 + progress * 2.5;
-    this.mainLight.intensity = lightIntensity;
-    this.secondLight.intensity = 1.2 + progress * 1;
+    // Lighting: Static intensity - no dynamic changes
+    this.mainLight.intensity = 2;
 
-    // Scene fade
+    // Scene fade - start at 90%, end at 100%
     if (progress > 0.9) {
       const fadeAmount = (progress - 0.9) / 0.1;
       this.scene.background.copy(
