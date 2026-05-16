@@ -390,6 +390,28 @@
       visibility: hidden !important;
     }
 
+    /* Firefox and Safari fallback */
+    video::before {
+      display: none !important;
+    }
+
+    video::after {
+      display: none !important;
+    }
+
+    /* Absolutely hide any overlays */
+    .card-media {
+      background: #000 !important;
+      position: relative;
+    }
+
+    .card-media::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      display: none;
+    }
+
     .card-media video.is-reel-normalized {
       transform: scale(1.78);
       transform-origin: center center;
