@@ -24,7 +24,11 @@
       background: var(--bg);
       color: var(--text);
       font-family: 'Space Mono', monospace;
-      min-height: 100vh;
+      height: 100vh;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       overflow: auto;
       position: relative;
     }
@@ -65,8 +69,8 @@
       justify-content: center;
       gap: 3rem;
       padding: 2rem;
-      max-width: 680px;
       width: 100%;
+      height: 100vh;
       opacity: 0;
       animation: fadeInUp 1.2s cubic-bezier(.16,1,.3,1) forwards;
     }
@@ -321,7 +325,20 @@
     }
 
     .intro-shell {
-      display: flex;
+      position: relative !important;
+      z-index: 10 !important;
+      text-align: center !important;
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 3rem !important;
+      padding: 2rem !important;
+      width: 100% !important;
+      height: 100vh !important;
+      min-height: 100vh !important;
+      opacity: 0;
+      animation: fadeInUp 1.2s cubic-bezier(.16,1,.3,1) forwards;
     }
 
     #canvas-3d {
