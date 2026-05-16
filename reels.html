@@ -365,7 +365,13 @@
 
     /* Global video play button hide for all videos on page */
     video {
-      background: transparent !important;
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: contain !important;
+      object-position: center center !important;
+      border-radius: 0 !important;
+      background: #000 !important;
+      display: block !important;
     }
 
     video::-internal-media-controls-play-button {
@@ -1114,7 +1120,7 @@
       function render(reels) {
         grid.innerHTML = reels.map((r, i) => {
           const embedHtml = r.video_url && r.video_url.trim()
-            ? `<video src="${esc(r.video_url)}" poster="${esc(r.thumbnail_url)}" muted playsinline preload="metadata" style="width:100%;height:100%;object-fit:contain;object-position:center center;border-radius:0;"></video>`
+            ? `<video src="${esc(r.video_url)}" poster="${esc(r.thumbnail_url)}" muted playsinline preload="metadata"></video>`
             : `<blockquote class="instagram-media" data-instgrm-permalink="${esc(r.url)}" data-instgrm-version="14" style="background:#FFF;border:0;border-radius:0;box-shadow:none;margin:0;max-width:540px;min-width:326px;padding:0;width:100%;"></blockquote>`;
 
           return `<article class="card" ${r.audio_url ? `data-audio-url="${esc(r.audio_url)}"` : ''}>
