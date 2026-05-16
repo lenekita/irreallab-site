@@ -1,0 +1,58 @@
+/* Shared header/footer typography for site chrome */
+:root {
+  --chrome-logo-size: 1.2rem;
+  --chrome-logo-letter: .04em;
+  --chrome-link-size: .58rem;
+  --chrome-link-letter: .12em;
+}
+
+.nav-logo,
+.footer-logo {
+  font-family: 'Bebas Neue', sans-serif !important;
+  font-size: var(--chrome-logo-size) !important;
+  letter-spacing: var(--chrome-logo-letter) !important;
+  line-height: 1 !important;
+  color: var(--muted) !important;
+  text-decoration: none !important;
+}
+
+.nav-logo em,
+.footer-logo em {
+  color: var(--accent) !important;
+  font-style: normal !important;
+}
+
+.nav-logo .footer-irreal,
+.footer-logo .footer-irreal {
+  position: relative;
+  display: inline-block;
+  animation: footerIrrealBlink 2.2s infinite;
+  will-change: opacity, text-shadow;
+}
+
+.nav-links a,
+.footer-link {
+  font-family: 'Space Mono', monospace !important;
+  font-size: var(--chrome-link-size) !important;
+  letter-spacing: var(--chrome-link-letter) !important;
+  line-height: 1.2 !important;
+  text-transform: uppercase !important;
+  color: var(--muted) !important;
+  text-decoration: none !important;
+}
+
+.nav-links a:hover,
+.footer-link:hover {
+  color: var(--accent) !important;
+}
+
+.nav-cta {
+  color: #060606 !important;
+}
+
+@media (max-width: 420px) {
+  .nav-logo,
+  .footer-logo {
+    font-size: var(--chrome-logo-size) !important;
+  }
+}
