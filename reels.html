@@ -1201,12 +1201,25 @@
               card.addEventListener('mouseleave', () => {
                 if (video) {
                   video.pause();
+                  video.currentTime = 0;
                   video.style.pointerEvents = 'auto';
                 }
                 if (audio) {
                   audio.pause();
                   audio.currentTime = 0;
                 }
+              });
+
+              video.addEventListener('play', function() {
+                video.style.pointerEvents = 'none';
+              });
+
+              video.addEventListener('pause', function() {
+                setTimeout(() => {
+                  if (video.paused) {
+                    video.style.pointerEvents = 'none';
+                  }
+                }, 50);
               });
             }
           });
