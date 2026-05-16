@@ -293,6 +293,12 @@
       object-position: center center;
       background: #000;
       display: block;
+      cursor: pointer;
+    }
+
+    .card-media video::before,
+    .card-media video::after {
+      display: none !important;
     }
 
     .card-media video::-webkit-media-controls-panel {
@@ -304,6 +310,26 @@
     }
 
     .card-media video::-moz-media-controls {
+      display: none !important;
+    }
+
+    .card-media video::cue {
+      display: none;
+    }
+
+    .card-media video::-webkit-media-controls-enclosure {
+      display: none !important;
+    }
+
+    .card-media video::-webkit-media-text-track-display {
+      display: none;
+    }
+
+    .card-media video::-webkit-media-controls-start-playback-button {
+      display: none !important;
+    }
+
+    .card-media video::-webkit-media-controls-play-button {
       display: none !important;
     }
 
@@ -1066,6 +1092,9 @@
             const audioUrl = card.getAttribute('data-audio-url');
 
             if (video) {
+              video.removeAttribute('controls');
+              video.controlsList.add('nodownload');
+
               let audio = null;
               if (audioUrl) {
                 audio = new Audio(audioUrl);
