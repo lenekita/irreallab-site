@@ -15,8 +15,8 @@ class ScrollIntro3D {
   init() {
     // Scene setup
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0x0a0a0a);
-    this.scene.fog = new THREE.Fog(0x0a0a0a, 30, 50);
+    this.scene.background = new THREE.Color(0x000000);
+    this.scene.fog = new THREE.Fog(0x000000, 30, 50);
 
     // Camera setup
     const width = window.innerWidth;
@@ -34,7 +34,7 @@ class ScrollIntro3D {
     this.renderer.setSize(width, height);
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 1.5;
+    this.renderer.toneMappingExposure = 2;
 
     // Create 3D elements
     this.createOrganicShape();
@@ -145,7 +145,8 @@ class ScrollIntro3D {
       side: THREE.DoubleSide
     });
 
-    const geometry = new THREE.PlaneGeometry(6, 3);
+    // Create 3D hexagon geometry (cylinder with 6 segments)
+    const geometry = new THREE.CylinderGeometry(3, 3, 0.5, 6, 1);
     this.textMesh = new THREE.Mesh(geometry, material);
     this.textMesh.position.z = 1;
     this.textMesh.scale.set(0, 0, 1);
