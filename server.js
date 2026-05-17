@@ -44,8 +44,8 @@ const upload = multer({
 
 // Middleware
 app.use(express.json());
-app.use(express.static(__dirname));
 
+// API Routes (must be before static middleware)
 // Upload endpoint
 app.post('/api/upload-reel', upload.single('video'), async (req, res) => {
   try {
@@ -184,6 +184,9 @@ app.post('/api/reorder', express.json(), (req, res) => {
 app.get('/health', (req, res) => {
   res.json({ status: 'ok' });
 });
+
+// Static file serving (after API routes so routes take priority)
+app.use(express.static(__dirname));
 
 app.listen(PORT, () => {
   console.log(`\n🎬 Irreallab Server running at http://localhost:${PORT}`);
