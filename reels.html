@@ -1156,10 +1156,9 @@
       const esc = s => (new DOMParser).parseFromString(s,'text/html').body.innerText;
 
       function render(reels) {
-        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         grid.innerHTML = reels.map((r, i) => {
-          const embedHtml = !isMobile && r.video_url && r.video_url.trim()
-            ? `<video src="${esc(r.video_url)}" muted playsinline preload="auto" webkit-playsinline="true" x5-playsinline="true" crossorigin="anonymous"></video>`
+          const embedHtml = r.video_url && r.video_url.trim()
+            ? `<video src="${esc(r.video_url)}" muted playsinline preload="auto" webkit-playsinline="true" x5-playsinline="true"></video>`
             : `<blockquote class="instagram-media" data-instgrm-permalink="${esc(r.url)}" data-instgrm-version="14" style="background:#FFF;border:0;border-radius:0;box-shadow:none;margin:0;max-width:540px;min-width:326px;padding:0;width:100%;"></blockquote>`;
 
           return `<article class="card" ${r.audio_url ? `data-audio-url="${esc(r.audio_url)}"` : ''}>
@@ -1213,7 +1212,7 @@
                 audio.preload = 'auto';
               }
 
-              // Play/pause on hover - works on both desktop and mobile
+              // Play/pause on hover (desktop)
               card.addEventListener('mouseenter', () => {
                 if (video) {
                   video.currentTime = 0;
@@ -1236,8 +1235,9 @@
                 }
               });
 
-              // Also support touch/tap on mobile
-              card.addEventListener('touchstart', () => {
+              // Play/pause on click (mobile and desktop fallback)
+              card.addEventListener('click', (e) => {
+                e.preventDefault();
                 if (video && video.paused) {
                   video.currentTime = 0;
                   video.play().catch(() => {});
@@ -1245,11 +1245,7 @@
                     audio.currentTime = 0;
                     audio.play().catch(() => {});
                   }
-                }
-              });
-
-              card.addEventListener('touchend', () => {
-                if (video && !video.paused) {
+                } else if (video && !video.paused) {
                   video.pause();
                   video.currentTime = 0;
                   if (audio) {
