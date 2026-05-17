@@ -224,11 +224,26 @@
 
     .video-preview {
       width: 100%;
-      aspect-ratio: 16 / 9;
+      aspect-ratio: 9 / 16;
       margin-top: 1rem;
       border: 1px solid rgba(212,240,58,.15);
       display: none;
       object-fit: cover;
+      background: #000;
+    }
+
+    .format-info {
+      background: rgba(212,240,58,.1);
+      border: 1px solid rgba(212,240,58,.3);
+      padding: 0.8rem;
+      margin-top: 0.5rem;
+      font-size: .75rem;
+      color: var(--muted);
+      letter-spacing: .05em;
+    }
+
+    .format-info strong {
+      color: var(--accent);
     }
 
     button {
@@ -490,6 +505,9 @@
             <label for="videoFile">Video File *</label>
             <input type="file" id="videoFile" name="videoFile" accept="video/*" required>
             <video id="videoPreview" class="video-preview"></video>
+            <div class="format-info">
+              📱 <strong>Format Required:</strong> 9:16 vertical (portrait) like Instagram Reels. MP4 recommended. Max 500MB.
+            </div>
           </div>
 
           <div class="form-group">
