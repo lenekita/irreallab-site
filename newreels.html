@@ -692,9 +692,15 @@
           showStatus('Reel published successfully! 🎬', 'success', statusMessage);
           reelForm.reset();
           videoPreview.style.display = 'none';
+
+          // Switch to Manage Reels tab and load the new reel
           setTimeout(() => {
-            window.location.href = '/reels.html';
-          }, 2000);
+            tabBtns.forEach(b => b.classList.remove('active'));
+            tabContents.forEach(t => t.classList.remove('active'));
+            tabBtns[1].classList.add('active');
+            tabContents[1].classList.add('active');
+            loadReels();
+          }, 500);
         } else {
           showStatus(data.error || 'Upload failed', 'error', statusMessage);
         }
