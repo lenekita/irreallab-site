@@ -120,7 +120,7 @@
 
     .hidden { display: none !important; }
 
-    .login-box, .upload-form {
+    .login-box {
       border: 1px solid rgba(212,240,58,.2);
       background: rgba(8,8,8,.72);
       backdrop-filter: blur(18px);
@@ -139,9 +139,52 @@
     }
     .login-title span, .admin-title span { color: var(--accent); }
 
-    .admin-header {
-      text-align: center;
-      margin-bottom: 3rem;
+    .tabs {
+      display: flex;
+      gap: 2rem;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid rgba(212,240,58,.2);
+      padding-bottom: 1rem;
+    }
+
+    .tab-btn {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: .05em;
+      cursor: pointer;
+      padding: 0.5rem 1rem;
+      transition: all .2s;
+      text-transform: uppercase;
+      position: relative;
+    }
+
+    .tab-btn:hover {
+      color: var(--text);
+    }
+
+    .tab-btn.active {
+      color: var(--accent);
+    }
+
+    .tab-btn.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1rem;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--accent);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
     }
 
     .form-group {
@@ -189,7 +232,6 @@
     }
 
     button {
-      width: 100%;
       padding: 0.9rem;
       background: var(--accent);
       color: #060606;
@@ -207,6 +249,113 @@
       background: #e0ff52;
       transform: translateY(-2px);
       box-shadow: 0 8px 24px rgba(212,240,58,.3);
+    }
+
+    .upload-form {
+      border: 1px solid rgba(212,240,58,.2);
+      background: rgba(8,8,8,.72);
+      backdrop-filter: blur(18px);
+      padding: 3rem;
+      width: 100%;
+      max-width: 520px;
+    }
+
+    .reels-list {
+      border: 1px solid rgba(212,240,58,.2);
+      background: rgba(8,8,8,.72);
+      backdrop-filter: blur(18px);
+      padding: 2rem;
+      width: 100%;
+      max-width: 800px;
+    }
+
+    .reel-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem;
+      border-bottom: 1px solid rgba(212,240,58,.1);
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .reel-item:last-child {
+      border-bottom: none;
+    }
+
+    .reel-info {
+      flex: 1;
+      min-width: 250px;
+    }
+
+    .reel-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.2rem;
+      color: var(--accent);
+      margin-bottom: 0.3rem;
+    }
+
+    .reel-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: .95rem;
+      color: var(--text);
+      margin-bottom: 0.2rem;
+    }
+
+    .reel-meta {
+      font-size: .7rem;
+      color: var(--muted);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .reel-actions {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .action-btn {
+      background: rgba(212,240,58,.15);
+      color: var(--accent);
+      border: 1px solid rgba(212,240,58,.3);
+      padding: 0.5rem 0.8rem;
+      font-family: 'Space Mono', monospace;
+      font-size: .65rem;
+      cursor: pointer;
+      transition: all .2s;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin: 0;
+      font-weight: normal;
+    }
+
+    .action-btn:hover {
+      background: rgba(212,240,58,.25);
+      border-color: var(--accent);
+      transform: none;
+    }
+
+    .delete-btn {
+      background: rgba(255,0,0,.15);
+      color: #ff6b6b;
+      border-color: rgba(255,0,0,.3);
+    }
+
+    .delete-btn:hover {
+      background: rgba(255,0,0,.25);
+      border-color: #ff6b6b;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 2rem;
+      color: var(--muted);
+    }
+
+    .empty-state p {
+      font-size: .9rem;
+      letter-spacing: .05em;
     }
 
     .status-message {
@@ -270,7 +419,9 @@
     @media (max-width: 600px) {
       .nav-links a.nav-hide { display: none; }
       .nav-logo { font-size: 1.2rem; }
-      .login-box, .upload-form { padding: 2rem; }
+      .upload-form, .reels-list { padding: 2rem; }
+      .reel-item { flex-direction: column; align-items: flex-start; }
+      .reel-actions { width: 100%; }
     }
 
   </style>
@@ -315,7 +466,7 @@
           <label for="userPassword">Password</label>
           <input type="password" id="userPassword" name="userPassword" required autocomplete="off">
         </div>
-        <button type="submit">Access Admin Panel</button>
+        <button type="submit" style="width: 100%; margin-top: 1rem;">Access Admin Panel</button>
         <div id="loginError" class="status-message error"></div>
       </form>
     </div>
@@ -323,37 +474,51 @@
 
   <!-- ADMIN SCREEN -->
   <main id="adminContainer" class="admin-container hidden">
-    <div class="admin-header">
-      <h1 class="admin-title">Upload <span>New Reel</span></h1>
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="upload">Upload Reel</button>
+      <button class="tab-btn" data-tab="manage">Manage Reels</button>
     </div>
 
-    <div class="upload-form">
-      <div id="statusMessage" class="status-message"></div>
+    <!-- UPLOAD TAB -->
+    <div id="upload-tab" class="tab-content active">
+      <h1 class="admin-title">Upload <span>New Reel</span></h1>
+      <div class="upload-form">
+        <div id="statusMessage" class="status-message"></div>
 
-      <form id="reelForm">
-        <div class="form-group">
-          <label for="videoFile">Video File *</label>
-          <input type="file" id="videoFile" name="videoFile" accept="video/*" required>
-          <video id="videoPreview" class="video-preview"></video>
-        </div>
+        <form id="reelForm">
+          <div class="form-group">
+            <label for="videoFile">Video File *</label>
+            <input type="file" id="videoFile" name="videoFile" accept="video/*" required>
+            <video id="videoPreview" class="video-preview"></video>
+          </div>
 
-        <div class="form-group">
-          <label for="reelTitle">Title *</label>
-          <input type="text" id="reelTitle" name="reelTitle" placeholder="e.g., carved origins" required>
-        </div>
+          <div class="form-group">
+            <label for="reelTitle">Title *</label>
+            <input type="text" id="reelTitle" name="reelTitle" placeholder="e.g., carved origins" required>
+          </div>
 
-        <div class="form-group">
-          <label for="reelHashtags">Hashtags *</label>
-          <textarea id="reelHashtags" name="reelHashtags" placeholder="#irreallab #surrealvisuals&#10;#dreamlogic" required></textarea>
-        </div>
+          <div class="form-group">
+            <label for="reelHashtags">Hashtags *</label>
+            <textarea id="reelHashtags" name="reelHashtags" placeholder="#irreallab #surrealvisuals&#10;#dreamlogic" required></textarea>
+          </div>
 
-        <div class="form-group">
-          <label for="reelUrl">Instagram URL (optional)</label>
-          <input type="url" id="reelUrl" name="reelUrl" placeholder="https://www.instagram.com/reel/...">
-        </div>
+          <div class="form-group">
+            <label for="reelUrl">Instagram URL (optional)</label>
+            <input type="url" id="reelUrl" name="reelUrl" placeholder="https://www.instagram.com/reel/...">
+          </div>
 
-        <button type="submit">Upload & Publish Reel</button>
-      </form>
+          <button type="submit" style="width: 100%;">Upload & Publish Reel</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- MANAGE TAB -->
+    <div id="manage-tab" class="tab-content">
+      <h1 class="admin-title">Manage <span>Reels</span></h1>
+      <div class="reels-list">
+        <div id="statusMessageManage" class="status-message"></div>
+        <div id="reelsList" class="reels-container"></div>
+      </div>
     </div>
   </main>
 
@@ -377,10 +542,33 @@
     const videoInput = document.getElementById('videoFile');
     const videoPreview = document.getElementById('videoPreview');
     const statusMessage = document.getElementById('statusMessage');
+    const statusMessageManage = document.getElementById('statusMessageManage');
     const loginError = document.getElementById('loginError');
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+    const reelsList = document.getElementById('reelsList');
 
     const VALID_ID = 'radu';
     const VALID_PASSWORD = 'lovemylife27';
+
+    let allReels = [];
+
+    // Tab switching
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tabName = btn.dataset.tab;
+
+        tabBtns.forEach(b => b.classList.remove('active'));
+        tabContents.forEach(t => t.classList.remove('active'));
+
+        btn.classList.add('active');
+        document.getElementById(`${tabName}-tab`).classList.add('active');
+
+        if (tabName === 'manage') {
+          loadReels();
+        }
+      });
+    });
 
     videoInput.addEventListener('change', (e) => {
       const file = e.target.files[0];
@@ -412,8 +600,13 @@
       videoPreview.style.display = 'none';
       reelForm.reset();
       statusMessage.classList.remove('active', 'success', 'error');
+      statusMessageManage.classList.remove('active', 'success', 'error');
       adminContainer.classList.add('hidden');
       loginContainer.classList.remove('hidden');
+      tabBtns[0].classList.add('active');
+      tabBtns[1].classList.remove('active');
+      tabContents[0].classList.add('active');
+      tabContents[1].classList.remove('active');
       updateSticky();
     });
 
@@ -426,7 +619,7 @@
       const url = document.getElementById('reelUrl').value || 'https://www.instagram.com/irreallab/';
 
       if (!videoFile) {
-        showStatus('Please select a video file', 'error');
+        showStatus('Please select a video file', 'error', statusMessage);
         return;
       }
 
@@ -445,23 +638,98 @@
         const data = await response.json();
 
         if (response.ok) {
-          showStatus('Reel published successfully! 🎬', 'success');
+          showStatus('Reel published successfully! 🎬', 'success', statusMessage);
           reelForm.reset();
           videoPreview.style.display = 'none';
           setTimeout(() => {
             window.location.href = '/reels.html';
           }, 2000);
         } else {
-          showStatus(data.error || 'Upload failed', 'error');
+          showStatus(data.error || 'Upload failed', 'error', statusMessage);
         }
       } catch (err) {
-        showStatus('Error uploading reel: ' + err.message, 'error');
+        showStatus('Error uploading reel: ' + err.message, 'error', statusMessage);
       }
     });
 
-    function showStatus(message, type) {
-      statusMessage.textContent = message;
-      statusMessage.className = `status-message ${type} active`;
+    async function loadReels() {
+      try {
+        const response = await fetch('/api/reels');
+        allReels = await response.json();
+        renderReels();
+      } catch (err) {
+        showStatus('Error loading reels', 'error', statusMessageManage);
+      }
+    }
+
+    function renderReels() {
+      if (allReels.length === 0) {
+        reelsList.innerHTML = '<div class="empty-state"><p>No reels yet. Upload your first reel!</p></div>';
+        return;
+      }
+
+      reelsList.innerHTML = allReels.map((reel, idx) => `
+        <div class="reel-item">
+          <div class="reel-info">
+            <div class="reel-num">#${idx + 1}</div>
+            <div class="reel-title">${reel.title}</div>
+            <div class="reel-meta">${reel.status} • ${new Date(reel.posted_at).toLocaleDateString()}</div>
+          </div>
+          <div class="reel-actions">
+            ${idx > 0 ? `<button class="action-btn" onclick="moveReel(${idx}, 'up')">↑ Up</button>` : ''}
+            ${idx < allReels.length - 1 ? `<button class="action-btn" onclick="moveReel(${idx}, 'down')">↓ Down</button>` : ''}
+            <button class="action-btn delete-btn" onclick="deleteReel(${idx})">✕ Delete</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    window.deleteReel = async function(idx) {
+      if (!confirm(`Delete "${allReels[idx].title}"?`)) return;
+
+      try {
+        const response = await fetch(`/api/reel/${idx}`, { method: 'DELETE' });
+        const data = await response.json();
+
+        if (response.ok) {
+          showStatus('Reel deleted ✓', 'success', statusMessageManage);
+          loadReels();
+        } else {
+          showStatus(data.error || 'Delete failed', 'error', statusMessageManage);
+        }
+      } catch (err) {
+        showStatus('Error: ' + err.message, 'error', statusMessageManage);
+      }
+    };
+
+    window.moveReel = async function(idx, direction) {
+      const newIdx = direction === 'up' ? idx - 1 : idx + 1;
+      if (newIdx < 0 || newIdx >= allReels.length) return;
+
+      [allReels[idx], allReels[newIdx]] = [allReels[newIdx], allReels[idx]];
+
+      try {
+        const response = await fetch('/api/reorder', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ reels: allReels })
+        });
+
+        if (response.ok) {
+          renderReels();
+        } else {
+          showStatus('Reorder failed', 'error', statusMessageManage);
+          loadReels();
+        }
+      } catch (err) {
+        showStatus('Error: ' + err.message, 'error', statusMessageManage);
+        loadReels();
+      }
+    };
+
+    function showStatus(message, type, element) {
+      element.textContent = message;
+      element.className = `status-message ${type} active`;
     }
 
     function updateSticky() {

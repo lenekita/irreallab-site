@@ -114,6 +114,72 @@ app.post('/api/upload-reel', upload.single('video'), async (req, res) => {
   }
 });
 
+// Get all reels
+app.get('/api/reels', (req, res) => {
+  try {
+    const reelsPath = path.join(__dirname, 'reels.json');
+    if (!fs.existsSync(reelsPath)) {
+      return res.json([]);
+    }
+    const reels = JSON.parse(fs.readFileSync(reelsPath, 'utf8'));
+    res.json(reels);
+  } catch (error) {
+    res.status(500).json({ error: 'Error reading reels' });
+  }
+});
+
+// Delete a reel by index
+app.delete('/api/reel/:index', (req, res) => {
+  try {
+    const index = parseInt(req.params.index);
+    const reelsPath = path.join(__dirname, 'reels.json');
+
+    if (!fs.existsSync(reelsPath)) {
+      return res.status(404).json({ error: 'Reels file not found' });
+    }
+
+    let reels = JSON.parse(fs.readFileSync(reelsPath, 'utf8'));
+
+    if (index < 0 || index >= reels.length) {
+      return res.status(400).json({ error: 'Invalid reel index' });
+    }
+
+    reels.splice(index, 1);
+    fs.writeFileSync(reelsPath, JSON.stringify(reels, null, 2));
+
+    res.json({
+      success: true,
+      message: 'Reel deleted successfully',
+      remainingReels: reels.length
+    });
+  } catch (error) {
+    console.error('Delete error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Reorder reels
+app.post('/api/reorder', express.json(), (req, res) => {
+  try {
+    const { reels } = req.body;
+    const reelsPath = path.join(__dirname, 'reels.json');
+
+    if (!Array.isArray(reels)) {
+      return res.status(400).json({ error: 'Invalid reels array' });
+    }
+
+    fs.writeFileSync(reelsPath, JSON.stringify(reels, null, 2));
+
+    res.json({
+      success: true,
+      message: 'Reels reordered successfully'
+    });
+  } catch (error) {
+    console.error('Reorder error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Health check endpoint
 app.get('/health', (req, res) => {
   res.json({ status: 'ok' });
