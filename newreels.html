@@ -712,10 +712,14 @@
     async function loadReels() {
       try {
         const response = await fetch('/api/reels');
+        if (!response.ok) {
+          throw new Error(`API error: ${response.status} ${response.statusText}`);
+        }
         allReels = await response.json();
         renderReels();
       } catch (err) {
-        showStatus('Error loading reels', 'error', statusMessageManage);
+        console.error('Load reels error:', err);
+        showStatus('Error loading reels: ' + err.message, 'error', statusMessageManage);
       }
     }
 
