@@ -1206,14 +1206,6 @@
               video.style.objectPosition = 'center';
               video.setAttribute('disablePictureInPicture', '');
 
-              // Log video loading for debugging
-              video.addEventListener('loadstart', () => console.log('Video loading:', video.src?.substring(0, 50)));
-              video.addEventListener('error', (e) => {
-                console.error('Video error:', video.error?.code, video.error?.message);
-                video.style.backgroundColor = '#ff0000';
-              });
-              video.addEventListener('canplay', () => console.log('Video ready to play'));
-
               let audio = null;
               if (audioUrl) {
                 audio = new Audio(audioUrl);
