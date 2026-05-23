@@ -49,6 +49,21 @@ const upload = multer({
 // Middleware
 app.use(express.json());
 
+// Serve HTML files without .html extension
+app.use((req, res, next) => {
+  // Skip API routes and files with extensions
+  if (req.path.startsWith('/api/') || req.path.includes('.')) {
+    return next();
+  }
+
+  const possiblePath = path.join(__dirname, req.path + '.html');
+  if (fs.existsSync(possiblePath)) {
+    return res.sendFile(possiblePath);
+  }
+
+  next();
+});
+
 // Helper function to find next reel number
 function getNextReelNumber() {
   try {
