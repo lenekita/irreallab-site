@@ -384,6 +384,26 @@
       transform: none;
     }
 
+    .hashtag-btn {
+      background: rgba(212,240,58,.1);
+      color: var(--accent);
+      border: 1px solid rgba(212,240,58,.3);
+      padding: 0.4rem 0.8rem;
+      font-family: 'Space Mono', monospace;
+      font-size: .65rem;
+      cursor: pointer;
+      transition: all .2s;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin: 0;
+      font-weight: normal;
+    }
+
+    .hashtag-btn:hover {
+      background: rgba(212,240,58,.25);
+      border-color: var(--accent);
+    }
+
     .delete-btn {
       background: rgba(255,0,0,.15);
       color: #ff6b6b;
@@ -560,6 +580,17 @@
 
           <div class="form-group">
             <label for="reelHashtags">Hashtags *</label>
+            <div style="margin-bottom: 0.8rem;">
+              <div style="font-size: .65rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.5rem;">Quick templates:</div>
+              <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+                <button type="button" class="hashtag-btn" onclick="addHashtags('#irreallab #surrealvisuals #dreamlogic')">Surreal</button>
+                <button type="button" class="hashtag-btn" onclick="addHashtags('#irreallab #visualart #digitalart')">Visual Art</button>
+                <button type="button" class="hashtag-btn" onclick="addHashtags('#irreallab #generativeart #experimental')">Generative</button>
+                <button type="button" class="hashtag-btn" onclick="addHashtags('#irreallab #motiondesign #animation')">Motion</button>
+                <button type="button" class="hashtag-btn" onclick="addHashtags('#irreallab #abstract #artistry')">Abstract</button>
+                <button type="button" class="hashtag-btn" onclick="addHashtags('#irreallab #creative #design')">Creative</button>
+              </div>
+            </div>
             <textarea id="reelHashtags" name="reelHashtags" placeholder="#irreallab #surrealvisuals&#10;#dreamlogic" required></textarea>
           </div>
 
@@ -667,6 +698,22 @@
 
     let allReels = [];
     let editingReelIndex = null;
+
+    // Add hashtags from template
+    window.addHashtags = function(hashtags) {
+      const textarea = document.getElementById('reelHashtags');
+      const current = textarea.value.trim();
+
+      if (current) {
+        // If there's already content, add on a new line
+        textarea.value = current + '\n' + hashtags;
+      } else {
+        // Otherwise just set it
+        textarea.value = hashtags;
+      }
+
+      textarea.focus();
+    };
 
     // Session management
     function saveSession(rememberMe) {
