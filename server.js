@@ -138,38 +138,68 @@ async function fetchInstagramMetadata(igUrl) {
       return;
     }
 
-    // Extract reel ID from Instagram URL
-    const reelIdMatch = igUrl.match(/reel\/([A-Za-z0-9_-]+)/);
-    if (!reelIdMatch) {
+    // Extract post/reel ID from various Instagram URL formats
+    // Supports: /p/ID, /reel/ID, /reels/ID, /tv/ID
+    let postId = null;
+    const postMatch = igUrl.match(/\/(?:p|reel|reels|tv)\/([A-Za-z0-9_-]+)/);
+    if (postMatch) {
+      postId = postMatch[1];
+    } else {
       resolve({ success: false });
       return;
     }
 
     // Try to fetch metadata from Instagram's embed API
-    const embedUrl = `https://www.instagram.com/p/${reelIdMatch[1]}/embed/captioned/`;
+    const embedUrl = `https://www.instagram.com/p/${postId}/embed/captioned/`;
 
-    https.get(embedUrl, { timeout: 5000 }, (res) => {
+    const options = {
+      timeout: 8000,
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+      }
+    };
+
+    https.get(embedUrl, options, (res) => {
       let data = '';
       res.on('data', chunk => data += chunk);
       res.on('end', () => {
         try {
-          // Extract caption from embed HTML
-          const captionMatch = data.match(/"caption":"([^"]+)"/);
-          const caption = captionMatch ? captionMatch[1].replace(/\\n/g, '\n') : '';
+          // Try multiple patterns to extract caption
+          let caption = '';
+
+          // Pattern 1: "caption":"..."
+          const captionMatch1 = data.match(/"caption":"([^"]*(?:\\.[^"]*)*?)"/);
+          if (captionMatch1) {
+            caption = captionMatch1[1].replace(/\\n/g, '\n').replace(/\\"/g, '"');
+          }
+
+          // Pattern 2: caption from script tags
+          if (!caption) {
+            const scriptMatch = data.match(/"caption":\s*"([^"]+)"/);
+            if (scriptMatch) {
+              caption = scriptMatch[1];
+            }
+          }
 
           // Extract hashtags from caption
           const hashtags = (caption.match(/#\w+/g) || []).join('\n');
 
-          resolve({
-            success: true,
-            caption: caption,
-            hashtags: hashtags
-          });
+          if (caption || hashtags) {
+            resolve({
+              success: true,
+              caption: caption,
+              hashtags: hashtags
+            });
+          } else {
+            resolve({ success: false });
+          }
         } catch (e) {
+          console.error('Parse error:', e.message);
           resolve({ success: false });
         }
       });
-    }).on('error', () => {
+    }).on('error', (err) => {
+      console.error('Fetch error:', err.message);
       resolve({ success: false });
     });
   });
