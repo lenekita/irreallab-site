@@ -596,12 +596,9 @@
 
           <div class="form-group">
             <label for="reelUrl">Instagram URL (optional)</label>
-            <div style="display: flex; gap: 0.5rem;">
-              <input type="url" id="reelUrl" name="reelUrl" placeholder="https://www.instagram.com/reel/..." style="flex: 1;">
-              <button type="button" id="fetchMetadataBtn" style="width: auto; margin-top: 0; padding: 0.8rem 1.2rem;">Fetch</button>
-            </div>
+            <input type="url" id="reelUrl" name="reelUrl" placeholder="https://www.instagram.com/reel/...">
             <div class="format-info" style="margin-top: 0.5rem;">
-              💡 Paste Instagram URL and click "Fetch" to auto-fill title and hashtags from the post caption.
+              🔗 Link to the original Instagram post. Used in the reel's "Watch on Instagram" button.
             </div>
           </div>
 
@@ -686,7 +683,6 @@
     const tabBtns = document.querySelectorAll('.tab-btn');
     const tabContents = document.querySelectorAll('.tab-content');
     const reelsList = document.getElementById('reelsList');
-    const fetchMetadataBtn = document.getElementById('fetchMetadataBtn');
     const editModal = document.getElementById('editModal');
     const editForm = document.getElementById('editForm');
     const uploadProgress = document.getElementById('uploadProgress');
@@ -908,46 +904,6 @@
       }
     });
 
-    // Fetch Instagram metadata
-    fetchMetadataBtn.addEventListener('click', async (e) => {
-      e.preventDefault();
-      const igUrl = document.getElementById('reelUrl').value;
-
-      if (!igUrl) {
-        showStatus('Please enter an Instagram URL first', 'error', statusMessage);
-        return;
-      }
-
-      fetchMetadataBtn.textContent = 'Fetching...';
-      fetchMetadataBtn.disabled = true;
-
-      try {
-        const response = await fetch('/api/fetch-instagram-metadata', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ url: igUrl })
-        });
-
-        const data = await response.json();
-
-        if (response.ok && data.success) {
-          if (data.caption) {
-            document.getElementById('reelTitle').value = data.caption.split('\n')[0].substring(0, 50) || 'Untitled';
-          }
-          if (data.hashtags) {
-            document.getElementById('reelHashtags').value = data.hashtags;
-          }
-          showStatus('✓ Metadata fetched from Instagram!', 'success', statusMessage);
-        } else {
-          showStatus('⚠ Instagram blocked auto-fetch. Copy-paste the caption above and fill in the details manually. Title & hashtags are required.', 'error', statusMessage);
-        }
-      } catch (err) {
-        showStatus('⚠ Instagram blocked auto-fetch. Copy-paste the caption and fill in the details manually. Title & hashtags are required.', 'error', statusMessage);
-      } finally {
-        fetchMetadataBtn.textContent = 'Fetch';
-        fetchMetadataBtn.disabled = false;
-      }
-    });
 
     async function loadReels() {
       try {
