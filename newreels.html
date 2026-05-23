@@ -884,15 +884,18 @@
         const data = await response.json();
 
         if (response.ok && data.success) {
+          if (data.caption) {
+            document.getElementById('reelTitle').value = data.caption.split('\n')[0].substring(0, 50) || 'Untitled';
+          }
           if (data.hashtags) {
             document.getElementById('reelHashtags').value = data.hashtags;
           }
           showStatus('✓ Metadata fetched from Instagram!', 'success', statusMessage);
         } else {
-          showStatus('Could not fetch metadata. Enter details manually.', 'error', statusMessage);
+          showStatus('⚠ Instagram blocked auto-fetch. Copy-paste the caption above and fill in the details manually. Title & hashtags are required.', 'error', statusMessage);
         }
       } catch (err) {
-        showStatus('Error fetching metadata: ' + err.message, 'error', statusMessage);
+        showStatus('⚠ Instagram blocked auto-fetch. Copy-paste the caption and fill in the details manually. Title & hashtags are required.', 'error', statusMessage);
       } finally {
         fetchMetadataBtn.textContent = 'Fetch';
         fetchMetadataBtn.disabled = false;
