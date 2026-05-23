@@ -368,7 +368,7 @@ app.put('/api/reel/:index', express.json(), (req, res) => {
   }
 });
 
-// Get all reels (filtered by scheduled publish time)
+// Get all reels (filtered by scheduled publish time for public view)
 app.get('/api/reels', (req, res) => {
   try {
     const reelsPath = path.join(__dirname, 'reels.json');
@@ -387,6 +387,20 @@ app.get('/api/reels', (req, res) => {
       return true;
     });
 
+    res.json(reels);
+  } catch (error) {
+    res.status(500).json({ error: 'Error reading reels' });
+  }
+});
+
+// Get all reels (admin - includes scheduled)
+app.get('/api/reels-admin', (req, res) => {
+  try {
+    const reelsPath = path.join(__dirname, 'reels.json');
+    if (!fs.existsSync(reelsPath)) {
+      return res.json([]);
+    }
+    const reels = JSON.parse(fs.readFileSync(reelsPath, 'utf8'));
     res.json(reels);
   } catch (error) {
     res.status(500).json({ error: 'Error reading reels' });

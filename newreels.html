@@ -842,7 +842,8 @@
 
     async function loadReels() {
       try {
-        const response = await fetch('/api/reels');
+        // Use admin endpoint to get all reels including scheduled ones
+        const response = await fetch('/api/reels-admin');
         if (!response.ok) {
           throw new Error(`API error: ${response.status} ${response.statusText}`);
         }
