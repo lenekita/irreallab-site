@@ -183,11 +183,20 @@ app.post('/api/upload-reel', upload.single('video'), async (req, res) => {
       return res.status(400).json({ error: 'No video file provided' });
     }
 
-    const { title, hashtags, url, scheduledDate } = req.body;
+    const { title, hashtags, url, scheduledDate, position } = req.body;
 
     if (!title || !hashtags) {
       fs.unlinkSync(req.file.path);
       return res.status(400).json({ error: 'Title and hashtags are required' });
+    }
+
+    // Validate position if provided
+    let insertPosition = 0; // Default to beginning
+    if (position !== undefined && position !== null) {
+      const pos = parseInt(position);
+      if (!isNaN(pos) && pos >= 0) {
+        insertPosition = pos;
+      }
     }
 
     // Check for duplicate video
@@ -265,17 +274,24 @@ app.post('/api/upload-reel', upload.single('video'), async (req, res) => {
       newReel.audio_url = `/audio/${audioFilename}`;
     }
 
-    // Add new reel to the beginning of the array (most recent first)
-    reels.unshift(newReel);
+    // Insert reel at specified position
+    if (insertPosition >= reels.length) {
+      // If position is beyond array length, add at end
+      reels.push(newReel);
+    } else {
+      // Insert at specified position
+      reels.splice(insertPosition, 0, newReel);
+    }
 
     // Save updated reels.json
     fs.writeFileSync(reelsPath, JSON.stringify(reels, null, 2));
 
     res.json({
       success: true,
-      message: `Reel uploaded ${scheduledDate ? 'and scheduled' : 'and published'} successfully${audioExtracted ? ' with audio' : ''}`,
+      message: `Reel uploaded ${scheduledDate ? 'and scheduled' : 'and published'} at position #${insertPosition + 1}${audioExtracted ? ' with audio' : ''}`,
       reel: newReel,
-      videoSize: fileSizeMB.toFixed(2)
+      videoSize: fileSizeMB.toFixed(2),
+      position: insertPosition + 1
     });
 
   } catch (error) {

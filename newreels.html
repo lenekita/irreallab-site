@@ -571,6 +571,14 @@
           </div>
 
           <div class="form-group">
+            <label for="reelPosition">Position in List (optional)</label>
+            <input type="number" id="reelPosition" name="reelPosition" min="1" placeholder="Leave empty for position #1">
+            <div class="format-info">
+              🔢 Enter position number (1 = first, 10 = tenth, etc). Leave empty to add at position #1.
+            </div>
+          </div>
+
+          <div class="form-group">
             <label for="scheduledDate">Publish Date & Time (optional)</label>
             <input type="datetime-local" id="scheduledDate" name="scheduledDate">
             <div class="format-info">
@@ -721,6 +729,7 @@
       const hashtags = document.getElementById('reelHashtags').value;
       const url = document.getElementById('reelUrl').value || 'https://www.instagram.com/irreallab/';
       const scheduledDate = document.getElementById('scheduledDate').value;
+      const position = document.getElementById('reelPosition').value;
 
       if (!videoFile) {
         showStatus('Please select a video file', 'error', statusMessage);
@@ -734,6 +743,9 @@
       formData.append('url', url);
       if (scheduledDate) {
         formData.append('scheduledDate', new Date(scheduledDate).toISOString());
+      }
+      if (position) {
+        formData.append('position', parseInt(position) - 1); // Convert to 0-based index
       }
 
       try {
