@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reels Archive — irreallab</title>
+  <meta name="description" content="Irreallab reels archive: surreal visual experiments, motion studies and cinematic AI-driven worlds.">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="192x192" href="/images/favicon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <meta property="og:title" content="Reels Archive — irreallab">
+  <meta property="og:description" content="Surreal visual experiments and short-form cinematic reels by irreallab.">
+  <meta property="og:image" content="https://irreallab.fr/preview.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
+  <style>
+    /* ── TOKENS ── */
+    :root {
+      --bg:      #060606;
+      --bg2:     #0d0d0d;
+      --line:    #1c1c1c;
+      --line2:   #242424;
+      --accent:  #d4f03a;
+      --text:    #ede9df;
+      --muted:   #4a4a4a;
+      --muted2:  #222;
+      --pad-x:   3.5rem;
+    }
+    @media (max-width: 900px) { :root { --pad-x: 1.5rem; } }
+    @media (max-width: 480px) { :root { --pad-x: 1.1rem; } }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Space Mono', monospace;
+      min-height: 100vh;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity: 0.035; pointer-events: none; z-index: 9999;
+    }
+
+    /* MARQUEE */
+    .marquee {
+      background: var(--accent);
+      overflow: hidden;
+      position: relative;
+      top: auto;
+      z-index: 200;
+      border-bottom: 1.5px solid #000;
+      transition: box-shadow .25s ease;
+    }
+    .marquee.is-sticky {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 100000;
+      box-shadow: 0 10px 30px rgba(0,0,0,.28);
+    }
+    .marquee-spacer { height: 0; pointer-events: none; }
+    .marquee-spacer.is-active { height: var(--marquee-height, 34px); }
+    .marquee-track {
+      display: inline-flex; white-space: nowrap;
+      animation: mscroll 22s linear infinite;
+    }
+    .marquee:hover .marquee-track { animation-play-state: paused; }
+    .marquee-item {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.9rem; letter-spacing: 0.15em;
+      color: #060606; text-decoration: none;
+      padding: 8px 24px; display: inline-block;
+      transition: opacity .2s;
+    }
+    .marquee-item:hover { opacity: 1; color: #ff0000; }
+    .marquee-dot { color: #06060650; padding: 8px 4px; font-size: .7rem; }
+    @keyframes mscroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* NAV */
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 var(--pad-x); height: 60px;
+      border-bottom: 1px solid var(--line);
+      position: relative; z-index: 100;
+    }
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem; letter-spacing: .04em;
+      color: var(--text); text-decoration: none;
+    }
+    .nav-logo em { color: var(--accent); font-style: normal; }
+    .nav-links { display: flex; gap: 2rem; align-items: center; }
+    .nav-links a {
+      font-size: .6rem; letter-spacing: .16em; text-transform: uppercase;
+      color: var(--muted); text-decoration: none; transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta { background: var(--accent) !important; color: #060606 !important; padding: 6px 14px; }
+    @media (max-width: 600px) { .nav-links .nav-hide { display: none; } }
+    @media (max-width: 420px) { .nav-links { gap: 1rem; } .nav-logo { font-size: 1.2rem; } }
+
+    nav.is-sticky {
+      position: fixed;
+      left: 0;
+      top: var(--marquee-height, 34px);
+      width: 100%;
+      z-index: 99999;
+      background: rgba(6,6,6,.82);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 14px 40px rgba(0,0,0,.34);
+    }
+
+    .nav-spacer {
+      height: 0;
+      pointer-events: none;
+    }
+
+    .nav-spacer.is-active {
+      height: var(--nav-height, 60px);
+    }
+
+    /* MAIN CONTENT */
+    main {
+      flex: 1;
+      padding: 4rem var(--pad-x) 3rem;
+    }
+
+    .head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 3rem;
+      margin-bottom: 3rem;
+      opacity: 0;
+      animation: fadeInUp .95s cubic-bezier(.16,1,.3,1) forwards;
+    }
+
+    .kicker {
+      font-size: .58rem;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: .4rem;
+    }
+
+    .title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(4.2rem, 8.5vw, 8rem);
+      line-height: .82;
+      letter-spacing: -.025em;
+      position: relative;
+      display: inline-block;
+      cursor: default;
+      color: var(--text);
+      text-shadow: 0 0 0 rgba(212,240,58,0);
+      transition: text-shadow .35s ease, filter .35s ease;
+      min-height: 1.64em;
+    }
+
+    .title span {
+      position: relative;
+      display: block;
+      color: var(--accent);
+      text-shadow: 0 0 10px rgba(212,240,58,.16), 0 0 22px rgba(212,240,58,.06);
+    }
+
+    .title span::after {
+      content: '_';
+      display: inline-block;
+      margin-left: .08em;
+      color: var(--accent);
+      animation: ir-more-title-blink .85s step-end infinite;
+      text-shadow: 0 0 10px rgba(212,240,58,.55), 0 0 24px rgba(212,240,58,.28), 0 0 44px rgba(212,240,58,.14);
+    }
+
+    .title:before {
+      content: attr(data-glitch);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      color: var(--accent);
+      opacity: 0;
+      pointer-events: none;
+      mix-blend-mode: screen;
+      transform: translateX(0);
+      clip-path: inset(0 0 72% 0);
+      white-space: pre;
+      line-height: inherit;
+    }
+
+    .title:hover {
+      filter: brightness(1.08);
+      text-shadow: 0 0 12px rgba(237,233,223,.10), 0 0 26px rgba(212,240,58,.16);
+    }
+
+    .title:hover:before {
+      animation: ir-more-title-electric .72s steps(2,end) both;
+    }
+
+    @keyframes ir-more-title-blink { 0%, 48% { opacity: 1; } 49%, 100% { opacity: 0; } }
+    @keyframes ir-more-title-electric { 0% { opacity:0; transform:translate(0,0); clip-path:inset(0 0 85% 0); } 12% { opacity:.85; transform:translate(-3px,-1px); clip-path:inset(8% 0 68% 0); } 24% { opacity:.35; transform:translate(4px,1px); clip-path:inset(46% 0 33% 0); } 36% { opacity:.75; transform:translate(-2px,0); clip-path:inset(22% 0 54% 0); } 48% { opacity:.18; transform:translate(3px,-1px); clip-path:inset(70% 0 12% 0); } 60% { opacity:.65; transform:translate(-1px,1px); clip-path:inset(34% 0 41% 0); } 100% { opacity:0; transform:translate(0,0); clip-path:inset(0 0 100% 0); } }
+
+    .intro {
+      font-family: 'Space Mono', 'Courier New', monospace !important;
+      font-style: normal !important;
+      font-weight: 400 !important;
+      letter-spacing: .035em !important;
+      text-transform: none !important;
+      font-size: clamp(.78rem, 1.15vw, 1rem) !important;
+      line-height: 1.7 !important;
+      color: rgba(237,233,223,.72) !important;
+      max-width: 520px !important;
+      margin-top: 1.2rem !important;
+      min-height: calc(1em * 1.7 * 3);
+      display: block !important;
+      white-space: normal !important;
+      overflow: visible !important;
+    }
+
+    .count {
+      font-size: .58rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: rgba(237,233,223,.45);
+      white-space: nowrap;
+    }
+
+    .grid {
+      width: min(1180px, 100%);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 2rem;
+      opacity: 0;
+      transform: translateY(42px) scale(.985);
+      animation: gridIn .95s cubic-bezier(.16,1,.3,1) forwards;
+      animation-delay: .16s;
+    }
+
+    @keyframes gridIn {
+      to { opacity: 1; transform: none; }
+    }
+
+    .card {
+      border: 1px solid rgba(237,233,223,.1);
+      background: rgba(8,8,8,.72);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      box-shadow: 0 24px 60px rgba(0,0,0,.28);
+      overflow: hidden;
+      transition: all .35s cubic-bezier(.16,1,.3,1);
+    }
+
+    .card:hover {
+      border-color: var(--accent);
+      box-shadow: 0 24px 80px rgba(212,240,58,.2);
+      transform: translateY(-4px);
+    }
+
+    .card-media {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #050505;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .card-media video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      background: #000;
+      display: block;
+    }
+
+    .card-media .instagram-media {
+      margin: 0 auto !important;
+      max-width: 100% !important;
+      min-width: auto !important;
+      width: 100% !important;
+      transform: scale(1) !important;
+      transform-origin: top center !important;
+      height: 100% !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+
+    .card-media .instagram-media-rendered {
+      max-width: 100% !important;
+      width: 100% !important;
+    }
+
+    .card-media .instagram-media-rendered iframe {
+      max-width: 100% !important;
+      width: 100% !important;
+      border: none !important;
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      align-items: center;
+      padding: 1rem 1.2rem;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.3rem;
+      color: rgba(212,240,58,.9);
+      line-height: 1;
+      text-shadow: 0 0 8px rgba(212,240,58,.10), 0 0 18px rgba(212,240,58,.05);
+    }
+
+    .tag {
+      font-size: .52rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      background: rgba(212,240,58,.1);
+      color: var(--accent);
+      padding: 4px 9px;
+    }
+
+    .info {
+      padding: .9rem;
+    }
+
+    .info h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem;
+      letter-spacing: .035em;
+      line-height: .95;
+      margin-bottom: .4rem;
+    }
+
+    .sub {
+      font-size: .5rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: .8rem;
+    }
+
+    .hashtags {
+      font-family: 'Space Mono', 'Courier New', monospace !important;
+      font-style: normal !important;
+      font-weight: 400 !important;
+      letter-spacing: .035em !important;
+      text-transform: none !important;
+      font-size: clamp(.78rem, 1.15vw, 1rem) !important;
+      line-height: 1.4 !important;
+      color: rgba(237,233,223,.72) !important;
+      margin-bottom: 1rem;
+      overflow-wrap: anywhere;
+    }
+
+    .open {
+      display: inline-block;
+      color: var(--accent);
+      font-size: .58rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-bottom: 1px solid var(--accent);
+      padding-bottom: 2px;
+    }
+
+    /* FOOTER */
+    footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.8rem var(--pad-x);
+      flex-wrap: wrap;
+      gap: 1rem;
+      border-top: 1px solid var(--line);
+      background: var(--bg);
+      margin-top: auto;
+    }
+
+    .footer-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.2rem;
+      letter-spacing: .04em;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .footer-logo .footer-irreal {
+      position: relative;
+      display: inline-block;
+      animation: footerIrrealBlink 2.2s infinite;
+      will-change: opacity, text-shadow;
+    }
+
+    .footer-logo em {
+      color: var(--accent);
+      font-style: normal;
+    }
+
+    @keyframes footerIrrealBlink {
+      0%, 74%, 100% {
+        color: inherit;
+        opacity: 1;
+        text-shadow: none;
+      }
+      76% {
+        color: var(--accent);
+        opacity: 1;
+        text-shadow: 0 0 4px rgba(212,240,58,.45), 0 0 10px rgba(212,240,58,.22), 0 0 18px rgba(212,240,58,.12);
+      }
+      78% {
+        color: inherit;
+        text-shadow: none;
+      }
+      80% {
+        color: var(--accent);
+        opacity: 1;
+        text-shadow: 0 0 5px rgba(212,240,58,.55), 0 0 12px rgba(212,240,58,.28), 0 0 20px rgba(212,240,58,.16);
+      }
+      82% {
+        color: inherit;
+        text-shadow: none;
+      }
+      84% {
+        color: var(--accent);
+        opacity: 1;
+        text-shadow: 0 0 4px rgba(212,240,58,.42), 0 0 10px rgba(212,240,58,.20);
+      }
+    }
+
+    .footer-right {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .footer-link {
+      font-size: .6rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color .2s;
+    }
+
+    .footer-link:hover {
+      color: var(--text);
+    }
+
+    .footer-copyright {
+      width: 100%;
+      margin-top: .8rem;
+      font-size: .58rem;
+      letter-spacing: .08em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 900px) {
+      .head { display: block; }
+      .intro { margin-top: 1.3rem; }
+      .count { display: block; margin-top: 1rem; }
+      .grid { grid-template-columns: 1fr; gap: 1.4rem; }
+    }
+
+    @media (max-width: 600px) {
+      .nav-links { gap: 1rem; }
+      .nav-logo { font-size: 1.2rem; }
+      .title { font-size: clamp(3.8rem, 17vw, 6rem); }
+    }
+
+    .ir-typewriter {
+      position: relative;
+      white-space: nowrap !important;
+      overflow: hidden;
+      display: inline-block;
+      max-width: 100%;
+      vertical-align: bottom;
+    }
+
+    .intro.ir-typewriter {
+      display: block !important;
+      white-space: normal !important;
+      overflow: visible !important;
+    }
+    .ir-typewriter::after {
+      content: '_';
+      display: inline-block;
+      margin-left: .12em;
+      color: var(--accent);
+      text-shadow: 0 0 8px rgba(212,240,58,.55), 0 0 22px rgba(212,240,58,.22);
+      animation: ir-typewriter-cursor .8s step-end infinite;
+    }
+    .ir-typewriter.is-done::after { opacity: .75; }
+    @keyframes ir-typewriter-cursor { 0%, 48% { opacity: 1; } 49%, 100% { opacity: 0; } }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ir-typewriter::after, .title span::after { display: none; }
+      .head, .grid { opacity: 1; transform: none; }
+      .title span::after { display: none; }
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      html,
+      body,
+      a,
+      button,
+      .reel-row,
+      .audio-toggle,
+      .intro-enter { cursor: none !important; }
+      .ir-cursor, .ir-cursor-trail {
+        position: fixed;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+        border-radius: 50%;
+        transform: translate3d(-100px, -100px, 0) translate(-50%, -50%);
+        z-index: 2147483647;
+        will-change: transform, width, height, opacity;
+      }
+      .ir-cursor {
+        width: 13px;
+        height: 13px;
+        background: var(--accent);
+        box-shadow: 0 0 10px rgba(212,240,58,.55), 0 0 24px rgba(212,240,58,.22);
+      }
+      .ir-cursor-trail {
+        width: 42px;
+        height: 42px;
+        border: 1px solid rgba(212,240,58,.42);
+        background: rgba(212,240,58,.035);
+        backdrop-filter: blur(2px);
+        -webkit-backdrop-filter: blur(2px);
+        transition: width .18s ease, height .18s ease, border-color .18s ease, background .18s ease;
+      }
+      body.ir-cursor-hover .ir-cursor {
+        width: 20px;
+        height: 20px;
+      }
+      body.ir-cursor-hover .ir-cursor-trail {
+        width: 58px;
+        height: 58px;
+        border-color: rgba(212,240,58,.75);
+        background: rgba(212,240,58,.06);
+      }
+      body.ir-cursor-hidden .ir-cursor, body.ir-cursor-hidden .ir-cursor-trail {
+        opacity: 0;
+      }
+    }
+    @media (hover: none), (pointer: coarse) {
+      .ir-cursor, .ir-cursor-trail { display: none !important; }
+    }
+
+
+    /* REELS PAGE PATCH — aligned with main.html visual system */
+    .footer-irreal {
+      position: relative;
+      display: inline-block;
+      animation: footerIrrealBlink 2.2s infinite;
+      will-change: opacity, text-shadow;
+    }
+
+    .reels-page {
+      flex: 1;
+      min-height: 100vh;
+      position: relative;
+      padding: clamp(4.5rem, 8vw, 7rem) 0 clamp(5rem, 8vw, 7rem);
+      border-bottom: 1px solid var(--line);
+      background:
+        radial-gradient(circle at 85% 12%, rgba(212,240,58,.12), transparent 24%),
+        radial-gradient(circle at 12% 72%, rgba(237,233,223,.045), transparent 28%),
+        linear-gradient(180deg, #060606 0%, #0b0b0b 48%, #060606 100%);
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    .reels-page::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+      background:
+        linear-gradient(90deg, rgba(212,240,58,.06) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(255,255,255,.025) 1px, transparent 1px);
+      background-size: 82px 82px;
+      mask-image: radial-gradient(circle at 50% 38%, black, transparent 72%);
+      -webkit-mask-image: radial-gradient(circle at 50% 38%, black, transparent 72%);
+      opacity: .45;
+    }
+
+    .reels-page::after {
+      content: 'REELS ARCHIVE';
+      position: absolute;
+      right: var(--pad-x);
+      top: clamp(2rem, 4vw, 3.3rem);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(4rem, 12vw, 13rem);
+      line-height: .8;
+      letter-spacing: -.03em;
+      color: rgba(255,255,255,.018);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .reels-page .head {
+      width: min(1180px, calc(100% - var(--pad-x) * 2));
+      margin: 0 auto clamp(2rem, 4vw, 3.5rem);
+      padding: 0 0 2rem;
+      border-bottom: 1px solid rgba(212,240,58,.18);
+      align-items: flex-end;
+    }
+
+    .reels-page .kicker {
+      font-size: .58rem;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: .8rem;
+      margin-bottom: 1rem;
+    }
+
+    .reels-page .kicker::before {
+      content: '';
+      width: 28px;
+      height: 1px;
+      background: var(--muted);
+      flex-shrink: 0;
+    }
+
+    .reels-page .title {
+      font-size: clamp(4.8rem, 11vw, 9.5rem);
+      line-height: .78;
+      letter-spacing: -.01em;
+      min-height: auto;
+      text-transform: uppercase;
+    }
+
+    .reels-page .title span {
+      display: inline-block;
+      color: var(--accent);
+    }
+
+    .reels-page .intro {
+      max-width: 560px !important;
+      color: rgba(237,233,223,.72) !important;
+    }
+
+    .reels-page .count {
+      color: rgba(237,233,223,.45);
+      font-size: .56rem;
+    }
+
+    .reels-page .grid {
+      width: min(1180px, calc(100% - var(--pad-x) * 2));
+      border: 1px solid rgba(237,233,223,.1);
+      background: rgba(8,8,8,.72);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      box-shadow: 0 36px 90px rgba(0,0,0,.38);
+      padding: clamp(1rem, 2vw, 1.4rem);
+      gap: clamp(1rem, 2vw, 1.4rem);
+    }
+
+    .reels-page .card {
+      background: linear-gradient(180deg, rgba(255,255,255,.028), rgba(255,255,255,.01)), rgba(6,6,6,.78);
+      border-color: rgba(237,233,223,.105);
+      box-shadow: none;
+    }
+
+    .reels-page .card:hover {
+      border-color: rgba(212,240,58,.72);
+      box-shadow: 0 24px 80px rgba(212,240,58,.13);
+    }
+
+    .reels-page .info h2 {
+      font-size: clamp(1.45rem, 2.3vw, 2.35rem);
+      letter-spacing: .035em;
+    }
+
+    .reels-page .sub {
+      font-family:'Satoshi','Inter',sans-serif !important;
+      font-weight:600 !important;
+      letter-spacing:.08em !important;
+      text-transform:uppercase !important;
+      color:rgba(237,233,223,.55) !important;
+    }
+
+    .reels-page .hashtags {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1rem;
+      line-height: 1.55;
+      color: rgba(237,233,223,.6);
+    }
+
+    .reels-page .open {
+      font-size: .58rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid var(--accent);
+      padding-bottom: 1px;
+      transition: opacity .2s;
+    }
+
+    .reels-page .open:hover { opacity: .6; }
+
+    @media (max-width: 900px) {
+      .reels-page .head {
+        display: block;
+        width: calc(100% - var(--pad-x) * 2);
+      }
+      .reels-page .count { margin-top: 1.3rem; display: block; }
+      .reels-page .grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 600px) {
+      .reels-page { padding-top: 4rem; }
+      .reels-page .title { font-size: clamp(4.2rem, 23vw, 7.4rem); }
+      .reels-page .grid { width: calc(100% - 1rem); padding: .55rem; }
+    }
+
+  
+    /* Visible title + paragraphs under title, matched to main page */
+    .reels-page .head.section-head {
+      width: min(1180px, calc(100% - var(--pad-x) * 2));
+      margin: 0 auto 3.2rem;
+      padding: clamp(3.8rem, 7vw, 6.2rem) 0 2.4rem;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 3rem;
+      border-bottom: 1px solid rgba(212,240,58,.18);
+    }
+
+    .reels-page .head.section-head > div:first-child {
+      max-width: 760px;
+    }
+
+    .reels-page .kicker {
+      font-size: .58rem;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: .8rem;
+      margin-bottom: 1.4rem;
+    }
+
+    .reels-page .kicker::before {
+      content: '';
+      width: 28px;
+      height: 1px;
+      background: var(--muted);
+      flex-shrink: 0;
+    }
+
+    .reels-page .title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(4.8rem, 9.5vw, 9rem);
+      line-height: .86;
+      letter-spacing: -.01em;
+      color: var(--text);
+      position: relative;
+      display: inline-block;
+      cursor: default;
+      text-transform: uppercase;
+    }
+
+    .reels-page .title span {
+      color: var(--accent);
+      display: block;
+      font-style: normal;
+      text-shadow: 0 0 10px rgba(212,240,58,.16), 0 0 22px rgba(212,240,58,.06);
+    }
+
+    .reels-page .title span::after {
+      content: "_";
+      display: inline-block;
+      margin-left: .08em;
+      color: var(--accent);
+      animation: ir-more-title-blink .85s step-end infinite;
+      text-shadow: 0 0 10px rgba(212,240,58,.55), 0 0 24px rgba(212,240,58,.28), 0 0 44px rgba(212,240,58,.14);
+    }
+
+    .reels-page .hero-sub {
+      font-family: 'Space Mono', 'Courier New', monospace !important;
+      font-style: normal !important;
+      font-size: 1rem !important;
+      line-height: 1.7 !important;
+      color: var(--muted) !important;
+      max-width: 560px !important;
+      margin-top: 1.2rem !important;
+      min-height: auto !important;
+      font-weight: 400 !important;
+      letter-spacing: .035em !important;
+      text-transform: none !important;
+      display: block !important;
+      white-space: normal !important;
+      overflow: visible !important;
+    }
+
+    .reels-page .ir-typewriter-second {
+      margin-top: .2rem !important;
+    }
+
+    @media (max-width: 900px) {
+      .reels-page .head.section-head {
+        width: calc(100% - var(--pad-x) * 2);
+        padding-top: 4rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.4rem;
+      }
+
+      .reels-page .title {
+        font-size: clamp(4.8rem, 23vw, 7.4rem);
+        line-height: .78;
+      }
+
+      .reels-page .hero-sub {
+        max-width: 86vw !important;
+      }
+    }
+
+
+    /* HEADER TEXT FIX ONLY — does not affect reels/videos/audio */
+    .reels-page .head.section-head {
+      opacity: 1 !important;
+      visibility: visible !important;
+      transform: none !important;
+      display: flex !important;
+      align-items: flex-end !important;
+      justify-content: space-between !important;
+      gap: 3rem !important;
+      width: min(1180px, calc(100% - var(--pad-x) * 2)) !important;
+      margin: 0 auto 3rem !important;
+      padding: clamp(4rem, 7vw, 6rem) 0 2.4rem !important;
+      border-bottom: 1px solid rgba(212,240,58,.18) !important;
+    }
+
+    .reels-page .title {
+      opacity: 1 !important;
+      visibility: visible !important;
+      display: inline-block !important;
+      color: var(--text) !important;
+      font-family: 'Bebas Neue', sans-serif !important;
+      font-size: clamp(4.8rem, 9.5vw, 9rem) !important;
+      line-height: .86 !important;
+      letter-spacing: -.01em !important;
+      text-transform: uppercase !important;
+      min-height: 0 !important;
+      margin: 0 !important;
+    }
+
+    .reels-page .title span {
+      display: block !important;
+      color: var(--accent) !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+    }
+
+    .reels-page .intro.ir-typewriter {
+      opacity: 1 !important;
+      visibility: visible !important;
+      display: block !important;
+      max-width: 620px !important;
+      min-height: auto !important;
+      margin-top: 1.1rem !important;
+      font-family: 'Space Mono','Courier New',monospace !important;
+      font-size: clamp(.82rem, 1.1vw, 1rem) !important;
+      line-height: 1.7 !important;
+      letter-spacing: .035em !important;
+      color: rgba(237,233,223,.68) !important;
+      white-space: normal !important;
+      overflow: visible !important;
+      text-transform: none !important;
+    }
+
+    .reels-page .intro-second {
+      margin-top: .25rem !important;
+      color: rgba(237,233,223,.54) !important;
+    }
+
+    @media (max-width: 900px) {
+      .reels-page .head.section-head {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+      }
+
+      .reels-page .title {
+        font-size: clamp(4.8rem, 23vw, 7.4rem) !important;
+        line-height: .78 !important;
+      }
+    }
+
+</style>
+</head>
+<body>
+  <!-- MARQUEE -->
+  <div id="marquee-spacer" class="marquee-spacer" aria-hidden="true"></div>
+  <div id="site-content" class="marquee">
+    <div class="marquee-track">
+      <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="marquee-item">@irreallab on Instagram</a>
+      <span class="marquee-dot">✦</span>
+      <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="marquee-item">Visual Experiments</a>
+      <span class="marquee-dot">✦</span>
+      <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="marquee-item">Follow on Instagram</a>
+      <span class="marquee-dot">✦</span>
+      <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="marquee-item">Short-form / Reels</a>
+      <span class="marquee-dot">✦</span>
+      <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="marquee-item">@irreallab</a>
+      <span class="marquee-dot">✦</span>
+      <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="marquee-item">New Reels Every Week</a>
+      <span class="marquee-dot">✦</span>
+      <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="marquee-item">@irreallab on Instagram</a>
+      <span class="marquee-dot">✦</span>
+      <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="marquee-item">Visual Experiments</a>
+      <span class="marquee-dot">✦</span>
+      <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="marquee-item">Follow on Instagram</a>
+      <span class="marquee-dot">✦</span>
+      <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="marquee-item">Short-form / Reels</a>
+      <span class="marquee-dot">✦</span>
+      <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="marquee-item">@irreallab</a>
+      <span class="marquee-dot">✦</span>
+      <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="marquee-item">New Reels Every Week</a>
+      <span class="marquee-dot">✦</span>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <div id="nav-spacer" class="nav-spacer" aria-hidden="true"></div>
+  <nav id="main-nav">
+    <a href="/main.html" class="nav-logo"><span class="footer-irreal">irreal</span><em>lab_</em></a>
+    <div class="nav-links">
+      <a href="/main.html">Home</a>
+      <a href="reels.html">Reels</a>
+      <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="nav-hide">About</a>
+      <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="nav-cta">↗ Instagram</a>
+    </div>
+  </nav>
+
+  <main class="reels-page">
+    <div class="head section-head">
+      <div>
+        <div class="kicker">Archive / Motion / Visual experiments</div>
+
+        <h1 class="title" data-glitch="MORE&#10;REELS">
+          MORE
+          <span>REELS</span>
+        </h1>
+
+        <div class="intro ir-typewriter" data-typewriter-text="Visual experiments in short-form. Motion, surrealism &amp; the art of the unreal.">
+          Visual experiments in short-form. Motion, surrealism &amp; the art of the unreal.
+        </div>
+
+        <div class="intro ir-typewriter intro-second" data-typewriter-text="Every week, a new experiment. Follow @irreallab to never miss a reel.">
+          Every week, a new experiment. Follow @irreallab to never miss a reel.
+        </div>
+      </div>
+
+      <div class="count">Curated archive / cinematic fragments</div>
+    </div>
+    <div class="grid reel-list"></div>
+  </main>
+
+  <footer>
+    <div class="footer-logo"><span class="footer-irreal">irreal</span><em>lab_</em></div>
+    <div class="footer-right">
+      <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="footer-link">Instagram ↗</a>
+      <span class="footer-link" style="cursor:default;">© 2025 irreallab</span>
+    </div>
+
+    <p class="footer-copyright" style="width:100%;margin-top:.8rem;font-size:.58rem;letter-spacing:.08em;color:var(--muted);text-transform:uppercase;">
+      © irreallab — Radu Nechita (Instagram) · Site rédaction : © Hélène Nechita · Tous droits réservés.
+    </p>
+
+  </footer>
+
+  <script>
+    (function() {
+      'use strict';
+
+      const grid = document.querySelector('.grid');
+      const count = document.querySelector('.count');
+      const esc = s => (new DOMParser).parseFromString(s,'text/html').body.innerText;
+
+      function render(reels) {
+        grid.innerHTML = reels.map((r, i) => {
+          const embedHtml = r.video_url && r.video_url.trim()
+            ? `<video src="${esc(r.video_url)}" poster="${esc(r.thumbnail_url)}" muted playsinline style="width:100%;height:100%;object-fit:cover;border-radius:0;"></video>`
+            : `<blockquote class="instagram-media" data-instgrm-permalink="${esc(r.url)}" data-instgrm-version="14" style="background:#FFF;border:0;border-radius:0;box-shadow:none;margin:0;max-width:540px;min-width:326px;padding:0;width:100%;"></blockquote>`;
+
+          return `<article class="card" ${r.audio_url ? `data-audio-url="${esc(r.audio_url)}"` : ''}>
+            <div class="card-media">${embedHtml}</div>
+            <div class="card-top"><div class="num">${String(i+1).padStart(2,'0')}</div><div class="tag">${esc(r.status||'Live')}</div></div>
+            <div class="info">
+              <h2>${esc(r.title)}</h2>
+              <div class="sub">${esc(r.subtitle||'@irreallab · Watch on Instagram')}</div>
+              <p class="hashtags">${esc(r.hashtags)}</p>
+              <a class="open" href="${esc(r.url)}" target="_blank" rel="noopener">Open reel ↗</a>
+            </div>
+          </article>`;
+        }).join('');
+
+        count.textContent = String(reels.length).padStart(2,'0') + ' live reels';
+
+        if (window.instgrm && window.instgrm.Embeds) {
+          window.instgrm.Embeds.process();
+        }
+
+        // Initialize video controls with audio
+        setTimeout(() => {
+          const cards = document.querySelectorAll('.card');
+          cards.forEach((card) => {
+            const video = card.querySelector('video');
+            const audioUrl = card.getAttribute('data-audio-url');
+
+            if (video) {
+              let audio = null;
+              if (audioUrl) {
+                audio = new Audio(audioUrl);
+                audio.preload = 'auto';
+              }
+
+              card.addEventListener('mouseenter', () => {
+                if (video) {
+                  video.currentTime = 0;
+                  const playPromise = video.play();
+                  if (playPromise !== undefined) {
+                    playPromise.catch(() => {});
+                  }
+                }
+                if (audio) {
+                  audio.currentTime = 0;
+                  audio.play().catch(() => {});
+                }
+              });
+
+              card.addEventListener('mouseleave', () => {
+                if (video) video.pause();
+                if (audio) {
+                  audio.pause();
+                  audio.currentTime = 0;
+                }
+              });
+
+              card.addEventListener('click', () => {
+                if (video.paused) {
+                  video.currentTime = 0;
+                  const playPromise = video.play();
+                  if (playPromise !== undefined) {
+                    playPromise.catch(() => {});
+                  }
+                  if (audio) {
+                    audio.currentTime = 0;
+                    audio.play().catch(() => {});
+                  }
+                } else {
+                  video.pause();
+                  if (audio) {
+                    audio.pause();
+                    audio.currentTime = 0;
+                  }
+                }
+              });
+            }
+          });
+        }, 100);
+      }
+
+      function loadReels() {
+        fetch('reels.json', { cache: 'no-store' })
+          .then(r => r.json())
+          .then(render)
+          .catch(() => {
+            count.textContent = 'Unable to load reels.json';
+          });
+      }
+
+      // Sticky marquee and nav
+      function updateSticky() {
+        const marquee = document.getElementById('site-content');
+        const marqueespacer = document.getElementById('marquee-spacer');
+        const nav = document.getElementById('main-nav');
+        const navSpacer = document.getElementById('nav-spacer');
+
+        const marqueeHeight = marquee.offsetHeight;
+        const navHeight = nav.offsetHeight;
+
+        document.documentElement.style.setProperty('--marquee-height', marqueeHeight + 'px');
+        document.documentElement.style.setProperty('--nav-height', navHeight + 'px');
+
+        if (window.scrollY > 0) {
+          marquee.classList.add('is-sticky');
+          marqueespacer.classList.add('is-active');
+        } else {
+          marquee.classList.remove('is-sticky');
+          marqueespacer.classList.remove('is-active');
+        }
+
+        if (window.scrollY > marqueeHeight) {
+          nav.classList.add('is-sticky');
+          navSpacer.classList.add('is-active');
+        } else {
+          nav.classList.remove('is-sticky');
+          navSpacer.classList.remove('is-active');
+        }
+      }
+
+      window.addEventListener('scroll', updateSticky, { passive: true });
+      window.addEventListener('resize', updateSticky);
+      updateSticky();
+
+      loadReels();
+    })();
+  </script>
+
+  <div class="ir-cursor" aria-hidden="true"></div>
+  <div class="ir-cursor-trail" aria-hidden="true"></div>
+
+  <!-- Instagram embed script -->
+  <script async src="https://www.instagram.com/embed.js"></script>
+  <script src="animations2.js" defer></script>
+</body>
+</html>

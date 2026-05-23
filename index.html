@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>irreallab — surreal visual experiments</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="192x192" href="/images/favicon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <meta name="description" content="Visual experiments in short-form. Motion, surrealism & the art of the unreal.">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #060606;
+      --accent: #d4f03a;
+      --text: #ede9df;
+      --muted: #4a4a4a;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Space Mono', monospace;
+      height: 100vh;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: auto;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at 20% 50%, rgba(212,240,58,.15) 0%, transparent 40%),
+                  radial-gradient(circle at 80% 80%, rgba(212,240,58,.08) 0%, transparent 50%),
+                  linear-gradient(135deg, #060606 0%, #0a0a0a 50%, #060606 100%);
+      z-index: 0;
+      animation: gradientShift 12s ease-in-out infinite;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity: 0.04;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    @keyframes gradientShift {
+      0%, 100% { filter: brightness(1); }
+      50% { filter: brightness(1.08); }
+    }
+
+    .intro-shell {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3rem;
+      padding: 2rem;
+      width: 100%;
+      height: 100vh;
+      opacity: 0;
+      animation: fadeInUp 1.2s cubic-bezier(.16,1,.3,1) forwards;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(48px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .intro-label {
+      font-size: .58rem;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .8rem;
+    }
+
+    .intro-label::before,
+    .intro-label::after {
+      content: '';
+      width: 24px;
+      height: 1px;
+      background: var(--muted);
+    }
+
+    .intro-brand {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3.5rem, 12vw, 9rem);
+      line-height: .86;
+      letter-spacing: -.02em;
+      position: relative;
+      display: inline-block;
+      cursor: default;
+      color: var(--text);
+      text-shadow: 0 0 20px rgba(212,240,58,.16), 0 0 44px rgba(212,240,58,.08);
+      transition: text-shadow .35s ease, filter .35s ease;
+      white-space: nowrap;
+      text-transform: uppercase;
+    }
+
+    .intro-brand span {
+      display: block;
+      color: var(--accent);
+      text-shadow: 0 0 10px rgba(212,240,58,.16), 0 0 22px rgba(212,240,58,.06);
+    }
+
+    .intro-brand::before {
+      content: "Irreal\A Lab";
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      color: var(--accent);
+      opacity: 0;
+      pointer-events: none;
+      mix-blend-mode: screen;
+      transform: translateX(0);
+      clip-path: inset(0 0 72% 0);
+      white-space: pre;
+      line-height: inherit;
+    }
+
+    .intro-brand:hover {
+      color: var(--text);
+      filter: brightness(1.08);
+      text-shadow: 0 0 12px rgba(237,233,223,.10), 0 0 26px rgba(212,240,58,.16);
+    }
+
+    .intro-brand:hover span {
+      color: var(--accent);
+    }
+
+    .intro-brand:hover::before {
+      animation: ir-intro-electric .72s steps(2,end) both;
+    }
+
+    @keyframes ir-intro-electric {
+      0% { opacity:0; transform:translate(0,0); clip-path:inset(0 0 85% 0); }
+      12% { opacity:.85; transform:translate(-3px,-1px); clip-path:inset(8% 0 68% 0); }
+      24% { opacity:.35; transform:translate(4px,1px); clip-path:inset(46% 0 33% 0); }
+      36% { opacity:.75; transform:translate(-2px,0); clip-path:inset(22% 0 54% 0); }
+      48% { opacity:.18; transform:translate(3px,-1px); clip-path:inset(70% 0 12% 0); }
+      60% { opacity:.65; transform:translate(-1px,1px); clip-path:inset(34% 0 41% 0); }
+      100% { opacity:0; transform:translate(0,0); clip-path:inset(0 0 100% 0); }
+    }
+
+    .intro-tagline {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(1.1rem, 3vw, 1.8rem);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: rgba(212,240,58,.85);
+      text-shadow: 0 0 8px rgba(212,240,58,.35);
+      line-height: 1.4;
+      animation-delay: .2s;
+    }
+
+    .intro-cta {
+      margin-top: 1.5rem;
+      opacity: 0;
+      animation: fadeInUp 1.2s cubic-bezier(.16,1,.3,1) forwards .4s;
+    }
+
+    .intro-btn {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: #060606;
+      background: var(--accent);
+      text-decoration: none;
+      padding: 16px 48px;
+      display: inline-block;
+      transition: all .3s cubic-bezier(.16,1,.3,1);
+      position: relative;
+      overflow: hidden;
+      border: 2px solid var(--accent);
+      cursor: pointer;
+    }
+
+    .intro-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: #060606;
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform .35s cubic-bezier(.16,1,.3,1);
+      z-index: -1;
+    }
+
+    .intro-btn:hover::before {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+
+    .intro-btn:hover {
+      color: var(--accent);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(212,240,58,.25);
+    }
+
+    .intro-footer {
+      position: absolute;
+      bottom: 2rem;
+      font-size: .58rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      z-index: 10;
+    }
+
+    .intro-footer a {
+      color: rgba(212,240,58,.75);
+      text-decoration: none;
+      transition: color .2s;
+    }
+
+    .intro-footer a:hover {
+      color: var(--accent);
+    }
+
+    @media (max-width: 480px) {
+      .intro-shell {
+        gap: 2rem;
+      }
+      .intro-brand {
+        font-size: clamp(2.8rem, 20vw, 5rem);
+      }
+      .intro-label::before,
+      .intro-label::after {
+        width: 12px;
+      }
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      html,
+      body,
+      a,
+      button,
+      .reel-row,
+      .audio-toggle,
+      .intro-enter { cursor: none !important; }
+      .ir-cursor, .ir-cursor-trail {
+        position: fixed;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+        border-radius: 50%;
+        transform: translate3d(-100px, -100px, 0) translate(-50%, -50%);
+        z-index: 2147483647;
+        will-change: transform, width, height, opacity;
+      }
+      .ir-cursor {
+        width: 13px;
+        height: 13px;
+        background: var(--accent);
+        box-shadow: 0 0 10px rgba(212,240,58,.55), 0 0 24px rgba(212,240,58,.22);
+      }
+      .ir-cursor-trail {
+        width: 42px;
+        height: 42px;
+        border: 1px solid rgba(212,240,58,.42);
+        background: rgba(212,240,58,.035);
+        backdrop-filter: blur(2px);
+        -webkit-backdrop-filter: blur(2px);
+        transition: width .18s ease, height .18s ease, border-color .18s ease, background .18s ease;
+      }
+      body.ir-cursor-hover .ir-cursor {
+        width: 20px;
+        height: 20px;
+      }
+      body.ir-cursor-hover .ir-cursor-trail {
+        width: 58px;
+        height: 58px;
+        border-color: rgba(212,240,58,.75);
+        background: rgba(212,240,58,.06);
+      }
+      body.ir-cursor-hidden .ir-cursor, body.ir-cursor-hidden .ir-cursor-trail {
+        opacity: 0;
+      }
+    }
+    @media (hover: none), (pointer: coarse) {
+      .ir-cursor, .ir-cursor-trail { display: none !important; }
+    }
+
+    #canvas-3d {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      display: block;
+      z-index: 1;
+    }
+
+    #scroll-container {
+      position: relative;
+      width: 100%;
+      height: 800vh;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .intro-shell {
+      position: relative !important;
+      z-index: 10 !important;
+      text-align: center !important;
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 3rem !important;
+      padding: 2rem !important;
+      width: 100% !important;
+      height: 100vh !important;
+      min-height: 100vh !important;
+      opacity: 0;
+      animation: fadeInUp 1.2s cubic-bezier(.16,1,.3,1) forwards;
+    }
+
+    #canvas-3d {
+      display: none;
+    }
+
+    #scroll-container {
+      display: none;
+    }
+
+    .intro-footer {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: .58rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      z-index: 100;
+      pointer-events: auto;
+    }
+
+    .intro-footer a {
+      color: rgba(212,240,58,.75);
+      text-decoration: none;
+      transition: color .2s;
+    }
+
+    .intro-footer a:hover {
+      color: var(--accent);
+    }
+  </style>
+  <link rel="stylesheet" href="/styles/site-chrome.css">
+</head>
+<body>
+  <!-- 3D Canvas for scroll animation -->
+  <canvas id="canvas-3d"></canvas>
+
+  <!-- Invisible scroll container for tracking scroll progress -->
+  <div id="scroll-container"></div>
+
+  <!-- Legacy intro content (hidden by CSS) -->
+  <div class="intro-shell">
+    <div class="intro-label">Visual Experiments</div>
+    <div>
+      <h1 class="intro-brand"><span>irreallab</span></h1>
+      <div class="intro-tagline">Surreal worlds in motion</div>
+    </div>
+    <div class="intro-cta">
+      <a href="/main.html" class="intro-btn">Enter ↗</a>
+    </div>
+  </div>
+
+  <!-- Fixed footer with Instagram link -->
+  <div class="intro-footer">
+    <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener">Follow on Instagram ↗</a>
+  </div>
+
+  <!-- Custom cursor elements -->
+  <div class="ir-cursor" aria-hidden="true"></div>
+  <div class="ir-cursor-trail" aria-hidden="true"></div>
+
+  <!-- Three.js library - load synchronously before other scripts -->
+  <script src="/three.min.js"></script>
+
+  <!-- 3D Scroll Intro Script - defer until after Three.js loads -->
+  <script defer src="scroll-3d-intro.js"></script>
+
+  <!-- Custom Cursor and other animations -->
+  <script src="animations2.js" defer></script>
+</body>
+</html>
