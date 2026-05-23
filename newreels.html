@@ -569,7 +569,7 @@
             </div>
             <video id="videoPreview" class="video-preview"></video>
             <div class="format-info">
-              📱 <strong>Format Required:</strong> 9:16 vertical (portrait) like Instagram Reels. MP4 recommended. Auto-compressed for all videos. Max 100MB.
+              📱 <strong>Format Required:</strong> 9:16 vertical (portrait) like Instagram Reels. MP4 recommended. Auto-compressed for all videos. Max 50MB.
             </div>
           </div>
 
@@ -870,7 +870,19 @@
         xhr.addEventListener('load', () => {
           console.log('✅ Response received:', xhr.status, xhr.responseText);
           uploadProgress.style.display = 'none';
-          const data = JSON.parse(xhr.responseText);
+
+          if (xhr.status === 413) {
+            showStatus('❌ File too large. Maximum 50MB. Compress your video before uploading.', 'error', statusMessage);
+            return;
+          }
+
+          let data;
+          try {
+            data = JSON.parse(xhr.responseText);
+          } catch (e) {
+            showStatus('❌ Server error. Please try again.', 'error', statusMessage);
+            return;
+          }
 
           if (xhr.status >= 200 && xhr.status < 300) {
             const message = scheduledDate
