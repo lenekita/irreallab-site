@@ -42,7 +42,7 @@ const upload = multer({
     }
   },
   limits: {
-    fileSize: 500 * 1024 * 1024 // 500MB limit
+    fileSize: 100 * 1024 * 1024 // 100MB limit (Cloudflare max)
   }
 });
 
