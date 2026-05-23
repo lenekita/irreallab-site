@@ -516,6 +516,10 @@
         </div>
         <button type="submit" style="width: 100%; margin-top: 1rem;">Access Admin Panel</button>
         <div id="loginError" class="status-message error"></div>
+        <div class="form-group" style="margin-top: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+          <input type="checkbox" id="rememberMe" style="width: auto; cursor: pointer;">
+          <label for="rememberMe" style="margin: 0; cursor: pointer; color: var(--muted); font-size: .85rem;">Remember me for 30 days</label>
+        </div>
       </form>
     </div>
   </main>
@@ -664,6 +668,53 @@
     let allReels = [];
     let editingReelIndex = null;
 
+    // Session management
+    function saveSession(rememberMe) {
+      const expirationDate = new Date();
+      expirationDate.setDate(expirationDate.getDate() + (rememberMe ? 30 : 0)); // 30 days if remember me, else session only
+
+      const sessionData = {
+        id: VALID_ID,
+        timestamp: new Date().getTime(),
+        expiration: expirationDate.getTime()
+      };
+
+      localStorage.setItem('irreallab_admin_session', JSON.stringify(sessionData));
+    }
+
+    function getSession() {
+      const sessionData = localStorage.getItem('irreallab_admin_session');
+      if (!sessionData) return null;
+
+      try {
+        const session = JSON.parse(sessionData);
+        const now = new Date().getTime();
+
+        if (now > session.expiration) {
+          localStorage.removeItem('irreallab_admin_session');
+          return null;
+        }
+
+        return session;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function clearSession() {
+      localStorage.removeItem('irreallab_admin_session');
+    }
+
+    // Check for existing session on page load
+    function checkExistingSession() {
+      const session = getSession();
+      if (session && session.id === VALID_ID) {
+        loginSuccess();
+        document.getElementById('userId').value = '';
+        document.getElementById('userPassword').value = '';
+      }
+    }
+
     // Tab switching
     tabBtns.forEach(btn => {
       btn.addEventListener('click', () => {
@@ -690,16 +741,22 @@
       }
     });
 
+    function loginSuccess() {
+      loginError.classList.remove('active');
+      loginContainer.classList.add('hidden');
+      adminContainer.classList.remove('hidden');
+      updateSticky();
+    }
+
     loginForm.addEventListener('submit', (e) => {
       e.preventDefault();
       const id = document.getElementById('userId').value;
       const password = document.getElementById('userPassword').value;
+      const rememberMe = document.getElementById('rememberMe').checked;
 
       if (id === VALID_ID && password === VALID_PASSWORD) {
-        loginError.classList.remove('active');
-        loginContainer.classList.add('hidden');
-        adminContainer.classList.remove('hidden');
-        updateSticky();
+        saveSession(rememberMe);
+        loginSuccess();
       } else {
         loginError.textContent = 'Invalid credentials';
         loginError.classList.add('active');
@@ -707,6 +764,7 @@
     });
 
     logoutBtn.addEventListener('click', () => {
+      clearSession();
       loginForm.reset();
       videoPreview.style.display = 'none';
       reelForm.reset();
@@ -718,6 +776,7 @@
       tabBtns[1].classList.remove('active');
       tabContents[0].classList.add('active');
       tabContents[1].classList.remove('active');
+      document.getElementById('rememberMe').checked = false;
       updateSticky();
     });
 
@@ -1023,6 +1082,9 @@
     window.addEventListener('scroll', updateSticky, { passive: true });
     window.addEventListener('resize', updateSticky);
     updateSticky();
+
+    // Check for existing session on page load
+    checkExistingSession();
   </script>
 </body>
 </html>
