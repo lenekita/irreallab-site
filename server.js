@@ -2,15 +2,17 @@ const express = require('express');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const { execSync } = require('child_process');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Ensure directories exist
 const videosDir = path.join(__dirname, 'video');
+const audioDir = path.join(__dirname, 'audio');
 const uploadsDir = path.join(__dirname, 'uploads');
 
-[videosDir, uploadsDir].forEach(dir => {
+[videosDir, audioDir, uploadsDir].forEach(dir => {
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir, { recursive: true });
   }
@@ -45,6 +47,35 @@ const upload = multer({
 // Middleware
 app.use(express.json());
 
+// Helper function to find next reel number
+function getNextReelNumber() {
+  try {
+    const files = fs.readdirSync(videosDir);
+    const reelNumbers = files
+      .filter(f => f.match(/^reel-\d+\.mp4$/))
+      .map(f => parseInt(f.match(/\d+/)[0]))
+      .sort((a, b) => b - a);
+
+    return reelNumbers.length > 0 ? reelNumbers[0] + 1 : 1;
+  } catch (e) {
+    return 1;
+  }
+}
+
+// Helper function to extract audio from video
+function extractAudio(videoPath, audioPath) {
+  try {
+    // Use ffmpeg to extract audio as MP3
+    execSync(`ffmpeg -i "${videoPath}" -q:a 9 -n "${audioPath}"`, {
+      stdio: 'pipe'
+    });
+    return true;
+  } catch (error) {
+    console.error('Audio extraction error:', error.message);
+    return false;
+  }
+}
+
 // API Routes (must be before static middleware)
 // Upload endpoint
 app.post('/api/upload-reel', upload.single('video'), async (req, res) => {
@@ -72,11 +103,18 @@ app.post('/api/upload-reel', upload.single('video'), async (req, res) => {
       }
     }
 
-    // Move uploaded file to video directory
-    const videoFilename = `reel-${reels.length + 1}.mp4`;
+    // Get next reel number
+    const nextReelNum = getNextReelNumber();
+    const videoFilename = `reel-${nextReelNum}.mp4`;
+    const audioFilename = `reel-${nextReelNum}.mp3`;
     const videoPath = path.join(videosDir, videoFilename);
+    const audioPath = path.join(audioDir, audioFilename);
 
+    // Move uploaded file to video directory
     fs.renameSync(req.file.path, videoPath);
+
+    // Extract audio from video
+    const audioExtracted = extractAudio(videoPath, audioPath);
 
     // Create new reel object
     const newReel = {
@@ -89,7 +127,12 @@ app.post('/api/upload-reel', upload.single('video'), async (req, res) => {
       posted_at: new Date().toISOString()
     };
 
-    // Add new reel to the beginning of the array
+    // Add audio_url if extraction was successful
+    if (audioExtracted) {
+      newReel.audio_url = `/audio/${audioFilename}`;
+    }
+
+    // Add new reel to the beginning of the array (most recent first)
     reels.unshift(newReel);
 
     // Save updated reels.json
@@ -97,7 +140,7 @@ app.post('/api/upload-reel', upload.single('video'), async (req, res) => {
 
     res.json({
       success: true,
-      message: 'Reel uploaded and published successfully',
+      message: `Reel uploaded and published successfully${audioExtracted ? ' with audio' : ''}`,
       reel: newReel
     });
 
@@ -142,6 +185,24 @@ app.delete('/api/reel/:index', (req, res) => {
 
     if (index < 0 || index >= reels.length) {
       return res.status(400).json({ error: 'Invalid reel index' });
+    }
+
+    const reel = reels[index];
+
+    // Delete video file
+    if (reel.video_url) {
+      const videoFile = path.join(__dirname, reel.video_url);
+      if (fs.existsSync(videoFile)) {
+        fs.unlinkSync(videoFile);
+      }
+    }
+
+    // Delete audio file
+    if (reel.audio_url) {
+      const audioFile = path.join(__dirname, reel.audio_url);
+      if (fs.existsSync(audioFile)) {
+        fs.unlinkSync(audioFile);
+      }
     }
 
     reels.splice(index, 1);
