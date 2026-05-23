@@ -825,6 +825,7 @@
 
     reelForm.addEventListener('submit', async (e) => {
       e.preventDefault();
+      console.log('🎬 Form submitted');
 
       const videoFile = videoInput.files[0];
       const title = document.getElementById('reelTitle').value;
@@ -832,6 +833,8 @@
       const url = document.getElementById('reelUrl').value || 'https://www.instagram.com/irreallab/';
       const scheduledDate = document.getElementById('scheduledDate').value;
       const position = document.getElementById('reelPosition').value;
+
+      console.log('📝 Form data:', { videoFile: videoFile ? 'selected' : 'none', title, hashtags, url });
 
       if (!videoFile) {
         showStatus('Please select a video file', 'error', statusMessage);
@@ -854,6 +857,7 @@
         // Use XMLHttpRequest for progress tracking
         const xhr = new XMLHttpRequest();
         uploadProgress.style.display = 'block';
+        console.log('📤 Sending upload request to /api/upload-reel');
 
         xhr.upload.addEventListener('progress', (e) => {
           if (e.lengthComputable) {
@@ -864,6 +868,7 @@
         });
 
         xhr.addEventListener('load', () => {
+          console.log('✅ Response received:', xhr.status, xhr.responseText);
           uploadProgress.style.display = 'none';
           const data = JSON.parse(xhr.responseText);
 
@@ -886,11 +891,13 @@
               loadReels();
             }, 500);
           } else {
+            console.error('❌ Upload failed:', data.error);
             showStatus(data.error || 'Upload failed', 'error', statusMessage);
           }
         });
 
-        xhr.addEventListener('error', () => {
+        xhr.addEventListener('error', (err) => {
+          console.error('❌ XHR error:', err);
           uploadProgress.style.display = 'none';
           showStatus('Error uploading reel', 'error', statusMessage);
         });
