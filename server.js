@@ -259,25 +259,24 @@ app.post('/api/upload-reel', upload.single('video'), async (req, res) => {
     // Move uploaded file to temp location
     fs.renameSync(req.file.path, compressedVideoPath);
 
-    // Check file size and compress if needed
+    // Always compress video for consistency and smaller file size
     const stats = fs.statSync(compressedVideoPath);
     const fileSizeMB = stats.size / (1024 * 1024);
-    let finalVideoPath = compressedVideoPath;
 
-    if (fileSizeMB > 50) {
-      console.log(`Compressing video (${fileSizeMB.toFixed(2)}MB)...`);
-      const compressionSuccess = compressVideo(compressedVideoPath, videoPath);
-      if (compressionSuccess) {
-        fs.unlinkSync(compressedVideoPath);
-        finalVideoPath = videoPath;
-      } else {
-        // If compression fails, use original
-        fs.renameSync(compressedVideoPath, videoPath);
-        finalVideoPath = videoPath;
-      }
+    console.log(`Compressing video (${fileSizeMB.toFixed(2)}MB)...`);
+    const compressionSuccess = compressVideo(compressedVideoPath, videoPath);
+
+    let finalVideoPath = videoPath;
+    if (compressionSuccess) {
+      // Compression succeeded, use compressed version
+      fs.unlinkSync(compressedVideoPath);
+      const compressedStats = fs.statSync(videoPath);
+      const compressedMB = compressedStats.size / (1024 * 1024);
+      console.log(`✓ Compressed: ${fileSizeMB.toFixed(2)}MB → ${compressedMB.toFixed(2)}MB`);
     } else {
+      // If compression fails, still use the original but rename it
+      console.log(`⚠ Compression failed, using original`);
       fs.renameSync(compressedVideoPath, videoPath);
-      finalVideoPath = videoPath;
     }
 
     // Extract audio from video
