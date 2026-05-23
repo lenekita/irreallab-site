@@ -537,9 +537,15 @@
           <div class="form-group">
             <label for="videoFile">Video File *</label>
             <input type="file" id="videoFile" name="videoFile" accept="video/*" required>
+            <div id="uploadProgress" style="display: none; margin-top: 1rem;">
+              <div style="width: 100%; height: 6px; background: rgba(212,240,58,.1); border-radius: 3px; overflow: hidden;">
+                <div id="progressBar" style="height: 100%; background: var(--accent); width: 0%; transition: width 0.3s;"></div>
+              </div>
+              <div style="font-size: 0.75rem; color: var(--muted); margin-top: 0.3rem; text-align: center;" id="progressText">0%</div>
+            </div>
             <video id="videoPreview" class="video-preview"></video>
             <div class="format-info">
-              📱 <strong>Format Required:</strong> 9:16 vertical (portrait) like Instagram Reels. MP4 recommended. Max 500MB.
+              📱 <strong>Format Required:</strong> 9:16 vertical (portrait) like Instagram Reels. MP4 recommended. Auto-compressed if >50MB. Max 500MB.
             </div>
           </div>
 
@@ -555,7 +561,21 @@
 
           <div class="form-group">
             <label for="reelUrl">Instagram URL (optional)</label>
-            <input type="url" id="reelUrl" name="reelUrl" placeholder="https://www.instagram.com/reel/...">
+            <div style="display: flex; gap: 0.5rem;">
+              <input type="url" id="reelUrl" name="reelUrl" placeholder="https://www.instagram.com/reel/..." style="flex: 1;">
+              <button type="button" id="fetchMetadataBtn" style="width: auto; margin-top: 0; padding: 0.8rem 1.2rem;">Fetch</button>
+            </div>
+            <div class="format-info" style="margin-top: 0.5rem;">
+              💡 Paste Instagram URL and click "Fetch" to auto-fill title and hashtags from the post caption.
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="scheduledDate">Publish Date & Time (optional)</label>
+            <input type="datetime-local" id="scheduledDate" name="scheduledDate">
+            <div class="format-info">
+              🕐 Leave empty to publish immediately, or set a future date/time to schedule the reel.
+            </div>
           </div>
 
           <button type="submit" style="width: 100%;">Upload & Publish Reel</button>
@@ -569,6 +589,31 @@
       <div class="reels-list">
         <div id="statusMessageManage" class="status-message"></div>
         <div id="reelsList" class="reels-container"></div>
+      </div>
+    </div>
+
+    <!-- EDIT MODAL -->
+    <div id="editModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,.8); z-index: 10000; align-items: center; justify-content: center;">
+      <div style="background: rgba(8,8,8,.9); border: 1px solid rgba(212,240,58,.2); padding: 2rem; max-width: 520px; width: 90%; max-height: 90vh; overflow-y: auto; border-radius: 0;">
+        <h2 style="font-family: 'Bebas Neue', sans-serif; color: var(--text); margin-bottom: 1.5rem; font-size: 1.8rem;">Edit <span style="color: var(--accent);">Reel</span></h2>
+        <form id="editForm">
+          <div class="form-group">
+            <label for="editTitle">Title</label>
+            <input type="text" id="editTitle" required>
+          </div>
+          <div class="form-group">
+            <label for="editHashtags">Hashtags</label>
+            <textarea id="editHashtags" required></textarea>
+          </div>
+          <div class="form-group">
+            <label for="editUrl">Instagram URL</label>
+            <input type="url" id="editUrl">
+          </div>
+          <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+            <button type="submit" style="flex: 1; width: 100%;">Save Changes</button>
+            <button type="button" style="flex: 1; width: 100%; background: rgba(212,240,58,.15); color: var(--accent);" onclick="closeEditModal()">Cancel</button>
+          </div>
+        </form>
       </div>
     </div>
   </main>
@@ -598,11 +643,18 @@
     const tabBtns = document.querySelectorAll('.tab-btn');
     const tabContents = document.querySelectorAll('.tab-content');
     const reelsList = document.getElementById('reelsList');
+    const fetchMetadataBtn = document.getElementById('fetchMetadataBtn');
+    const editModal = document.getElementById('editModal');
+    const editForm = document.getElementById('editForm');
+    const uploadProgress = document.getElementById('uploadProgress');
+    const progressBar = document.getElementById('progressBar');
+    const progressText = document.getElementById('progressText');
 
     const VALID_ID = 'radu';
     const VALID_PASSWORD = 'lovemylife27';
 
     let allReels = [];
+    let editingReelIndex = null;
 
     // Tab switching
     tabBtns.forEach(btn => {
@@ -668,6 +720,7 @@
       const title = document.getElementById('reelTitle').value;
       const hashtags = document.getElementById('reelHashtags').value;
       const url = document.getElementById('reelUrl').value || 'https://www.instagram.com/irreallab/';
+      const scheduledDate = document.getElementById('scheduledDate').value;
 
       if (!videoFile) {
         showStatus('Please select a video file', 'error', statusMessage);
@@ -679,33 +732,99 @@
       formData.append('title', title);
       formData.append('hashtags', hashtags);
       formData.append('url', url);
+      if (scheduledDate) {
+        formData.append('scheduledDate', new Date(scheduledDate).toISOString());
+      }
 
       try {
-        const response = await fetch('/api/upload-reel', {
+        // Use XMLHttpRequest for progress tracking
+        const xhr = new XMLHttpRequest();
+        uploadProgress.style.display = 'block';
+
+        xhr.upload.addEventListener('progress', (e) => {
+          if (e.lengthComputable) {
+            const percentComplete = (e.loaded / e.total) * 100;
+            progressBar.style.width = percentComplete + '%';
+            progressText.textContent = Math.round(percentComplete) + '%';
+          }
+        });
+
+        xhr.addEventListener('load', () => {
+          uploadProgress.style.display = 'none';
+          const data = JSON.parse(xhr.responseText);
+
+          if (xhr.status >= 200 && xhr.status < 300) {
+            const message = scheduledDate
+              ? `Reel scheduled successfully! 📅 Will be published on ${new Date(scheduledDate).toLocaleDateString()}`
+              : `Reel published successfully! 🎬 (${data.videoSize}MB)`;
+            showStatus(message, 'success', statusMessage);
+            reelForm.reset();
+            videoPreview.style.display = 'none';
+            progressBar.style.width = '0%';
+            progressText.textContent = '0%';
+
+            // Switch to Manage Reels tab
+            setTimeout(() => {
+              tabBtns.forEach(b => b.classList.remove('active'));
+              tabContents.forEach(t => t.classList.remove('active'));
+              tabBtns[1].classList.add('active');
+              tabContents[1].classList.add('active');
+              loadReels();
+            }, 500);
+          } else {
+            showStatus(data.error || 'Upload failed', 'error', statusMessage);
+          }
+        });
+
+        xhr.addEventListener('error', () => {
+          uploadProgress.style.display = 'none';
+          showStatus('Error uploading reel', 'error', statusMessage);
+        });
+
+        xhr.open('POST', '/api/upload-reel');
+        xhr.send(formData);
+
+      } catch (err) {
+        uploadProgress.style.display = 'none';
+        showStatus('Error uploading reel: ' + err.message, 'error', statusMessage);
+      }
+    });
+
+    // Fetch Instagram metadata
+    fetchMetadataBtn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      const igUrl = document.getElementById('reelUrl').value;
+
+      if (!igUrl) {
+        showStatus('Please enter an Instagram URL first', 'error', statusMessage);
+        return;
+      }
+
+      fetchMetadataBtn.textContent = 'Fetching...';
+      fetchMetadataBtn.disabled = true;
+
+      try {
+        const response = await fetch('/api/fetch-instagram-metadata', {
           method: 'POST',
-          body: formData
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: igUrl })
         });
 
         const data = await response.json();
 
-        if (response.ok) {
-          showStatus('Reel published successfully! 🎬', 'success', statusMessage);
-          reelForm.reset();
-          videoPreview.style.display = 'none';
-
-          // Switch to Manage Reels tab and load the new reel
-          setTimeout(() => {
-            tabBtns.forEach(b => b.classList.remove('active'));
-            tabContents.forEach(t => t.classList.remove('active'));
-            tabBtns[1].classList.add('active');
-            tabContents[1].classList.add('active');
-            loadReels();
-          }, 500);
+        if (response.ok && data.success) {
+          if (data.hashtags) {
+            document.getElementById('reelHashtags').value = data.hashtags;
+          }
+          showStatus('✓ Metadata fetched from Instagram!', 'success', statusMessage);
         } else {
-          showStatus(data.error || 'Upload failed', 'error', statusMessage);
+          showStatus('Could not fetch metadata. Enter details manually.', 'error', statusMessage);
         }
       } catch (err) {
-        showStatus('Error uploading reel: ' + err.message, 'error', statusMessage);
+        showStatus('Error fetching metadata: ' + err.message, 'error', statusMessage);
+      } finally {
+        fetchMetadataBtn.textContent = 'Fetch';
+        fetchMetadataBtn.disabled = false;
       }
     });
 
@@ -729,23 +848,31 @@
         return;
       }
 
-      reelsList.innerHTML = allReels.map((reel, idx) => `
-        <div class="reel-item">
-          <div class="reel-thumbnail">
-            <video src="${reel.video_url}" muted></video>
+      reelsList.innerHTML = allReels.map((reel, idx) => {
+        const isScheduled = reel.status === 'Scheduled';
+        const publishDate = isScheduled && reel.scheduled_publish_at
+          ? new Date(reel.scheduled_publish_at).toLocaleDateString()
+          : new Date(reel.posted_at).toLocaleDateString();
+
+        return `
+          <div class="reel-item">
+            <div class="reel-thumbnail">
+              <video src="${reel.video_url}" muted></video>
+            </div>
+            <div class="reel-info">
+              <div class="reel-num">#${idx + 1}${isScheduled ? ' 🕐' : ''}</div>
+              <div class="reel-title">${reel.title}</div>
+              <div class="reel-meta">${reel.status} • ${publishDate}</div>
+            </div>
+            <div class="reel-actions">
+              <button class="action-btn" onclick="editReel(${idx})">✎ Edit</button>
+              ${idx > 0 ? `<button class="action-btn" onclick="moveReel(${idx}, 'up')">↑ Up</button>` : ''}
+              ${idx < allReels.length - 1 ? `<button class="action-btn" onclick="moveReel(${idx}, 'down')">↓ Down</button>` : ''}
+              <button class="action-btn delete-btn" onclick="deleteReel(${idx})">✕ Delete</button>
+            </div>
           </div>
-          <div class="reel-info">
-            <div class="reel-num">#${idx + 1}</div>
-            <div class="reel-title">${reel.title}</div>
-            <div class="reel-meta">${reel.status} • ${new Date(reel.posted_at).toLocaleDateString()}</div>
-          </div>
-          <div class="reel-actions">
-            ${idx > 0 ? `<button class="action-btn" onclick="moveReel(${idx}, 'up')">↑ Up</button>` : ''}
-            ${idx < allReels.length - 1 ? `<button class="action-btn" onclick="moveReel(${idx}, 'down')">↓ Down</button>` : ''}
-            <button class="action-btn delete-btn" onclick="deleteReel(${idx})">✕ Delete</button>
-          </div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
     window.deleteReel = async function(idx) {
@@ -790,6 +917,59 @@
         loadReels();
       }
     };
+
+    window.editReel = function(idx) {
+      editingReelIndex = idx;
+      const reel = allReels[idx];
+
+      document.getElementById('editTitle').value = reel.title;
+      document.getElementById('editHashtags').value = reel.hashtags;
+      document.getElementById('editUrl').value = reel.url;
+
+      editModal.style.display = 'flex';
+    };
+
+    window.closeEditModal = function() {
+      editModal.style.display = 'none';
+      editingReelIndex = null;
+    };
+
+    editForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      if (editingReelIndex === null) return;
+
+      const title = document.getElementById('editTitle').value;
+      const hashtags = document.getElementById('editHashtags').value;
+      const url = document.getElementById('editUrl').value;
+
+      try {
+        const response = await fetch(`/api/reel/${editingReelIndex}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ title, hashtags, url })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          showStatus('Reel updated ✓', 'success', statusMessageManage);
+          closeEditModal();
+          loadReels();
+        } else {
+          showStatus(data.error || 'Update failed', 'error', statusMessageManage);
+        }
+      } catch (err) {
+        showStatus('Error: ' + err.message, 'error', statusMessageManage);
+      }
+    });
+
+    // Close modal when clicking outside
+    editModal.addEventListener('click', (e) => {
+      if (e.target === editModal) {
+        closeEditModal();
+      }
+    });
 
     function showStatus(message, type, element) {
       element.textContent = message;

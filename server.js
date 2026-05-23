@@ -2,7 +2,9 @@ const express = require('express');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const crypto = require('crypto');
 const { execSync } = require('child_process');
+const https = require('https');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -62,6 +64,44 @@ function getNextReelNumber() {
   }
 }
 
+// Helper function to calculate file hash
+function calculateFileHash(filePath) {
+  const hash = crypto.createHash('sha256');
+  const stream = fs.createReadStream(filePath);
+  return new Promise((resolve, reject) => {
+    stream.on('data', chunk => hash.update(chunk));
+    stream.on('end', () => resolve(hash.digest('hex')));
+    stream.on('error', reject);
+  });
+}
+
+// Helper function to check for duplicate videos
+async function checkDuplicateVideo(videoPath) {
+  try {
+    const reelsPath = path.join(__dirname, 'reels.json');
+    if (!fs.existsSync(reelsPath)) return false;
+
+    const reels = JSON.parse(fs.readFileSync(reelsPath, 'utf8'));
+    const newHash = await calculateFileHash(videoPath);
+
+    for (const reel of reels) {
+      if (reel.video_url) {
+        const existingPath = path.join(__dirname, reel.video_url);
+        if (fs.existsSync(existingPath)) {
+          const existingHash = await calculateFileHash(existingPath);
+          if (existingHash === newHash) {
+            return true; // Duplicate found
+          }
+        }
+      }
+    }
+    return false;
+  } catch (error) {
+    console.error('Duplicate check error:', error.message);
+    return false;
+  }
+}
+
 // Helper function to extract audio from video
 function extractAudio(videoPath, audioPath) {
   try {
@@ -76,6 +116,65 @@ function extractAudio(videoPath, audioPath) {
   }
 }
 
+// Helper function to compress video
+function compressVideo(inputPath, outputPath) {
+  try {
+    // Compress video using ffmpeg with H.264 codec
+    execSync(`ffmpeg -i "${inputPath}" -c:v libx264 -crf 28 -preset medium -c:a aac -b:a 128k -n "${outputPath}"`, {
+      stdio: 'pipe'
+    });
+    return true;
+  } catch (error) {
+    console.error('Video compression error:', error.message);
+    return false;
+  }
+}
+
+// Helper function to fetch Instagram metadata from URL
+async function fetchInstagramMetadata(igUrl) {
+  return new Promise((resolve) => {
+    if (!igUrl || !igUrl.includes('instagram.com')) {
+      resolve({ success: false });
+      return;
+    }
+
+    // Extract reel ID from Instagram URL
+    const reelIdMatch = igUrl.match(/reel\/([A-Za-z0-9_-]+)/);
+    if (!reelIdMatch) {
+      resolve({ success: false });
+      return;
+    }
+
+    // Try to fetch metadata from Instagram's embed API
+    const embedUrl = `https://www.instagram.com/p/${reelIdMatch[1]}/embed/captioned/`;
+
+    https.get(embedUrl, { timeout: 5000 }, (res) => {
+      let data = '';
+      res.on('data', chunk => data += chunk);
+      res.on('end', () => {
+        try {
+          // Extract caption from embed HTML
+          const captionMatch = data.match(/"caption":"([^"]+)"/);
+          const caption = captionMatch ? captionMatch[1].replace(/\\n/g, '\n') : '';
+
+          // Extract hashtags from caption
+          const hashtags = (caption.match(/#\w+/g) || []).join('\n');
+
+          resolve({
+            success: true,
+            caption: caption,
+            hashtags: hashtags
+          });
+        } catch (e) {
+          resolve({ success: false });
+        }
+      });
+    }).on('error', () => {
+      resolve({ success: false });
+    });
+  });
+}
+
 // API Routes (must be before static middleware)
 // Upload endpoint
 app.post('/api/upload-reel', upload.single('video'), async (req, res) => {
@@ -84,11 +183,18 @@ app.post('/api/upload-reel', upload.single('video'), async (req, res) => {
       return res.status(400).json({ error: 'No video file provided' });
     }
 
-    const { title, hashtags, url } = req.body;
+    const { title, hashtags, url, scheduledDate } = req.body;
 
     if (!title || !hashtags) {
       fs.unlinkSync(req.file.path);
       return res.status(400).json({ error: 'Title and hashtags are required' });
+    }
+
+    // Check for duplicate video
+    const isDuplicate = await checkDuplicateVideo(req.file.path);
+    if (isDuplicate) {
+      fs.unlinkSync(req.file.path);
+      return res.status(400).json({ error: 'This video already exists in your library' });
     }
 
     // Read existing reels
@@ -108,13 +214,35 @@ app.post('/api/upload-reel', upload.single('video'), async (req, res) => {
     const videoFilename = `reel-${nextReelNum}.mp4`;
     const audioFilename = `reel-${nextReelNum}.mp3`;
     const videoPath = path.join(videosDir, videoFilename);
+    const compressedVideoPath = path.join(videosDir, `reel-${nextReelNum}-temp.mp4`);
     const audioPath = path.join(audioDir, audioFilename);
 
-    // Move uploaded file to video directory
-    fs.renameSync(req.file.path, videoPath);
+    // Move uploaded file to temp location
+    fs.renameSync(req.file.path, compressedVideoPath);
+
+    // Check file size and compress if needed
+    const stats = fs.statSync(compressedVideoPath);
+    const fileSizeMB = stats.size / (1024 * 1024);
+    let finalVideoPath = compressedVideoPath;
+
+    if (fileSizeMB > 50) {
+      console.log(`Compressing video (${fileSizeMB.toFixed(2)}MB)...`);
+      const compressionSuccess = compressVideo(compressedVideoPath, videoPath);
+      if (compressionSuccess) {
+        fs.unlinkSync(compressedVideoPath);
+        finalVideoPath = videoPath;
+      } else {
+        // If compression fails, use original
+        fs.renameSync(compressedVideoPath, videoPath);
+        finalVideoPath = videoPath;
+      }
+    } else {
+      fs.renameSync(compressedVideoPath, videoPath);
+      finalVideoPath = videoPath;
+    }
 
     // Extract audio from video
-    const audioExtracted = extractAudio(videoPath, audioPath);
+    const audioExtracted = extractAudio(finalVideoPath, audioPath);
 
     // Create new reel object
     const newReel = {
@@ -122,10 +250,15 @@ app.post('/api/upload-reel', upload.single('video'), async (req, res) => {
       subtitle: '@irreallab · Watch on Instagram',
       url: url || 'https://www.instagram.com/irreallab/',
       hashtags: hashtags.trim(),
-      status: 'Live',
+      status: scheduledDate ? 'Scheduled' : 'Live',
       video_url: `/video/${videoFilename}`,
       posted_at: new Date().toISOString()
     };
+
+    // Add scheduled publish time if provided
+    if (scheduledDate) {
+      newReel.scheduled_publish_at = scheduledDate;
+    }
 
     // Add audio_url if extraction was successful
     if (audioExtracted) {
@@ -140,8 +273,9 @@ app.post('/api/upload-reel', upload.single('video'), async (req, res) => {
 
     res.json({
       success: true,
-      message: `Reel uploaded and published successfully${audioExtracted ? ' with audio' : ''}`,
-      reel: newReel
+      message: `Reel uploaded ${scheduledDate ? 'and scheduled' : 'and published'} successfully${audioExtracted ? ' with audio' : ''}`,
+      reel: newReel,
+      videoSize: fileSizeMB.toFixed(2)
     });
 
   } catch (error) {
@@ -157,14 +291,86 @@ app.post('/api/upload-reel', upload.single('video'), async (req, res) => {
   }
 });
 
-// Get all reels
+// Fetch Instagram metadata
+app.post('/api/fetch-instagram-metadata', express.json(), async (req, res) => {
+  try {
+    const { url } = req.body;
+
+    if (!url) {
+      return res.status(400).json({ error: 'Instagram URL required' });
+    }
+
+    const metadata = await fetchInstagramMetadata(url);
+
+    if (metadata.success) {
+      res.json({
+        success: true,
+        caption: metadata.caption,
+        hashtags: metadata.hashtags
+      });
+    } else {
+      res.status(400).json({ error: 'Could not fetch metadata from Instagram URL' });
+    }
+  } catch (error) {
+    console.error('Instagram fetch error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Edit reel metadata
+app.put('/api/reel/:index', express.json(), (req, res) => {
+  try {
+    const index = parseInt(req.params.index);
+    const { title, hashtags, url } = req.body;
+    const reelsPath = path.join(__dirname, 'reels.json');
+
+    if (!fs.existsSync(reelsPath)) {
+      return res.status(404).json({ error: 'Reels file not found' });
+    }
+
+    let reels = JSON.parse(fs.readFileSync(reelsPath, 'utf8'));
+
+    if (index < 0 || index >= reels.length) {
+      return res.status(400).json({ error: 'Invalid reel index' });
+    }
+
+    // Update reel metadata
+    if (title) reels[index].title = title.trim();
+    if (hashtags) reels[index].hashtags = hashtags.trim();
+    if (url) reels[index].url = url.trim();
+
+    fs.writeFileSync(reelsPath, JSON.stringify(reels, null, 2));
+
+    res.json({
+      success: true,
+      message: 'Reel updated successfully',
+      reel: reels[index]
+    });
+  } catch (error) {
+    console.error('Edit error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Get all reels (filtered by scheduled publish time)
 app.get('/api/reels', (req, res) => {
   try {
     const reelsPath = path.join(__dirname, 'reels.json');
     if (!fs.existsSync(reelsPath)) {
       return res.json([]);
     }
-    const reels = JSON.parse(fs.readFileSync(reelsPath, 'utf8'));
+    let reels = JSON.parse(fs.readFileSync(reelsPath, 'utf8'));
+
+    // Filter out scheduled reels that haven't been published yet
+    const now = new Date();
+    reels = reels.filter(reel => {
+      if (reel.scheduled_publish_at) {
+        const scheduledTime = new Date(reel.scheduled_publish_at);
+        return scheduledTime <= now;
+      }
+      return true;
+    });
+
     res.json(reels);
   } catch (error) {
     res.status(500).json({ error: 'Error reading reels' });
