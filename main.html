@@ -853,6 +853,44 @@
   }
 }
 
+    /* Video Play Button Overlay */
+    .reel-row-preview-frame {
+      position: relative;
+    }
+
+    .video-play-button {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 10;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      background: rgba(0, 0, 0, 0);
+    }
+
+    .reel-row-preview-frame:hover .video-play-button {
+      opacity: 1;
+    }
+
+    .video-play-button svg {
+      width: 80px;
+      height: 80px;
+      filter: drop-shadow(0 0 20px rgba(212, 240, 58, 0.4));
+      transition: transform 0.2s ease;
+    }
+
+    .video-play-button:hover svg {
+      transform: scale(1.1);
+    }
+
+    .preview-video {
+      cursor: pointer;
+      display: block;
+    }
+
 </style>
   <script type="text/javascript">
     (function(c,l,a,r,i,t,y){
@@ -1076,10 +1114,16 @@ document.addEventListener('DOMContentLoaded', async function() {
             <div class="reel-row-preview-label">Preview</div>
             <div class="reel-row-preview-frame" style="display: flex; align-items: center; justify-content: center;">
               ${reel.video_url ? `
-                <video class="preview-video" controls style="max-width: 100%; max-height: 100%; width: auto; height: auto; background: #000;">
+                <video class="preview-video" style="max-width: 100%; max-height: 100%; width: auto; height: auto; background: #000;">
                   <source src="${reel.video_url}" type="video/mp4">
                   Your browser does not support the video tag.
                 </video>
+                <div class="video-play-button">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10" stroke="#d4f03a"></circle>
+                    <polygon points="10 8 16 12 10 16 10 8" fill="#d4f03a"></polygon>
+                  </svg>
+                </div>
               ` : '<div style="background: #000; aspect-ratio: 9/16; display: flex; align-items: center; justify-content: center; color: #666;">No video available</div>'}
             </div>
             <p class="reel-row-preview-text"><strong>${reel.title}</strong><br><span class="reel-hashtags ir-typewriter" data-typewriter-text="${hashtags}">${hashtags}</span></p>
@@ -1088,15 +1132,41 @@ document.addEventListener('DOMContentLoaded', async function() {
       `;
     }).join('');
 
-    // Add audio management for preview videos
+    // Add audio management and play/pause button for preview videos
     const previewVideos = document.querySelectorAll('.preview-video');
 
     previewVideos.forEach(video => {
+      const playButton = video.nextElementSibling;
+
+      // Toggle play/pause on video click
+      video.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (video.paused) {
+          video.play();
+        } else {
+          video.pause();
+        }
+      });
+
+      // Toggle play/pause on button click
+      if (playButton && playButton.classList.contains('video-play-button')) {
+        playButton.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (video.paused) {
+            video.play();
+          } else {
+            video.pause();
+          }
+        });
+      }
+
       // Pause site audio when video starts playing
       video.addEventListener('play', () => {
         if (siteAudio && !siteAudio.paused) {
           siteAudio.pause();
         }
+        // Hide play button when playing
+        if (playButton) playButton.style.opacity = '0';
       });
 
       // Resume site audio when video stops playing
@@ -1104,6 +1174,8 @@ document.addEventListener('DOMContentLoaded', async function() {
         if (siteAudio && siteAudio.paused) {
           siteAudio.play().catch(err => console.log('Cannot resume background audio:', err));
         }
+        // Show play button when paused
+        if (playButton) playButton.style.opacity = '1';
       });
 
       // Also resume when video ends
@@ -1111,6 +1183,8 @@ document.addEventListener('DOMContentLoaded', async function() {
         if (siteAudio && siteAudio.paused) {
           siteAudio.play().catch(err => console.log('Cannot resume background audio:', err));
         }
+        // Show play button when ended
+        if (playButton) playButton.style.opacity = '1';
       });
     });
 
