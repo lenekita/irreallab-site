@@ -88,9 +88,9 @@
     switcher.innerHTML = `
       <button id="lang-toggle" class="lang-toggle">${currentLanguage.toUpperCase()} ▼</button>
       <div id="lang-dropdown" class="lang-dropdown">
-        <a href="#" data-lang="en" class="lang-option ${currentLanguage === 'en' ? 'active' : ''}">English</a>
-        <a href="#" data-lang="fr" class="lang-option ${currentLanguage === 'fr' ? 'active' : ''}">Français</a>
-        <a href="#" data-lang="ro" class="lang-option ${currentLanguage === 'ro' ? 'active' : ''}">Română</a>
+        <button data-lang="en" class="lang-option ${currentLanguage === 'en' ? 'active' : ''}">English</button>
+        <button data-lang="fr" class="lang-option ${currentLanguage === 'fr' ? 'active' : ''}">Français</button>
+        <button data-lang="ro" class="lang-option ${currentLanguage === 'ro' ? 'active' : ''}">Română</button>
       </div>
     `;
 
@@ -143,6 +143,7 @@
 
         .lang-option {
           display: block;
+          width: 100%;
           padding: 0.5rem 1rem;
           color: #4a4a4a;
           text-decoration: none;
@@ -151,6 +152,11 @@
           text-transform: uppercase;
           transition: all 0.2s;
           border-bottom: 1px solid #242424;
+          border: none;
+          background: transparent;
+          cursor: pointer;
+          font: inherit;
+          text-align: left;
         }
 
         .lang-option:last-child {
@@ -229,20 +235,36 @@
     let insertionPoint = null;
     const navLinks = document.querySelector('.nav-links');
     const nav = document.querySelector('nav');
+    const mainNav = document.getElementById('main-nav');
 
-    if (navLinks && nav) {
-      insertionPoint = navLinks.parentElement;
-      const switcher = createLanguageSwitcher();
-      insertionPoint.appendChild(switcher);
-      console.log('Language switcher inserted successfully');
+    console.log('Language switcher init - navLinks:', !!navLinks, 'nav:', !!nav, 'mainNav:', !!mainNav);
+
+    const switcher = createLanguageSwitcher();
+
+    if (navLinks) {
+      // Insert after nav-links
+      navLinks.parentElement.appendChild(switcher);
+      console.log('Language switcher inserted after nav-links');
+    } else if (mainNav) {
+      // Fallback for main page: append to main-nav directly
+      mainNav.appendChild(switcher);
+      console.log('Language switcher inserted to main-nav');
     } else if (nav) {
-      // Fallback: append to nav directly
-      const switcher = createLanguageSwitcher();
+      // Fallback: append to any nav
       nav.appendChild(switcher);
       console.log('Language switcher inserted to nav (fallback)');
     } else {
       console.warn('Could not find navigation element to insert language switcher');
     }
+
+    // Wait a moment then verify switcher exists
+    setTimeout(() => {
+      const checkSwitcher = document.getElementById('lang-switcher-component');
+      console.log('Switcher verification:', !!checkSwitcher);
+      if (!checkSwitcher) {
+        console.error('Switcher was not found after insertion');
+      }
+    }, 100);
 
     // Apply translations to page
     applyTranslations();
@@ -273,13 +295,19 @@
         }
       });
 
-      options.forEach(option => {
-        option.addEventListener('click', async (e) => {
-          e.preventDefault();
+      // Use event delegation on dropdown for language option clicks
+      dropdown.addEventListener('click', async (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        // Check if clicked element is a language option
+        const option = e.target.closest('.lang-option');
+        if (option) {
           const lang = option.getAttribute('data-lang');
+          console.log('Language option clicked:', lang);
           await setLanguage(lang);
           dropdown.classList.remove('active');
-        });
+        }
       });
     }
   });
