@@ -1044,9 +1044,10 @@
 <script src="animations2.js" defer></script>
 
 <script>
-// Load and display reels in "MORE REELS" section
+// Load and display reels in "MORE REELS" section with audio management
 document.addEventListener('DOMContentLoaded', async function() {
   const reelsList = document.getElementById('mainReelsList');
+  const siteAudio = document.getElementById('site-audio');
 
   try {
     const response = await fetch('/api/reels');
@@ -1073,9 +1074,9 @@ document.addEventListener('DOMContentLoaded', async function() {
         <div class="reel-row-preview-panel" aria-hidden="true">
           <div class="reel-row-preview-shell">
             <div class="reel-row-preview-label">Preview</div>
-            <div class="reel-row-preview-frame">
+            <div class="reel-row-preview-frame" style="display: flex; align-items: center; justify-content: center;">
               ${reel.video_url ? `
-                <video width="100%" height="auto" controls muted style="background: #000; aspect-ratio: 9/16; object-fit: contain;">
+                <video class="preview-video" controls style="max-width: 100%; max-height: 100%; width: auto; height: auto; background: #000;">
                   <source src="${reel.video_url}" type="video/mp4">
                   Your browser does not support the video tag.
                 </video>
@@ -1086,6 +1087,32 @@ document.addEventListener('DOMContentLoaded', async function() {
         </div>
       `;
     }).join('');
+
+    // Add audio management for preview videos
+    const previewVideos = document.querySelectorAll('.preview-video');
+
+    previewVideos.forEach(video => {
+      // Pause site audio when video starts playing
+      video.addEventListener('play', () => {
+        if (siteAudio && !siteAudio.paused) {
+          siteAudio.pause();
+        }
+      });
+
+      // Resume site audio when video stops playing
+      video.addEventListener('pause', () => {
+        if (siteAudio && siteAudio.paused) {
+          siteAudio.play().catch(err => console.log('Cannot resume background audio:', err));
+        }
+      });
+
+      // Also resume when video ends
+      video.addEventListener('ended', () => {
+        if (siteAudio && siteAudio.paused) {
+          siteAudio.play().catch(err => console.log('Cannot resume background audio:', err));
+        }
+      });
+    });
 
   } catch (error) {
     console.error('Error loading reels:', error);
