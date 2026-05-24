@@ -26,12 +26,12 @@
       <div class="cookie-banner">
         <div class="cookie-content">
           <div class="cookie-text">
-            <h3>🍪 Nous respectons votre vie privée</h3>
-            <p>Nous utilisons Google Analytics pour comprendre comment vous utilisez notre site et améliorer votre expérience. Aucune donnée personnelle n'est collectée.</p>
+            <h3>🍪 We Respect Your Privacy</h3>
+            <p>We use Google Analytics to understand how you use our site and improve your experience. No personal data is collected.</p>
           </div>
           <div class="cookie-actions">
-            <button id="cookie-reject" class="cookie-btn cookie-reject">Refuser</button>
-            <button id="cookie-accept" class="cookie-btn cookie-accept">Accepter</button>
+            <button id="cookie-reject" class="cookie-btn cookie-reject">Decline</button>
+            <button id="cookie-accept" class="cookie-btn cookie-accept">Accept</button>
           </div>
         </div>
       </div>
