@@ -1144,6 +1144,12 @@ document.addEventListener('DOMContentLoaded', async function() {
       video.addEventListener('click', (e) => {
         e.stopPropagation();
         if (video.paused) {
+          // Stop all other videos
+          previewVideos.forEach(otherVideo => {
+            if (otherVideo !== video && !otherVideo.paused) {
+              otherVideo.pause();
+            }
+          });
           video.play();
         } else {
           video.pause();
@@ -1155,6 +1161,12 @@ document.addEventListener('DOMContentLoaded', async function() {
         playButton.addEventListener('click', (e) => {
           e.stopPropagation();
           if (video.paused) {
+            // Stop all other videos
+            previewVideos.forEach(otherVideo => {
+              if (otherVideo !== video && !otherVideo.paused) {
+                otherVideo.pause();
+              }
+            });
             video.play();
           } else {
             video.pause();
