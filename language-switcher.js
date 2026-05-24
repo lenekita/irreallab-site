@@ -127,16 +127,14 @@
         }
 
         .lang-dropdown {
-          position: absolute;
-          top: 100%;
-          right: 0;
+          position: fixed;
           background: #0d0d0d;
           border: 1px solid #1c1c1c;
           border-radius: 3px;
-          margin-top: 0.5rem;
           min-width: 120px;
           display: none;
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+          z-index: 100000;
         }
 
         .lang-dropdown.active {
@@ -258,6 +256,14 @@
       toggle.addEventListener('click', (e) => {
         e.preventDefault();
         dropdown.classList.toggle('active');
+
+        // Position dropdown below toggle button if active
+        if (dropdown.classList.contains('active')) {
+          const rect = toggle.getBoundingClientRect();
+          dropdown.style.top = (rect.bottom + 8) + 'px';
+          dropdown.style.right = window.innerWidth - rect.right + 'px';
+          dropdown.style.left = 'auto';
+        }
       });
 
       // Close dropdown when clicking outside
