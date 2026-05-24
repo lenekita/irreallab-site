@@ -260,7 +260,7 @@
     .reel-row-num { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2rem, 4vw, 3rem); color: var(--muted2); padding: 1.6rem 1.5rem 1.6rem var(--pad-x); line-height: 1; position: relative; z-index: 1; transition: color .3s; }
     .reel-row-body { padding: 1.6rem 1.5rem; position: relative; z-index: 1; }
     .reel-row-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(1.1rem, 2.5vw, 1.4rem); letter-spacing: .03em; line-height: 1.1; margin-bottom: .3rem; }
-    .reel-row-sub { font-family:'Satoshi','Inter',sans-serif !important; font-weight:600 !important; letter-spacing:.08em !important; text-transform:uppercase !important; color:#8c8c8c !important; font-size: .56rem; transition: color .3s; }
+    .reel-row-sub { display: none; font-family:'Satoshi','Inter',sans-serif !important; font-weight:600 !important; letter-spacing:.08em !important; text-transform:uppercase !important; color:#8c8c8c !important; font-size: .56rem; transition: color .3s; }
     .reel-row-right { padding: 1.6rem var(--pad-x) 1.6rem 1.5rem; display: flex; align-items: center; gap: 1.2rem; position: relative; z-index: 1; }
     .reel-row-tag { font-size: .52rem; letter-spacing: .14em; text-transform: uppercase; background: var(--line2); color: var(--muted); padding: 3px 9px; transition: background .3s, color .3s; }
     .reel-row-arrow { font-size: 1.2rem; color: var(--muted2); transition: color .3s, transform .3s; line-height: 1; }
@@ -392,7 +392,7 @@
       .reels-page .section-head h2 { font-size: clamp(3.4rem, 17vw, 5.6rem) !important; }
       .reels-page .reel-row-sub { font-size: .6rem; }
     }
-    @media (max-width: 768px) { .reel-row-right { display: none; } .reel-row-sub { display: none; } }
+    @media (max-width: 768px) { .reel-row-right { display: none; } }
     @media (max-width: 600px) { .reel-row { grid-template-columns: 60px 1fr; } .reel-row-num { padding-left: var(--pad-x); font-size: 2rem; } }
     @media (max-width: 768px) {
       .reels-page { padding-left: 0 !important; padding-right: 0 !important; }
