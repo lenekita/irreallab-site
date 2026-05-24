@@ -100,7 +100,9 @@
       styles.id = 'lang-switcher-styles';
       styles.textContent = `
         .lang-switcher {
-          position: relative;
+          position: fixed;
+          top: 12px;
+          right: var(--pad-x, 3.5rem);
           display: flex;
           align-items: center;
           z-index: 1000;
@@ -249,21 +251,10 @@
     const switcher = createLanguageSwitcher();
     console.log('✅ Switcher created:', !!switcher);
 
-    if (navLinks) {
-      // Insert after nav-links
-      navLinks.parentElement.appendChild(switcher);
-      console.log('✅ Language switcher inserted after nav-links');
-    } else if (mainNav) {
-      // Fallback for main page: append to main-nav directly
-      mainNav.appendChild(switcher);
-      console.log('✅ Language switcher inserted to main-nav');
-    } else if (nav) {
-      // Fallback: append to any nav
-      nav.appendChild(switcher);
-      console.log('✅ Language switcher inserted to nav (fallback)');
-    } else {
-      console.warn('❌ Could not find navigation element to insert language switcher');
-    }
+    // Insert switcher into body (not inside nav) to avoid CSS containment issues
+    // The fixed-positioned dropdown needs to be outside any element with contain: paint
+    document.body.appendChild(switcher);
+    console.log('✅ Language switcher inserted to body');
 
     // Verify it's actually there
     setTimeout(() => {
