@@ -302,16 +302,13 @@
       }
 
       // Handle language option clicks
-      if (e.target.closest('#lang-dropdown .lang-option')) {
+      const langOption = e.target.closest('.lang-option');
+      if (langOption && dropdown.contains(langOption)) {
         e.preventDefault();
         e.stopPropagation();
-
-        const option = e.target.closest('.lang-option');
-        if (option) {
-          const lang = option.getAttribute('data-lang');
-          await setLanguage(lang);
-          dropdown.classList.remove('active');
-        }
+        const lang = langOption.getAttribute('data-lang');
+        await setLanguage(lang);
+        dropdown.classList.remove('active');
         return;
       }
 
