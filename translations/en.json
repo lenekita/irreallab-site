@@ -1,0 +1,132 @@
+{
+  "nav": {
+    "home": "Home",
+    "reels": "Reels",
+    "about": "About",
+    "contact": "Contact",
+    "credits": "Credits",
+    "instagram": "↗ Instagram",
+    "logout": "Logout"
+  },
+  "index": {
+    "label": "Visual Experiments",
+    "brand": "irreallab",
+    "tagline": "Surreal worlds in motion",
+    "button": "Enter ↗",
+    "footer": "Follow on Instagram ↗"
+  },
+  "meta": {
+    "mainTitle": "irreallab — surreal visual experiments",
+    "mainDescription": "Visual experiments in short-form. Motion, surrealism & the art of the unreal.",
+    "aboutTitle": "About — irreallab",
+    "aboutDescription": "Discover the concept behind irreallab and its creator Radu Nechita. Surreal visual experiments created with AI and digital technologies.",
+    "contactTitle": "Contact — irreallab",
+    "contactDescription": "Get in touch with irreallab. Send us your questions, collaborations, or inquiries about our visual experiments.",
+    "creditsTitle": "Credits — irreallab",
+    "creditsDescription": "Music credits and production details for all irreallab visual experiments.",
+    "reelsTitle": "Reels — irreallab",
+    "reelsDescription": "Browse all visual experiments from irreallab. Explore our collection of surreal and cinematic short films.",
+    "ogTitle": "irreallab — surreal visual experiments",
+    "ogDescription": "Visual experiments in short-form. Motion, surrealism & the art of the unreal."
+  },
+  "main": {
+    "marqueeText": "NEW WORK • NEW WORK • NEW WORK • ",
+    "heroEyebrow": "AI-Driven Cinematic",
+    "heroTitle": "Irreal Lab",
+    "heroSubtitle": "A creative laboratory exploring the boundaries between art, technology, and imagination.",
+    "transmissionKicker": "Latest",
+    "transmissionTitle": "Surreal Visual Experiments",
+    "transmissionStatus": "Reel",
+    "heroReelsLink": "View All Reels",
+    "liveIndicator": "Live",
+    "sectionTitle": "More Reels",
+    "sectionCount": "Count",
+    "previewLabel": "Preview",
+    "noVideoAvailable": "No video available"
+  },
+  "about": {
+    "pageTitle": "About",
+    "pageSubtitle": "Discover the concept behind irreallab and meet the creator shaping these surreal visual experiments.",
+    "conceptTitle": "The Concept",
+    "conceptText": "irreallab is a creative laboratory dedicated to exploring the boundaries between art, technology, and imagination. Each visual experiment is a dive into surreal abstraction, where forms, colors, and motion combine to create ephemeral and captivating worlds.",
+    "philosophyTitle": "Creative Philosophy",
+    "philosophyText": "We believe in the power of visual storytelling to evoke emotion and inspire wonder. Through AI-driven tools and digital technologies, we push the limits of what's possible in motion design and cinematic expression.",
+    "creatorTitle": "Meet the Creator",
+    "creatorName": "Radu Nechita",
+    "creatorRole": "Founder & Creative Director",
+    "creatorBio": "A passionate creator blending technology with artistic vision. Radu founded irreallab to explore the intersection of AI, motion design, and surreal aesthetics. Each experiment is a step toward redefining digital cinema.",
+    "designCredit": "Website Design by Hélène Nechita",
+    "ctaTitle": "Ready to explore?",
+    "ctaButton": "View All Reels",
+    "conceptGridItem1Title": "AI Innovation",
+    "conceptGridItem1Text": "Leveraging cutting-edge AI tools to create unprecedented visual experiences.",
+    "conceptGridItem2Title": "Surreal Aesthetics",
+    "conceptGridItem2Text": "Pushing boundaries of digital art through abstract and dreamlike visuals.",
+    "conceptGridItem3Title": "Cinematic Motion",
+    "conceptGridItem3Text": "Professional-grade cinematography adapted for short-form content.",
+    "conceptGridItem4Title": "Emotional Impact",
+    "conceptGridItem4Text": "Creating moments that resonate and leave lasting impressions."
+  },
+  "contact": {
+    "pageTitle": "Contact",
+    "pageSubtitle": "Have a question or collaboration idea? Let's connect.",
+    "formTitle": "Get In Touch",
+    "formDescription": "Send us your inquiries, collaboration requests, or feedback about our work.",
+    "fieldName": "Name",
+    "fieldEmail": "Email",
+    "fieldSubject": "Subject",
+    "fieldMessage": "Message",
+    "submitButton": "Send",
+    "note": "We'll get back to you as soon as possible.",
+    "successMessage": "Message sent successfully! We'll be in touch soon.",
+    "errorMessage": "An error occurred. Please try again."
+  },
+  "credits": {
+    "pageTitle": "Credits",
+    "pageSubtitle": "Music and production credits for all irreallab visual experiments.",
+    "musicCreditsTitle": "Music Credits",
+    "productionCreditsTitle": "Production & Design",
+    "createdBy": "Created by Radu Nechita",
+    "designedBy": "Website Design by Hélène Nechita",
+    "reel": "Reel #"
+  },
+  "reels": {
+    "pageTitle": "Reels Archive",
+    "sectionTitle": "More Reels",
+    "previewLabel": "Preview",
+    "noVideoAvailable": "No video available"
+  },
+  "newreels": {
+    "pageTitle": "Admin Panel",
+    "uploadTitle": "Upload New Reel",
+    "formTitle": "Title",
+    "formDescription": "Description",
+    "formVideo": "Video File",
+    "formTags": "Tags (comma-separated)",
+    "uploadButton": "Upload Reel",
+    "loadingMessage": "Loading reels...",
+    "successMessage": "Reel uploaded successfully!",
+    "errorMessage": "Error uploading reel. Please try again.",
+    "deleteButton": "Delete",
+    "editButton": "Edit"
+  },
+  "footer": {
+    "copyright": "© 2024 irreallab. All rights reserved.",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "instagram": "Instagram",
+    "designedBy": "Website Design by Hélène Nechita",
+    "logoText": "irreal_"
+  },
+  "cookies": {
+    "title": "🍪 We Respect Your Privacy",
+    "message": "We use Google Analytics to understand how you use our site and improve your experience. No personal data is collected.",
+    "accept": "Accept",
+    "decline": "Decline"
+  },
+  "errors": {
+    "videoError": "Unable to load video",
+    "loadingError": "Unable to load content",
+    "networkError": "Network error. Please check your connection."
+  }
+}

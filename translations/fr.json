@@ -1,0 +1,132 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "reels": "Reels",
+    "about": "À Propos",
+    "contact": "Contact",
+    "credits": "Crédits",
+    "instagram": "↗ Instagram",
+    "logout": "Déconnexion"
+  },
+  "index": {
+    "label": "Expériences Visuelles",
+    "brand": "irreallab",
+    "tagline": "Mondes surréalistes en mouvement",
+    "button": "Entrer ↗",
+    "footer": "Suivre sur Instagram ↗"
+  },
+  "meta": {
+    "mainTitle": "irreallab — expériences visuelles surréalistes",
+    "mainDescription": "Expériences visuelles en format court. Mouvement, surréalisme & l'art de l'irréel.",
+    "aboutTitle": "À Propos — irreallab",
+    "aboutDescription": "Découvrez le concept derrière irreallab et son créateur Radu Nechita. Expériences visuelles surréalistes créées avec l'IA et les technologies numériques.",
+    "contactTitle": "Contact — irreallab",
+    "contactDescription": "Entrez en contact avec irreallab. Envoyez-nous vos questions, collaborations ou demandes de renseignements sur nos expériences visuelles.",
+    "creditsTitle": "Crédits — irreallab",
+    "creditsDescription": "Crédits musicaux et détails de production pour toutes les expériences visuelles d'irreallab.",
+    "reelsTitle": "Reels — irreallab",
+    "reelsDescription": "Parcourez toutes les expériences visuelles d'irreallab. Explorez notre collection de courts films surréalistes et cinématographiques.",
+    "ogTitle": "irreallab — expériences visuelles surréalistes",
+    "ogDescription": "Expériences visuelles en format court. Mouvement, surréalisme & l'art de l'irréel."
+  },
+  "main": {
+    "marqueeText": "NOUVEAU TRAVAIL • NOUVEAU TRAVAIL • NOUVEAU TRAVAIL • ",
+    "heroEyebrow": "Cinéma Piloté par l'IA",
+    "heroTitle": "Irreal Lab",
+    "heroSubtitle": "Un laboratoire créatif explorant les frontières entre l'art, la technologie et l'imagination.",
+    "transmissionKicker": "Dernier",
+    "transmissionTitle": "Expériences Visuelles Surréalistes",
+    "transmissionStatus": "Reel",
+    "heroReelsLink": "Voir tous les Reels",
+    "liveIndicator": "En direct",
+    "sectionTitle": "Plus de Reels",
+    "sectionCount": "Nombre",
+    "previewLabel": "Aperçu",
+    "noVideoAvailable": "Aucune vidéo disponible"
+  },
+  "about": {
+    "pageTitle": "À Propos",
+    "pageSubtitle": "Découvrez le concept derrière irreallab et rencontrez le créateur façonnant ces expériences visuelles surréalistes.",
+    "conceptTitle": "Le Concept",
+    "conceptText": "irreallab est un laboratoire créatif dédié à l'exploration des frontières entre l'art, la technologie et l'imagination. Chaque expérience visuelle est une plongée dans l'abstraction surréaliste, où les formes, les couleurs et le mouvement se combinent pour créer des mondes éphémères et captivants.",
+    "philosophyTitle": "Philosophie Créative",
+    "philosophyText": "Nous croyons au pouvoir de la narration visuelle pour évoquer l'émotion et inspirer l'émerveillement. Grâce aux outils alimentés par l'IA et aux technologies numériques, nous repoussons les limites de ce qui est possible dans le design de mouvement et l'expression cinématographique.",
+    "creatorTitle": "Rencontre avec le Créateur",
+    "creatorName": "Radu Nechita",
+    "creatorRole": "Fondateur & Directeur Créatif",
+    "creatorBio": "Un créateur passionné fusionnant la technologie avec la vision artistique. Radu a fondé irreallab pour explorer l'intersection entre l'IA, le design de mouvement et l'esthétique surréaliste. Chaque expérience est une étape vers la redéfinition du cinéma numérique.",
+    "designCredit": "Conception du site web par Hélène Nechita",
+    "ctaTitle": "Prêt à explorer ?",
+    "ctaButton": "Voir tous les Reels",
+    "conceptGridItem1Title": "Innovation IA",
+    "conceptGridItem1Text": "Utiliser les outils IA de pointe pour créer des expériences visuelles sans précédent.",
+    "conceptGridItem2Title": "Esthétique Surréaliste",
+    "conceptGridItem2Text": "Repousser les limites de l'art numérique par des visuels abstraits et onirique.",
+    "conceptGridItem3Title": "Mouvement Cinématographique",
+    "conceptGridItem3Text": "Cinématographie de qualité professionnelle adaptée aux contenus de format court.",
+    "conceptGridItem4Title": "Impact Émotionnel",
+    "conceptGridItem4Text": "Créer des moments qui résonnent et laissent des impressions durables."
+  },
+  "contact": {
+    "pageTitle": "Contact",
+    "pageSubtitle": "Vous avez une question ou une idée de collaboration ? Connectons-nous.",
+    "formTitle": "Nous Contacter",
+    "formDescription": "Envoyez-nous vos demandes, demandes de collaboration ou retours sur notre travail.",
+    "fieldName": "Nom",
+    "fieldEmail": "Email",
+    "fieldSubject": "Sujet",
+    "fieldMessage": "Message",
+    "submitButton": "Envoyer",
+    "note": "Nous vous répondrons dès que possible.",
+    "successMessage": "Message envoyé avec succès ! Nous vous recontacterons bientôt.",
+    "errorMessage": "Une erreur s'est produite. Veuillez réessayer."
+  },
+  "credits": {
+    "pageTitle": "Crédits",
+    "pageSubtitle": "Crédits musicaux et de production pour toutes les expériences visuelles d'irreallab.",
+    "musicCreditsTitle": "Crédits Musicaux",
+    "productionCreditsTitle": "Production & Design",
+    "createdBy": "Créé par Radu Nechita",
+    "designedBy": "Conception du site web par Hélène Nechita",
+    "reel": "Reel #"
+  },
+  "reels": {
+    "pageTitle": "Archive de Reels",
+    "sectionTitle": "Plus de Reels",
+    "previewLabel": "Aperçu",
+    "noVideoAvailable": "Aucune vidéo disponible"
+  },
+  "newreels": {
+    "pageTitle": "Panneau d'Administration",
+    "uploadTitle": "Télécharger un nouveau Reel",
+    "formTitle": "Titre",
+    "formDescription": "Description",
+    "formVideo": "Fichier Vidéo",
+    "formTags": "Tags (séparés par des virgules)",
+    "uploadButton": "Télécharger le Reel",
+    "loadingMessage": "Chargement des reels...",
+    "successMessage": "Reel téléchargé avec succès !",
+    "errorMessage": "Erreur lors du téléchargement du reel. Veuillez réessayer.",
+    "deleteButton": "Supprimer",
+    "editButton": "Modifier"
+  },
+  "footer": {
+    "copyright": "© 2024 irreallab. Tous droits réservés.",
+    "privacy": "Confidentialité",
+    "terms": "Conditions",
+    "instagram": "Instagram",
+    "designedBy": "Conception du site web par Hélène Nechita",
+    "logoText": "irreal_"
+  },
+  "cookies": {
+    "title": "🍪 Nous Respectons Votre Confidentialité",
+    "message": "Nous utilisons Google Analytics pour comprendre comment vous utilisez notre site et améliorer votre expérience. Aucune donnée personnelle n'est collectée.",
+    "accept": "Accepter",
+    "decline": "Refuser"
+  },
+  "errors": {
+    "videoError": "Impossible de charger la vidéo",
+    "loadingError": "Impossible de charger le contenu",
+    "networkError": "Erreur réseau. Veuillez vérifier votre connexion."
+  }
+}

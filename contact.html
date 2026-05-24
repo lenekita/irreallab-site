@@ -439,9 +439,9 @@
 <nav id="main-nav">
   <a href="index.html" class="nav-logo"><span class="footer-irreal">irreal</span><em>lab_</em></a>
   <div class="nav-links">
-    <a href="index.html#reels" class="nav-hide">Reels</a>
-    <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="nav-hide">Instagram</a>
-    <a href="index.html" class="nav-cta">← Home</a>
+    <a href="reels" class="nav-hide" data-translate="nav.reels">Reels</a>
+    <a href="about.html" class="nav-hide" data-translate="nav.about">About</a>
+    <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="nav-cta" data-translate="nav.instagram">↗ Instagram</a>
   </div>
 </nav>
 
@@ -449,7 +449,7 @@
   <div class="contact-wrap">
     <section>
       <div class="contact-kicker">Direct transmission</div>
-      <h1 class="contact-title">Contact<span>Irreallab</span></h1>
+      <h1 class="contact-title" data-translate="contact.pageTitle">Contact<span>Irreallab</span></h1>
       <p class="contact-copy">
         For collaborations, visual experiments, reels, cinematic AI-driven worlds, or any unreal idea waiting to become visible.
       </p>
@@ -463,26 +463,26 @@
     <section class="contact-panel" aria-label="Contact form">
       <form class="contact-form" action="https://formspree.io/f/mpqnayka" method="POST">
         <div class="form-row">
-          <label for="name">Name</label>
+          <label for="name" data-translate="contact.fieldName">Name</label>
           <input id="name" name="name" type="text" placeholder="Your name" required>
         </div>
 
         <div class="form-row">
-          <label for="email">Email</label>
+          <label for="email" data-translate="contact.fieldEmail">Email</label>
           <input id="email" name="email" type="email" placeholder="your@email.com" required>
         </div>
 
         <div class="form-row">
-          <label for="subject">Subject</label>
+          <label for="subject" data-translate="contact.fieldSubject">Subject</label>
           <input id="subject" name="subject" type="text" placeholder="Collaboration / project / idea" required>
         </div>
 
         <div class="form-row">
-          <label for="message">Message</label>
+          <label for="message" data-translate="contact.fieldMessage">Message</label>
           <textarea id="message" name="message" placeholder="Write your message here..." required></textarea>
         </div>
 
-        <button class="contact-submit" type="submit">Send message ↗</button>
+        <button class="contact-submit" type="submit" data-translate="contact.submitButton">Send message ↗</button>
         <p class="contact-note">
           The message is sent to irreallab@proton.me
         </p>
@@ -494,9 +494,9 @@
 <footer>
   <div class="footer-logo"><span class="footer-irreal">irreal</span><em>lab_</em></div>
   <div class="footer-right">
-    <a href="index.html#reels" class="footer-link">Reels</a>
-    <a href="about.html" class="footer-link">About</a>
-    <a href="contact.html" class="footer-link">Contact</a>
+    <a href="reels" class="footer-link" data-translate="nav.reels">Reels</a>
+    <a href="about.html" class="footer-link" data-translate="nav.about">About</a>
+    <a href="contact" class="footer-link" data-translate="nav.contact">Contact</a>
     <a href="credits" class="footer-link">Credits</a>
     <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="footer-link">Instagram</a>
   </div>
@@ -579,5 +579,7 @@
   })();
 </script>
 
+<!-- Language Switcher -->
+<script src="/language-switcher.js"></script>
 </body>
 </html>

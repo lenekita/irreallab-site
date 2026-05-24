@@ -1,0 +1,132 @@
+{
+  "nav": {
+    "home": "Acasă",
+    "reels": "Reels",
+    "about": "Despre",
+    "contact": "Contact",
+    "credits": "Credite",
+    "instagram": "↗ Instagram",
+    "logout": "Deconectare"
+  },
+  "index": {
+    "label": "Experimente Vizuale",
+    "brand": "irreallab",
+    "tagline": "Lumi suprareale în mișcare",
+    "button": "Intră ↗",
+    "footer": "Urmărește pe Instagram ↗"
+  },
+  "meta": {
+    "mainTitle": "irreallab — experimente vizuale suprareale",
+    "mainDescription": "Experimente vizuale în format scurt. Mișcare, suprarealism și arta irealului.",
+    "aboutTitle": "Despre — irreallab",
+    "aboutDescription": "Descoperiți conceptul din spatele irreallab și creatorul Radu Nechita. Experimente vizuale suprareale create cu IA și tehnologii digitale.",
+    "contactTitle": "Contact — irreallab",
+    "contactDescription": "Luați legătura cu irreallab. Trimiteți-ne întrebările, ideile de colaborare sau cereri de informații despre experimentele noastre vizuale.",
+    "creditsTitle": "Credite — irreallab",
+    "creditsDescription": "Credite muzicale și detalii de producție pentru toate experimentele vizuale irreallab.",
+    "reelsTitle": "Reels — irreallab",
+    "reelsDescription": "Explorați toate experimentele vizuale irreallab. Descoperți colecția noastră de filme suprareale și cinematografice scurte.",
+    "ogTitle": "irreallab — experimente vizuale suprareale",
+    "ogDescription": "Experimente vizuale în format scurt. Mișcare, suprarealism și arta irealului."
+  },
+  "main": {
+    "marqueeText": "LUCRARE NOUĂ • LUCRARE NOUĂ • LUCRARE NOUĂ • ",
+    "heroEyebrow": "Cinematografie Condusă de IA",
+    "heroTitle": "Irreal Lab",
+    "heroSubtitle": "Un laborator creativ explorând granițele dintre artă, tehnologie și imaginație.",
+    "transmissionKicker": "Cel mai recent",
+    "transmissionTitle": "Experimente Vizuale Suprareale",
+    "transmissionStatus": "Reel",
+    "heroReelsLink": "Vezi toate Reels-urile",
+    "liveIndicator": "Live",
+    "sectionTitle": "Mai Multe Reels",
+    "sectionCount": "Număr",
+    "previewLabel": "Previzualizare",
+    "noVideoAvailable": "Niciun videoclip disponibil"
+  },
+  "about": {
+    "pageTitle": "Despre",
+    "pageSubtitle": "Descoperiți conceptul din spatele irreallab și cunoașteți creatorul care modelează aceste experimente vizuale suprareale.",
+    "conceptTitle": "Conceptul",
+    "conceptText": "irreallab este un laborator creativ dedicat explorării granițelor dintre artă, tehnologie și imaginație. Fiecare experiment vizual este o scufundare în abstracția suprareală, unde formele, culorile și mișcarea se combină pentru a crea lumi efemere și captivante.",
+    "philosophyTitle": "Filosofia Creativă",
+    "philosophyText": "Credem în puterea povestirii vizuale de a evocare emoție și a inspira uimire. Prin instrumente alimentate de IA și tehnologii digitale, împingem limitele a ceea ce este posibil în designul de mișcare și expresia cinematografică.",
+    "creatorTitle": "Întâlniți Creatorul",
+    "creatorName": "Radu Nechita",
+    "creatorRole": "Fondator & Director Creativ",
+    "creatorBio": "Un creator pasionat combinând tehnologia cu viziunea artistică. Radu a fondat irreallab pentru a explora intersecția dintre IA, designul de mișcare și estetica suprareală. Fiecare experiment este un pas către redefinirea cinematografiei digitale.",
+    "designCredit": "Design Web de Hélène Nechita",
+    "ctaTitle": "Gata să explorezi?",
+    "ctaButton": "Vezi toate Reels-urile",
+    "conceptGridItem1Title": "Inovație IA",
+    "conceptGridItem1Text": "Valorificarea unor instrumente IA de ultimă generație pentru a crea experiențe vizuale fără precedent.",
+    "conceptGridItem2Title": "Estetică Suprareală",
+    "conceptGridItem2Text": "Depășirea limitelor artei digitale prin vizuale abstracte și visătoare.",
+    "conceptGridItem3Title": "Mișcare Cinematografică",
+    "conceptGridItem3Text": "Cinematografie de calitate profesională adaptată pentru conținutul în format scurt.",
+    "conceptGridItem4Title": "Impact Emoțional",
+    "conceptGridItem4Text": "Crearea momentelor care rezonează și lasă impresia de lungă durată."
+  },
+  "contact": {
+    "pageTitle": "Contact",
+    "pageSubtitle": "Aveți o întrebare sau o idee de colaborare? Să ne conectăm.",
+    "formTitle": "Contactați-Mă",
+    "formDescription": "Trimiteți-ne întrebări, cereri de colaborare sau feedback despre munca noastră.",
+    "fieldName": "Nume",
+    "fieldEmail": "Email",
+    "fieldSubject": "Subiect",
+    "fieldMessage": "Mesaj",
+    "submitButton": "Trimite",
+    "note": "Vă vom răspunde în cel mai scurt timp.",
+    "successMessage": "Mesajul a fost trimis cu succes! Vom lua legătura cu dumneavoastră în curând.",
+    "errorMessage": "A apărut o eroare. Vă rog să încercați din nou."
+  },
+  "credits": {
+    "pageTitle": "Credite",
+    "pageSubtitle": "Credite muzicale și detalii de producție pentru toate experimentele vizuale irreallab.",
+    "musicCreditsTitle": "Credite Muzicale",
+    "productionCreditsTitle": "Producție & Design",
+    "createdBy": "Creat de Radu Nechita",
+    "designedBy": "Design Web de Hélène Nechita",
+    "reel": "Reel #"
+  },
+  "reels": {
+    "pageTitle": "Arhiva Reels",
+    "sectionTitle": "Mai Multe Reels",
+    "previewLabel": "Previzualizare",
+    "noVideoAvailable": "Niciun videoclip disponibil"
+  },
+  "newreels": {
+    "pageTitle": "Panou Admin",
+    "uploadTitle": "Încarcă un Reel Nou",
+    "formTitle": "Titlu",
+    "formDescription": "Descriere",
+    "formVideo": "Fișier Video",
+    "formTags": "Etichete (separate prin virgulă)",
+    "uploadButton": "Încarcă Reel",
+    "loadingMessage": "Se încarc reels...",
+    "successMessage": "Reel încărcat cu succes!",
+    "errorMessage": "Eroare la încărcarea reel. Vă rog să încercați din nou.",
+    "deleteButton": "Șterge",
+    "editButton": "Editează"
+  },
+  "footer": {
+    "copyright": "© 2024 irreallab. Toate drepturile rezervate.",
+    "privacy": "Confidențialitate",
+    "terms": "Condiții",
+    "instagram": "Instagram",
+    "designedBy": "Design Web de Hélène Nechita",
+    "logoText": "irreal_"
+  },
+  "cookies": {
+    "title": "🍪 Respectăm Confidențialitatea Dvs.",
+    "message": "Folosim Google Analytics pentru a înțelege cum utilizați site-ul nostru și pentru a îmbunătăți experiența dumneavoastră. Nu sunt colectate date personale.",
+    "accept": "Accept",
+    "decline": "Refuz"
+  },
+  "errors": {
+    "videoError": "Imposibil de încărcat videoclipul",
+    "loadingError": "Imposibil de încărcat conținutul",
+    "networkError": "Eroare de rețea. Vă rog verificați conexiunea."
+  }
+}
