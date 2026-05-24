@@ -235,6 +235,9 @@
     // Load initial translations
     translations = await loadTranslations(currentLanguage);
 
+    // Delay creation to ensure animations2.js has finished manipulating the DOM
+    await new Promise(resolve => setTimeout(resolve, 100));
+
     // Insert switcher into navigation - try multiple selectors for different page structures
     let insertionPoint = null;
     const navLinks = document.querySelector('.nav-links');
