@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>À Propos — irreallab</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="192x192" href="/images/favicon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <meta name="description" content="Découvrez le concept d'irreallab et son créateur Radu Nechita. Des expériences visuelles surréalistes créées avec l'IA et les technologies numériques.">
+  <meta property="og:title" content="À Propos — irreallab">
+  <meta property="og:description" content="En savoir plus sur irreallab et son créateur.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://irreallab.fr/about">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
+  <script src="/cookie-consent.js"></script>
+  <style>
+    :root {
+      --bg: #060606;
+      --bg2: #0d0d0d;
+      --line: #1c1c1c;
+      --line2: #242424;
+      --accent: #d4f03a;
+      --text: #ede9df;
+      --muted: #4a4a4a;
+      --muted2: #222;
+      --pad-x: 3.5rem;
+    }
+    @media (max-width: 900px) { :root { --pad-x: 1.5rem; } }
+    @media (max-width: 480px) { :root { --pad-x: 1.1rem; } }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Space Mono', monospace;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity: 0.035; pointer-events: none; z-index: 9999;
+    }
+
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 var(--pad-x); height: 60px;
+      border-bottom: 1px solid var(--line);
+      position: relative; z-index: 100;
+    }
+
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem; letter-spacing: .04em;
+      color: var(--text); text-decoration: none;
+    }
+
+    .nav-logo em { color: var(--accent); font-style: normal; }
+
+    .nav-links { display: flex; gap: 2rem; align-items: center; }
+
+    .nav-links a {
+      font-size: .6rem; letter-spacing: .16em; text-transform: uppercase;
+      color: var(--muted); text-decoration: none; transition: color .2s;
+    }
+
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta { background: var(--accent) !important; color: #060606 !important; padding: 6px 14px; }
+
+    @media (max-width: 600px) { .nav-links .nav-hide { display: none; } }
+    @media (max-width: 420px) { .nav-links { gap: 1rem; } .nav-logo { font-size: 1.2rem; } }
+
+    main {
+      padding: 3rem var(--pad-x) 4rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .about-header {
+      margin-bottom: 4rem;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 2rem;
+    }
+
+    .about-header h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      letter-spacing: .04em;
+      margin-bottom: 1rem;
+      color: var(--text);
+    }
+
+    .about-header p {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.1rem;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .about-section {
+      margin-bottom: 3rem;
+    }
+
+    .about-section h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(212, 240, 58, 0.2);
+    }
+
+    .about-content {
+      display: grid;
+      gap: 1.5rem;
+      line-height: 1.8;
+    }
+
+    .about-content p {
+      font-size: .95rem;
+      color: var(--text);
+    }
+
+    .about-content strong {
+      color: var(--accent);
+    }
+
+    .creator-card {
+      background: rgba(212, 240, 58, 0.05);
+      border: 1px solid rgba(212, 240, 58, 0.15);
+      padding: 2rem;
+      border-radius: 4px;
+      margin: 2rem 0;
+    }
+
+    .creator-card h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.2rem;
+      letter-spacing: .08em;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+    }
+
+    .creator-card p {
+      margin-bottom: 1rem;
+    }
+
+    .creator-card p:last-child {
+      margin-bottom: 0;
+    }
+
+    .cta-section {
+      background: rgba(212, 240, 58, 0.08);
+      border: 2px solid rgba(212, 240, 58, 0.25);
+      padding: 3rem 2rem;
+      text-align: center;
+      border-radius: 4px;
+      margin-top: 3rem;
+    }
+
+    .cta-section h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem;
+      letter-spacing: .08em;
+      color: var(--text);
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+    }
+
+    .cta-button {
+      display: inline-block;
+      background: var(--accent);
+      color: #060606;
+      padding: 12px 32px;
+      text-decoration: none;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-size: .75rem;
+      border-radius: 3px;
+      transition: all .3s;
+      border: none;
+      cursor: pointer;
+    }
+
+    .cta-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(212, 240, 58, 0.3);
+    }
+
+    .concept-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+
+    .concept-item {
+      padding: 1.5rem;
+      border: 1px solid var(--line);
+      background: rgba(212, 240, 58, 0.02);
+    }
+
+    .concept-item h4 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1rem;
+      letter-spacing: .08em;
+      color: var(--accent);
+      margin-bottom: 0.8rem;
+      text-transform: uppercase;
+    }
+
+    .concept-item p {
+      font-size: .9rem;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 2.5rem var(--pad-x);
+      background: var(--bg2);
+      margin-top: 4rem;
+    }
+
+    .footer-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.2rem;
+      letter-spacing: .04em;
+      margin-bottom: 1.5rem;
+    }
+
+    .footer-logo span { color: var(--muted); }
+    .footer-logo em { color: var(--accent); font-style: normal; }
+
+    .footer-right {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+
+    .footer-link {
+      font-size: .75rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color .2s;
+    }
+
+    .footer-link:hover {
+      color: var(--text);
+    }
+
+    .footer-copyright {
+      font-size: .75rem;
+      letter-spacing: .08em;
+      color: var(--muted);
+      text-transform: uppercase;
+      border-top: 1px solid var(--line);
+      padding-top: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    @media (max-width: 768px) {
+      main { padding: 2rem var(--pad-x) 3rem; }
+      .concept-grid { grid-template-columns: 1fr; }
+      .creator-card { padding: 1.5rem; }
+    }
+
+    @media (max-width: 480px) {
+      main { padding: 1.5rem var(--pad-x) 2.5rem; }
+      .about-header h1 { font-size: 1.8rem; }
+      .about-section h2 { font-size: 1.1rem; }
+      .cta-section { padding: 2rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="/" class="nav-logo"><em>irreallab</em>_</a>
+    <div class="nav-links">
+      <a href="/">Accueil</a>
+      <a href="reels">Reels</a>
+      <a href="about" class="nav-hide">À Propos</a>
+      <a href="contact" class="nav-hide">Contact</a>
+      <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="nav-cta">↗ Instagram</a>
+    </div>
+  </nav>
+
+  <main>
+    <div class="about-header">
+      <h1>À Propos</h1>
+      <p>Découvrez le concept derrière irreallab et rencontrez le créateur qui façonne ces expériences visuelles surréalistes.</p>
+    </div>
+
+    <section class="about-section">
+      <h2>Le Concept</h2>
+      <div class="about-content">
+        <p>
+          <strong>irreallab</strong> est un laboratoire créatif dédié à l'exploration des frontières entre l'art, la technologie et l'imagination.
+          Chaque expérience visuelle est une plongée dans l'abstraction surréaliste, où les formes, les couleurs et le mouvement se conjuguent
+          pour créer des univers éphémères et captivants.
+        </p>
+
+        <p>
+          Le projet explore les possibilités infinies des outils d'intelligence artificielle et des technologies numériques pour générer
+          des visuels jamais vus auparavant. Il s'agit d'une quête constante pour repousser les limites de la création visuelle et
+          d'explorer ce qu'il est possible de créer quand la technologie et l'art se rencontrent.
+        </p>
+
+        <p>
+          Chaque reel est une expérience unique. Du mouvement fluide à la géométrie abstraite, en passant par les jeux de lumière et
+          de couleur, irreallab cherche à inspirer, surprendre et challenger votre perception de ce qui est réel et ce qui ne l'est pas.
+        </p>
+      </div>
+
+      <div class="concept-grid">
+        <div class="concept-item">
+          <h4>Surréalisme Numérique</h4>
+          <p>Exploration des formes et des mondes impossibles créés par l'IA.</p>
+        </div>
+        <div class="concept-item">
+          <h4>Motion & Mouvement</h4>
+          <p>Études dynamiques du mouvement, de la fluidité et de la transformation.</p>
+        </div>
+        <div class="concept-item">
+          <h4>Abstraction Visuelle</h4>
+          <p>Jeux de couleurs, de textures et de structures géométriques.</p>
+        </div>
+        <div class="concept-item">
+          <h4>Expérimentation</h4>
+          <p>Approche avant-gardiste de la création visuelle et de l'art numérique.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="about-section">
+      <h2>Le Créateur</h2>
+
+      <div class="creator-card">
+        <h3>Radu Nechita</h3>
+        <p>
+          Radu Nechita est le créateur et visionnaire derrière irreallab. Avec une passion pour l'art numérique et les technologies émergentes,
+          il utilise l'intelligence artificielle, les outils de génération d'images et les technologies créatives pour créer des expériences
+          visuelles uniques et immersives.
+        </p>
+        <p>
+          Son travail se concentre sur l'exploration des possibilités illimitées de la création numérique, en combinant l'algorithme avec
+          l'intuition créative pour produire des visuals qui défient la convention et inspirent l'imagination.
+        </p>
+        <p>
+          <strong>Suivez son travail:</strong> Découvrez les derniers reels sur <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" style="color: var(--accent); text-decoration: none;">@irreallab sur Instagram</a>
+          où il partage régulièrement de nouvelles expériences visuelles.
+        </p>
+      </div>
+    </section>
+
+    <section class="about-section">
+      <h2>Philosophie</h2>
+      <div class="about-content">
+        <p>
+          irreallab repose sur la conviction que la technologie n'est pas une limitation créative, mais plutôt un outil puissant pour
+          explorer de nouveaux territoires artistiques. Chaque création est une conversation entre l'intention humaine et les possibilités
+          offertes par l'intelligence artificielle et les outils numériques.
+        </p>
+
+        <p>
+          L'objectif est de créer des expériences qui:
+        </p>
+        <p style="margin-left: 2rem;">
+          • Défient votre perception de la réalité<br>
+          • Inspirent l'émerveillement et la curiosité<br>
+          • Explorent les limites de la création visuelle<br>
+          • Célèbrent la fusion de l'art et de la technologie<br>
+          • Invitent à la réflexion et à l'imagination
+        </p>
+      </div>
+    </section>
+
+    <div class="cta-section">
+      <h3>Prêt à explorer?</h3>
+      <p style="margin-bottom: 1.5rem; color: var(--muted);">Découvrez les dernières expériences visuelles</p>
+      <a href="/" class="cta-button">Voir les Reels</a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-logo"><span>irreal</span><em>lab_</em></div>
+    <div class="footer-right">
+      <a href="/" class="footer-link">Accueil</a>
+      <a href="reels" class="footer-link">Reels</a>
+      <a href="about" class="footer-link">À Propos</a>
+      <a href="contact" class="footer-link">Contact</a>
+      <a href="credits" class="footer-link">Crédits</a>
+      <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="footer-link">Instagram ↗</a>
+    </div>
+    <p class="footer-copyright">
+      © irreallab — Radu Nechita · Site design : © Hélène Nechita · Tous droits réservés.
+    </p>
+  </footer>
+</body>
+</html>
