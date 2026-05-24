@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Credits — irreallab</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="192x192" href="/images/favicon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <meta name="description" content="Music and media credits for irreallab visual experiments.">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
+  <script src="/cookie-consent.js"></script>
+  <style>
+    :root {
+      --bg: #060606;
+      --bg2: #0d0d0d;
+      --line: #1c1c1c;
+      --line2: #242424;
+      --accent: #d4f03a;
+      --text: #ede9df;
+      --muted: #4a4a4a;
+      --muted2: #222;
+      --pad-x: 3.5rem;
+    }
+    @media (max-width: 900px) { :root { --pad-x: 1.5rem; } }
+    @media (max-width: 480px) { :root { --pad-x: 1.1rem; } }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Space Mono', monospace;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity: 0.035; pointer-events: none; z-index: 9999;
+    }
+
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 var(--pad-x); height: 60px;
+      border-bottom: 1px solid var(--line);
+      position: relative; z-index: 100;
+    }
+
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem; letter-spacing: .04em;
+      color: var(--text); text-decoration: none;
+    }
+
+    .nav-logo em { color: var(--accent); font-style: normal; }
+
+    .nav-links { display: flex; gap: 2rem; align-items: center; }
+
+    .nav-links a {
+      font-size: .6rem; letter-spacing: .16em; text-transform: uppercase;
+      color: var(--muted); text-decoration: none; transition: color .2s;
+    }
+
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta { background: var(--accent) !important; color: #060606 !important; padding: 6px 14px; }
+
+    @media (max-width: 600px) { .nav-links .nav-hide { display: none; } }
+    @media (max-width: 420px) { .nav-links { gap: 1rem; } .nav-logo { font-size: 1.2rem; } }
+
+    main {
+      padding: 3rem var(--pad-x) 4rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .credits-header {
+      margin-bottom: 4rem;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 2rem;
+    }
+
+    .credits-header h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      letter-spacing: .04em;
+      margin-bottom: 1rem;
+      color: var(--text);
+    }
+
+    .credits-header p {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.1rem;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .credits-section {
+      margin-bottom: 3rem;
+    }
+
+    .credits-section h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(212, 240, 58, 0.2);
+    }
+
+    .credit-item {
+      padding: 1.5rem 0;
+      border-bottom: 1px solid var(--line2);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    .credit-item:last-child {
+      border-bottom: none;
+    }
+
+    .credit-info h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: .03em;
+      color: var(--text);
+      margin-bottom: 0.3rem;
+    }
+
+    .credit-info .artist {
+      font-size: .9rem;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .credit-info .used-in {
+      font-size: .8rem;
+      color: var(--accent);
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .credit-usage {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-size: .9rem;
+      color: var(--muted);
+    }
+
+    .credit-usage-label {
+      display: inline-block;
+      background: rgba(212, 240, 58, 0.1);
+      border: 1px solid rgba(212, 240, 58, 0.3);
+      color: var(--accent);
+      padding: 4px 12px;
+      border-radius: 3px;
+      font-size: .75rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .copyright-notice {
+      margin-top: 4rem;
+      padding: 2rem;
+      background: rgba(212, 240, 58, 0.05);
+      border: 1px solid rgba(212, 240, 58, 0.15);
+      border-radius: 4px;
+    }
+
+    .copyright-notice h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1rem;
+      letter-spacing: .08em;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+    }
+
+    .copyright-notice p {
+      font-size: .85rem;
+      line-height: 1.7;
+      color: var(--muted);
+    }
+
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 2.5rem var(--pad-x);
+      background: var(--bg2);
+      margin-top: 4rem;
+    }
+
+    .footer-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+      flex-wrap: wrap;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .footer-text {
+      font-size: .75rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .footer-link {
+      font-size: .75rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color .2s;
+    }
+
+    .footer-link:hover {
+      color: var(--text);
+    }
+
+    @media (max-width: 768px) {
+      main { padding: 2rem var(--pad-x) 3rem; }
+      .credit-item { grid-template-columns: 1fr; gap: 1rem; }
+      .footer-content { flex-direction: column; align-items: flex-start; }
+    }
+
+    @media (max-width: 480px) {
+      main { padding: 1.5rem var(--pad-x) 2.5rem; }
+      .credits-header h1 { font-size: 1.8rem; }
+      .credits-section h2 { font-size: 1.1rem; }
+      .credit-item { padding: 1.2rem 0; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="/" class="nav-logo"><em>irreallab</em>_</a>
+    <div class="nav-links">
+      <a href="/" class="nav-hide">Home</a>
+      <a href="reels">Reels</a>
+      <a href="contact" class="nav-hide">Contact</a>
+      <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="nav-cta">↗ Instagram</a>
+    </div>
+  </nav>
+
+  <main>
+    <div class="credits-header">
+      <h1>Credits</h1>
+      <p>Music and media attributions for irreallab visual experiments. We are grateful to the artists whose work enhances our creative vision.</p>
+    </div>
+
+    <section class="credits-section">
+      <h2>Music Credits</h2>
+
+      <div class="credit-item">
+        <div class="credit-info">
+          <h3>Clint Eastwood</h3>
+          <div class="artist">Gorillaz</div>
+          <div class="credit-usage">
+            <span class="credit-usage-label">Reel #01</span>
+            <span>Artificial Emotions</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="credit-item">
+        <div class="credit-info">
+          <h3>Can't Tell Me Nothing</h3>
+          <div class="artist">Kanye West</div>
+          <div class="credit-usage">
+            <span class="credit-usage-label">Reel #04</span>
+            <span>Chasing Speed</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="credit-item">
+        <div class="credit-info">
+          <h3>Connected</h3>
+          <div class="artist">Adam Jamar</div>
+          <div class="credit-usage">
+            <span class="credit-usage-label">Reel #03</span>
+            <span>Frame Shift</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="credit-item">
+        <div class="credit-info">
+          <h3>Radiant Pulse</h3>
+          <div class="artist">Donushi</div>
+          <div class="credit-usage">
+            <span class="credit-usage-label">Reel #02</span>
+            <span>Art Heist</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="copyright-notice">
+      <h3>Copyright Notice</h3>
+      <p>
+        The music featured in irreallab visual experiments is the intellectual property of the respective artists and rights holders.
+        This work is used to enhance and complement our creative visual storytelling. All music credits are provided to honor the
+        original artists and creators. For licensing inquiries or copyright concerns, please contact us at <a href="contact" style="color: var(--accent); text-decoration: none;">contact page</a>.
+      </p>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-text">
+        © irreallab — Radu Nechita · Site design: © Hélène Nechita · All rights reserved.
+      </div>
+      <div class="footer-links">
+        <a href="/" class="footer-link">Home</a>
+        <a href="credits" class="footer-link">Credits</a>
+        <a href="contact" class="footer-link">Contact</a>
+        <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="footer-link">Instagram ↗</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
