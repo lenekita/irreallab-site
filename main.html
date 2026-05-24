@@ -1191,7 +1191,7 @@ document.addEventListener('DOMContentLoaded', async function() {
       const tag = isScheduled ? 'Scheduled' : 'Live';
 
       return `
-        <a class="reel-row" href="${reel.url}" target="_blank" rel="noopener">
+        <a class="reel-row" href="${reel.url}" target="_blank" rel="noopener" data-video-trigger="true">
           <div class="reel-row-num" data-num="${num}">${num}</div>
           <div class="reel-row-body">
             <div class="reel-row-title">${reel.title}</div>
@@ -1225,6 +1225,31 @@ document.addEventListener('DOMContentLoaded', async function() {
     // Add audio management and play/pause button for preview videos
     const previewVideos = document.querySelectorAll('.preview-video');
     const audioToggleBtn = document.getElementById('audio-toggle');
+
+    // Prevent reel-row links from navigating to Instagram when video exists
+    const reelRows = document.querySelectorAll('.reel-row[data-video-trigger]');
+    reelRows.forEach((reelRow, index) => {
+      const video = previewVideos[index];
+      if (video) {
+        reelRow.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+
+          // Play the video instead of going to Instagram
+          if (video.paused) {
+            // Stop all other videos
+            previewVideos.forEach(otherVideo => {
+              if (otherVideo !== video && !otherVideo.paused) {
+                otherVideo.pause();
+              }
+            });
+            video.play();
+          } else {
+            video.pause();
+          }
+        });
+      }
+    });
 
     previewVideos.forEach(video => {
       const playButton = video.nextElementSibling;
