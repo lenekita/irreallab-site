@@ -31,16 +31,16 @@
   },
   "main": {
     "marqueeText": "LUCRARE NOUĂ • LUCRARE NOUĂ • LUCRARE NOUĂ • ",
-    "heroEyebrow": "Cinematografie Condusă de IA",
+    "heroEyebrow": "Lumi cinematografice conduse de IA.",
     "heroTitle": "Irreal Lab",
-    "heroSubtitle": "Un laborator creativ explorând granițele dintre artă, tehnologie și imaginație.",
-    "transmissionKicker": "Cel mai recent",
-    "transmissionTitle": "Experimente Vizuale Suprareale",
+    "heroSubtitle": "Experimente vizuale în format scurt. Mișcare, suprarealism și arta irealului.",
+    "transmissionKicker": "Transmisiune Curentă",
+    "transmissionTitle": "Sky Runway",
     "transmissionStatus": "Reel",
-    "heroReelsLink": "Vezi toate Reels-urile",
-    "liveIndicator": "Live",
+    "heroReelsLink": "↗ Explorați Toate Reels-urile",
+    "liveIndicator": "Live pe Instagram",
     "sectionTitle": "Mai Multe Reels",
-    "sectionCount": "Număr",
+    "sectionCount": "Vizualizați arhiva completă ↗",
     "previewLabel": "Previzualizare",
     "noVideoAvailable": "Niciun videoclip disponibil"
   },
@@ -70,15 +70,15 @@
   },
   "contact": {
     "pageTitle": "Contact",
-    "pageSubtitle": "Aveți o întrebare sau o idee de colaborare? Să ne conectăm.",
+    "pageSubtitle": "Pentru colaborări, experimente vizuale, reels, lumi cinematografice conduse de IA, sau orice idee suprareală așteptând să devină vizibilă.",
     "formTitle": "Contactați-Mă",
     "formDescription": "Trimiteți-ne întrebări, cereri de colaborare sau feedback despre munca noastră.",
     "fieldName": "Nume",
     "fieldEmail": "Email",
     "fieldSubject": "Subiect",
     "fieldMessage": "Mesaj",
-    "submitButton": "Trimite",
-    "note": "Vă vom răspunde în cel mai scurt timp.",
+    "submitButton": "Trimite mesajul ↗",
+    "note": "Mesajul este trimis la irreallab@proton.me",
     "successMessage": "Mesajul a fost trimis cu succes! Vom lua legătura cu dumneavoastră în curând.",
     "errorMessage": "A apărut o eroare. Vă rog să încercați din nou."
   },
@@ -92,8 +92,8 @@
     "reel": "Reel #"
   },
   "reels": {
-    "pageTitle": "Arhiva Reels",
-    "sectionTitle": "Mai Multe Reels",
+    "pageTitle": "Mai Multe Reels",
+    "sectionTitle": "Experimente vizuale în format scurt. Mișcare, suprarealism și arta irealului.",
     "previewLabel": "Previzualizare",
     "noVideoAvailable": "Niciun videoclip disponibil"
   },

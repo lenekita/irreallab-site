@@ -31,16 +31,16 @@
   },
   "main": {
     "marqueeText": "NEW WORK • NEW WORK • NEW WORK • ",
-    "heroEyebrow": "AI-Driven Cinematic",
+    "heroEyebrow": "AI-driven cinematic worlds.",
     "heroTitle": "Irreal Lab",
-    "heroSubtitle": "A creative laboratory exploring the boundaries between art, technology, and imagination.",
-    "transmissionKicker": "Latest",
-    "transmissionTitle": "Surreal Visual Experiments",
+    "heroSubtitle": "Visual experiments in short-form. Motion, surrealism & the art of the unreal.",
+    "transmissionKicker": "Current Transmission",
+    "transmissionTitle": "Sky Runway",
     "transmissionStatus": "Reel",
-    "heroReelsLink": "View All Reels",
-    "liveIndicator": "Live",
+    "heroReelsLink": "↗ Browse All Reels",
+    "liveIndicator": "Live on Instagram",
     "sectionTitle": "More Reels",
-    "sectionCount": "Count",
+    "sectionCount": "View full archive ↗",
     "previewLabel": "Preview",
     "noVideoAvailable": "No video available"
   },
@@ -70,15 +70,15 @@
   },
   "contact": {
     "pageTitle": "Contact",
-    "pageSubtitle": "Have a question or collaboration idea? Let's connect.",
+    "pageSubtitle": "For collaborations, visual experiments, reels, cinematic AI-driven worlds, or any unreal idea waiting to become visible.",
     "formTitle": "Get In Touch",
     "formDescription": "Send us your inquiries, collaboration requests, or feedback about our work.",
     "fieldName": "Name",
     "fieldEmail": "Email",
     "fieldSubject": "Subject",
     "fieldMessage": "Message",
-    "submitButton": "Send",
-    "note": "We'll get back to you as soon as possible.",
+    "submitButton": "Send message ↗",
+    "note": "The message is sent to irreallab@proton.me",
     "successMessage": "Message sent successfully! We'll be in touch soon.",
     "errorMessage": "An error occurred. Please try again."
   },
@@ -92,8 +92,8 @@
     "reel": "Reel #"
   },
   "reels": {
-    "pageTitle": "Reels Archive",
-    "sectionTitle": "More Reels",
+    "pageTitle": "More Reels",
+    "sectionTitle": "Visual experiments in short-form. Motion, surrealism & the art of the unreal.",
     "previewLabel": "Preview",
     "noVideoAvailable": "No video available"
   },

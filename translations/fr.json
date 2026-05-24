@@ -31,16 +31,16 @@
   },
   "main": {
     "marqueeText": "NOUVEAU TRAVAIL • NOUVEAU TRAVAIL • NOUVEAU TRAVAIL • ",
-    "heroEyebrow": "Cinéma Piloté par l'IA",
+    "heroEyebrow": "Des mondes cinématographiques pilotés par l'IA.",
     "heroTitle": "Irreal Lab",
-    "heroSubtitle": "Un laboratoire créatif explorant les frontières entre l'art, la technologie et l'imagination.",
-    "transmissionKicker": "Dernier",
-    "transmissionTitle": "Expériences Visuelles Surréalistes",
+    "heroSubtitle": "Expériences visuelles en format court. Mouvement, surréalisme et l'art de l'irréel.",
+    "transmissionKicker": "Transmission Actuelle",
+    "transmissionTitle": "Sky Runway",
     "transmissionStatus": "Reel",
-    "heroReelsLink": "Voir tous les Reels",
-    "liveIndicator": "En direct",
+    "heroReelsLink": "↗ Parcourir Tous les Reels",
+    "liveIndicator": "En direct sur Instagram",
     "sectionTitle": "Plus de Reels",
-    "sectionCount": "Nombre",
+    "sectionCount": "Voir l'archive complète ↗",
     "previewLabel": "Aperçu",
     "noVideoAvailable": "Aucune vidéo disponible"
   },
@@ -70,15 +70,15 @@
   },
   "contact": {
     "pageTitle": "Contact",
-    "pageSubtitle": "Vous avez une question ou une idée de collaboration ? Connectons-nous.",
+    "pageSubtitle": "Pour des collaborations, des expériences visuelles, des reels, des mondes cinématographiques pilotés par l'IA, ou toute idée irréelle attendant de devenir visible.",
     "formTitle": "Nous Contacter",
     "formDescription": "Envoyez-nous vos demandes, demandes de collaboration ou retours sur notre travail.",
     "fieldName": "Nom",
     "fieldEmail": "Email",
     "fieldSubject": "Sujet",
     "fieldMessage": "Message",
-    "submitButton": "Envoyer",
-    "note": "Nous vous répondrons dès que possible.",
+    "submitButton": "Envoyer le message ↗",
+    "note": "Le message est envoyé à irreallab@proton.me",
     "successMessage": "Message envoyé avec succès ! Nous vous recontacterons bientôt.",
     "errorMessage": "Une erreur s'est produite. Veuillez réessayer."
   },
@@ -92,8 +92,8 @@
     "reel": "Reel #"
   },
   "reels": {
-    "pageTitle": "Archive de Reels",
-    "sectionTitle": "Plus de Reels",
+    "pageTitle": "Plus de Reels",
+    "sectionTitle": "Expériences visuelles en format court. Mouvement, surréalisme et l'art de l'irréel.",
     "previewLabel": "Aperçu",
     "noVideoAvailable": "Aucune vidéo disponible"
   },
