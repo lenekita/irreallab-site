@@ -279,9 +279,12 @@
     const options = document.querySelectorAll('.lang-option');
 
     if (toggle && dropdown) {
+      console.log('🔴 Attaching click listener to lang-toggle');
       toggle.addEventListener('click', (e) => {
+        console.log('🟢 BUTTON CLICKED!', e);
         e.preventDefault();
         dropdown.classList.toggle('active');
+        console.log('🟢 Dropdown now active:', dropdown.classList.contains('active'));
 
         // Position dropdown below toggle button if active
         if (dropdown.classList.contains('active')) {
@@ -289,6 +292,7 @@
           dropdown.style.top = (rect.bottom + 8) + 'px';
           dropdown.style.right = window.innerWidth - rect.right + 'px';
           dropdown.style.left = 'auto';
+          console.log('🟢 Positioned dropdown at:', {top: dropdown.style.top, right: dropdown.style.right});
         }
       });
 
