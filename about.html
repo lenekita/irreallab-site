@@ -140,6 +140,35 @@
       padding: 2rem;
       border-radius: 4px;
       margin: 2rem 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem;
+      align-items: center;
+    }
+
+    .creator-photo {
+      width: 100%;
+      max-width: 350px;
+      height: auto;
+      border-radius: 4px;
+      border: 1px solid rgba(212, 240, 58, 0.2);
+      overflow: hidden;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .creator-photo img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .creator-info h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.2rem;
+      letter-spacing: .08em;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      text-transform: uppercase;
     }
 
     .creator-card h3 {
@@ -277,7 +306,8 @@
     @media (max-width: 768px) {
       main { padding: 2rem var(--pad-x) 3rem; }
       .concept-grid { grid-template-columns: 1fr; }
-      .creator-card { padding: 1.5rem; }
+      .creator-card { grid-template-columns: 1fr; gap: 2rem; padding: 1.5rem; }
+      .creator-photo { max-width: 100%; }
     }
 
     @media (max-width: 480px) {
@@ -349,19 +379,24 @@
       <h2>The Creator</h2>
 
       <div class="creator-card">
-        <h3>Radu Nechita</h3>
-        <p>
-          Radu Nechita is the creator and visionary behind irreallab. With a passion for digital art and emerging technologies,
-          he uses artificial intelligence, image generation tools, and creative technologies to create unique and immersive visual experiences.
-        </p>
-        <p>
-          His work focuses on exploring the unlimited possibilities of digital creation, combining algorithms with creative intuition
-          to produce visuals that defy convention and inspire imagination.
-        </p>
-        <p>
-          <strong>Follow his work:</strong> Discover the latest reels on <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" style="color: var(--accent); text-decoration: none;">@irreallab on Instagram</a>
-          where he regularly shares new visual experiments.
-        </p>
+        <div class="creator-photo">
+          <img src="/images/radu-nechita.jpg" alt="Radu Nechita - Creator of irreallab">
+        </div>
+        <div class="creator-info">
+          <h3>Radu Nechita</h3>
+          <p>
+            Radu Nechita is the creator and visionary behind irreallab. With a passion for digital art and emerging technologies,
+            he uses artificial intelligence, image generation tools, and creative technologies to create unique and immersive visual experiences.
+          </p>
+          <p>
+            His work focuses on exploring the unlimited possibilities of digital creation, combining algorithms with creative intuition
+            to produce visuals that defy convention and inspire imagination.
+          </p>
+          <p>
+            <strong>Follow his work:</strong> Discover the latest reels on <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" style="color: var(--accent); text-decoration: none;">@irreallab on Instagram</a>
+            where he regularly shares new visual experiments.
+          </p>
+        </div>
       </div>
     </section>
 
@@ -383,6 +418,20 @@
           • Explore the boundaries of visual creation<br>
           • Celebrate the fusion of art and technology<br>
           • Invite reflection and imagination
+        </p>
+      </div>
+    </section>
+
+    <section class="about-section">
+      <h2>Website Design</h2>
+      <div class="about-content">
+        <p>
+          This website was designed and built by <strong>Hélène Nechita</strong>, a professional website creator and digital designer.
+          With a focus on clean design, responsive layouts, and user experience, Hélène brings irreallab's creative vision to life online.
+        </p>
+        <p>
+          The site combines modern web technologies with artistic direction to showcase the surreal visual experiments in their best light,
+          ensuring an immersive and engaging experience across all devices.
         </p>
       </div>
     </section>
