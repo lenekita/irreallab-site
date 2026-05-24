@@ -278,13 +278,18 @@
     const dropdown = document.getElementById('lang-dropdown');
     const options = document.querySelectorAll('.lang-option');
 
-    if (toggle && dropdown) {
-      console.log('🔴 Attaching click listener to lang-toggle');
-      toggle.addEventListener('click', (e) => {
-        console.log('🟢 BUTTON CLICKED!', e);
+    // Use document-level event delegation - survives DOM changes
+    document.addEventListener('click', async (e) => {
+      const toggle = document.getElementById('lang-toggle');
+      const dropdown = document.getElementById('lang-dropdown');
+
+      if (!toggle || !dropdown) return;
+
+      // Handle toggle button click
+      if (e.target.closest('#lang-toggle')) {
         e.preventDefault();
+        e.stopPropagation();
         dropdown.classList.toggle('active');
-        console.log('🟢 Dropdown now active:', dropdown.classList.contains('active'));
 
         // Position dropdown below toggle button if active
         if (dropdown.classList.contains('active')) {
@@ -292,32 +297,29 @@
           dropdown.style.top = (rect.bottom + 8) + 'px';
           dropdown.style.right = window.innerWidth - rect.right + 'px';
           dropdown.style.left = 'auto';
-          console.log('🟢 Positioned dropdown at:', {top: dropdown.style.top, right: dropdown.style.right});
         }
-      });
+        return;
+      }
 
-      // Close dropdown when clicking outside
-      document.addEventListener('click', (e) => {
-        if (!e.target.closest('.lang-switcher')) {
-          dropdown.classList.remove('active');
-        }
-      });
-
-      // Use event delegation on dropdown for language option clicks
-      dropdown.addEventListener('click', async (e) => {
+      // Handle language option clicks
+      if (e.target.closest('#lang-dropdown .lang-option')) {
         e.preventDefault();
         e.stopPropagation();
 
-        // Check if clicked element is a language option
         const option = e.target.closest('.lang-option');
         if (option) {
           const lang = option.getAttribute('data-lang');
-          console.log('Language option clicked:', lang);
           await setLanguage(lang);
           dropdown.classList.remove('active');
         }
-      });
-    }
+        return;
+      }
+
+      // Close dropdown when clicking outside
+      if (!e.target.closest('.lang-switcher')) {
+        dropdown.classList.remove('active');
+      }
+    });
   });
 
   // Expose setLanguage globally for manual switching
