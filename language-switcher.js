@@ -227,13 +227,23 @@
     // Load initial translations
     translations = await loadTranslations(currentLanguage);
 
-    // Insert switcher into navigation
-    const navLinks = document.querySelector('.nav-links') ||
-                     document.querySelector('.nav-cta')?.parentElement;
+    // Insert switcher into navigation - try multiple selectors for different page structures
+    let insertionPoint = null;
+    const navLinks = document.querySelector('.nav-links');
+    const nav = document.querySelector('nav');
 
-    if (navLinks) {
+    if (navLinks && nav) {
+      insertionPoint = navLinks.parentElement;
       const switcher = createLanguageSwitcher();
-      navLinks.parentElement.insertBefore(switcher, navLinks.nextSibling);
+      insertionPoint.appendChild(switcher);
+      console.log('Language switcher inserted successfully');
+    } else if (nav) {
+      // Fallback: append to nav directly
+      const switcher = createLanguageSwitcher();
+      nav.appendChild(switcher);
+      console.log('Language switcher inserted to nav (fallback)');
+    } else {
+      console.warn('Could not find navigation element to insert language switcher');
     }
 
     // Apply translations to page
