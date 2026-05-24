@@ -244,22 +244,33 @@
     console.log('Language switcher init - navLinks:', !!navLinks, 'nav:', !!nav, 'mainNav:', !!mainNav);
 
     const switcher = createLanguageSwitcher();
+    console.log('✅ Switcher created:', !!switcher);
 
     if (navLinks) {
       // Insert after nav-links
       navLinks.parentElement.appendChild(switcher);
-      console.log('Language switcher inserted after nav-links');
+      console.log('✅ Language switcher inserted after nav-links');
     } else if (mainNav) {
       // Fallback for main page: append to main-nav directly
       mainNav.appendChild(switcher);
-      console.log('Language switcher inserted to main-nav');
+      console.log('✅ Language switcher inserted to main-nav');
     } else if (nav) {
       // Fallback: append to any nav
       nav.appendChild(switcher);
-      console.log('Language switcher inserted to nav (fallback)');
+      console.log('✅ Language switcher inserted to nav (fallback)');
     } else {
-      console.warn('Could not find navigation element to insert language switcher');
+      console.warn('❌ Could not find navigation element to insert language switcher');
     }
+
+    // Verify it's actually there
+    setTimeout(() => {
+      const check = document.getElementById('lang-switcher-component');
+      console.log('✅ Switcher in DOM after insert:', !!check);
+      if (check) {
+        console.log('✅ Dropdown in DOM:', !!document.getElementById('lang-dropdown'));
+        console.log('✅ Toggle button in DOM:', !!document.getElementById('lang-toggle'));
+      }
+    }, 50);
 
     // Wait a moment then verify switcher exists
     setTimeout(() => {
@@ -287,8 +298,6 @@
 
       // Handle toggle button click
       if (e.target.closest('#lang-toggle')) {
-        e.preventDefault();
-        e.stopPropagation();
         dropdown.classList.toggle('active');
 
         // Position dropdown below toggle button if active
@@ -304,8 +313,6 @@
       // Handle language option clicks
       const langOption = e.target.closest('.lang-option');
       if (langOption && dropdown.contains(langOption)) {
-        e.preventDefault();
-        e.stopPropagation();
         const lang = langOption.getAttribute('data-lang');
         await setLanguage(lang);
         dropdown.classList.remove('active');
