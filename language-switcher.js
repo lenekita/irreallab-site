@@ -2,10 +2,6 @@
 // Loads translations from JSON files and dynamically updates page content
 
 (function() {
-  // Prevent multiple initializations
-  if (window.irreallabSwitcherInitialized) return;
-  window.irreallabSwitcherInitialized = true;
-
   const LANGUAGE_KEY = 'irreallab_language_preference';
   const SUPPORTED_LANGUAGES = ['en', 'fr', 'ro'];
   const DEFAULT_LANGUAGE = 'en';
@@ -229,6 +225,10 @@
 
   // Initialize when DOM is ready
   window.addEventListener('DOMContentLoaded', async () => {
+    // Prevent multiple initializations
+    if (window.irreallabSwitcherInitialized) return;
+    window.irreallabSwitcherInitialized = true;
+
     // Get language preference
     currentLanguage = getLanguagePreference();
 
