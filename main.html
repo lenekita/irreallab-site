@@ -1134,9 +1134,11 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     // Add audio management and play/pause button for preview videos
     const previewVideos = document.querySelectorAll('.preview-video');
+    const audioToggleBtn = document.getElementById('audio-toggle');
 
     previewVideos.forEach(video => {
       const playButton = video.nextElementSibling;
+      let audioWasPlayingBeforeVideo = false;
 
       // Toggle play/pause on video click
       video.addEventListener('click', (e) => {
@@ -1163,15 +1165,18 @@ document.addEventListener('DOMContentLoaded', async function() {
       // Pause site audio when video starts playing
       video.addEventListener('play', () => {
         if (siteAudio && !siteAudio.paused) {
+          audioWasPlayingBeforeVideo = true;
           siteAudio.pause();
+        } else {
+          audioWasPlayingBeforeVideo = false;
         }
         // Hide play button when playing
         if (playButton) playButton.style.opacity = '0';
       });
 
-      // Resume site audio when video stops playing
+      // Resume site audio only if it was playing before AND button says it should be on
       video.addEventListener('pause', () => {
-        if (siteAudio && siteAudio.paused) {
+        if (audioWasPlayingBeforeVideo && siteAudio && siteAudio.paused && audioToggleBtn && audioToggleBtn.classList.contains('is-on')) {
           siteAudio.play().catch(err => console.log('Cannot resume background audio:', err));
         }
         // Show play button when paused
@@ -1180,7 +1185,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
       // Also resume when video ends
       video.addEventListener('ended', () => {
-        if (siteAudio && siteAudio.paused) {
+        if (audioWasPlayingBeforeVideo && siteAudio && siteAudio.paused && audioToggleBtn && audioToggleBtn.classList.contains('is-on')) {
           siteAudio.play().catch(err => console.log('Cannot resume background audio:', err));
         }
         // Show play button when ended
