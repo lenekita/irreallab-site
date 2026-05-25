@@ -349,6 +349,11 @@
     if (!cursor || !trail) return;
     if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
 
+    // Ensure cursor is visible on init
+    document.body.classList.remove('ir-cursor-hidden');
+    cursor.style.opacity = '1';
+    trail.style.opacity = '1';
+
     let mouseX = window.innerWidth / 2;
     let mouseY = window.innerHeight / 2;
     let trailX = mouseX;
@@ -357,6 +362,10 @@
     function setPosition(element, x, y) {
       element.style.transform = 'translate3d(' + x + 'px, ' + y + 'px, 0) translate(-50%, -50%)';
     }
+
+    // Initial position
+    setPosition(cursor, mouseX, mouseY);
+    setPosition(trail, trailX, trailY);
 
     document.addEventListener('mousemove', function (event) {
       mouseX = event.clientX;
