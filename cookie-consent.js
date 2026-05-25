@@ -45,12 +45,17 @@
         bottom: 0;
         left: 0;
         right: 0;
-        z-index: 9999;
+        z-index: 2147483646;
         background: rgba(6, 6, 6, 0.95);
         backdrop-filter: blur(10px);
         border-top: 1px solid rgba(212, 240, 58, 0.2);
         padding: 1.5rem 2rem;
         animation: slideUp 0.3s ease-out;
+      }
+
+      /* Ensure cursor stays on top of banner */
+      .ir-cursor, .ir-cursor-trail {
+        z-index: 2147483647 !important;
       }
 
       @keyframes slideUp {
