@@ -247,7 +247,20 @@
     .section-head { padding: 2.5rem var(--pad-x) 1.8rem; display: flex; align-items: baseline; justify-content: space-between; border-bottom: 1px solid var(--line); }
     .section-head h2 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2rem, 5vw, 3rem); line-height: 1; letter-spacing: -.01em; }
     .section-head h2 span { color: var(--accent); }
-    .section-count { font-size: .58rem; letter-spacing: .15em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+    .section-count {
+      font-size: .58rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: rgba(212, 240, 58, 0.65);
+      white-space: nowrap;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .section-count:hover {
+      color: rgba(212, 240, 58, 1);
+      text-decoration: underline;
+    }
 
     /* REELS */
     .reel-list { border-bottom: 1px solid var(--line); }
