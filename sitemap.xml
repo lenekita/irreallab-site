@@ -1,39 +1,196 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
   <url>
     <loc>https://irreallab.fr/</loc>
-    <lastmod>2026-05-29</lastmod>
+    <lastmod>2026-06-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://irreallab.fr/main</loc>
-    <lastmod>2026-05-29</lastmod>
+    <lastmod>2026-06-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
   </url>
   <url>
     <loc>https://irreallab.fr/reels</loc>
-    <lastmod>2026-05-29</lastmod>
+    <lastmod>2026-06-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://irreallab.fr/about</loc>
-    <lastmod>2026-05-29</lastmod>
+    <lastmod>2026-06-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://irreallab.fr/contact</loc>
-    <lastmod>2026-05-29</lastmod>
+    <lastmod>2026-06-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://irreallab.fr/credits</loc>
-    <lastmod>2026-05-29</lastmod>
+    <lastmod>2026-06-09</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://irreallab.fr/reel/posthuman-couture-2086.html</loc>
+    <lastmod>2026-06-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+    <video:video>
+      <video:thumbnail_loc>https://irreallab.fr/images/posters/posthuman-couture-2086.jpg</video:thumbnail_loc>
+      <video:title>posthuman couture 2086</video:title>
+      <video:description>A fashion runway from the year 2086 — synthetic fabrics, augmented silhouettes and couture designed for a posthuman world.</video:description>
+      <video:content_loc>https://irreallab.fr/video/reel-11.mp4</video:content_loc>
+      <video:duration>44</video:duration>
+      <video:publication_date>2026-06-06T00:00:00.000Z</video:publication_date>
+      <video:family_friendly>yes</video:family_friendly>
+      <video:live>no</video:live>
+    </video:video>
+  </url>
+  <url>
+    <loc>https://irreallab.fr/reel/crowded-thoughts.html</loc>
+    <lastmod>2026-05-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+    <video:video>
+      <video:thumbnail_loc>https://irreallab.fr/images/posters/crowded-thoughts.jpg</video:thumbnail_loc>
+      <video:title>crowded thoughts</video:title>
+      <video:description>A meditation on mental noise — streets, faces and fragments crowd the frame until the quiet chaos starts to think for itself.</video:description>
+      <video:content_loc>https://irreallab.fr/video/reel-10.mp4</video:content_loc>
+      <video:duration>47</video:duration>
+      <video:publication_date>2026-05-29T00:00:00.000Z</video:publication_date>
+      <video:family_friendly>yes</video:family_friendly>
+      <video:live>no</video:live>
+    </video:video>
+  </url>
+  <url>
+    <loc>https://irreallab.fr/reel/artificial-emotions.html</loc>
+    <lastmod>2026-05-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+    <video:video>
+      <video:thumbnail_loc>https://irreallab.fr/images/posters/artificial-emotions.jpg</video:thumbnail_loc>
+      <video:title>artificial emotions</video:title>
+      <video:description>Machines learning to feel — a cinematic study of synthetic faces caught somewhere between code and emotion.</video:description>
+      <video:content_loc>https://irreallab.fr/video/reel-9.mp4</video:content_loc>
+      <video:duration>78</video:duration>
+      <video:publication_date>2026-05-18T00:00:00.000Z</video:publication_date>
+      <video:family_friendly>yes</video:family_friendly>
+      <video:live>no</video:live>
+    </video:video>
+  </url>
+  <url>
+    <loc>https://irreallab.fr/reel/urban-mirage.html</loc>
+    <lastmod>2026-05-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+    <video:video>
+      <video:thumbnail_loc>https://irreallab.fr/images/posters/urban-mirage.jpg</video:thumbnail_loc>
+      <video:title>urban mirage</video:title>
+      <video:description>Paris at night dissolves into a mirage — neon, rain and architecture bending like a half-remembered dream.</video:description>
+      <video:content_loc>https://irreallab.fr/video/reel-8.mp4</video:content_loc>
+      <video:duration>64</video:duration>
+      <video:publication_date>2026-05-18T00:00:00.000Z</video:publication_date>
+      <video:family_friendly>yes</video:family_friendly>
+      <video:live>no</video:live>
+    </video:video>
+  </url>
+  <url>
+    <loc>https://irreallab.fr/reel/carved-origins.html</loc>
+    <lastmod>2026-05-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+    <video:video>
+      <video:thumbnail_loc>https://irreallab.fr/images/posters/carved-origins.jpg</video:thumbnail_loc>
+      <video:title>carved origins</video:title>
+      <video:description>Ancient stone meets generative form — monuments carved by hands that never existed, somewhere between ruin and prophecy.</video:description>
+      <video:content_loc>https://irreallab.fr/video/reel-1.mp4</video:content_loc>
+      <video:duration>38</video:duration>
+      <video:publication_date>2026-05-15T00:00:00.000Z</video:publication_date>
+      <video:family_friendly>yes</video:family_friendly>
+      <video:live>no</video:live>
+    </video:video>
+  </url>
+  <url>
+    <loc>https://irreallab.fr/reel/chasing-speed.html</loc>
+    <lastmod>2026-05-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+    <video:video>
+      <video:thumbnail_loc>https://irreallab.fr/images/posters/chasing-speed.jpg</video:thumbnail_loc>
+      <video:title>chasing speed.</video:title>
+      <video:description>A surreal love letter to speed culture — engines, blur and the poetry of motion at the edge of control.</video:description>
+      <video:content_loc>https://irreallab.fr/video/reel-2.mp4</video:content_loc>
+      <video:duration>73</video:duration>
+      <video:publication_date>2026-05-15T12:18:34.357Z</video:publication_date>
+      <video:family_friendly>yes</video:family_friendly>
+      <video:live>no</video:live>
+    </video:video>
+  </url>
+  <url>
+    <loc>https://irreallab.fr/reel/closing-hours.html</loc>
+    <lastmod>2026-06-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+    <video:video>
+      <video:thumbnail_loc>https://irreallab.fr/images/posters/closing-hours.jpg</video:thumbnail_loc>
+      <video:title>Closing Hours</video:title>
+      <video:description>After the museum closes, the water rises — an archive of art drifting through surreal silence after dark.</video:description>
+      <video:content_loc>https://irreallab.fr/video/reel-3.mp4</video:content_loc>
+      <video:duration>92</video:duration>
+      <video:family_friendly>yes</video:family_friendly>
+      <video:live>no</video:live>
+    </video:video>
+  </url>
+  <url>
+    <loc>https://irreallab.fr/reel/frame-shift.html</loc>
+    <lastmod>2026-06-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+    <video:video>
+      <video:thumbnail_loc>https://irreallab.fr/images/posters/frame-shift.jpg</video:thumbnail_loc>
+      <video:title>Frame Shift</video:title>
+      <video:description>Perspective folds in on itself — one scene, infinite angles, pure dream logic set in motion.</video:description>
+      <video:content_loc>https://irreallab.fr/video/reel-4.mp4</video:content_loc>
+      <video:duration>36</video:duration>
+      <video:family_friendly>yes</video:family_friendly>
+      <video:live>no</video:live>
+    </video:video>
+  </url>
+  <url>
+    <loc>https://irreallab.fr/reel/art-heist.html</loc>
+    <lastmod>2026-06-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+    <video:video>
+      <video:thumbnail_loc>https://irreallab.fr/images/posters/art-heist.jpg</video:thumbnail_loc>
+      <video:title>Art Heist</video:title>
+      <video:description>The perfect crime is a point of view — a cinematic heist through galleries of stolen vision.</video:description>
+      <video:content_loc>https://irreallab.fr/video/reel-5.mp4</video:content_loc>
+      <video:duration>27</video:duration>
+      <video:family_friendly>yes</video:family_friendly>
+      <video:live>no</video:live>
+    </video:video>
+  </url>
+  <url>
+    <loc>https://irreallab.fr/reel/drifting-through.html</loc>
+    <lastmod>2026-06-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+    <video:video>
+      <video:thumbnail_loc>https://irreallab.fr/images/posters/drifting-through.jpg</video:thumbnail_loc>
+      <video:title>Drifting through</video:title>
+      <video:description>A high-speed drive on a road made of clouds — drifting somewhere between waking and dream.</video:description>
+      <video:content_loc>https://irreallab.fr/video/reel-6.mp4</video:content_loc>
+      <video:duration>45</video:duration>
+      <video:family_friendly>yes</video:family_friendly>
+      <video:live>no</video:live>
+    </video:video>
   </url>
 </urlset>

@@ -7,7 +7,8 @@
     "status": "Live",
     "video_url": "/video/reel-11.mp4",
     "posted_at": "2026-06-06T00:00:00.000Z",
-    "audio_url": "/audio/reel-11.mp3"
+    "audio_url": "/audio/reel-11.mp3",
+    "description": "A fashion runway from the year 2086 — synthetic fabrics, augmented silhouettes and couture designed for a posthuman world."
   },
   {
     "title": "crowded thoughts",
@@ -17,7 +18,8 @@
     "status": "Live",
     "video_url": "/video/reel-10.mp4",
     "posted_at": "2026-05-29T00:00:00.000Z",
-    "audio_url": "/audio/reel-10.mp3"
+    "audio_url": "/audio/reel-10.mp3",
+    "description": "A meditation on mental noise — streets, faces and fragments crowd the frame until the quiet chaos starts to think for itself."
   },
   {
     "title": "artificial emotions",
@@ -27,7 +29,8 @@
     "status": "Live",
     "video_url": "/video/reel-9.mp4",
     "posted_at": "2026-05-18T00:00:00.000Z",
-    "audio_url": "/audio/reel-9.mp3"
+    "audio_url": "/audio/reel-9.mp3",
+    "description": "Machines learning to feel — a cinematic study of synthetic faces caught somewhere between code and emotion."
   },
   {
     "title": "urban mirage",
@@ -37,7 +40,8 @@
     "status": "Live",
     "video_url": "/video/reel-8.mp4",
     "posted_at": "2026-05-18T00:00:00.000Z",
-    "audio_url": "/audio/reel-8.mp3"
+    "audio_url": "/audio/reel-8.mp3",
+    "description": "Paris at night dissolves into a mirage — neon, rain and architecture bending like a half-remembered dream."
   },
   {
     "title": "carved origins",
@@ -47,7 +51,8 @@
     "status": "Live",
     "video_url": "/video/reel-1.mp4",
     "posted_at": "2026-05-15T00:00:00.000Z",
-    "audio_url": "/audio/reel-1.mp3"
+    "audio_url": "/audio/reel-1.mp3",
+    "description": "Ancient stone meets generative form — monuments carved by hands that never existed, somewhere between ruin and prophecy."
   },
   {
     "title": "chasing speed.",
@@ -57,7 +62,8 @@
     "status": "Live",
     "video_url": "/video/reel-2.mp4",
     "audio_url": "/audio/reel-2.mp3",
-    "posted_at": "2026-05-15T12:18:34.357Z"
+    "posted_at": "2026-05-15T12:18:34.357Z",
+    "description": "A surreal love letter to speed culture — engines, blur and the poetry of motion at the edge of control."
   },
   {
     "title": "Closing Hours",
@@ -66,7 +72,8 @@
     "hashtags": "#closinghours #museumafterdark #surrealwater #nightarchive #visualpoetry #irreallab",
     "status": "Live",
     "video_url": "/video/reel-3.mp4",
-    "audio_url": "/audio/reel-3.mp3"
+    "audio_url": "/audio/reel-3.mp3",
+    "description": "After the museum closes, the water rises — an archive of art drifting through surreal silence after dark."
   },
   {
     "title": "Frame Shift",
@@ -75,7 +82,8 @@
     "hashtags": "#frameshift #alteredperspective #dreamlogic #surrealvisuals #cinematicreel #irreallab",
     "status": "Live",
     "video_url": "/video/reel-4.mp4",
-    "audio_url": "/audio/reel-4.mp3"
+    "audio_url": "/audio/reel-4.mp3",
+    "description": "Perspective folds in on itself — one scene, infinite angles, pure dream logic set in motion."
   },
   {
     "title": "Art Heist",
@@ -84,7 +92,8 @@
     "hashtags": "#artheist #stolenvision #creativecrime #museumreel #visualexperiment #irreallab",
     "status": "Live",
     "video_url": "/video/reel-5.mp4",
-    "audio_url": "/audio/reel-5.mp3"
+    "audio_url": "/audio/reel-5.mp3",
+    "description": "The perfect crime is a point of view — a cinematic heist through galleries of stolen vision."
   },
   {
     "title": "Drifting through",
@@ -93,6 +102,7 @@
     "hashtags": "#driftingthrough #cloudroad #highspeeddream #surrealmotion #cinematicdrive #irreallab",
     "status": "Live",
     "video_url": "/video/reel-6.mp4",
-    "audio_url": "/audio/reel-6.mp3"
+    "audio_url": "/audio/reel-6.mp3",
+    "description": "A high-speed drive on a road made of clouds — drifting somewhere between waking and dream."
   }
 ]

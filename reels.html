@@ -1066,11 +1066,15 @@ window.cookiehub.load(cpm);
       const grid = document.querySelector('.grid');
       const count = document.querySelector('.count');
       const esc = s => (new DOMParser).parseFromString(s,'text/html').body.innerText;
+      const slugify = t => t.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
 
       function render(reels) {
         grid.innerHTML = reels.map((r, i) => {
+          const isLocalVideo = r.video_url && r.video_url.trim().startsWith('/');
+          const slug = isLocalVideo ? slugify(r.title) : null;
+          const poster = slug ? `/images/posters/${slug}.jpg` : esc(r.thumbnail_url || '');
           const embedHtml = r.video_url && r.video_url.trim()
-            ? `<video src="${esc(r.video_url)}" poster="${esc(r.thumbnail_url)}" muted playsinline style="width:100%;height:100%;object-fit:contain;border-radius:0;"></video>`
+            ? `<video src="${esc(r.video_url)}" poster="${poster}" muted playsinline style="width:100%;height:100%;object-fit:contain;border-radius:0;"></video>`
             : `<blockquote class="instagram-media" data-instgrm-permalink="${esc(r.url)}" data-instgrm-version="14" style="background:#FFF;border:0;border-radius:0;box-shadow:none;margin:0;max-width:540px;min-width:326px;padding:0;width:100%;"></blockquote>`;
 
           return `<article class="card" ${r.audio_url ? `data-audio-url="${esc(r.audio_url)}"` : ''}>
@@ -1080,7 +1084,7 @@ window.cookiehub.load(cpm);
               <h2>${esc(r.title)}</h2>
               <div class="sub">${esc(r.subtitle||'@irreallab · Watch on Instagram')}</div>
               <p class="hashtags">${esc(r.hashtags)}</p>
-              <a class="open" href="${esc(r.url)}" target="_blank" rel="noopener">Open reel ↗</a>
+              ${slug ? `<a class="open" href="/reel/${slug}.html" style="margin-right:1.2rem;">View + share ↗</a>` : ''}<a class="open" href="${esc(r.url)}" target="_blank" rel="noopener">Open reel ↗</a>
             </div>
           </article>`;
         }).join('');
