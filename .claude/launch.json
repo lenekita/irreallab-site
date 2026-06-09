@@ -6,6 +6,12 @@
       "runtimeExecutable": "node",
       "runtimeArgs": ["server.js"],
       "port": 3000
+    },
+    {
+      "name": "irreallab-static",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["http-server", "-p", "8086", "-c-1"],
+      "port": 8086
     }
   ]
 }

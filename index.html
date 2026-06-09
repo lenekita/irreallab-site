@@ -8,6 +8,17 @@
   <link rel="icon" type="image/png" sizes="192x192" href="/images/favicon.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
   <meta name="description" content="Visual experiments in short-form. Motion, surrealism & the art of the unreal.">
+  <link rel="canonical" href="https://irreallab.fr/">
+  <meta property="og:title" content="irreallab — surreal visual experiments">
+  <meta property="og:description" content="Visual experiments in short-form. Motion, surrealism & the art of the unreal.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://irreallab.fr/">
+  <meta property="og:image" content="https://irreallab.fr/images/preview.jpg">
+  <meta property="og:site_name" content="irreallab">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="irreallab — surreal visual experiments">
+  <meta name="twitter:description" content="Visual experiments in short-form. Motion, surrealism & the art of the unreal.">
+  <meta name="twitter:image" content="https://irreallab.fr/images/preview.jpg">
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -306,24 +317,6 @@
       .ir-cursor, .ir-cursor-trail { display: none !important; }
     }
 
-    #canvas-3d {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100vh;
-      display: block;
-      z-index: 1;
-    }
-
-    #scroll-container {
-      position: relative;
-      width: 100%;
-      height: 800vh;
-      z-index: 2;
-      pointer-events: none;
-    }
-
     .intro-shell {
       position: relative !important;
       z-index: 10 !important;
@@ -339,14 +332,6 @@
       min-height: 100vh !important;
       opacity: 0;
       animation: fadeInUp 1.2s cubic-bezier(.16,1,.3,1) forwards;
-    }
-
-    #canvas-3d {
-      display: none;
-    }
-
-    #scroll-container {
-      display: none;
     }
 
     .intro-footer {
@@ -389,13 +374,6 @@ window.cookiehub.load(cpm);
 </script>
 </head>
 <body>
-  <!-- 3D Canvas for scroll animation -->
-  <canvas id="canvas-3d"></canvas>
-
-  <!-- Invisible scroll container for tracking scroll progress -->
-  <div id="scroll-container"></div>
-
-  <!-- Legacy intro content (hidden by CSS) -->
   <div class="intro-shell">
     <div class="intro-label" data-translate="index.label">Visual Experiments</div>
     <div>
@@ -415,12 +393,6 @@ window.cookiehub.load(cpm);
   <!-- Custom cursor elements -->
   <div class="ir-cursor" aria-hidden="true"></div>
   <div class="ir-cursor-trail" aria-hidden="true"></div>
-
-  <!-- Three.js library - load synchronously before other scripts -->
-  <script src="/three.min.js"></script>
-
-  <!-- 3D Scroll Intro Script - defer until after Three.js loads -->
-  <script defer src="scroll-3d-intro.js"></script>
 
   <!-- Custom Cursor and other animations -->
   <script src="animations2.js" defer></script>

@@ -1185,7 +1185,12 @@ document.addEventListener('DOMContentLoaded', async function() {
   const siteAudio = document.getElementById('site-audio');
 
   try {
-    const response = await fetch('/api/reels');
+    // /api/reels only exists when served by server.js; fall back to the
+    // static reels.json on GitHub Pages
+    let response = await fetch('/api/reels').catch(() => null);
+    if (!response || !response.ok) {
+      response = await fetch('/reels.json', { cache: 'no-store' });
+    }
     const reels = await response.json();
 
     // Show only first 4 reels on main page
