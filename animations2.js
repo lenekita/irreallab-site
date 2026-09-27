@@ -388,6 +388,11 @@
     if (!cursor || !trail) return;
     if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
 
+    // Only hide the native pointer once the replacement is actually live —
+    // site.css's cursor:none rule is scoped to this class for exactly that
+    // reason (a page that forgets the cursor elements must not go pointer-less).
+    document.body.classList.add('ir-cursor-active');
+
     // Ensure cursor is visible on init
     document.body.classList.remove('ir-cursor-hidden');
     cursor.style.opacity = '1';

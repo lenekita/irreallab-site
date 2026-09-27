@@ -263,9 +263,16 @@ footer { display: flex; align-items: center; justify-content: space-between; pad
   }
 }
 
-/* ── CUSTOM CURSOR ── */
+/* ── CUSTOM CURSOR ──
+   The native pointer is only hidden once animations2.js has confirmed the
+   replacement (.ir-cursor/.ir-cursor-trail) exists and initialized — see
+   initCustomCursor(), which adds this class. Without it, a page that
+   forgets to include the cursor elements or the script would otherwise be
+   left with no visible pointer at all. */
 @media (hover: hover) and (pointer: fine) {
-  html, body, a, button, .reel-row, .card, .audio-toggle, .intro-enter { cursor: none !important; }
+  html:has(body.ir-cursor-active), body.ir-cursor-active, body.ir-cursor-active a, body.ir-cursor-active button,
+  body.ir-cursor-active .reel-row, body.ir-cursor-active .card,
+  body.ir-cursor-active .audio-toggle, body.ir-cursor-active .intro-enter { cursor: none !important; }
   .ir-cursor, .ir-cursor-trail {
     position: fixed; top: 0; left: 0; pointer-events: none; border-radius: 50%;
     transform: translate3d(-100px, -100px, 0) translate(-50%, -50%);

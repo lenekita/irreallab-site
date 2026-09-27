@@ -349,6 +349,10 @@ ${JSON.stringify(jsonLd, null, 2)}
   <!-- @footer -->
   <!-- /@footer -->
 
+  <div class="ir-cursor" aria-hidden="true"></div>
+  <div class="ir-cursor-trail" aria-hidden="true"></div>
+
+  <script src="/animations2.js" defer></script>
   <script src="/language-switcher.js"></script>
 </body>
 </html>
