@@ -18,11 +18,10 @@ const POSTER_DIR = path.join(ROOT, 'images', 'posters');
 
 const STATIC_PAGES = [
   { loc: `${SITE}/`, changefreq: 'weekly', priority: '1.0' },
-  { loc: `${SITE}/main`, changefreq: 'weekly', priority: '0.95' },
-  { loc: `${SITE}/reels`, changefreq: 'weekly', priority: '0.9' },
-  { loc: `${SITE}/about`, changefreq: 'monthly', priority: '0.85' },
-  { loc: `${SITE}/contact`, changefreq: 'monthly', priority: '0.8' },
-  { loc: `${SITE}/credits`, changefreq: 'yearly', priority: '0.7' },
+  { loc: `${SITE}/reels.html`, changefreq: 'weekly', priority: '0.9' },
+  { loc: `${SITE}/about.html`, changefreq: 'monthly', priority: '0.85' },
+  { loc: `${SITE}/contact.html`, changefreq: 'monthly', priority: '0.8' },
+  { loc: `${SITE}/credits.html`, changefreq: 'yearly', priority: '0.7' },
 ];
 
 function slugify(title) {
@@ -74,7 +73,7 @@ function isoDuration(seconds) {
   return `PT${m ? m + 'M' : ''}${s}S`;
 }
 
-function pageHtml(reel, meta) {
+function pageHtml(reel, meta, neighbors) {
   const title = escapeHtml(reel.title);
   const desc = escapeHtml(reel.description || `${reel.title} — a surreal visual experiment by irreallab.`);
   const pageUrl = `${SITE}/reel/${meta.slug}.html`;
@@ -102,6 +101,8 @@ function pageHtml(reel, meta) {
     },
   };
   if (reel.posted_at) jsonLd.uploadDate = reel.posted_at;
+
+  const { prev, next } = neighbors;
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -136,54 +137,9 @@ ${JSON.stringify(jsonLd, null, 2)}
   </script>
 
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles/site.css">
   <style>
-    :root {
-      --bg: #060606;
-      --accent: #d4f03a;
-      --text: #ede9df;
-      --muted: #4a4a4a;
-      --line: #1c1c1c;
-    }
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Space Mono', monospace;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-    body::after {
-      content: '';
-      position: fixed; inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-      opacity: 0.035; pointer-events: none; z-index: 9999;
-    }
-    header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1.4rem 2rem;
-      border-bottom: 1px solid var(--line);
-    }
-    .brand {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.4rem;
-      letter-spacing: .04em;
-      text-transform: uppercase;
-      color: var(--text);
-      text-decoration: none;
-    }
-    .brand em { color: var(--accent); font-style: normal; }
-    .back {
-      font-size: .62rem;
-      letter-spacing: .16em;
-      text-transform: uppercase;
-      color: var(--muted);
-      text-decoration: none;
-      transition: color .2s;
-    }
-    .back:hover { color: var(--accent); }
+    body { display: flex; flex-direction: column; }
     main {
       flex: 1;
       display: grid;
@@ -322,20 +278,25 @@ ${JSON.stringify(jsonLd, null, 2)}
     .btn:hover { background: var(--accent); color: #060606; }
     .btn.primary { background: var(--accent); color: #060606; }
     .btn.primary:hover { background: transparent; color: var(--accent); }
-    footer {
+    .reel-nav {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-top: 2.2rem;
+      padding-top: 1.6rem;
       border-top: 1px solid var(--line);
-      padding: 1.2rem 2rem;
+    }
+    .reel-nav a {
       font-size: .58rem;
       letter-spacing: .14em;
       text-transform: uppercase;
       color: var(--muted);
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: .6rem;
+      text-decoration: none;
+      transition: color .2s;
+      max-width: 48%;
     }
-    footer a { color: rgba(212,240,58,.75); text-decoration: none; }
-    footer a:hover { color: var(--accent); }
+    .reel-nav a:hover { color: var(--accent); }
+    .reel-nav .reel-nav-next { text-align: right; }
     @media (max-width: 820px) {
       main { grid-template-columns: 1fr; gap: 2rem; padding: 2rem 1.2rem; }
       .player { max-width: 380px; margin: 0 auto; width: 100%; }
@@ -361,10 +322,8 @@ ${JSON.stringify(jsonLd, null, 2)}
   </script>
 </head>
 <body>
-  <header>
-    <a class="brand" href="/main.html">irreal<em>lab_</em></a>
-    <a class="back" href="/reels.html">&larr; All reels</a>
-  </header>
+  <!-- @nav -->
+  <!-- /@nav -->
 
   <main>
     <div class="player">
@@ -380,13 +339,17 @@ ${JSON.stringify(jsonLd, null, 2)}
         <a class="btn primary" href="${escapeHtml(reel.url)}" target="_blank" rel="noopener">Watch on Instagram &#8599;</a>
         <a class="btn" href="/reels.html">More reels</a>
       </div>
+      <nav class="reel-nav" aria-label="More reels">
+        ${prev ? `<a href="/reel/${prev.slug}.html">&larr; ${escapeHtml(prev.title)}</a>` : '<span></span>'}
+        ${next ? `<a class="reel-nav-next" href="/reel/${next.slug}.html">${escapeHtml(next.title)} &rarr;</a>` : '<span></span>'}
+      </nav>
     </article>
   </main>
 
-  <footer>
-    <span>&copy; irreallab — all rights reserved</span>
-    <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener">@irreallab</a>
-  </footer>
+  <!-- @footer -->
+  <!-- /@footer -->
+
+  <script src="/language-switcher.js"></script>
 </body>
 </html>
 `;
@@ -437,26 +400,38 @@ function main() {
   fs.mkdirSync(REEL_DIR, { recursive: true });
   fs.mkdirSync(POSTER_DIR, { recursive: true });
 
-  const entries = [];
-  for (const reel of reels) {
+  const publishable = reels.filter(reel => {
     if (!reel.video_url || !reel.video_url.startsWith('/')) {
       console.warn(`skip "${reel.title}" — no local video_url`);
-      continue;
+      return false;
     }
-    const videoFile = path.join(ROOT, reel.video_url);
-    if (!fs.existsSync(videoFile)) {
+    if (!fs.existsSync(path.join(ROOT, reel.video_url))) {
       console.warn(`skip "${reel.title}" — missing ${reel.video_url}`);
-      continue;
+      return false;
     }
+    return true;
+  });
+
+  const entries = [];
+  publishable.forEach((reel, i) => {
+    const videoFile = path.join(ROOT, reel.video_url);
     const slug = slugify(reel.title);
     const posterFile = path.join(POSTER_DIR, `${slug}.jpg`);
     ensurePoster(videoFile, posterFile);
     const { width, height, duration } = probeVideo(videoFile);
     const meta = { slug, width, height, duration };
-    fs.writeFileSync(path.join(REEL_DIR, `${slug}.html`), pageHtml(reel, meta));
+
+    const prevReel = publishable[i - 1];
+    const nextReel = publishable[i + 1];
+    const neighbors = {
+      prev: prevReel ? { slug: slugify(prevReel.title), title: prevReel.title } : null,
+      next: nextReel ? { slug: slugify(nextReel.title), title: nextReel.title } : null,
+    };
+
+    fs.writeFileSync(path.join(REEL_DIR, `${slug}.html`), pageHtml(reel, meta, neighbors));
     entries.push({ reel, meta });
     console.log(`built reel/${slug}.html (${width}x${height}, ${duration}s)`);
-  }
+  });
 
   fs.writeFileSync(path.join(ROOT, 'sitemap.xml'), sitemapXml(entries));
   console.log(`wrote sitemap.xml with ${STATIC_PAGES.length} pages + ${entries.length} reels`);

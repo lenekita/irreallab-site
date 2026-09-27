@@ -265,13 +265,43 @@
 
     if (!audio || !button) return;
 
+    const MUTE_PREF_KEY = 'irreallab_audio_muted';
+    const TARGET_VOLUME = 1;
+    const FADE_MS = 900;
+    const FADE_STEP_MS = 30;
+
     audio.loop = true;
     audio.preload = 'auto';
+    audio.volume = 0;
+
+    let fadeTimer = null;
+
+    function fadeTo(target, onDone) {
+      if (fadeTimer) clearInterval(fadeTimer);
+      const steps = Math.max(1, Math.round(FADE_MS / FADE_STEP_MS));
+      const start = audio.volume;
+      const delta = (target - start) / steps;
+      let step = 0;
+
+      fadeTimer = window.setInterval(function () {
+        step += 1;
+        const next = start + delta * step;
+        audio.volume = Math.min(1, Math.max(0, next));
+
+        if (step >= steps) {
+          clearInterval(fadeTimer);
+          fadeTimer = null;
+          audio.volume = target;
+          if (onDone) onDone();
+        }
+      }, FADE_STEP_MS);
+    }
 
     function setAudioState(isOn) {
       button.classList.toggle('is-on', isOn);
       button.textContent = isOn ? 'SOUND ON' : 'SOUND OFF';
       button.setAttribute('aria-label', isOn ? 'Désactiver la musique' : 'Activer la musique');
+      try { localStorage.setItem(MUTE_PREF_KEY, isOn ? 'unmuted' : 'muted'); } catch (e) {}
     }
 
     function playAudio() {
@@ -281,18 +311,20 @@
       if (playPromise && typeof playPromise.then === 'function') {
         playPromise
           .then(function () {
+            fadeTo(TARGET_VOLUME);
             setAudioState(true);
           })
           .catch(function () {
             setAudioState(false);
           });
       } else {
+        fadeTo(TARGET_VOLUME);
         setAudioState(true);
       }
     }
 
     function pauseAudio() {
-      audio.pause();
+      fadeTo(0, function () { audio.pause(); });
       setAudioState(false);
     }
 
@@ -304,15 +336,22 @@
       }
     });
 
-    // Browsers often block autoplay with sound. This tries, then waits for first user interaction.
-    playAudio();
+    let userMuted = false;
+    try { userMuted = localStorage.getItem(MUTE_PREF_KEY) === 'muted'; } catch (e) {}
 
-    ['pointerdown', 'touchstart', 'keydown', 'scroll'].forEach(function (eventName) {
-      window.addEventListener(eventName, function firstInteraction() {
-        if (audio.paused) playAudio();
-        window.removeEventListener(eventName, firstInteraction);
-      }, { once: true, passive: true });
-    });
+    if (!userMuted) {
+      // Browsers often block autoplay with sound. This tries, then waits for first user interaction.
+      playAudio();
+
+      ['pointerdown', 'touchstart', 'keydown', 'scroll'].forEach(function (eventName) {
+        window.addEventListener(eventName, function firstInteraction() {
+          if (audio.paused) playAudio();
+          window.removeEventListener(eventName, firstInteraction);
+        }, { once: true, passive: true });
+      });
+    } else {
+      setAudioState(false);
+    }
   }
 
   function initMobileVideoAutoplay() {

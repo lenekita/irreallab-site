@@ -119,12 +119,6 @@
     "designedBy": "Conception du site web par Hélène Nechita",
     "logoText": "irreal_"
   },
-  "cookies": {
-    "title": "🍪 Nous Respectons Votre Confidentialité",
-    "message": "Nous utilisons Google Analytics pour comprendre comment vous utilisez notre site et améliorer votre expérience. Aucune donnée personnelle n'est collectée.",
-    "accept": "Accepter",
-    "decline": "Refuser"
-  },
   "errors": {
     "videoError": "Impossible de charger la vidéo",
     "loadingError": "Impossible de charger le contenu",

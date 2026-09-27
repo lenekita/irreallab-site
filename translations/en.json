@@ -119,12 +119,6 @@
     "designedBy": "Website Design by Hélène Nechita",
     "logoText": "irreal_"
   },
-  "cookies": {
-    "title": "🍪 We Respect Your Privacy",
-    "message": "We use Google Analytics to understand how you use our site and improve your experience. No personal data is collected.",
-    "accept": "Accept",
-    "decline": "Decline"
-  },
   "errors": {
     "videoError": "Unable to load video",
     "loadingError": "Unable to load content",

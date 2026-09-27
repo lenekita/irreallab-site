@@ -3,401 +3,461 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>irreallab — surreal visual experiments</title>
+
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link rel="icon" type="image/png" sizes="192x192" href="/images/favicon.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+
   <meta name="description" content="Visual experiments in short-form. Motion, surrealism & the art of the unreal.">
   <link rel="canonical" href="https://irreallab.fr/">
+
   <meta property="og:title" content="irreallab — surreal visual experiments">
   <meta property="og:description" content="Visual experiments in short-form. Motion, surrealism & the art of the unreal.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://irreallab.fr/">
-  <meta property="og:image" content="https://irreallab.fr/images/preview.jpg">
   <meta property="og:site_name" content="irreallab">
+  <meta property="og:image" content="https://irreallab.fr/images/preview.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="irreallab — surreal visual experiments">
   <meta name="twitter:description" content="Visual experiments in short-form. Motion, surrealism & the art of the unreal.">
   <meta name="twitter:image" content="https://irreallab.fr/images/preview.jpg">
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles/site.css">
   <style>
-    :root {
-      --bg: #060606;
-      --accent: #d4f03a;
-      --text: #ede9df;
-      --muted: #4a4a4a;
+    /* HERO */
+    .hero { display: grid; grid-template-columns: 1fr 1fr; min-height: 92vh; border-bottom: 1px solid var(--line); contain: layout; }
+    .hero-left { display: flex; flex-direction: column; justify-content: space-between; padding: 3.5rem var(--pad-x); border-right: 1px solid var(--line); }
+    .hero-eyebrow { font-size: .58rem; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; gap: .8rem; }
+    .hero-eyebrow::before { content: ''; width: 28px; height: 1px; background: var(--muted); flex-shrink: 0; }
+    .hero-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(4rem, 8.5vw, 9.5rem); line-height: .86; letter-spacing: -.01em; }
+    .hero-title em { color: var(--accent); display: block; font-style: normal; }
+    .hero-sub {
+      font-family: 'Space Mono', 'Courier New', monospace !important; font-style: normal !important;
+      font-size: 1rem !important; line-height: 1.7 !important; color: var(--muted) !important;
+      max-width: 300px !important; margin-top: 1.2rem !important; min-height: calc(1em * 1.7 * 3);
+      font-weight: 400 !important; letter-spacing: .035em !important; text-transform: none !important;
+    }
+    .hero-sub.ir-typewriter { display: block !important; white-space: normal !important; overflow: visible !important; max-width: 420px !important; }
+    @media (max-width: 900px) { .hero-sub.ir-typewriter { max-width: 86vw !important; } }
+    .hero-divider { width: 100%; height: 1px; background: var(--line2); }
+    .hero-meta { display: flex; flex-direction: column; gap: .9rem; }
+    .hero-transmission { display: grid; gap: 1rem; padding: .15rem 0; position: relative; }
+    .hero-transmission::before { content: ''; position: absolute; left: 0; top: -10px; width: 42px; height: 1px; background: var(--accent); box-shadow: 0 0 18px rgba(212,240,58,.55); opacity: .75; animation: ir-transmission-pulse 2.2s ease-in-out infinite; }
+    .transmission-kicker { font-size: .58rem; letter-spacing: .22em; text-transform: uppercase; color: var(--accent); }
+    .transmission-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(1.8rem, 3vw, 2.6rem); line-height: .9; letter-spacing: .04em; color: var(--text); }
+    .transmission-details { display: grid; gap: .35rem; font-size: .58rem; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+    .transmission-details span { display: inline-flex; align-items: center; gap: .65rem; }
+    .transmission-details span::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); opacity: .75; box-shadow: 0 0 14px rgba(212,240,58,.55); }
+    @keyframes ir-transmission-pulse { 0%,100% { opacity: .35; transform: scaleX(.5); } 50% { opacity: 1; transform: scaleX(1); } }
+
+    .hero-right { align-self: center; justify-self: center; width: min(460px, calc(100% - 4rem)); max-width: 460px; margin: 3rem auto; flex: 0 0 auto; border: 1px solid rgba(237,233,223,.12); background: radial-gradient(circle at 50% 0%, rgba(212,240,58,.075), transparent 36%), var(--bg2); box-shadow: 0 24px 70px rgba(0,0,0,.28); display: flex; flex-direction: column; }
+    .hero-reel-cta { padding: 1rem 1.4rem; border-bottom: 1px solid rgba(212,240,58,.2); background: rgba(212,240,58,.06); display: flex; align-items: center; justify-content: center; }
+    .hero-reels-link { font-size: .65rem; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); text-decoration: none; font-weight: 600; padding: 6px 14px; border: 1px solid var(--accent); border-radius: 2px; transition: all .3s; box-shadow: 0 0 10px rgba(212,240,58,.25); }
+    .hero-reels-link:hover { background: var(--accent); color: #060606; box-shadow: 0 0 18px rgba(212,240,58,.45); transform: translateY(-2px); }
+    .hero-reel-label { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.4rem; border-bottom: 1px solid var(--line); font-size: .58rem; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); gap: 1rem; }
+    .live-dot { display: inline-flex; align-items: center; gap: 6px; color: var(--accent); }
+    .live-dot::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: lpulse 2s ease infinite; }
+    @keyframes lpulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:.3; transform:scale(.6); } }
+    .hero-embed { flex: 0 0 auto; min-height: 0; height: auto; display: flex; justify-content: center; align-items: center; padding: 1rem; overflow: hidden; background: transparent; contain: layout style paint; }
+    .hero-video { display: block; width: 100%; max-width: 360px; aspect-ratio: 9 / 16; object-fit: cover; object-position: center center; background: #000; border: none; outline: none; }
+    .hero-reel-footer { padding: 1rem 1.4rem; border-top: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+    .hero-reel-title { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: .05em; }
+    .hero-reel-open { font-size: .58rem; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent); padding-bottom: 1px; transition: opacity .2s; white-space: nowrap; }
+    .hero-reel-open:hover { opacity: .6; }
+
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr !important; min-height: auto !important; }
+      .hero-left { min-height: auto !important; padding: 5.8rem var(--pad-x) 2.6rem !important; border-right: none !important; border-bottom: 1px solid var(--line) !important; order: 2; }
+      .hero-title { font-size: clamp(4.8rem, 23vw, 7.4rem) !important; line-height: .78 !important; }
+      .hero-sub { max-width: 86vw !important; }
+      .hero-right { width: min(390px, calc(100% - 2rem)); margin: 2rem auto; min-height: auto !important; padding: 0 !important; order: 1; margin-bottom: 2rem; }
+      .hero-embed { min-height: auto !important; height: auto !important; padding: 1.1rem !important; }
+      .hero-embed video { width: 100% !important; height: auto !important; max-height: 72svh !important; object-fit: contain !important; }
+      .hero-reel-label, .hero-reel-footer { padding: .9rem 1.1rem !important; gap: .75rem !important; flex-wrap: wrap !important; }
+    }
+    @media (max-width: 420px) { .hero-right { width: calc(100% - 1rem); } }
+
+    /* SECTION HEAD */
+    .section-head { padding: 2.5rem var(--pad-x) 1.8rem; display: flex; align-items: baseline; justify-content: space-between; border-bottom: 1px solid var(--line); }
+    .section-head h2 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2rem, 5vw, 3rem); line-height: 1; letter-spacing: -.01em; }
+    .section-head h2 span { color: var(--accent); }
+    .section-count { font-size: .58rem; letter-spacing: .15em; text-transform: uppercase; color: rgba(212, 240, 58, 0.65); white-space: nowrap; text-decoration: none; transition: color 0.2s ease; }
+    .section-count:hover { color: rgba(212, 240, 58, 1); text-decoration: underline; }
+
+    /* REELS ROW LIST (homepage preview only — full archive lives on /reels.html) */
+    .reel-list { border-bottom: 1px solid var(--line); }
+    .reel-row { display: grid; grid-template-columns: 80px 1fr auto; align-items: center; border-bottom: 1px solid var(--line); text-decoration: none; color: var(--text); position: relative; overflow: hidden; }
+    .reel-row:last-child { border-bottom: none; }
+    .reel-row::before { content: ''; position: absolute; inset: 0; background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform .45s cubic-bezier(.16,1,.3,1); z-index: 0; }
+    .reel-row:hover::before { transform: scaleX(1); }
+    .reel-row:hover, .reel-row:hover .reel-row-sub, .reel-row:hover .reel-row-arrow { color: #060606; }
+    .reel-row:hover .reel-row-tag { background: #06060618; color: #060606; }
+    .reel-row-num { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2rem, 4vw, 3rem); color: var(--muted2); padding: 1.6rem 1.5rem 1.6rem var(--pad-x); line-height: 1; position: relative; z-index: 1; transition: color .3s; overflow: visible; text-shadow: 0 0 8px rgba(212,240,58,.10), 0 0 18px rgba(212,240,58,.05); }
+    .reel-row-body { padding: 1.6rem 1.5rem; position: relative; z-index: 1; }
+    .reel-row-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(1.1rem, 2.5vw, 1.4rem); letter-spacing: .03em; line-height: 1.1; margin-bottom: .3rem; }
+    .reel-row-sub { display: none; font-family:'Satoshi','Inter',sans-serif !important; font-weight:600 !important; letter-spacing:.08em !important; text-transform:uppercase !important; color:#8c8c8c !important; font-size: .56rem; transition: color .3s; }
+    .reel-row-right { padding: 1.6rem var(--pad-x) 1.6rem 1.5rem; display: flex; align-items: center; gap: 1.2rem; position: relative; z-index: 1; }
+    .reel-row-tag { font-size: .52rem; letter-spacing: .14em; text-transform: uppercase; background: var(--line2); color: var(--muted); padding: 3px 9px; transition: background .3s, color .3s; }
+    .reel-row-arrow { font-size: 1.2rem; color: var(--muted2); transition: color .3s, transform .3s; line-height: 1; }
+    .reel-row:hover .reel-row-arrow { transform: translate(4px,-4px); }
+    .reel-row:hover .reel-row-num { color: #060606 !important; text-shadow: 0 0 7px rgba(212,240,58,.35), 0 0 18px rgba(212,240,58,.12); }
+
+    .reel-row-preview-panel { max-height: 0; overflow: hidden; border-bottom: 1px solid var(--line); background: #080808; transition: max-height .55s cubic-bezier(.16,1,.3,1), opacity .35s cubic-bezier(.16,1,.3,1); opacity: 0; }
+    .reel-row:hover + .reel-row-preview-panel, .reel-row:focus-within + .reel-row-preview-panel, .reel-row-preview-panel:hover { max-height: 340px; opacity: 1; }
+    .reel-row-preview-shell { display: grid; grid-template-columns: 80px minmax(260px, 420px) 1fr; gap: 1.5rem; align-items: start; padding: 1.2rem var(--pad-x) 1.4rem; border-top: 1px solid rgba(212,240,58,.16); background: linear-gradient(90deg, rgba(212,240,58,.055), transparent 38%), var(--bg2); }
+    .reel-row-preview-label { font-size: .52rem; letter-spacing: .16em; text-transform: uppercase; color: var(--accent); padding-top: .2rem; }
+    .reel-row-preview-frame { height: 260px; display: flex; justify-content: center; align-items: flex-start; overflow: hidden; border: 1px solid rgba(212,240,58,.18); background: #050505; position: relative; }
+    .reel-row-preview-text { align-self: center; max-width: 420px; color: var(--muted); font-family: 'Cormorant Garamond', serif; font-style: italic; line-height: 1.7; font-size: 1.08rem; }
+    .reel-row-preview-text strong { color: var(--text); font-style: normal; font-family: 'Space Mono', monospace; font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; }
+    .reel-hashtags { font-family: 'Space Mono', 'Courier New', monospace !important; font-style: normal !important; font-weight: 400 !important; letter-spacing: .035em !important; text-transform: none !important; font-size: clamp(.78rem, 1.15vw, 1rem) !important; line-height: 1.4 !important; color: rgba(237,233,223,.72) !important; }
+    .reel-hashtags.ir-typewriter { display: inline; white-space: normal !important; overflow: visible; max-width: 100%; }
+
+    .video-play-button { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; opacity: 0; transition: opacity 0.3s ease; }
+    .reel-row-preview-frame:hover .video-play-button { opacity: 1; }
+    .video-play-button svg { width: clamp(40px, 10vw, 80px); height: clamp(40px, 10vw, 80px); filter: drop-shadow(0 0 20px rgba(212, 240, 58, 0.4)); transition: transform 0.2s ease; }
+    .video-play-button:hover svg { transform: scale(1.1); }
+    .preview-video { cursor: pointer; display: block; max-width: 100%; max-height: 100%; width: auto; height: auto; background: #000; }
+
+    @media (max-width: 900px) { .reel-row-preview-panel { display: none; } }
+    @media (max-width: 768px) { .reel-row-right { display: none; } }
+    @media (max-width: 600px) { .reel-row { grid-template-columns: 60px 1fr; } .reel-row-num { padding-left: var(--pad-x); font-size: 2rem; } }
+
+    /* CTA */
+    .cta-band { display: flex; align-items: center; justify-content: space-between; padding: 2.5rem var(--pad-x); background: var(--bg2); border-bottom: 1px solid var(--line); gap: 2rem; flex-wrap: wrap; }
+    .cta-band-text { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.2rem; color: var(--muted); line-height: 1.6; }
+    .cta-band-text strong { color: var(--text); font-style: normal; font-weight: 600; }
+    .cta-typewriter { font-family: 'Space Mono', 'Courier New', monospace !important; font-style: normal !important; font-weight: 400 !important; letter-spacing: .035em !important; text-transform: none !important; font-size: clamp(.95rem, 1.4vw, 1.2rem) !important; line-height: 1.55 !important; color: rgba(237,233,223,.72) !important; }
+    .cta-typewriter strong { font-family: inherit !important; font-style: normal !important; font-weight: 700 !important; color: var(--text) !important; }
+    @media (max-width: 768px) {
+      .cta-band { flex-direction: column; align-items: stretch; gap: 1.2rem; }
+      .cta-btn { width: 100%; text-align: center; }
+      .cta-band-text.ir-typewriter { white-space: normal !important; overflow: visible !important; display: block !important; width: 100% !important; max-width: 100% !important; line-height: 1.6 !important; }
     }
 
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+    /* INTRO VIDEO (full-bleed opening beat — the site's one and only landing moment) */
+    .intro-video { position: relative; height: 100svh; min-height: 620px; overflow: hidden; background: #000; isolation: isolate; border-bottom: 1px solid var(--line); }
+    .intro-video-media { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center center; opacity: .86; filter: contrast(1.08) saturate(.9) brightness(.72); z-index: 0; }
+    .intro-video::before { content: ''; position: absolute; inset: 0; z-index: 1; background: radial-gradient(circle at 50% 50%, rgba(212,240,58,.08), transparent 34%), linear-gradient(to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5) 72%, rgba(0,0,0,.92)); pointer-events: none; }
+    .intro-video::after { content: ''; position: absolute; inset: 0; z-index: 2; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); opacity: .045; pointer-events: none; }
+    .intro-video-content { position: relative; z-index: 3; height: 100%; padding: 2.2rem var(--pad-x); display: flex; flex-direction: column; justify-content: space-between; }
+    .intro-topline { display: flex; align-items: center; justify-content: space-between; gap: 1rem; font-size: .58rem; letter-spacing: .18em; text-transform: uppercase; color: rgba(237,233,223,.58); }
+    .intro-brand { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3.7rem, 9.2vw, 9.5rem); line-height: .86; letter-spacing: -.02em; max-width: 820px; text-transform: uppercase; white-space: normal; text-shadow: 0 0 20px rgba(212,240,58,.16), 0 0 44px rgba(212,240,58,.08); }
+    .intro-brand span { display: block; color: var(--accent); }
+    .intro-brand::after, .intro-brand:hover::after { display: none; content: none; }
+    .intro-bottom { display: flex; justify-content: space-between; align-items: end; gap: 2rem; border-top: 1px solid rgba(237,233,223,.16); padding-top: 1.3rem; }
+    .intro-copy { font-family: 'Space Mono', 'Courier New', monospace !important; font-style: normal !important; font-weight: 400 !important; letter-spacing: .035em !important; text-transform: none !important; font-size: clamp(.78rem, 1.15vw, 1rem) !important; line-height: 1.4 !important; color: rgba(237,233,223,.72) !important; max-width: none !important; width: 100% !important; min-height: calc(1em * 1.4); white-space: nowrap !important; overflow: hidden; }
+    .intro-enter { border: 1px solid var(--accent); background: rgba(212,240,58,.08); color: var(--accent); padding: 12px 18px; font-family: 'Space Mono', monospace; font-size: .58rem; letter-spacing: .16em; text-transform: uppercase; cursor: pointer; transition: background .25s, color .25s, transform .25s; white-space: nowrap; }
+    .intro-enter:hover { background: var(--accent); color: #060606; transform: translateY(-2px); }
+    .intro-scroll-hint { display: inline-flex; align-items: center; gap: .65rem; color: var(--accent); }
+    .intro-scroll-hint::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); animation: introPulse 1.4s ease-in-out infinite; }
+    @keyframes introPulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: .25; transform: scale(.65); } }
 
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Space Mono', monospace;
-      height: 100vh;
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: auto;
-      position: relative;
-    }
-
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background: radial-gradient(circle at 20% 50%, rgba(212,240,58,.15) 0%, transparent 40%),
-                  radial-gradient(circle at 80% 80%, rgba(212,240,58,.08) 0%, transparent 50%),
-                  linear-gradient(135deg, #060606 0%, #0a0a0a 50%, #060606 100%);
-      z-index: 0;
-      animation: gradientShift 12s ease-in-out infinite;
-    }
-
-    body::after {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-      opacity: 0.04;
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    @keyframes gradientShift {
-      0%, 100% { filter: brightness(1); }
-      50% { filter: brightness(1.08); }
-    }
-
-    .intro-shell {
-      position: relative;
-      z-index: 10;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 3rem;
-      padding: 2rem;
-      width: 100%;
-      height: 100vh;
-      opacity: 0;
-      animation: fadeInUp 1.2s cubic-bezier(.16,1,.3,1) forwards;
-    }
-
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(48px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .intro-label {
-      font-size: .58rem;
-      letter-spacing: .22em;
-      text-transform: uppercase;
-      color: var(--muted);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: .8rem;
-    }
-
-    .intro-label::before,
-    .intro-label::after {
-      content: '';
-      width: 24px;
-      height: 1px;
-      background: var(--muted);
-    }
-
-    .intro-brand {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(3.5rem, 12vw, 9rem);
-      line-height: .86;
-      letter-spacing: -.02em;
-      position: relative;
-      display: inline-block;
-      cursor: default;
-      color: var(--text);
-      text-shadow: 0 0 20px rgba(212,240,58,.16), 0 0 44px rgba(212,240,58,.08);
-      transition: text-shadow .35s ease, filter .35s ease;
-      white-space: nowrap;
-      text-transform: uppercase;
-    }
-
-    .intro-brand span {
-      display: block;
-      color: var(--accent);
-      text-shadow: 0 0 10px rgba(212,240,58,.16), 0 0 22px rgba(212,240,58,.06);
-    }
-
-    .intro-brand::before {
-      content: "Irreal\A Lab";
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 100%;
-      color: var(--accent);
-      opacity: 0;
-      pointer-events: none;
-      mix-blend-mode: screen;
-      transform: translateX(0);
-      clip-path: inset(0 0 72% 0);
-      white-space: pre;
-      line-height: inherit;
-    }
-
-    .intro-brand:hover {
-      color: var(--text);
-      filter: brightness(1.08);
-      text-shadow: 0 0 12px rgba(237,233,223,.10), 0 0 26px rgba(212,240,58,.16);
-    }
-
-    .intro-brand:hover span {
-      color: var(--accent);
-    }
-
-    .intro-brand:hover::before {
-      animation: ir-intro-electric .72s steps(2,end) both;
-    }
-
-    @keyframes ir-intro-electric {
-      0% { opacity:0; transform:translate(0,0); clip-path:inset(0 0 85% 0); }
-      12% { opacity:.85; transform:translate(-3px,-1px); clip-path:inset(8% 0 68% 0); }
-      24% { opacity:.35; transform:translate(4px,1px); clip-path:inset(46% 0 33% 0); }
-      36% { opacity:.75; transform:translate(-2px,0); clip-path:inset(22% 0 54% 0); }
-      48% { opacity:.18; transform:translate(3px,-1px); clip-path:inset(70% 0 12% 0); }
-      60% { opacity:.65; transform:translate(-1px,1px); clip-path:inset(34% 0 41% 0); }
-      100% { opacity:0; transform:translate(0,0); clip-path:inset(0 0 100% 0); }
-    }
-
-    .intro-tagline {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(1.1rem, 3vw, 1.8rem);
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      color: rgba(212,240,58,.85);
-      text-shadow: 0 0 8px rgba(212,240,58,.35);
-      line-height: 1.4;
-      animation-delay: .2s;
-    }
-
-    .intro-cta {
-      margin-top: 1.5rem;
-      opacity: 0;
-      animation: fadeInUp 1.2s cubic-bezier(.16,1,.3,1) forwards .4s;
-    }
-
-    .intro-btn {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(1rem, 2vw, 1.2rem);
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      color: #060606;
-      background: var(--accent);
-      text-decoration: none;
-      padding: 16px 48px;
-      display: inline-block;
-      transition: all .3s cubic-bezier(.16,1,.3,1);
-      position: relative;
-      overflow: hidden;
-      border: 2px solid var(--accent);
-      cursor: pointer;
-    }
-
-    .intro-btn::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: #060606;
-      transform: scaleX(0);
-      transform-origin: right;
-      transition: transform .35s cubic-bezier(.16,1,.3,1);
-      z-index: -1;
-    }
-
-    .intro-btn:hover::before {
-      transform: scaleX(1);
-      transform-origin: left;
-    }
-
-    .intro-btn:hover {
-      color: var(--accent);
-      transform: translateY(-3px);
-      box-shadow: 0 12px 40px rgba(212,240,58,.25);
-    }
-
-    .intro-footer {
-      position: absolute;
-      bottom: 2rem;
-      font-size: .58rem;
-      letter-spacing: .16em;
-      text-transform: uppercase;
-      color: var(--muted);
-      z-index: 10;
-    }
-
-    .intro-footer a {
-      color: rgba(212,240,58,.75);
-      text-decoration: none;
-      transition: color .2s;
-    }
-
-    .intro-footer a:hover {
-      color: var(--accent);
-    }
-
-    @media (max-width: 480px) {
-      .intro-shell {
-        gap: 2rem;
-      }
-      .intro-brand {
-        font-size: clamp(2.8rem, 20vw, 5rem);
-      }
-      .intro-label::before,
-      .intro-label::after {
-        width: 12px;
-      }
-    }
-
-    @media (hover: hover) and (pointer: fine) {
-      html,
-      body,
-      a,
-      button,
-      .reel-row,
-      .audio-toggle,
-      .intro-enter { cursor: none !important; }
-      .ir-cursor, .ir-cursor-trail {
-        position: fixed;
-        top: 0;
-        left: 0;
-        pointer-events: none;
-        border-radius: 50%;
-        transform: translate3d(-100px, -100px, 0) translate(-50%, -50%);
-        z-index: 2147483647;
-        will-change: transform, width, height, opacity;
-      }
-      .ir-cursor {
-        width: 13px;
-        height: 13px;
-        background: var(--accent);
-        box-shadow: 0 0 10px rgba(212,240,58,.55), 0 0 24px rgba(212,240,58,.22);
-      }
-      .ir-cursor-trail {
-        width: 42px;
-        height: 42px;
-        border: 1px solid rgba(212,240,58,.42);
-        background: rgba(212,240,58,.035);
-        backdrop-filter: blur(2px);
-        -webkit-backdrop-filter: blur(2px);
-        transition: width .18s ease, height .18s ease, border-color .18s ease, background .18s ease;
-      }
-      body.ir-cursor-hover .ir-cursor {
-        width: 20px;
-        height: 20px;
-      }
-      body.ir-cursor-hover .ir-cursor-trail {
-        width: 58px;
-        height: 58px;
-        border-color: rgba(212,240,58,.75);
-        background: rgba(212,240,58,.06);
-      }
-      body.ir-cursor-hidden .ir-cursor, body.ir-cursor-hidden .ir-cursor-trail {
-        opacity: 0;
-      }
-    }
-    @media (hover: none), (pointer: coarse) {
-      .ir-cursor, .ir-cursor-trail { display: none !important; }
-    }
-
-    .intro-shell {
-      position: relative !important;
-      z-index: 10 !important;
-      text-align: center !important;
-      display: flex !important;
-      flex-direction: column !important;
-      align-items: center !important;
-      justify-content: center !important;
-      gap: 3rem !important;
-      padding: 2rem !important;
-      width: 100% !important;
-      height: 100vh !important;
-      min-height: 100vh !important;
-      opacity: 0;
-      animation: fadeInUp 1.2s cubic-bezier(.16,1,.3,1) forwards;
-    }
-
-    .intro-footer {
-      position: fixed;
-      bottom: 2rem;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: .58rem;
-      letter-spacing: .16em;
-      text-transform: uppercase;
-      color: var(--muted);
-      z-index: 100;
-      pointer-events: auto;
-    }
-
-    .intro-footer a {
-      color: rgba(212,240,58,.75);
-      text-decoration: none;
-      transition: color .2s;
-    }
-
-    .intro-footer a:hover {
-      color: var(--accent);
+    @media (max-width: 768px) {
+      .intro-video, .intro-video-media { width: 100% !important; height: 100svh !important; object-fit: cover !important; }
+      .intro-video-content { width: 100% !important; max-width: none !important; padding: 1.4rem !important; justify-content: flex-start !important; padding-top: 1.4rem !important; }
+      .intro-brand { font-size: clamp(4.8rem, 22vw, 7.2rem) !important; line-height: .78 !important; margin-top: 2.2rem !important; margin-bottom: auto !important; align-self: flex-start !important; text-align: left !important; }
+      .intro-copy { max-width: 100% !important; font-size: clamp(.62rem, 2.45vw, .82rem) !important; line-height: 1.35 !important; }
+      .intro-bottom { flex-direction: column; align-items: flex-start; margin-top: auto !important; }
+      .intro-enter { width: 100%; }
+      .intro-video { min-height: 400px; }
     }
   </style>
-  <link rel="stylesheet" href="/styles/site-chrome.css">
   <script type="text/javascript">
     (function(c,l,a,r,i,t,y){
         c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
         t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
         y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
     })(window, document, "clarity", "script", "wr62xdtgob");
-</script>
+  </script>
   <script src="https://cdn.cookiehub.eu/c2/45bb1a81.js"></script>
-<script type="text/javascript">
-document.addEventListener("DOMContentLoaded", function(event) {
-var cpm = {};
-window.cookiehub.load(cpm);
-});
-</script>
+  <script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function(event) {
+      window.cookiehub.load({});
+    });
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "irreallab",
+    "url": "https://irreallab.fr/",
+    "description": "Visual experiments in short-form. Motion, surrealism & the art of the unreal.",
+    "publisher": {
+      "@type": "Organization",
+      "name": "irreallab",
+      "url": "https://irreallab.fr",
+      "sameAs": ["https://www.instagram.com/irreallab/"],
+      "logo": { "@type": "ImageObject", "url": "https://irreallab.fr/images/logo.png" }
+    }
+  }
+  </script>
 </head>
 <body>
-  <div class="intro-shell">
-    <div class="intro-label" data-translate="index.label">Visual Experiments</div>
+
+<!-- INTRO VIDEO — the site's single landing beat -->
+<section class="intro-video" aria-label="Irreallab video intro">
+  <video class="intro-video-media" src="/video/homepage-intro.mp4" autoplay muted loop playsinline webkit-playsinline preload="auto" x5-playsinline x5-video-player-type="h5" x5-video-player-fullscreen="false" disablepictureinpicture></video>
+
+  <div class="intro-video-content">
+    <div class="intro-topline">
+      <span>@irreallab</span>
+      <span class="intro-scroll-hint">Scroll to explore</span>
+    </div>
+
+    <h1 class="intro-brand ir-title-typewriter" data-glitch="IRREAL LAB" data-title-first="Irreal" data-title-second="Lab">
+      Irreal<br><span>Lab</span>
+    </h1>
+
+    <div class="intro-bottom">
+      <p class="intro-copy ir-typewriter" data-typewriter-text="Creativity and motion combined into Re-(els)-ality">Creativity and motion combined into Re-(els)-ality</p>
+      <button class="intro-enter" type="button" id="intro-enter-btn">Enter the reels ↓</button>
+    </div>
+  </div>
+</section>
+
+<!-- @nav -->
+<div id="marquee-spacer" class="marquee-spacer" aria-hidden="true"></div>
+<div id="site-content" class="marquee">
+  <div class="marquee-track">
+    <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="marquee-item">@irreallab on Instagram</a>
+    <span class="marquee-dot">✦</span>
+    <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="marquee-item">Visual Experiments</a>
+    <span class="marquee-dot">✦</span>
+    <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="marquee-item">Follow on Instagram</a>
+    <span class="marquee-dot">✦</span>
+    <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="marquee-item">Short-form / Reels</a>
+    <span class="marquee-dot">✦</span>
+    <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="marquee-item">@irreallab</a>
+    <span class="marquee-dot">✦</span>
+    <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="marquee-item">New Reels Every Week</a>
+    <span class="marquee-dot">✦</span>
+    <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="marquee-item">@irreallab on Instagram</a>
+    <span class="marquee-dot">✦</span>
+    <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="marquee-item">Visual Experiments</a>
+    <span class="marquee-dot">✦</span>
+    <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="marquee-item">Follow on Instagram</a>
+    <span class="marquee-dot">✦</span>
+    <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="marquee-item">Short-form / Reels</a>
+    <span class="marquee-dot">✦</span>
+    <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="marquee-item">@irreallab</a>
+    <span class="marquee-dot">✦</span>
+    <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="marquee-item">New Reels Every Week</a>
+    <span class="marquee-dot">✦</span>
+  </div>
+</div>
+
+<div id="nav-spacer" class="nav-spacer" aria-hidden="true"></div>
+<nav id="main-nav">
+  <a href="/" class="nav-logo"><span class="footer-irreal">irreal</span><em>lab_</em></a>
+  <div class="nav-links">
+    <a href="/reels.html" data-translate="nav.reels">Reels</a>
+    <a href="/about.html" class="nav-hide" data-translate="nav.about">About</a>
+    <a href="/contact.html" class="nav-hide" data-translate="nav.contact">Contact</a>
+    <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="nav-cta" data-translate="nav.instagram">↗ Instagram</a>
+  </div>
+</nav>
+<!-- /@nav -->
+
+<!-- HERO: Sky Runway -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow"></div>
     <div>
-      <h1 class="intro-brand"><span data-translate="index.brand">irreallab</span></h1>
-      <div class="intro-tagline" data-translate="index.tagline">Surreal worlds in motion</div>
+      <h1 class="hero-title ir-electric-title ir-title-typewriter" data-glitch="IRREAL LAB" data-title-first="Irreal" data-title-second="Lab">Irreal<em>Lab</em></h1>
+      <p style="margin-top:1rem;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);opacity:.9;" data-translate="main.heroEyebrow">AI-driven cinematic worlds.</p>
+      <p class="hero-sub ir-typewriter" data-typewriter-text="Visual experiments in short-form. Motion, surrealism &amp; the art of the unreal." data-translate="main.heroSubtitle">Visual experiments in short-form. Motion, surrealism &amp; the art of the unreal.</p>
     </div>
-    <div class="intro-cta">
-      <a href="/main.html" class="intro-btn" data-translate="index.button">Enter ↗</a>
+    <div class="hero-meta">
+      <div class="hero-divider"></div>
+      <div class="hero-transmission">
+        <div class="transmission-kicker" data-translate="main.transmissionKicker">Current Transmission</div>
+        <div class="transmission-title" data-translate="main.transmissionTitle">Sky Runway</div>
+        <div class="transmission-details">
+          <span>Motion study 04</span>
+          <span>Above the clouds</span>
+        </div>
+      </div>
+      <div class="hero-divider"></div>
     </div>
   </div>
 
-  <!-- Fixed footer with Instagram link -->
-  <div class="intro-footer">
-    <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" data-translate="index.footer">Follow on Instagram ↗</a>
+  <div class="hero-right">
+    <div class="hero-reel-cta">
+      <a href="/reels.html" class="hero-reels-link" data-translate="main.heroReelsLink">↗ Browse All Reels</a>
+    </div>
+    <div class="hero-reel-label">
+      <span>Sky Runway</span>
+      <span class="live-dot" data-translate="main.liveIndicator">Live on Instagram</span>
+    </div>
+    <div class="hero-embed">
+      <video class="hero-video" controls autoplay muted loop playsinline poster="https://irreallab.fr/images/preview.jpg" webkit-playsinline preload="metadata" x5-playsinline x5-video-player-type="h5" x5-video-player-fullscreen="false" disablepictureinpicture>
+        <source src="https://irreallab.fr/video/sky-runway.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+    <div class="hero-reel-footer">
+      <span class="hero-reel-title">Sky Runway</span>
+      <a href="/reels.html" class="hero-reel-open" data-translate="main.sectionTitle">See all reels ↗</a>
+    </div>
+  </div>
+</section>
+
+<!-- REELS PREVIEW -->
+<section id="reels" class="reels-page">
+  <div class="section-head">
+    <h2 class="ir-glitch-title" data-glitch="MORE REELS" data-translate="main.sectionTitle">More <span>Reels</span></h2>
+    <a href="/reels.html" class="section-count" data-translate="main.sectionCount">View full archive ↗</a>
   </div>
 
-  <!-- Custom cursor elements -->
-  <div class="ir-cursor" aria-hidden="true"></div>
-  <div class="ir-cursor-trail" aria-hidden="true"></div>
+  <div class="reel-list" id="mainReelsList">
+    <!-- Dynamically loaded from /api/reels -->
+  </div>
+</section>
 
-  <!-- Custom Cursor and other animations -->
-  <script src="animations2.js" defer></script>
+<!-- CTA BAND -->
+<div class="cta-band">
+  <p class="cta-band-text cta-typewriter ir-typewriter" data-typewriter-text="Every week, a new experiment. Follow @irreallab to never miss a reel.">Every week, a new experiment.<br><strong>Follow @irreallab</strong> to never miss a reel.</p>
+  <a href="/contact.html" class="cta-btn">Start a collaboration ↗</a>
+</div>
 
-  <!-- Language Switcher -->
-  <script src="/language-switcher.js"></script>
+<!-- @footer -->
+<footer>
+  <div class="footer-logo"><span class="footer-irreal">irreal</span><em>lab_</em></div>
+  <div class="footer-right">
+    <a href="/about.html" class="footer-link" data-translate="nav.about">About</a>
+    <a href="/contact.html" class="footer-link" data-translate="nav.contact">Contact</a>
+    <a href="/credits.html" class="footer-link" data-translate="nav.credits">Credits</a>
+    <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="footer-link" data-translate="nav.instagram">Instagram ↗</a>
+    <span class="footer-link" style="cursor:default;">© 2026 irreallab</span>
+  </div>
+
+  <p class="footer-copyright" style="width:100%;margin-top:.8rem;font-size:.58rem;letter-spacing:.08em;color:var(--muted);text-transform:uppercase;">
+    © irreallab — Radu Nechita (Instagram) · Site rédaction : © Hélène Nechita · Tous droits réservés.
+  </p>
+</footer>
+<!-- /@footer -->
+
+<audio id="site-audio" src="/audio/carbune-cobza.mp3" loop preload="auto"></audio>
+<button id="audio-toggle" class="audio-toggle" type="button" aria-label="Activer la musique">SOUND OFF</button>
+
+<div class="ir-cursor" aria-hidden="true"></div>
+<div class="ir-cursor-trail" aria-hidden="true"></div>
+
+<script src="animations2.js" defer></script>
+
+<script>
+document.getElementById('intro-enter-btn')?.addEventListener('click', () => {
+  document.querySelector('#main-nav')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+
+// Load and display reels in "MORE REELS" section with audio management
+document.addEventListener('DOMContentLoaded', async function() {
+  const reelsList = document.getElementById('mainReelsList');
+  const siteAudio = document.getElementById('site-audio');
+
+  try {
+    let response = await fetch('/api/reels').catch(() => null);
+    if (!response || !response.ok) {
+      response = await fetch('/reels.json', { cache: 'no-store' });
+    }
+    const reels = await response.json();
+    const displayReels = reels.slice(0, 4);
+
+    const slugify = t => t.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+
+    reelsList.innerHTML = displayReels.map((reel, index) => {
+      const num = String(index + 1).padStart(2, '0');
+      const hashtags = (reel.hashtags || '').split('\n').join(' ');
+      const isScheduled = reel.status === 'Scheduled';
+      const tag = isScheduled ? 'Scheduled' : 'Live';
+      const isLocalVideo = reel.video_url && reel.video_url.trim().startsWith('/');
+      const slug = isLocalVideo ? slugify(reel.title) : null;
+      const openHref = slug ? `/reel/${slug}.html` : reel.url;
+
+      return `
+        <a class="reel-row" href="${openHref}" data-video-trigger="true">
+          <div class="reel-row-num" data-num="${num}">${num}</div>
+          <div class="reel-row-body">
+            <div class="reel-row-title">${reel.title}</div>
+            <div class="reel-row-sub">${reel.subtitle || ''}</div>
+          </div>
+          <div class="reel-row-right"><span class="reel-row-tag">${tag}</span><span class="reel-row-arrow">↗</span></div>
+        </a>
+        <div class="reel-row-preview-panel" aria-hidden="true">
+          <div class="reel-row-preview-shell">
+            <div class="reel-row-preview-label">Preview</div>
+            <div class="reel-row-preview-frame">
+              ${reel.video_url ? `
+                <video class="preview-video" src="${reel.video_url}" ${slug ? `poster="/images/posters/${slug}.jpg"` : ''} muted playsinline preload="none"></video>
+                <div class="video-play-button">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10" stroke="#d4f03a"></circle>
+                    <polygon points="10 8 16 12 10 16 10 8" fill="#d4f03a"></polygon>
+                  </svg>
+                </div>
+              ` : '<div style="background: #000; aspect-ratio: 9/16; display: flex; align-items: center; justify-content: center; color: #666;">No video available</div>'}
+            </div>
+            <p class="reel-row-preview-text"><strong>${reel.title}</strong><br><span class="reel-hashtags ir-typewriter" data-typewriter-text="${hashtags}">${hashtags}</span></p>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    const previewVideos = document.querySelectorAll('.preview-video');
+    const audioToggleBtn = document.getElementById('audio-toggle');
+
+    // Clicking a reel row navigates to its own page; the inline preview
+    // video is a play/pause hover toy, not a navigation trigger.
+    document.querySelectorAll('.reel-row-preview-frame').forEach(frame => {
+      const video = frame.querySelector('.preview-video');
+      const playButton = frame.querySelector('.video-play-button');
+      if (!video) return;
+      let audioWasPlayingBeforeVideo = false;
+
+      const toggle = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (video.paused) {
+          previewVideos.forEach(v => { if (v !== video && !v.paused) v.pause(); });
+          video.play().catch(() => {});
+        } else {
+          video.pause();
+        }
+      };
+      video.addEventListener('click', toggle);
+      playButton?.addEventListener('click', toggle);
+
+      video.addEventListener('play', () => {
+        if (siteAudio && !siteAudio.paused) {
+          audioWasPlayingBeforeVideo = true;
+          siteAudio.pause();
+        } else {
+          audioWasPlayingBeforeVideo = false;
+        }
+        if (playButton) playButton.style.opacity = '0';
+      });
+
+      const resumeSiteAudio = () => {
+        if (audioWasPlayingBeforeVideo && siteAudio && siteAudio.paused && audioToggleBtn?.classList.contains('is-on')) {
+          siteAudio.play().catch(() => {});
+        }
+        if (playButton) playButton.style.opacity = '1';
+      };
+      video.addEventListener('pause', resumeSiteAudio);
+      video.addEventListener('ended', resumeSiteAudio);
+    });
+
+  } catch (error) {
+    console.error('Error loading reels:', error);
+    reelsList.innerHTML = '<p style="color: var(--muted);">Unable to load reels</p>';
+  }
+});
+</script>
+
+<!-- Language Switcher -->
+<script src="/language-switcher.js"></script>
 </body>
 </html>

@@ -49,6 +49,92 @@ const upload = multer({
 // Middleware
 app.use(express.json());
 
+// ---------------------------------------------------------------------------
+// Admin auth — protects the admin panel's write API. Credentials come only
+// from env vars (set in Railway's dashboard), never from source. Sessions
+// are an in-memory random token in an httpOnly cookie; simple on purpose,
+// this is a single-admin tool, not a multi-user auth system.
+// ---------------------------------------------------------------------------
+const ADMIN_USER = process.env.ADMIN_USER || '';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '';
+const SESSION_COOKIE = 'irreallab_admin';
+const SESSION_TTL_MS = 12 * 60 * 60 * 1000; // 12h
+const adminSessions = new Map(); // token -> expiresAt
+
+if (!ADMIN_USER || !ADMIN_PASSWORD) {
+  console.warn('⚠ ADMIN_USER / ADMIN_PASSWORD are not set — the admin panel login will always fail until they are configured (e.g. in Railway).');
+}
+
+function timingSafeEqualStr(a, b) {
+  const bufA = Buffer.from(String(a));
+  const bufB = Buffer.from(String(b));
+  if (bufA.length !== bufB.length) {
+    // still run a compare of equal length to avoid a length-based timing leak
+    crypto.timingSafeEqual(bufA, bufA);
+    return false;
+  }
+  return crypto.timingSafeEqual(bufA, bufB);
+}
+
+function parseCookies(req) {
+  const header = req.headers.cookie;
+  const out = {};
+  if (!header) return out;
+  header.split(';').forEach(pair => {
+    const idx = pair.indexOf('=');
+    if (idx === -1) return;
+    out[pair.slice(0, idx).trim()] = decodeURIComponent(pair.slice(idx + 1).trim());
+  });
+  return out;
+}
+
+function createAdminSession(res) {
+  const token = crypto.randomBytes(32).toString('hex');
+  adminSessions.set(token, Date.now() + SESSION_TTL_MS);
+  res.setHeader('Set-Cookie', `${SESSION_COOKIE}=${token}; HttpOnly; SameSite=Strict; Path=/; Max-Age=${SESSION_TTL_MS / 1000}`);
+}
+
+function destroyAdminSession(req, res) {
+  const token = parseCookies(req)[SESSION_COOKIE];
+  if (token) adminSessions.delete(token);
+  res.setHeader('Set-Cookie', `${SESSION_COOKIE}=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0`);
+}
+
+function requireAdmin(req, res, next) {
+  const token = parseCookies(req)[SESSION_COOKIE];
+  const expiresAt = token && adminSessions.get(token);
+  if (!expiresAt || expiresAt < Date.now()) {
+    if (token) adminSessions.delete(token);
+    return res.status(401).json({ error: 'Not authenticated' });
+  }
+  next();
+}
+
+app.post('/api/admin/login', express.json(), (req, res) => {
+  const { id, password } = req.body || {};
+  if (!ADMIN_USER || !ADMIN_PASSWORD) {
+    return res.status(503).json({ error: 'Admin login is not configured on this server' });
+  }
+  const idOk = timingSafeEqualStr(id || '', ADMIN_USER);
+  const passOk = timingSafeEqualStr(password || '', ADMIN_PASSWORD);
+  if (idOk && passOk) {
+    createAdminSession(res);
+    return res.json({ success: true });
+  }
+  res.status(401).json({ error: 'Invalid credentials' });
+});
+
+app.post('/api/admin/logout', (req, res) => {
+  destroyAdminSession(req, res);
+  res.json({ success: true });
+});
+
+app.get('/api/admin/session', (req, res) => {
+  const token = parseCookies(req)[SESSION_COOKIE];
+  const expiresAt = token && adminSessions.get(token);
+  res.json({ authenticated: !!(expiresAt && expiresAt >= Date.now()) });
+});
+
 // Helper function to find next reel number
 function getNextReelNumber() {
   try {
@@ -207,7 +293,7 @@ async function fetchInstagramMetadata(igUrl) {
 
 // API Routes (must be before static middleware)
 // Upload endpoint
-app.post('/api/upload-reel', upload.single('video'), async (req, res) => {
+app.post('/api/upload-reel', requireAdmin, upload.single('video'), async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: 'No video file provided' });
@@ -337,7 +423,7 @@ app.post('/api/upload-reel', upload.single('video'), async (req, res) => {
 });
 
 // Fetch Instagram metadata
-app.post('/api/fetch-instagram-metadata', express.json(), async (req, res) => {
+app.post('/api/fetch-instagram-metadata', requireAdmin, express.json(), async (req, res) => {
   try {
     const { url } = req.body;
 
@@ -363,7 +449,7 @@ app.post('/api/fetch-instagram-metadata', express.json(), async (req, res) => {
 });
 
 // Edit reel metadata
-app.put('/api/reel/:index', express.json(), (req, res) => {
+app.put('/api/reel/:index', requireAdmin, express.json(), (req, res) => {
   try {
     const index = parseInt(req.params.index);
     const { title, hashtags, url } = req.body;
@@ -423,7 +509,7 @@ app.get('/api/reels', (req, res) => {
 });
 
 // Get all reels (admin - includes scheduled)
-app.get('/api/reels-admin', (req, res) => {
+app.get('/api/reels-admin', requireAdmin, (req, res) => {
   try {
     const reelsPath = path.join(__dirname, 'reels.json');
     if (!fs.existsSync(reelsPath)) {
@@ -437,7 +523,7 @@ app.get('/api/reels-admin', (req, res) => {
 });
 
 // Delete a reel by index
-app.delete('/api/reel/:index', (req, res) => {
+app.delete('/api/reel/:index', requireAdmin, (req, res) => {
   try {
     const index = parseInt(req.params.index);
     const reelsPath = path.join(__dirname, 'reels.json');
@@ -485,7 +571,7 @@ app.delete('/api/reel/:index', (req, res) => {
 });
 
 // Reorder reels
-app.post('/api/reorder', express.json(), (req, res) => {
+app.post('/api/reorder', requireAdmin, express.json(), (req, res) => {
   try {
     const { reels } = req.body;
     const reelsPath = path.join(__dirname, 'reels.json');
@@ -511,6 +597,10 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok' });
 });
 
+// main.html was merged into index.html (the homepage no longer has a
+// separate splash page + hub page) — send old links straight to /.
+app.get(['/main', '/main.html'], (req, res) => res.redirect(301, '/'));
+
 // Serve HTML files without .html extension
 app.use((req, res, next) => {
   // Skip files with extensions (images, css, js, etc)
@@ -532,6 +622,6 @@ app.use(express.static(__dirname));
 app.listen(PORT, () => {
   console.log(`\n🎬 Irreallab Server running at http://localhost:${PORT}`);
   console.log(`📁 Video uploads directory: ${videosDir}`);
-  console.log(`\n✨ Admin panel: http://localhost:${PORT}/newreels.html`);
+  console.log(`\n✨ Admin panel: http://localhost:${PORT}/admin.html`);
   console.log(`🎞️  Reels page: http://localhost:${PORT}/reels.html\n`);
 });

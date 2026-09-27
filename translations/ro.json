@@ -119,12 +119,6 @@
     "designedBy": "Design Web de Hélène Nechita",
     "logoText": "irreal_"
   },
-  "cookies": {
-    "title": "🍪 Respectăm Confidențialitatea Dvs.",
-    "message": "Folosim Google Analytics pentru a înțelege cum utilizați site-ul nostru și pentru a îmbunătăți experiența dumneavoastră. Nu sunt colectate date personale.",
-    "accept": "Accept",
-    "decline": "Refuz"
-  },
   "errors": {
     "videoError": "Imposibil de încărcat videoclipul",
     "loadingError": "Imposibil de încărcat conținutul",

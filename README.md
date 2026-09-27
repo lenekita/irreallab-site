@@ -2,76 +2,85 @@
 
 A platform for surreal visual experiments in short-form video. Motion, surrealism & the art of the unreal.
 
-**Website:** [irreallab.fr](https://irreallab.fr)  
+**Website:** [irreallab.fr](https://irreallab.fr)
 **Instagram:** [@irreallab](https://www.instagram.com/irreallab/)
 
 ---
 
 ## Overview
 
-irreallab showcases curated surreal visual reels with synchronized audio, direct video playback, and immersive design. Each reel is pulled from Instagram and displayed with custom audio overlays and cinematic presentation.
+irreallab showcases curated surreal visual reels with synchronized audio, direct video playback, and its own page per reel. It's a hand-written HTML/CSS/JS site served by a small Express app (`server.js`), which also powers a password-protected admin panel for uploading and managing reels.
 
 ---
 
-## Features
-
-🌀 **Immersive 3D Intro** — Scroll-triggered animations with rotating geometric shapes and particle effects  
-✨ **Audio-Synced Reels** — Hover over any reel to play synchronized audio  
-🎬 **Direct Video Playback** — High-quality video players with custom thumbnails  
-🎨 **Surreal Design** — Dark theme with neon accents and smooth animations  
-📱 **Responsive Layout** — Optimized for desktop and mobile viewing  
-⚡ **Fast Loading** — Optimized Three.js scene with particle systems  
-
----
-
-## Project Structure
+## Project structure
 
 ```
 /
-├── index.html              # Landing page with 3D scroll intro
-├── scroll-3d-intro.js      # Three.js 3D scene and scroll animation logic
-├── main.html               # Main content hub
-├── reels.html              # Reels gallery with audio sync
-├── contact.html            # Contact page
-├── reels.json              # Reel data (title, video URL, audio, etc.)
-├── reels-audio-sync.js     # Audio sync functionality on hover
-├── animations2.js          # Custom cursor and smooth animations
-├── package.json            # Project dependencies
-├── scripts/                # Backend utilities
-│   └── sync-instagram.js   # GitHub Actions script for syncing new reels
-├── .github/workflows/      # GitHub Actions automation
-│   └── sync-instagram-reels.yml
-├── logo.png, favicon.ico   # Branding assets
-├── *.mp3, *.mp4            # Media files
-└── robots.txt, sitemap.xml # SEO files
+├── index.html               # Homepage: intro video hero, latest reels, CTA
+├── reels.html                # Full reels archive/gallery
+├── reel/*.html                # One generated page per reel (see below)
+├── about.html, contact.html, credits.html
+├── admin.html                # Password-protected reel upload/management tool
+├── styles/site.css           # Shared design system (tokens, nav, footer, effects)
+├── partials/nav.html, partials/footer.html  # Single source for nav/footer markup
+├── animations2.js            # Marquee/nav scroll behavior, typewriter, cursor, audio player
+├── language-switcher.js      # Client-side i18n (en/fr/ro via translations/*.json)
+├── translations/             # en.json, fr.json, ro.json
+├── reels.json                # Canonical reel data (title, video/audio URLs, hashtags…)
+├── server.js                 # Express app: static hosting, extensionless routes,
+│                              #   admin auth, reel upload/edit/delete/reorder API
+├── scripts/
+│   ├── build-reel-pages.js   # Generates reel/*.html + sitemap.xml from reels.json
+│   ├── inject-partials.js    # Injects partials/nav.html + footer.html into every page
+│   └── sync-instagram.js     # Validates reels.json fields (manual workflow, see below)
+├── audio/, video/, images/   # Media assets
+├── robots.txt, sitemap.xml
+└── Dockerfile                # Container build for deployment
 ```
 
 ---
 
-## 3D Scroll Intro Experience
+## How pages are assembled
 
-The landing page (index.html) features an immersive 3D scroll-triggered animation powered by **Three.js**:
+There's no build framework — every page is a plain, self-contained HTML file — but
+nav and footer markup live in one place:
 
-**What happens as you scroll:**
-- **Stage 1 (0-25%)**: Rotating cube appears with particles emerging
-- **Stage 2 (25-50%)**: Cube morphs into icosahedron, text "irreallab" fades in
-- **Stage 3 (50-75%)**: Shape evolves to dodecahedron, camera zooms inward
-- **Stage 4 (75-100%)**: Particles scatter, glow intensifies, fade to black
-- **Auto-navigation**: Smooth transition to main.html
+- `partials/nav.html` and `partials/footer.html` are the source of truth.
+- Each page contains `<!-- @nav -->...<!-- /@nav --> ` and `<!-- @footer -->...<!-- /@footer -->`
+  sentinel comments.
+- `npm run build:pages` (wraps `scripts/inject-partials.js`) replaces everything between
+  each pair of sentinels with the current partial content, in place.
 
-**Technical Details:**
-- Uses Three.js r128 for 3D rendering
-- 1500-particle system with orbit animation
-- Camera follows scroll progress (0-100%)
-- Dynamic lighting that responds to scroll
-- Accessible: respects `prefers-reduced-motion`
-- Mobile responsive (tested on mobile viewports)
+Run it after editing `partials/nav.html` or `partials/footer.html` so every page picks
+up the change:
+
+```bash
+npm run build:pages
+```
+
+Shared visual language (color tokens, nav/footer styling, the noise-grain overlay,
+marquee, glitch/typewriter title effects, custom cursor, audio toggle) lives in
+`styles/site.css`, linked by every page. Page-specific layout (hero, forms, reel
+grid…) stays in that page's own `<style>` block.
 
 ---
 
-## Reel Data Format
+## Reel pages
 
-Each reel in `reels.json` contains:
+Each reel gets its own page under `reel/<slug>.html`, generated from `reels.json`:
+
+```bash
+npm run build:reels
+```
+
+This reads `reels.json`, uses `ffmpeg`/`ffprobe` (must be on `PATH`) to grab a poster
+frame and video metadata for each reel, writes `reel/<slug>.html` (canonical URL,
+Open Graph video tags, JSON-LD `VideoObject`, prev/next reel links), and regenerates
+`sitemap.xml`. It also runs `build:pages` at the end so the freshly generated reel
+pages pick up the current nav/footer.
+
+### Reel data format (`reels.json`)
 
 ```json
 {
@@ -80,102 +89,94 @@ Each reel in `reels.json` contains:
   "url": "https://www.instagram.com/reel/...",
   "hashtags": "#surreal #visual #art",
   "status": "Live",
-  "video_url": "https://scontent-cdg.../video.mp4",
-  "thumbnail_url": "https://scontent-cdg.../thumbnail.jpg",
-  "audio_url": "/audio-file.mp3",
-  "posted_at": "2026-05-15T00:00:00.000Z"
+  "video_url": "/video/reel-N.mp4",
+  "audio_url": "/audio/reel-N.mp3",
+  "posted_at": "2026-05-15T00:00:00.000Z",
+  "description": "One or two sentences used as the meta description and reel-page copy."
 }
 ```
 
+### Adding a reel
+
+The admin panel (`/admin.html`) handles upload, compression, and audio extraction for
+you — see below. To add one by hand instead: drop the video into `video/`, add an
+entry to `reels.json`, then run `npm run build:reels`.
+
+### Instagram sync
+
+`scripts/sync-instagram.js` is **not** an automated sync — Instagram no longer exposes
+data that can be scraped, and there is no GitHub Actions workflow wired up. It's a
+manual-workflow helper that validates `reels.json` has the fields each reel needs.
+Add new reels via the admin panel or by editing `reels.json` directly.
+
 ---
 
-## How It Works
+## Admin panel
 
-### Audio Sync
-`reels-audio-sync.js` automatically:
-- Plays audio when you hover over a reel
-- Stops and fades audio when you move away
-- Syncs audio with video playback time
+`/admin.html` is a password-protected tool (upload, edit, delete, reorder reels — see
+`server.js`'s `/api/*` routes) meant for the site owner only, not the public site.
 
-### Direct Video Playback
-Videos embed as native `<video>` elements with:
-- Custom poster thumbnails from Instagram
-- Built-in hover controls
-- Smooth loading from CDN
+- Set `ADMIN_USER` and `ADMIN_PASSWORD` as environment variables on the host (e.g. in
+  Railway's dashboard) — **never commit them**. Login is server-checked
+  (`/api/admin/login`) with a constant-time comparison; sessions are an httpOnly
+  cookie, not client-side state.
+- The page is excluded from `robots.txt` and marked `noindex`.
+- If `ADMIN_USER`/`ADMIN_PASSWORD` aren't set, login always fails (the server logs a
+  warning on startup) rather than falling back to a default.
 
 ---
 
 ## Development
 
-### Local Setup
+### Local setup
 
-1. Clone the repository:
 ```bash
 git clone https://github.com/lenekita/irreallab-site.git
 cd irreallab-site
+npm install
+ADMIN_USER=youruser ADMIN_PASSWORD=yourpassword npm start
 ```
 
-2. Open in a browser:
-```bash
-open index.html
-# or serve with a local server
-npx http-server
-```
-
-### Adding New Reels
-
-1. Extract the video URL from Instagram (see Instagram Graph API method below)
-2. Update `reels.json` with the new reel data
-3. Add the audio file (if different from existing)
-4. Commit and push to deploy
+Requires `ffmpeg`/`ffprobe` on `PATH` for `npm run build:reels` (video compression,
+posters, and audio extraction on upload).
 
 ### Deploy
 
-Changes pushed to `main` automatically deploy to **irreallab.fr** via GitHub Pages.
-
-```bash
-git add .
-git commit -m "Add new reel: [Title]"
-git push origin main
-```
-
----
-
-## GitHub Actions (Optional)
-
-The `.github/workflows/sync-instagram-reels.yml` workflow can automatically sync new reels from Instagram. To enable:
-
-1. Set up Instagram Graph API credentials
-2. Add `INSTAGRAM_TOKEN` and `INSTAGRAM_BUSINESS_ACCOUNT_ID` as GitHub secrets
-3. Workflow runs daily at 2 AM UTC and pulls new reels automatically
+The site runs as a Node/Express app in a Docker container (see `Dockerfile`), deployed
+on Railway. `server.js` serves the static files, rewrites extensionless URLs
+(`/about` → `about.html`), and exposes the reel-management API. Configure
+`ADMIN_USER`/`ADMIN_PASSWORD` as environment variables on the host.
 
 ---
 
 ## Technologies
 
-- **Frontend:** HTML5, CSS3, Vanilla JavaScript
-- **Data:** JSON
-- **Deployment:** GitHub Pages
-- **Media:** Instagram CDN for videos & thumbnails
+- **Frontend:** HTML5, CSS3, vanilla JavaScript — no framework
+- **Backend:** Node.js + Express (`server.js`), Multer for uploads, `ffmpeg`/`ffprobe`
+  for video processing
+- **Data:** `reels.json`
+- **Deployment:** Docker container on Railway
 
 ---
 
 ## Configuration
 
-### Site Settings
-- **Theme:** Dark mode with neon lime accents (`#d4f03a`)
-- **Fonts:** Bebas Neue (headings), Space Mono (body)
-- **Domain:** irreallab.fr (via CNAME)
+- **Theme:** dark mode with neon-lime accents (`#d4f03a`)
+- **Fonts:** Bebas Neue (headings), Space Mono (body), Cormorant Garamond (italic copy)
+- **Domain:** irreallab.fr
+- **i18n:** English (default), French, Romanian — `translations/*.json`, wired via
+  `language-switcher.js` (`data-translate="key.path"` on any element, including
+  `<title>` and `<meta>` tags)
+- **Analytics:** Microsoft Clarity. Cookie consent is handled by CookieHub.
 
-### Audio Files
-All audio files are stored in the repo root and referenced in `reels.json`:
-- `carved-origins.mp3`
-- `chasing-speed.mp3`
-- `closing-hours.mp3`
-- `frame-shift.mp3`
-- `art-heist.mp3`
-- `drifting-through.mp3`
-- `velvet-circuit.mp3`
+### Audio
+
+- Homepage background track: `audio/carbune-cobza.mp3` (looped, toggled by the visible
+  sound button, with a smooth fade in/out; the mute preference persists in
+  `localStorage`).
+- Per-reel hover audio: `audio/reel-N.mp3`, referenced by each reel's `audio_url` in
+  `reels.json`.
+- See `credits.html` for music attribution.
 
 ---
 
@@ -183,10 +184,11 @@ All audio files are stored in the repo root and referenced in `reels.json`:
 
 All original artwork © irreallab. All rights reserved.
 
-Audio tracks used in the reels are licensed tracks sourced from music libraries and available through Instagram's audio library.
+Music used across the site is credited on the [Credits page](https://irreallab.fr/credits.html).
 
 ---
 
 ## Contact
 
-For inquiries, visit the contact page or reach out on Instagram [@irreallab](https://www.instagram.com/irreallab/)
+For inquiries, visit the [contact page](https://irreallab.fr/contact.html) or reach out
+on Instagram [@irreallab](https://www.instagram.com/irreallab/).

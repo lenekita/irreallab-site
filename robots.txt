@@ -3,9 +3,9 @@
 User-agent: *
 Allow: /
 
-# Disallow indexing of private/admin pages (if any)
-# Disallow: /admin/
-# Disallow: /private/
+# Disallow indexing of the admin tool and its API
+Disallow: /admin.html
+Disallow: /api/
 
 # Specific crawl directives
 Crawl-delay: 1
