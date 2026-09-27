@@ -48,6 +48,22 @@
     </video:video>
   </url>
   <url>
+    <loc>https://irreallab.fr/reel/united-bonds.html</loc>
+    <lastmod>2026-08-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+    <video:video>
+      <video:thumbnail_loc>https://irreallab.fr/images/posters/united-bonds.jpg</video:thumbnail_loc>
+      <video:title>United Bonds</video:title>
+      <video:description>A weathered wanderer and a horse suspended between worlds — man and beast united in the mist of a mountain lake, gravity itself unsure who to answer to.</video:description>
+      <video:content_loc>https://irreallab.fr/video/reel-14.mp4</video:content_loc>
+      <video:duration>58</video:duration>
+      <video:publication_date>2026-08-20T00:00:00.000Z</video:publication_date>
+      <video:family_friendly>yes</video:family_friendly>
+      <video:live>no</video:live>
+    </video:video>
+  </url>
+  <url>
     <loc>https://irreallab.fr/reel/paradise-is-normal-absurdity-is-routine.html</loc>
     <lastmod>2026-06-12</lastmod>
     <changefreq>monthly</changefreq>
