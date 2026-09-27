@@ -26,22 +26,31 @@
   });
 
   function initStickyMarquee() {
+    // Only the homepage has a full-bleed .intro-video hero above the
+    // marquee; every other page has the marquee/nav at the very top. Both
+    // cases still need --marquee-height/--nav-height set and the sticky
+    // toggle wired up, so this no longer bails out when there's no hero.
     const introSection = document.querySelector('.intro-video');
     const marquee = document.querySelector('.marquee');
     const marqueeSpacer = document.getElementById('marquee-spacer');
     const nav = document.getElementById('main-nav') || document.querySelector('nav');
     const navSpacer = document.getElementById('nav-spacer');
 
-    function updateStickyHeader() {
-      if (!introSection || !marquee || !marqueeSpacer) return;
+    if (!marquee || !marqueeSpacer) return;
 
+    function updateStickyHeader() {
       const marqueeHeight = marquee.offsetHeight || 34;
       const navHeight = nav ? (nav.offsetHeight || 60) : 60;
 
       document.documentElement.style.setProperty('--marquee-height', `${marqueeHeight}px`);
       document.documentElement.style.setProperty('--nav-height', `${navHeight}px`);
 
-      const triggerPoint = introSection.offsetTop + introSection.offsetHeight;
+      // With a hero, stick once you've scrolled past it; otherwise the
+      // marquee is already at the top, so stick as soon as it would
+      // scroll out of view.
+      const triggerPoint = introSection
+        ? introSection.offsetTop + introSection.offsetHeight
+        : marqueeHeight;
       const shouldStick = window.scrollY >= triggerPoint;
 
       marquee.classList.toggle('is-sticky', shouldStick);

@@ -101,7 +101,7 @@
       styles.textContent = `
         .lang-switcher {
           position: fixed;
-          top: 12px;
+          top: calc(var(--marquee-height, 34px) + var(--nav-height, 60px) + 10px);
           right: var(--pad-x, 3.5rem);
           display: flex;
           align-items: center;

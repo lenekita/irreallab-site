@@ -59,7 +59,7 @@ body::after {
   z-index: 100000;
   box-shadow: 0 10px 30px rgba(0,0,0,.28);
 }
-.marquee-spacer { height: var(--marquee-height, 34px); pointer-events: none; }
+.marquee-spacer { height: 0; pointer-events: none; }
 .marquee-spacer.is-active { height: var(--marquee-height, 34px); }
 .marquee-track { display: inline-flex; white-space: nowrap; animation: mscroll 22s linear infinite; }
 .marquee:hover .marquee-track { animation-play-state: paused; }
@@ -143,7 +143,7 @@ nav.is-sticky {
   backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
   box-shadow: 0 14px 40px rgba(0,0,0,.34);
 }
-.nav-spacer { height: var(--nav-height, 60px); pointer-events: none; }
+.nav-spacer { height: 0; pointer-events: none; }
 .nav-spacer.is-active { height: var(--nav-height, 60px); }
 
 /* ── FOOTER ── */
