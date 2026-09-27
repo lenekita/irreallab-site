@@ -32,6 +32,22 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://irreallab.fr/reel/silent-bond.html</loc>
+    <lastmod>2026-09-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+    <video:video>
+      <video:thumbnail_loc>https://irreallab.fr/images/posters/silent-bond.jpg</video:thumbnail_loc>
+      <video:title>Silent Bond</video:title>
+      <video:description>A veiled rider and his camel share a quiet moment amid the roar of a desert market — a silent bond between man and beast, undisturbed by the noise of the world around them.</video:description>
+      <video:content_loc>https://irreallab.fr/video/reel-13.mp4</video:content_loc>
+      <video:duration>79</video:duration>
+      <video:publication_date>2026-09-27T00:00:00.000Z</video:publication_date>
+      <video:family_friendly>yes</video:family_friendly>
+      <video:live>no</video:live>
+    </video:video>
+  </url>
+  <url>
     <loc>https://irreallab.fr/reel/paradise-is-normal-absurdity-is-routine.html</loc>
     <lastmod>2026-06-12</lastmod>
     <changefreq>monthly</changefreq>
