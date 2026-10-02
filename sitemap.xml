@@ -3,33 +3,49 @@
         xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
   <url>
     <loc>https://irreallab.fr/</loc>
-    <lastmod>2026-09-27</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://irreallab.fr/reels.html</loc>
-    <lastmod>2026-09-27</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://irreallab.fr/about.html</loc>
-    <lastmod>2026-09-27</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://irreallab.fr/contact.html</loc>
-    <lastmod>2026-09-27</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://irreallab.fr/credits.html</loc>
-    <lastmod>2026-09-27</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://irreallab.fr/reel/paradise-denied.html</loc>
+    <lastmod>2026-10-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+    <video:video>
+      <video:thumbnail_loc>https://irreallab.fr/images/posters/paradise-denied.jpg</video:thumbnail_loc>
+      <video:title>Paradise Denied</video:title>
+      <video:description>A sun-drenched postcard from a golden age that never quite existed — vintage Hollywood glamour, palm-lined boulevards and a paradise that stays just out of reach, however close it seems.</video:description>
+      <video:content_loc>https://irreallab.fr/video/reel-15.mp4</video:content_loc>
+      <video:duration>62</video:duration>
+      <video:publication_date>2026-10-02T00:00:00.000Z</video:publication_date>
+      <video:family_friendly>yes</video:family_friendly>
+      <video:live>no</video:live>
+    </video:video>
   </url>
   <url>
     <loc>https://irreallab.fr/reel/silent-bond.html</loc>
@@ -177,7 +193,7 @@
   </url>
   <url>
     <loc>https://irreallab.fr/reel/closing-hours.html</loc>
-    <lastmod>2026-09-27</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
     <video:video>
@@ -192,7 +208,7 @@
   </url>
   <url>
     <loc>https://irreallab.fr/reel/frame-shift.html</loc>
-    <lastmod>2026-09-27</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
     <video:video>
@@ -207,7 +223,7 @@
   </url>
   <url>
     <loc>https://irreallab.fr/reel/art-heist.html</loc>
-    <lastmod>2026-09-27</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
     <video:video>
@@ -222,7 +238,7 @@
   </url>
   <url>
     <loc>https://irreallab.fr/reel/drifting-through.html</loc>
-    <lastmod>2026-09-27</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
     <video:video>
