@@ -16,6 +16,21 @@ const SITE = 'https://irreallab.fr';
 const REEL_DIR = path.join(ROOT, 'reel');
 const POSTER_DIR = path.join(ROOT, 'images', 'posters');
 
+// Videos that get their own watch page (and sitemap video entry) but are not
+// part of the reels archive — e.g. the homepage hero video, which Search
+// Console otherwise treats as "complementary content" with no watch page.
+const FEATURED_VIDEOS = [
+  {
+    title: 'Sky Runway',
+    subtitle: '@irreallab · Watch on Instagram',
+    url: 'https://www.instagram.com/irreallab/',
+    hashtags: '#irreallab #skyrunway #surrealvisuals #cinematicvisuals #generativeart',
+    video_url: '/video/sky-runway.mp4',
+    posted_at: '2026-05-09T00:00:00.000Z',
+    description: 'A surreal cinematic runway above the clouds — motion study 04 by irreallab.',
+  },
+];
+
 const STATIC_PAGES = [
   { loc: `${SITE}/`, changefreq: 'weekly', priority: '1.0' },
   { loc: `${SITE}/reels.html`, changefreq: 'weekly', priority: '0.9' },
@@ -437,8 +452,19 @@ function main() {
     console.log(`built reel/${slug}.html (${width}x${height}, ${duration}s)`);
   });
 
+  FEATURED_VIDEOS.forEach(reel => {
+    const videoFile = path.join(ROOT, reel.video_url);
+    const slug = slugify(reel.title);
+    ensurePoster(videoFile, path.join(POSTER_DIR, `${slug}.jpg`));
+    const { width, height, duration } = probeVideo(videoFile);
+    const meta = { slug, width, height, duration };
+    fs.writeFileSync(path.join(REEL_DIR, `${slug}.html`), pageHtml(reel, meta, { prev: null, next: null }));
+    entries.push({ reel, meta });
+    console.log(`built reel/${slug}.html (featured, ${width}x${height}, ${duration}s)`);
+  });
+
   fs.writeFileSync(path.join(ROOT, 'sitemap.xml'), sitemapXml(entries));
-  console.log(`wrote sitemap.xml with ${STATIC_PAGES.length} pages + ${entries.length} reels`);
+  console.log(`wrote sitemap.xml with ${STATIC_PAGES.length} pages + ${entries.length} video pages`);
 }
 
 main();
