@@ -323,4 +323,5 @@
   // Expose setLanguage globally for manual switching
   window.irreallab = window.irreallab || {};
   window.irreallab.setLanguage = setLanguage;
+  window.irreallab.t = function (key) { const v = getTranslation(key, null); return typeof v === 'string' ? v : null; };
 })();
