@@ -78,8 +78,8 @@
     "fieldSubject": "Subiect",
     "fieldMessage": "Mesaj",
     "submitButton": "Trimite brief-ul ↗",
-    "note": "Mesajul ajunge direct la irreallab@proton.me — răspund personal.",
-    "successMessage": "Mesaj trimis cu succes! Revin în curând.",
+    "note": "Mesajul ajunge direct la irreallab@proton.me — răspund personal în 48 de ore.",
+    "successMessage": "Mesaj trimis cu succes! Îți răspund în 48 de ore.",
     "errorMessage": "A apărut o eroare. Încearcă din nou sau scrie la irreallab@proton.me.",
     "kicker": "Video comercial · Filme de brand · Reclame sociale",
     "heroLine1": "Fă-ți brandul",
@@ -129,7 +129,8 @@
     "budget2": "1.000 € – 3.000 €",
     "budget3": "3.000 € – 10.000 €",
     "budget4": "Peste 10.000 €",
-    "budget5": "De discutat"
+    "budget5": "De discutat",
+    "chip4": "Răspuns în 48h"
   },
   "credits": {
     "pageTitle": "Credite",

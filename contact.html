@@ -234,6 +234,7 @@
         <span data-translate="contact.chip1">Social-first · 9:16 / 1:1 / 16:9</span>
         <span data-translate="contact.chip2">Concept to final cut</span>
         <span data-translate="contact.chip3">Paris-based · working worldwide</span>
+        <span data-translate="contact.chip4">Reply within 48h</span>
       </div>
     </div>
   </section>
@@ -366,7 +367,7 @@
 
           <div id="form-status" class="form-status" role="status" aria-live="polite"></div>
           <button class="contact-submit" id="submit-btn" type="submit" data-translate="contact.submitButton">Send project brief ↗</button>
-          <p class="contact-note" data-translate="contact.note">Your message goes straight to irreallab@proton.me — I reply personally.</p>
+          <p class="contact-note" data-translate="contact.note">Your message goes straight to irreallab@proton.me — I reply personally within 48 hours.</p>
         </form>
       </div>
     </div>
@@ -419,7 +420,7 @@
     }).then(function (res) {
       if (res.ok) {
         form.reset();
-        msg('ok', (window.irreallab && window.irreallab.t && window.irreallab.t('contact.successMessage')) || "Message sent successfully! I'll be in touch soon.");
+        msg('ok', (window.irreallab && window.irreallab.t && window.irreallab.t('contact.successMessage')) || "Message sent successfully! I'll reply within 48 hours.");
       } else {
         throw new Error('bad status');
       }

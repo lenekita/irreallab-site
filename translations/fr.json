@@ -78,8 +78,8 @@
     "fieldSubject": "Sujet",
     "fieldMessage": "Message",
     "submitButton": "Envoyer mon brief ↗",
-    "note": "Votre message arrive directement sur irreallab@proton.me — je réponds personnellement.",
-    "successMessage": "Message envoyé avec succès ! Je reviens vers vous très vite.",
+    "note": "Votre message arrive directement sur irreallab@proton.me — je réponds personnellement sous 48 heures.",
+    "successMessage": "Message envoyé avec succès ! Je vous réponds sous 48 heures.",
     "errorMessage": "Une erreur s'est produite. Veuillez réessayer ou écrire à irreallab@proton.me.",
     "kicker": "Vidéo commerciale · Films de marque · Publicités sociales",
     "heroLine1": "Rendez votre marque",
@@ -129,7 +129,8 @@
     "budget2": "1 000 € – 3 000 €",
     "budget3": "3 000 € – 10 000 €",
     "budget4": "Plus de 10 000 €",
-    "budget5": "À discuter"
+    "budget5": "À discuter",
+    "chip4": "Réponse sous 48h"
   },
   "credits": {
     "pageTitle": "Crédits",
