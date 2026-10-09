@@ -3,49 +3,23 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
-const { execSync } = require('child_process');
-const https = require('https');
+
+const site = require('./lib/site');
+const media = require('./lib/media');
+const store = require('./lib/reels-store');
+const { DATA_DIR, MEDIA_DIR, TMP_DIR } = store;
 
 const app = express();
 // Railway (and Cloudflare) sit in front of the app; needed for the real client IP.
 app.set('trust proxy', 1);
 const PORT = process.env.PORT || 3000;
 
-// Ensure directories exist
-const videosDir = path.join(__dirname, 'video');
-const audioDir = path.join(__dirname, 'audio');
-const uploadsDir = path.join(__dirname, 'uploads');
-
-[videosDir, audioDir, uploadsDir].forEach(dir => {
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
+// Never serve source, config or runtime data through the static handler.
+app.use((req, res, next) => {
+  if (/^\/(server\.js|lib|scripts|data|node_modules|partials|uploads|package(-lock)?\.json|Dockerfile|README\.md|CNAME|\.)/i.test(req.path)) {
+    return res.status(404).send('Not found');
   }
-});
-
-// Configure multer for video uploads
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadsDir);
-  },
-  filename: (req, file, cb) => {
-    const timestamp = Date.now();
-    const originalName = file.originalname.replace(/[^a-z0-9.-]/gi, '_').toLowerCase();
-    cb(null, `reel-${timestamp}-${originalName}`);
-  }
-});
-
-const upload = multer({
-  storage,
-  fileFilter: (req, file, cb) => {
-    if (file.mimetype.startsWith('video/')) {
-      cb(null, true);
-    } else {
-      cb(new Error('Only video files are allowed'), false);
-    }
-  },
-  limits: {
-    fileSize: 50 * 1024 * 1024 // 50MB limit (safe for Cloudflare on Railway)
-  }
+  next();
 });
 
 // Middleware
@@ -90,10 +64,10 @@ function parseCookies(req) {
   return out;
 }
 
-function createAdminSession(res) {
+function createAdminSession(req, res) {
   const token = crypto.randomBytes(32).toString('hex');
   adminSessions.set(token, Date.now() + SESSION_TTL_MS);
-  res.setHeader('Set-Cookie', `${SESSION_COOKIE}=${token}; HttpOnly; SameSite=Strict; Path=/; Max-Age=${SESSION_TTL_MS / 1000}`);
+  res.setHeader('Set-Cookie', `${SESSION_COOKIE}=${token}; HttpOnly; SameSite=Strict; Path=/; Max-Age=${SESSION_TTL_MS / 1000}${req.secure ? '; Secure' : ''}`);
 }
 
 function destroyAdminSession(req, res) {
@@ -112,6 +86,20 @@ function requireAdmin(req, res, next) {
   next();
 }
 
+const loginAttempts = new Map(); // ip -> { count, resetAt }
+function loginLimited(ip) {
+  const now = Date.now();
+  const e = loginAttempts.get(ip);
+  if (!e || e.resetAt < now) return false;
+  return e.count >= 5;
+}
+function recordFailedLogin(ip) {
+  const now = Date.now();
+  const e = loginAttempts.get(ip);
+  if (!e || e.resetAt < now) loginAttempts.set(ip, { count: 1, resetAt: now + 15 * 60 * 1000 });
+  else e.count += 1;
+}
+
 app.post('/api/admin/login', express.json(), (req, res) => {
   const { id, password } = req.body || {};
   if (!ADMIN_USER || !ADMIN_PASSWORD) {
@@ -119,10 +107,15 @@ app.post('/api/admin/login', express.json(), (req, res) => {
   }
   const idOk = timingSafeEqualStr(id || '', ADMIN_USER);
   const passOk = timingSafeEqualStr(password || '', ADMIN_PASSWORD);
+  if (loginLimited(req.ip)) {
+    return res.status(429).json({ error: 'Trop de tentatives — réessayez dans 15 minutes' });
+  }
   if (idOk && passOk) {
-    createAdminSession(res);
+    loginAttempts.delete(req.ip);
+    createAdminSession(req, res);
     return res.json({ success: true });
   }
+  recordFailedLogin(req.ip);
   res.status(401).json({ error: 'Invalid credentials' });
 });
 
@@ -137,462 +130,6 @@ app.get('/api/admin/session', (req, res) => {
   res.json({ authenticated: !!(expiresAt && expiresAt >= Date.now()) });
 });
 
-// Helper function to find next reel number
-function getNextReelNumber() {
-  try {
-    const files = fs.readdirSync(videosDir);
-    const reelNumbers = files
-      .filter(f => f.match(/^reel-\d+\.mp4$/))
-      .map(f => parseInt(f.match(/\d+/)[0]))
-      .sort((a, b) => b - a);
-
-    return reelNumbers.length > 0 ? reelNumbers[0] + 1 : 1;
-  } catch (e) {
-    return 1;
-  }
-}
-
-// Helper function to calculate file hash
-function calculateFileHash(filePath) {
-  const hash = crypto.createHash('sha256');
-  const stream = fs.createReadStream(filePath);
-  return new Promise((resolve, reject) => {
-    stream.on('data', chunk => hash.update(chunk));
-    stream.on('end', () => resolve(hash.digest('hex')));
-    stream.on('error', reject);
-  });
-}
-
-// Helper function to check for duplicate videos
-async function checkDuplicateVideo(videoPath) {
-  try {
-    const reelsPath = path.join(__dirname, 'reels.json');
-    if (!fs.existsSync(reelsPath)) return false;
-
-    const reels = JSON.parse(fs.readFileSync(reelsPath, 'utf8'));
-    const newHash = await calculateFileHash(videoPath);
-
-    for (const reel of reels) {
-      if (reel.video_url) {
-        const existingPath = path.join(__dirname, reel.video_url);
-        if (fs.existsSync(existingPath)) {
-          const existingHash = await calculateFileHash(existingPath);
-          if (existingHash === newHash) {
-            return true; // Duplicate found
-          }
-        }
-      }
-    }
-    return false;
-  } catch (error) {
-    console.error('Duplicate check error:', error.message);
-    return false;
-  }
-}
-
-// Helper function to extract audio from video
-function extractAudio(videoPath, audioPath) {
-  try {
-    // Use ffmpeg to extract audio as MP3
-    execSync(`ffmpeg -i "${videoPath}" -q:a 9 -n "${audioPath}"`, {
-      stdio: 'pipe'
-    });
-    return true;
-  } catch (error) {
-    console.error('Audio extraction error:', error.message);
-    return false;
-  }
-}
-
-// Helper function to compress video
-function compressVideo(inputPath, outputPath) {
-  try {
-    // Compress video using ffmpeg with H.264 codec
-    execSync(`ffmpeg -i "${inputPath}" -c:v libx264 -crf 28 -preset medium -c:a aac -b:a 128k -n "${outputPath}"`, {
-      stdio: 'pipe'
-    });
-    return true;
-  } catch (error) {
-    console.error('Video compression error:', error.message);
-    return false;
-  }
-}
-
-// Helper function to fetch Instagram metadata from URL
-async function fetchInstagramMetadata(igUrl) {
-  return new Promise((resolve) => {
-    if (!igUrl || !igUrl.includes('instagram.com')) {
-      resolve({ success: false });
-      return;
-    }
-
-    // Extract post/reel ID from various Instagram URL formats
-    // Supports: /p/ID, /reel/ID, /reels/ID, /tv/ID
-    let postId = null;
-    const postMatch = igUrl.match(/\/(?:p|reel|reels|tv)\/([A-Za-z0-9_-]+)/);
-    if (postMatch) {
-      postId = postMatch[1];
-    } else {
-      resolve({ success: false });
-      return;
-    }
-
-    // Try to fetch metadata from Instagram's embed API
-    const embedUrl = `https://www.instagram.com/p/${postId}/embed/captioned/`;
-
-    const options = {
-      timeout: 8000,
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-      }
-    };
-
-    https.get(embedUrl, options, (res) => {
-      let data = '';
-      res.on('data', chunk => data += chunk);
-      res.on('end', () => {
-        try {
-          // Try multiple patterns to extract caption
-          let caption = '';
-
-          // Pattern 1: "caption":"..."
-          const captionMatch1 = data.match(/"caption":"([^"]*(?:\\.[^"]*)*?)"/);
-          if (captionMatch1) {
-            caption = captionMatch1[1].replace(/\\n/g, '\n').replace(/\\"/g, '"');
-          }
-
-          // Pattern 2: caption from script tags
-          if (!caption) {
-            const scriptMatch = data.match(/"caption":\s*"([^"]+)"/);
-            if (scriptMatch) {
-              caption = scriptMatch[1];
-            }
-          }
-
-          // Extract hashtags from caption
-          const hashtags = (caption.match(/#\w+/g) || []).join('\n');
-
-          if (caption || hashtags) {
-            resolve({
-              success: true,
-              caption: caption,
-              hashtags: hashtags
-            });
-          } else {
-            resolve({ success: false });
-          }
-        } catch (e) {
-          console.error('Parse error:', e.message);
-          resolve({ success: false });
-        }
-      });
-    }).on('error', (err) => {
-      console.error('Fetch error:', err.message);
-      resolve({ success: false });
-    });
-  });
-}
-
-// API Routes (must be before static middleware)
-// Upload endpoint
-app.post('/api/upload-reel', requireAdmin, upload.single('video'), async (req, res) => {
-  try {
-    if (!req.file) {
-      return res.status(400).json({ error: 'No video file provided' });
-    }
-
-    const { title, hashtags, url, scheduledDate, position } = req.body;
-
-    if (!title || !hashtags) {
-      fs.unlinkSync(req.file.path);
-      return res.status(400).json({ error: 'Title and hashtags are required' });
-    }
-
-    // Validate position if provided
-    let insertPosition = 0; // Default to beginning
-    if (position !== undefined && position !== null) {
-      const pos = parseInt(position);
-      if (!isNaN(pos) && pos >= 0) {
-        insertPosition = pos;
-      }
-    }
-
-    // Check for duplicate video
-    const isDuplicate = await checkDuplicateVideo(req.file.path);
-    if (isDuplicate) {
-      fs.unlinkSync(req.file.path);
-      return res.status(400).json({ error: 'This video already exists in your library' });
-    }
-
-    // Read existing reels
-    const reelsPath = path.join(__dirname, 'reels.json');
-    let reels = [];
-
-    if (fs.existsSync(reelsPath)) {
-      try {
-        reels = JSON.parse(fs.readFileSync(reelsPath, 'utf8'));
-      } catch (e) {
-        reels = [];
-      }
-    }
-
-    // Get next reel number
-    const nextReelNum = getNextReelNumber();
-    const videoFilename = `reel-${nextReelNum}.mp4`;
-    const audioFilename = `reel-${nextReelNum}.mp3`;
-    const videoPath = path.join(videosDir, videoFilename);
-    const compressedVideoPath = path.join(videosDir, `reel-${nextReelNum}-temp.mp4`);
-    const audioPath = path.join(audioDir, audioFilename);
-
-    // Move uploaded file to temp location
-    fs.renameSync(req.file.path, compressedVideoPath);
-
-    // Always compress video for consistency and smaller file size
-    const stats = fs.statSync(compressedVideoPath);
-    const fileSizeMB = stats.size / (1024 * 1024);
-
-    console.log(`Compressing video (${fileSizeMB.toFixed(2)}MB)...`);
-    const compressionSuccess = compressVideo(compressedVideoPath, videoPath);
-
-    let finalVideoPath = videoPath;
-    if (compressionSuccess) {
-      // Compression succeeded, use compressed version
-      fs.unlinkSync(compressedVideoPath);
-      const compressedStats = fs.statSync(videoPath);
-      const compressedMB = compressedStats.size / (1024 * 1024);
-      console.log(`✓ Compressed: ${fileSizeMB.toFixed(2)}MB → ${compressedMB.toFixed(2)}MB`);
-    } else {
-      // If compression fails, still use the original but rename it
-      console.log(`⚠ Compression failed, using original`);
-      fs.renameSync(compressedVideoPath, videoPath);
-    }
-
-    // Extract audio from video
-    const audioExtracted = extractAudio(finalVideoPath, audioPath);
-
-    // Create new reel object
-    const newReel = {
-      title: title.trim(),
-      subtitle: '@irreallab · Watch on Instagram',
-      url: url || 'https://www.instagram.com/irreallab/',
-      hashtags: hashtags.trim(),
-      status: scheduledDate ? 'Scheduled' : 'Live',
-      video_url: `/video/${videoFilename}`,
-      posted_at: new Date().toISOString()
-    };
-
-    // Add scheduled publish time if provided
-    if (scheduledDate) {
-      newReel.scheduled_publish_at = scheduledDate;
-    }
-
-    // Add audio_url if extraction was successful
-    if (audioExtracted) {
-      newReel.audio_url = `/audio/${audioFilename}`;
-    }
-
-    // Insert reel at specified position
-    if (insertPosition >= reels.length) {
-      // If position is beyond array length, add at end
-      reels.push(newReel);
-    } else {
-      // Insert at specified position
-      reels.splice(insertPosition, 0, newReel);
-    }
-
-    // Save updated reels.json
-    fs.writeFileSync(reelsPath, JSON.stringify(reels, null, 2));
-
-    res.json({
-      success: true,
-      message: `Reel uploaded ${scheduledDate ? 'and scheduled' : 'and published'} at position #${insertPosition + 1}${audioExtracted ? ' with audio' : ''}`,
-      reel: newReel,
-      videoSize: fileSizeMB.toFixed(2),
-      position: insertPosition + 1
-    });
-
-  } catch (error) {
-    // Clean up uploaded file if there was an error
-    if (req.file && fs.existsSync(req.file.path)) {
-      fs.unlinkSync(req.file.path);
-    }
-
-    console.error('Upload error:', error);
-    res.status(500).json({
-      error: error.message || 'Error uploading reel'
-    });
-  }
-});
-
-// Fetch Instagram metadata
-app.post('/api/fetch-instagram-metadata', requireAdmin, express.json(), async (req, res) => {
-  try {
-    const { url } = req.body;
-
-    if (!url) {
-      return res.status(400).json({ error: 'Instagram URL required' });
-    }
-
-    const metadata = await fetchInstagramMetadata(url);
-
-    if (metadata.success) {
-      res.json({
-        success: true,
-        caption: metadata.caption,
-        hashtags: metadata.hashtags
-      });
-    } else {
-      res.status(400).json({ error: 'Could not fetch metadata from Instagram URL' });
-    }
-  } catch (error) {
-    console.error('Instagram fetch error:', error);
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// Edit reel metadata
-app.put('/api/reel/:index', requireAdmin, express.json(), (req, res) => {
-  try {
-    const index = parseInt(req.params.index);
-    const { title, hashtags, url } = req.body;
-    const reelsPath = path.join(__dirname, 'reels.json');
-
-    if (!fs.existsSync(reelsPath)) {
-      return res.status(404).json({ error: 'Reels file not found' });
-    }
-
-    let reels = JSON.parse(fs.readFileSync(reelsPath, 'utf8'));
-
-    if (index < 0 || index >= reels.length) {
-      return res.status(400).json({ error: 'Invalid reel index' });
-    }
-
-    // Update reel metadata
-    if (title) reels[index].title = title.trim();
-    if (hashtags) reels[index].hashtags = hashtags.trim();
-    if (url) reels[index].url = url.trim();
-
-    fs.writeFileSync(reelsPath, JSON.stringify(reels, null, 2));
-
-    res.json({
-      success: true,
-      message: 'Reel updated successfully',
-      reel: reels[index]
-    });
-  } catch (error) {
-    console.error('Edit error:', error);
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// Get all reels (filtered by scheduled publish time for public view)
-app.get('/api/reels', (req, res) => {
-  try {
-    const reelsPath = path.join(__dirname, 'reels.json');
-    if (!fs.existsSync(reelsPath)) {
-      return res.json([]);
-    }
-    let reels = JSON.parse(fs.readFileSync(reelsPath, 'utf8'));
-
-    // Filter out scheduled reels that haven't been published yet
-    const now = new Date();
-    reels = reels.filter(reel => {
-      if (reel.scheduled_publish_at) {
-        const scheduledTime = new Date(reel.scheduled_publish_at);
-        return scheduledTime <= now;
-      }
-      return true;
-    });
-
-    res.json(reels);
-  } catch (error) {
-    res.status(500).json({ error: 'Error reading reels' });
-  }
-});
-
-// Get all reels (admin - includes scheduled)
-app.get('/api/reels-admin', requireAdmin, (req, res) => {
-  try {
-    const reelsPath = path.join(__dirname, 'reels.json');
-    if (!fs.existsSync(reelsPath)) {
-      return res.json([]);
-    }
-    const reels = JSON.parse(fs.readFileSync(reelsPath, 'utf8'));
-    res.json(reels);
-  } catch (error) {
-    res.status(500).json({ error: 'Error reading reels' });
-  }
-});
-
-// Delete a reel by index
-app.delete('/api/reel/:index', requireAdmin, (req, res) => {
-  try {
-    const index = parseInt(req.params.index);
-    const reelsPath = path.join(__dirname, 'reels.json');
-
-    if (!fs.existsSync(reelsPath)) {
-      return res.status(404).json({ error: 'Reels file not found' });
-    }
-
-    let reels = JSON.parse(fs.readFileSync(reelsPath, 'utf8'));
-
-    if (index < 0 || index >= reels.length) {
-      return res.status(400).json({ error: 'Invalid reel index' });
-    }
-
-    const reel = reels[index];
-
-    // Delete video file
-    if (reel.video_url) {
-      const videoFile = path.join(__dirname, reel.video_url);
-      if (fs.existsSync(videoFile)) {
-        fs.unlinkSync(videoFile);
-      }
-    }
-
-    // Delete audio file
-    if (reel.audio_url) {
-      const audioFile = path.join(__dirname, reel.audio_url);
-      if (fs.existsSync(audioFile)) {
-        fs.unlinkSync(audioFile);
-      }
-    }
-
-    reels.splice(index, 1);
-    fs.writeFileSync(reelsPath, JSON.stringify(reels, null, 2));
-
-    res.json({
-      success: true,
-      message: 'Reel deleted successfully',
-      remainingReels: reels.length
-    });
-  } catch (error) {
-    console.error('Delete error:', error);
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// Reorder reels
-app.post('/api/reorder', requireAdmin, express.json(), (req, res) => {
-  try {
-    const { reels } = req.body;
-    const reelsPath = path.join(__dirname, 'reels.json');
-
-    if (!Array.isArray(reels)) {
-      return res.status(400).json({ error: 'Invalid reels array' });
-    }
-
-    fs.writeFileSync(reelsPath, JSON.stringify(reels, null, 2));
-
-    res.json({
-      success: true,
-      message: 'Reels reordered successfully'
-    });
-  } catch (error) {
-    console.error('Reorder error:', error);
-    res.status(500).json({ error: error.message });
-  }
-});
 
 // ---------------------------------------------------------------------------
 // Reel likes — anonymous hearts. Only counters are stored (no personal data).
@@ -600,8 +137,6 @@ app.post('/api/reorder', requireAdmin, express.json(), (req, res) => {
 // IP+reel while the server is up. Set DATA_DIR to a persistent volume
 // (e.g. a Railway volume) or the counts reset whenever the app redeploys.
 // ---------------------------------------------------------------------------
-const DATA_DIR = process.env.DATA_DIR || path.join(__dirname, 'data');
-fs.mkdirSync(DATA_DIR, { recursive: true });
 const LIKES_FILE = path.join(DATA_DIR, 'likes.json');
 const FEATURED_SLUGS = ['sky-runway'];
 
@@ -622,25 +157,7 @@ function saveLikesSoon() {
   }, 400);
 }
 
-function slugifyTitle(title) {
-  return String(title).normalize('NFD').replace(/[̀-ͯ]/g, '')
-    .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
-}
-
-let slugCache = { mtime: 0, slugs: new Set(FEATURED_SLUGS) };
-function allowedSlugs() {
-  try {
-    const file = path.join(__dirname, 'reels.json');
-    const mtime = fs.statSync(file).mtimeMs;
-    if (mtime !== slugCache.mtime) {
-      const reels = JSON.parse(fs.readFileSync(file, 'utf8'));
-      const slugs = new Set(FEATURED_SLUGS);
-      reels.forEach(r => { if (r.title && r.video_url && r.video_url.startsWith('/')) slugs.add(slugifyTitle(r.title)); });
-      slugCache = { mtime, slugs };
-    }
-  } catch (e) { /* keep last known list */ }
-  return slugCache.slugs;
-}
+function allowedSlugs() { return store.allowedSlugs(FEATURED_SLUGS); }
 
 const likeRate = new Map();   // ip -> { count, resetAt }
 const likedBy = new Set();    // `${ip}|${slug}`
@@ -665,15 +182,10 @@ app.get('/api/likes', (req, res) => {
 
 // Admin-only ranking with titles, for the admin panel's Statistics tab.
 app.get('/api/likes-report', requireAdmin, (req, res) => {
-  let titles = { 'sky-runway': 'Sky Runway' };
-  try {
-    JSON.parse(fs.readFileSync(path.join(__dirname, 'reels.json'), 'utf8')).forEach(r => {
-      if (r.title && r.video_url && r.video_url.startsWith('/')) titles[slugifyTitle(r.title)] = r.title;
-    });
-  } catch (e) { /* fall back to slugs */ }
-  const reels = Array.from(allowedSlugs())
-    .map(slug => ({ slug, title: titles[slug] || slug, likes: likeCounts[slug] || 0 }))
-    .sort((x, y) => y.likes - x.likes || x.title.localeCompare(y.title));
+  const reels = store.getAll().filter(r => !r.hidden)
+    .map(r => ({ slug: r.slug, title: r.title, likes: likeCounts[r.slug] || 0 }));
+  site.FEATURED_VIDEOS.forEach(v => { const slug = site.slugify(v.title); reels.push({ slug, title: v.title, likes: likeCounts[slug] || 0 }); });
+  reels.sort((x, y) => y.likes - x.likes || x.title.localeCompare(y.title));
   res.set('Cache-Control', 'no-store');
   res.json({ total: reels.reduce((n, r) => n + r.likes, 0), reels });
 });
@@ -696,6 +208,239 @@ app.post('/api/likes/:slug', express.json({ limit: '1kb' }), (req, res) => {
   res.set('Cache-Control', 'no-store');
   res.json({ slug, count: likeCounts[slug] || 0 });
 });
+
+
+// ---------------------------------------------------------------------------
+// Reels API (public) + admin API
+// ---------------------------------------------------------------------------
+const INTERNAL_FIELDS = ['managed', 'source', 'hidden', 'meta', 'scheduled_publish_at', 'deleted'];
+function publicView(r) {
+  const out = { ...r };
+  INTERNAL_FIELDS.forEach(k => delete out[k]);
+  return out;
+}
+function sendPublicReels(req, res) {
+  res.set('Cache-Control', 'no-store');
+  res.json(store.getPublic().map(publicView));
+}
+app.get('/api/reels', sendPublicReels);
+app.get('/reels.json', sendPublicReels);
+
+// Everything the admin list needs, in one call.
+app.get('/api/reels-admin', requireAdmin, (req, res) => {
+  const reels = store.getAll().map(r => ({
+    slug: r.slug, title: r.title, description: r.description || '', hashtags: r.hashtags || '',
+    url: r.url || '', posted_at: r.posted_at || null, scheduled_publish_at: r.scheduled_publish_at || null,
+    status: r.status, source: r.source, hidden: !!r.hidden,
+    poster: `/images/posters/${r.slug}.jpg`, likes: likeCounts[r.slug] || 0,
+  }));
+  res.set('Cache-Control', 'no-store');
+  res.json(reels);
+});
+
+function cleanFields(body) {
+  const out = {};
+  const str = (v, max) => String(v == null ? '' : v).trim().slice(0, max);
+  if ('title' in body) { out.title = str(body.title, 120); if (!out.title) throw new Error('Le titre est obligatoire'); }
+  if ('description' in body) out.description = str(body.description, 500);
+  if ('hashtags' in body) out.hashtags = str(body.hashtags, 300);
+  if ('url' in body) {
+    out.url = str(body.url, 500);
+    if (out.url && !/^https:\/\//i.test(out.url)) throw new Error('Le lien Instagram doit commencer par https://');
+  }
+  if ('posted_at' in body && body.posted_at) {
+    const d = new Date(body.posted_at);
+    if (isNaN(d)) throw new Error('Date de publication invalide');
+    out.posted_at = d.toISOString();
+  }
+  if ('scheduled_publish_at' in body) {
+    if (!body.scheduled_publish_at) out.scheduled_publish_at = null;
+    else {
+      const d = new Date(body.scheduled_publish_at);
+      if (isNaN(d)) throw new Error('Date de programmation invalide');
+      out.scheduled_publish_at = d.toISOString();
+    }
+  }
+  return out;
+}
+
+app.put('/api/reel/:slug', requireAdmin, (req, res) => {
+  if (!store.findBySlug(req.params.slug)) return res.status(404).json({ error: 'Reel introuvable' });
+  try {
+    store.updateReel(req.params.slug, cleanFields(req.body || {}));
+    res.json({ success: true });
+  } catch (err) { res.status(400).json({ error: err.message }); }
+});
+
+app.delete('/api/reel/:slug', requireAdmin, (req, res) => {
+  if (!store.deleteReel(req.params.slug)) return res.status(404).json({ error: 'Reel introuvable' });
+  res.json({ success: true });
+});
+
+app.post('/api/reel/:slug/restore', requireAdmin, (req, res) => {
+  if (!store.restoreReel(req.params.slug)) return res.status(404).json({ error: 'Rien à restaurer' });
+  res.json({ success: true });
+});
+
+// ── Upload: accept the file, then compress / extract audio / make a poster in
+// the background (one job at a time) while the admin polls for progress. ──
+const MAX_UPLOAD_MB = 100; // Cloudflare's request-size limit on the free plan
+const upload = multer({
+  storage: multer.diskStorage({
+    destination: (req, file, cb) => cb(null, TMP_DIR),
+    filename: (req, file, cb) => cb(null, `${Date.now()}-${crypto.randomBytes(4).toString('hex')}${path.extname(file.originalname).toLowerCase().replace(/[^.a-z0-9]/g, '')}`),
+  }),
+  fileFilter: (req, file, cb) => (file.mimetype.startsWith('video/') ? cb(null, true) : cb(new Error('Seules les vidéos sont acceptées'), false)),
+  limits: { fileSize: MAX_UPLOAD_MB * 1024 * 1024 },
+});
+function receiveVideo(req, res, next) {
+  upload.single('video')(req, res, err => {
+    if (!err) return next();
+    const tooBig = err.code === 'LIMIT_FILE_SIZE';
+    res.status(tooBig ? 413 : 400).json({ error: tooBig ? `La vidéo dépasse ${MAX_UPLOAD_MB} Mo (limite d'envoi)` : err.message });
+  });
+}
+
+const jobs = new Map();
+let jobQueue = Promise.resolve();
+setInterval(() => {
+  const cutoff = Date.now() - 60 * 60 * 1000;
+  for (const [id, j] of jobs) if (j.createdAt < cutoff) jobs.delete(id);
+}, 10 * 60 * 1000).unref();
+
+async function processUpload(job, tmpFile, record) {
+  const made = [];
+  try {
+    job.status = 'processing'; job.step = 'Lecture de la vidéo'; job.progress = 0;
+    let info;
+    try { info = media.probeVideo(tmpFile); } catch (e) { throw new Error("Ce fichier n'est pas une vidéo lisible"); }
+    const n = store.nextReelNumber();
+    const videoPath = path.join(MEDIA_DIR, 'video', `reel-${n}.mp4`);
+    const audioPath = path.join(MEDIA_DIR, 'audio', `reel-${n}.mp3`);
+    const posterPath = path.join(MEDIA_DIR, 'images', 'posters', `${record.slug}.jpg`);
+
+    job.step = 'Compression de la vidéo';
+    made.push(videoPath);
+    await media.compressVideo(tmpFile, videoPath, info.duration, p => { job.progress = p; });
+
+    job.step = 'Extraction du son'; job.progress = 100;
+    let audioUrl;
+    try { made.push(audioPath); await media.extractAudio(videoPath, audioPath); audioUrl = `/audio/reel-${n}.mp3`; }
+    catch (e) { /* silent video: no hover audio */ }
+
+    job.step = 'Création de la vignette';
+    const meta = media.probeVideo(videoPath);
+    made.push(posterPath);
+    await media.makePoster(videoPath, posterPath, meta.duration);
+
+    store.addReel({ ...record, video_url: `/video/reel-${n}.mp4`, ...(audioUrl ? { audio_url: audioUrl } : {}), meta });
+    job.status = 'done'; job.step = 'Publié'; job.reel = { slug: record.slug, title: record.title };
+  } catch (err) {
+    made.forEach(f => { try { fs.unlinkSync(f); } catch (e) { /* not created */ } });
+    job.status = 'error'; job.error = err.message;
+  } finally {
+    fs.unlink(tmpFile, () => {});
+  }
+}
+
+app.post('/api/upload-reel', requireAdmin, receiveVideo, (req, res) => {
+  const file = req.file;
+  if (!file) return res.status(400).json({ error: 'Aucune vidéo reçue' });
+  const fail = (code, error) => { fs.unlink(file.path, () => {}); return res.status(code).json({ error }); };
+
+  let fields;
+  try { fields = cleanFields({ title: req.body.title, description: req.body.description, hashtags: req.body.hashtags, url: req.body.url }); }
+  catch (err) { return fail(400, err.message); }
+
+  const slug = site.slugify(fields.title);
+  if (!slug) return fail(400, 'Le titre doit contenir des lettres ou des chiffres');
+  if (store.findBySlug(slug) || site.FEATURED_VIDEOS.some(v => site.slugify(v.title) === slug)) {
+    return fail(409, 'Un reel porte déjà ce titre');
+  }
+
+  let posted_at = new Date();
+  if (req.body.posted_at) { posted_at = new Date(req.body.posted_at); if (isNaN(posted_at)) return fail(400, 'Date de publication invalide'); }
+  let scheduled;
+  if (req.body.scheduledDate) {
+    const d = new Date(req.body.scheduledDate);
+    if (isNaN(d)) return fail(400, 'Date de programmation invalide');
+    scheduled = d.toISOString();
+  }
+
+  const record = {
+    slug, title: fields.title, subtitle: '@irreallab · Watch on Instagram',
+    url: fields.url || 'https://www.instagram.com/irreallab/',
+    hashtags: fields.hashtags || '#irreallab',
+    description: fields.description || '',
+    posted_at: posted_at.toISOString(),
+    ...(scheduled ? { scheduled_publish_at: scheduled } : {}),
+  };
+
+  const job = { id: crypto.randomBytes(8).toString('hex'), status: 'queued', step: 'En attente', progress: 0, createdAt: Date.now() };
+  jobs.set(job.id, job);
+  jobQueue = jobQueue.then(() => processUpload(job, file.path, record));
+  res.status(202).json({ jobId: job.id });
+});
+
+app.get('/api/upload-jobs/:id', requireAdmin, (req, res) => {
+  const j = jobs.get(req.params.id);
+  if (!j) return res.status(404).json({ error: 'Tâche inconnue' });
+  res.set('Cache-Control', 'no-store');
+  res.json({ status: j.status, step: j.step, progress: j.progress, error: j.error, reel: j.reel });
+});
+
+// ---------------------------------------------------------------------------
+// Pages rendered on request, so admin-published reels get a real page,
+// poster-backed SEO tags and a sitemap entry without any build step.
+// ---------------------------------------------------------------------------
+// Media published from the admin lives on the volume; repo media is static.
+app.use((req, res, next) => {
+  if (!/^\/(video|audio|images\/posters)\//.test(req.path)) return next();
+  let rel;
+  try { rel = decodeURIComponent(req.path); } catch (e) { return next(); }
+  const file = path.join(MEDIA_DIR, rel);
+  if (file.startsWith(MEDIA_DIR + path.sep) && fs.existsSync(file)) {
+    return res.sendFile(file, { headers: { 'Cache-Control': 'public, max-age=86400' } });
+  }
+  next();
+});
+
+app.get('/reel/:slug.html', (req, res, next) => {
+  const slug = req.params.slug;
+  const pub = store.getPublic();
+  const known = store.getAll().find(r => r.slug === slug);
+  let reel; const neighbors = { prev: null, next: null };
+
+  if (known) {
+    if (known.hidden || known.status !== 'Live') return res.status(404).send('Not found');
+    reel = known;
+    const i = pub.findIndex(r => r.slug === slug);
+    if (pub[i - 1]) neighbors.prev = { slug: pub[i - 1].slug, title: pub[i - 1].title };
+    if (pub[i + 1]) neighbors.next = { slug: pub[i + 1].slug, title: pub[i + 1].title };
+  } else {
+    reel = site.FEATURED_VIDEOS.find(v => site.slugify(v.title) === slug);
+    if (!reel) return next();
+  }
+
+  const meta = store.metaFor(reel);
+  if (!meta) return next();
+  res.set('Cache-Control', 'public, max-age=0, must-revalidate');
+  res.type('html').send(site.renderPage(site.pageHtml(reel, { slug, ...meta }, neighbors)));
+});
+
+let sitemapCache = { key: '', xml: '' };
+app.get('/sitemap.xml', (req, res) => {
+  const key = store.revision() + '|' + new Date().toISOString().slice(0, 10);
+  if (sitemapCache.key !== key) {
+    const entries = [];
+    store.getPublic().forEach(r => { const m = store.metaFor(r); if (m) entries.push({ reel: r, meta: { slug: r.slug, ...m } }); });
+    site.FEATURED_VIDEOS.forEach(v => { const m = store.metaFor(v); if (m) entries.push({ reel: v, meta: { slug: site.slugify(v.title), ...m } }); });
+    sitemapCache = { key, xml: site.sitemapXml(entries) };
+  }
+  res.set('Cache-Control', 'public, max-age=0, must-revalidate');
+  res.type('application/xml').send(sitemapCache.xml);
+});
+
 
 // Health check endpoint
 app.get('/health', (req, res) => {
@@ -736,7 +481,7 @@ app.use(express.static(__dirname, {
 
 app.listen(PORT, () => {
   console.log(`\n🎬 Irreallab Server running at http://localhost:${PORT}`);
-  console.log(`📁 Video uploads directory: ${videosDir}`);
+  console.log(`📁 Data directory: ${DATA_DIR}`);
   console.log(`\n✨ Admin panel: http://localhost:${PORT}/admin.html`);
   console.log(`🎞️  Reels page: http://localhost:${PORT}/reels.html\n`);
 });

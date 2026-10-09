@@ -29,7 +29,9 @@ irreallab showcases curated surreal visual reels with synchronized audio, direct
 ├── translations/             # en.json, fr.json, ro.json
 ├── reels.json                # Canonical reel data (title, video/audio URLs, hashtags…)
 ├── server.js                 # Express app: static hosting, extensionless routes,
-│                              #   admin auth, reel upload/edit/delete/reorder API
+│                              #   admin auth + API, reel pages & sitemap rendered on request, likes
+├── lib/                      # site.js (page templates, shared with the build script),
+│                              #   reels-store.js (repo + admin catalogue), media.js (ffmpeg)
 ├── scripts/
 │   ├── build-reel-pages.js   # Generates reel/*.html + sitemap.xml from reels.json
 │   ├── inject-partials.js    # Injects partials/nav.html + footer.html into every page
@@ -113,16 +115,28 @@ Add new reels via the admin panel or by editing `reels.json` directly.
 
 ## Admin panel
 
-`/admin.html` is a password-protected tool (upload, edit, delete, reorder reels — see
-`server.js`'s `/api/*` routes) meant for the site owner only, not the public site.
+`/admin.html` (French UI, owner only) lets you publish and manage reels without
+touching git: **upload** a video (MP4/MOV, 100 MB max), **edit** title /
+description / hashtags / Instagram link / date, **schedule** a publication,
+**delete** (or hide / restore) a reel, and see the **likes ranking**.
 
-- Set `ADMIN_USER` and `ADMIN_PASSWORD` as environment variables on the host (e.g. in
-  Railway's dashboard) — **never commit them**. Login is server-checked
-  (`/api/admin/login`) with a constant-time comparison; sessions are an httpOnly
-  cookie, not client-side state.
-- The page is excluded from `robots.txt` and marked `noindex`.
-- If `ADMIN_USER`/`ADMIN_PASSWORD` aren't set, login always fails (the server logs a
-  warning on startup) rather than falling back to a default.
+What happens on upload (in the background, with a progress bar): the video is
+compressed to H.264, the audio is extracted, a thumbnail is created, and the
+reel immediately gets its own page (`/reel/<slug>.html`, rendered by the
+server), a sitemap entry and likes support — no build step.
+
+- **Storage:** everything published from the admin lives on the persistent
+  volume (`$DATA_DIR`, e.g. `/data` on Railway): `reels.json` (catalogue),
+  `media/` (video, audio, posters) and `likes.json`. Reels committed in the repo
+  (`reels.json`) are merged in; "deleting" one of those only hides it, so you can
+  restore it. Titles can be edited but a reel's URL slug never changes.
+- **Auth:** set `ADMIN_USER` and `ADMIN_PASSWORD` as environment variables on the
+  host — never commit them. Login is checked server-side (constant-time
+  comparison), sessions are an httpOnly (and, over HTTPS, Secure) cookie, and
+  login is limited to 5 failed attempts per 15 minutes per IP. If the variables
+  are missing, login is refused.
+- The page is `noindex` and excluded from `robots.txt`. Source files, `lib/`,
+  `scripts/` and `data/` are never served by the static handler.
 
 ---
 

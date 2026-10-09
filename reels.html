@@ -982,7 +982,7 @@ window.cookiehub.load(cpm);
       function render(reels) {
         grid.innerHTML = reels.map((r, i) => {
           const isLocalVideo = r.video_url && r.video_url.trim().startsWith('/');
-          const slug = isLocalVideo ? slugify(r.title) : null;
+          const slug = isLocalVideo ? (r.slug || slugify(r.title)) : null;
           const poster = slug ? `/images/posters/${slug}.jpg` : esc(r.thumbnail_url || '');
           const embedHtml = r.video_url && r.video_url.trim()
             ? `<video src="${esc(r.video_url)}" poster="${poster}" muted playsinline style="width:100%;height:100%;object-fit:contain;border-radius:0;"></video>`

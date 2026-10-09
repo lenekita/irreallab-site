@@ -387,7 +387,7 @@ document.addEventListener('DOMContentLoaded', async function() {
       const isScheduled = reel.status === 'Scheduled';
       const tag = isScheduled ? 'Scheduled' : 'Live';
       const isLocalVideo = reel.video_url && reel.video_url.trim().startsWith('/');
-      const slug = isLocalVideo ? slugify(reel.title) : null;
+      const slug = isLocalVideo ? (reel.slug || slugify(reel.title)) : null;
       const openHref = slug ? `/reel/${slug}.html` : reel.url;
 
       return `
