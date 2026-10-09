@@ -629,6 +629,7 @@ window.cookiehub.load(cpm);
     <div class="tabs">
       <button class="tab-btn active" data-tab="upload">Upload Reel</button>
       <button class="tab-btn" data-tab="manage">Manage Reels</button>
+      <button class="tab-btn" data-tab="stats">Statistics</button>
     </div>
 
     <!-- UPLOAD TAB -->
@@ -709,6 +710,16 @@ window.cookiehub.load(cpm);
       <div class="reels-list">
         <div id="statusMessageManage" class="status-message"></div>
         <div id="reelsList" class="reels-container"></div>
+      </div>
+    </div>
+
+    <!-- STATS TAB -->
+    <div id="stats-tab" class="tab-content">
+      <h1 class="admin-title">Likes <span>Statistics</span></h1>
+      <div class="reels-list">
+        <div id="statusMessageStats" class="status-message"></div>
+        <div id="statsSummary" style="font-size:.8rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin-bottom:1.2rem;"></div>
+        <div id="statsList"></div>
       </div>
     </div>
 
@@ -816,6 +827,9 @@ window.cookiehub.load(cpm);
 
         if (tabName === 'manage') {
           loadReels();
+        }
+        if (tabName === 'stats') {
+          loadStats();
         }
       });
     });
@@ -977,6 +991,32 @@ window.cookiehub.load(cpm);
       }
     });
 
+
+    async function loadStats() {
+      const status = document.getElementById('statusMessageStats');
+      const list = document.getElementById('statsList');
+      const summary = document.getElementById('statsSummary');
+      status.classList.remove('active', 'success', 'error');
+      try {
+        const res = await fetch('/api/likes-report', { cache: 'no-store' });
+        if (!res.ok) throw new Error(res.status === 401 ? 'Session expired — log in again' : 'Could not load statistics');
+        const data = await res.json();
+        const max = Math.max(1, ...data.reels.map(r => r.likes));
+        const esc = t => String(t).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+        summary.textContent = data.total + ' like' + (data.total === 1 ? '' : 's') + ' in total · ' + data.reels.length + ' reels';
+        list.innerHTML = data.reels.map((r, i) => `
+          <div style="display:grid; grid-template-columns: 2rem 1fr auto; gap:1rem; align-items:center; padding:.8rem 0; border-bottom:1px solid rgba(212,240,58,.1);">
+            <span style="color:var(--muted); font-size:.75rem;">${String(i + 1).padStart(2, '0')}</span>
+            <div>
+              <a href="/reel/${encodeURIComponent(r.slug)}.html" target="_blank" rel="noopener" style="color:var(--text); text-decoration:none; font-family:'Bebas Neue',sans-serif; font-size:1.15rem; letter-spacing:.04em;">${esc(r.title)}</a>
+              <div style="height:4px; background:rgba(212,240,58,.1); margin-top:.5rem;"><div style="height:100%; width:${(r.likes / max) * 100}%; background:var(--accent);"></div></div>
+            </div>
+            <strong style="font-family:'Bebas Neue',sans-serif; font-size:1.5rem; color:var(--accent);">${r.likes}</strong>
+          </div>`).join('');
+      } catch (err) {
+        showStatus(err.message, 'error', status);
+      }
+    }
 
     async function loadReels() {
       try {

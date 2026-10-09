@@ -663,6 +663,21 @@ app.get('/api/likes', (req, res) => {
   res.json(out);
 });
 
+// Admin-only ranking with titles, for the admin panel's Statistics tab.
+app.get('/api/likes-report', requireAdmin, (req, res) => {
+  let titles = { 'sky-runway': 'Sky Runway' };
+  try {
+    JSON.parse(fs.readFileSync(path.join(__dirname, 'reels.json'), 'utf8')).forEach(r => {
+      if (r.title && r.video_url && r.video_url.startsWith('/')) titles[slugifyTitle(r.title)] = r.title;
+    });
+  } catch (e) { /* fall back to slugs */ }
+  const reels = Array.from(allowedSlugs())
+    .map(slug => ({ slug, title: titles[slug] || slug, likes: likeCounts[slug] || 0 }))
+    .sort((x, y) => y.likes - x.likes || x.title.localeCompare(y.title));
+  res.set('Cache-Control', 'no-store');
+  res.json({ total: reels.reduce((n, r) => n + r.likes, 0), reels });
+});
+
 app.post('/api/likes/:slug', express.json({ limit: '1kb' }), (req, res) => {
   const slug = req.params.slug;
   if (!allowedSlugs().has(slug)) return res.status(404).json({ error: 'Unknown reel' });
