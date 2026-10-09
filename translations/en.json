@@ -6,7 +6,8 @@
     "contact": "Contact",
     "credits": "Credits",
     "instagram": "↗ Instagram",
-    "logout": "Logout"
+    "logout": "Logout",
+    "shop": "Shop"
   },
   "index": {
     "label": "Visual Experiments",
@@ -208,5 +209,43 @@
     "videoError": "Unable to load video",
     "loadingError": "Unable to load content",
     "networkError": "Network error. Please check your connection."
+  },
+  "shop": {
+    "kicker": "Merch · Drop 01",
+    "heroLine1": "Wear the",
+    "heroLine2": "signal",
+    "heroCopy": "The irreallab wordmark and the signal artwork, printed on cotton tees. A small drop, made on demand.",
+    "ctaNotify": "Get notified ↗",
+    "ctaFollow": "Follow @irreallab",
+    "chip1": "Drop 01 · coming soon",
+    "chip2": "Wordmark + signal artwork",
+    "chip3": "Unisex tees",
+    "dropKicker": "The drop",
+    "dropTitle": "Four tees. One signal.",
+    "soon": "Coming soon",
+    "notify": "Notify me ↗",
+    "buy": "Buy ↗",
+    "p1Name": "Wordmark tee — black",
+    "p1Desc": "IRREALLAB_ on the chest, in cream and lime.",
+    "p2Name": "Wordmark tee — off-white",
+    "p2Desc": "The wordmark in black, with the lime cursor.",
+    "p3Name": "Signal tee — black",
+    "p3Desc": "The homepage flow field on the chest, with a small wordmark.",
+    "p4Name": "Stacked tee — black",
+    "p4Desc": "A large stacked IRREAL / LAB_ across the back.",
+    "storyKicker": "Behind the print",
+    "storyTitle": "Drawn by the same code as the homepage",
+    "storyText": "The signal artwork is a snapshot of the flow field that runs behind the title on the homepage: hundreds of light trails bent by two invisible vortices.",
+    "infoKicker": "The details",
+    "info1T": "Made on demand",
+    "info1P": "Each tee is printed when it is ordered: no stock, no minimum.",
+    "info2T": "Unisex cut",
+    "info2P": "Sizes S to XXL, to be confirmed at launch.",
+    "info3T": "Questions?",
+    "info3P": "Write to us from the contact page and we will answer.",
+    "ctaHeadline": "Want first access?",
+    "ctaText": "Tell us which tee you want and we will let you know when the drop opens.",
+    "ctaStart": "Notify me ↗",
+    "title": "Merch — irreallab tees | irreallab"
   }
 }

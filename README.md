@@ -224,3 +224,7 @@ Music used across the site is credited on the [Credits page](https://irreallab.f
 
 For inquiries, visit the [contact page](https://irreallab.fr/contact.html) or reach out
 on Instagram [@irreallab](https://www.instagram.com/irreallab/).
+
+## Shop (merch)
+
+`shop.html` is the merch page (four tees, "coming soon" for now). Product images live in `images/merch/`. To put a tee on sale, paste its store link and price into the `SHOP` block at the bottom of `shop.html`; the card switches from "Notify me" to "Buy" automatically. Texts are translated in `translations/*.json` under `shop.*`. The print-ready logo, artwork and mockup files are kept outside the repo, in `~/Desktop/irreallab-merch/` (see its README).

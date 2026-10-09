@@ -6,7 +6,8 @@
     "contact": "Contact",
     "credits": "Crédits",
     "instagram": "↗ Instagram",
-    "logout": "Déconnexion"
+    "logout": "Déconnexion",
+    "shop": "Boutique"
   },
   "index": {
     "label": "Expériences Visuelles",
@@ -208,5 +209,43 @@
     "videoError": "Impossible de charger la vidéo",
     "loadingError": "Impossible de charger le contenu",
     "networkError": "Erreur réseau. Veuillez vérifier votre connexion."
+  },
+  "shop": {
+    "kicker": "Merch · Drop 01",
+    "heroLine1": "Porte le",
+    "heroLine2": "signal",
+    "heroCopy": "Le logo irreallab et l’illustration « signal », imprimés sur des t-shirts en coton. Un petit drop, produit à la demande.",
+    "ctaNotify": "Me prévenir ↗",
+    "ctaFollow": "Suivre @irreallab",
+    "chip1": "Drop 01 · bientôt",
+    "chip2": "Logo + illustration signal",
+    "chip3": "T-shirts unisexes",
+    "dropKicker": "Le drop",
+    "dropTitle": "Quatre t-shirts. Un seul signal.",
+    "soon": "Bientôt",
+    "notify": "Me prévenir ↗",
+    "buy": "Acheter ↗",
+    "p1Name": "T-shirt logo — noir",
+    "p1Desc": "IRREALLAB_ sur la poitrine, en crème et lime.",
+    "p2Name": "T-shirt logo — écru",
+    "p2Desc": "Le logo en noir, avec le curseur lime.",
+    "p3Name": "T-shirt signal — noir",
+    "p3Desc": "Le champ de particules de l’accueil sur la poitrine, avec un petit logo.",
+    "p4Name": "T-shirt stacked — noir",
+    "p4Desc": "Un grand IRREAL / LAB_ empilé dans le dos.",
+    "storyKicker": "Derrière l’impression",
+    "storyTitle": "Dessiné par le même code que la page d’accueil",
+    "storyText": "L’illustration « signal » est un instantané du champ de particules qui tourne derrière le titre de la page d’accueil : des centaines de traînées de lumière courbées par deux tourbillons invisibles.",
+    "infoKicker": "Les détails",
+    "info1T": "Produit à la demande",
+    "info1P": "Chaque t-shirt est imprimé à la commande : pas de stock, pas de minimum.",
+    "info2T": "Coupe unisexe",
+    "info2P": "Tailles S à XXL, à confirmer au lancement.",
+    "info3T": "Une question ?",
+    "info3P": "Écrivez-nous depuis la page contact, nous vous répondrons.",
+    "ctaHeadline": "Envie d’un accès en avant-première ?",
+    "ctaText": "Dites-nous quel t-shirt vous voulez et nous vous préviendrons à l’ouverture du drop.",
+    "ctaStart": "Me prévenir ↗",
+    "title": "Merch — t-shirts irreallab | irreallab"
   }
 }
