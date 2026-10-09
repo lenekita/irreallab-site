@@ -138,7 +138,6 @@
 <section class="login" id="loginView" hidden>
   <div class="card">
     <h1>Admin <span>area</span></h1>
-    <p class="lead">Restricted access. The login is the one set in Railway (variables ADMIN_USER and ADMIN_PASSWORD).</p>
     <div id="loginError" class="msg err" hidden></div>
     <form id="loginForm">
       <div class="field"><label for="userId">Username</label><input type="text" id="userId" autocomplete="username" required></div>
@@ -297,7 +296,7 @@
       $('userPassword').value = '';
       showApp();
     } catch (err) {
-      showLogin(err.message.includes('not configured') ? 'Login is not configured on the server: add ADMIN_USER and ADMIN_PASSWORD in Railway (Variables), then redeploy.' : err.message.replace('Invalid credentials', 'Incorrect username or password'));
+      showLogin(err.message.includes('not configured') ? 'Login is not available right now.' : err.message.replace('Invalid credentials', 'Incorrect username or password'));
     } finally { btn.disabled = false; }
   });
   $('logoutBtn').addEventListener('click', async () => { try { await fetch('/api/admin/logout', { method: 'POST' }); } catch (e) {} showLogin(''); });
