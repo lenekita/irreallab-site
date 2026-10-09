@@ -707,7 +707,17 @@ app.use((req, res, next) => {
 });
 
 // Static file serving (after API routes so routes take priority)
-app.use(express.static(__dirname));
+app.use(express.static(__dirname, {
+  setHeaders(res, filePath) {
+    // Code and data must always be revalidated (a CDN sits in front of us);
+    // heavy media can be cached for a day.
+    if (/\.(html|css|js|json|xml|txt)$/i.test(filePath)) {
+      res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
+    } else if (/\.(mp4|mp3|jpg|jpeg|png|webp|ico)$/i.test(filePath)) {
+      res.setHeader('Cache-Control', 'public, max-age=86400');
+    }
+  }
+}));
 
 app.listen(PORT, () => {
   console.log(`\n🎬 Irreallab Server running at http://localhost:${PORT}`);
