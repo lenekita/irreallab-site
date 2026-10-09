@@ -27,71 +27,49 @@
   <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles/site.css?v=8eee6657">
   <style>
-    /* HERO */
-    .hero { display: grid; grid-template-columns: 1fr 1fr; min-height: 92vh; border-bottom: 1px solid var(--line); contain: layout; }
-    .hero-left { display: flex; flex-direction: column; justify-content: space-between; padding: 3.5rem var(--pad-x); border-right: 1px solid var(--line); }
-    .hero-eyebrow { font-size: .58rem; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; gap: .8rem; }
-    .hero-eyebrow::before { content: ''; width: 28px; height: 1px; background: var(--muted); flex-shrink: 0; }
-    .hero-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(4rem, 8.5vw, 9.5rem); line-height: .86; letter-spacing: -.01em; }
-    .hero-title em { color: var(--accent); display: block; font-style: normal; }
+    /* HERO: full-bleed particle flow field behind a giant title */
+    .hero { position: relative; display: block; min-height: 100svh; border-bottom: 1px solid var(--line); overflow: hidden; isolation: isolate; background: #050505; }
+    #flow-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; z-index: 0; }
+    .hero-vignette { position: absolute; inset: 0; z-index: 1; pointer-events: none;
+      background: radial-gradient(520px circle at var(--mx, 70%) var(--my, 45%), rgba(212,240,58,.10), transparent 62%),
+                  linear-gradient(90deg, rgba(5,5,5,.78) 0%, rgba(5,5,5,.35) 46%, rgba(5,5,5,0) 70%),
+                  linear-gradient(to top, rgba(5,5,5,.85), transparent 28%); }
+    .hero-wrap { position: relative; z-index: 2; min-height: 100svh; display: flex; flex-direction: column; justify-content: space-between; padding: 6.2rem var(--pad-x) 2.2rem; pointer-events: none; }
+    .hero-wrap a, .hero-wrap button { pointer-events: auto; }
+    .hero-top { display: flex; justify-content: flex-start; align-items: center; flex-wrap: wrap; gap: .6rem 2rem; max-width: calc(100% - 7rem); font-size: .6rem; letter-spacing: .22em; text-transform: uppercase; color: rgba(237,233,223,.6); }
+    .hero-tag { display: inline-flex; align-items: center; gap: .7rem; }
+    .hero-tag i { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 12px var(--accent); animation: lpulse 2s ease infinite; }
+    @keyframes lpulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: .3; transform: scale(.6); } }
+    .hero-count { padding-left: 2rem; border-left: 1px solid rgba(237,233,223,.2); }
+    .hero-count b { color: var(--accent); font-weight: 700; }
+    @media (max-width: 520px) { .hero-count { padding-left: 0; border-left: 0; } }
+    .hero-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(5.4rem, 17.5vw, 19rem); line-height: .8; letter-spacing: -.015em; margin-left: -.04em; }
+    .hero-title em { color: var(--accent); display: block; font-style: normal; text-shadow: 0 0 40px rgba(212,240,58,.35), 0 0 120px rgba(212,240,58,.18); }
+    .hero-kicker { margin-top: 1.4rem; font-size: .72rem; letter-spacing: .2em; text-transform: uppercase; color: var(--accent); }
     .hero-sub {
       font-family: 'Space Mono', 'Courier New', monospace !important; font-style: normal !important;
-      font-size: 1rem !important; line-height: 1.7 !important; color: var(--muted) !important;
-      max-width: 300px !important; margin-top: 1.2rem !important; min-height: calc(1em * 1.7 * 3);
+      font-size: 1rem !important; line-height: 1.7 !important; color: rgba(237,233,223,.72) !important;
+      margin-top: 1rem !important; min-height: calc(1em * 1.7 * 3);
       font-weight: 400 !important; letter-spacing: .035em !important; text-transform: none !important;
     }
-    .hero-sub.ir-typewriter { display: block !important; white-space: normal !important; overflow: visible !important; max-width: 420px !important; }
-    @media (max-width: 900px) { .hero-sub.ir-typewriter { max-width: 86vw !important; } }
-    .hero-divider { width: 100%; height: 1px; background: var(--line2); }
-    .hero-meta { display: flex; flex-direction: column; gap: .9rem; }
-    .hero-transmission { display: grid; gap: 1rem; padding: .15rem 0; position: relative; }
-    .hero-transmission::before { content: ''; position: absolute; left: 0; top: -10px; width: 42px; height: 1px; background: var(--accent); box-shadow: 0 0 18px rgba(212,240,58,.55); opacity: .75; animation: ir-transmission-pulse 2.2s ease-in-out infinite; }
-    .transmission-kicker { font-size: .58rem; letter-spacing: .22em; text-transform: uppercase; color: var(--accent); }
-    .transmission-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(1.8rem, 3vw, 2.6rem); line-height: .9; letter-spacing: .04em; color: var(--text); }
-    .transmission-details { display: grid; gap: .35rem; font-size: .58rem; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
-    .transmission-details span { display: inline-flex; align-items: center; gap: .65rem; }
-    .transmission-details span::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); opacity: .75; box-shadow: 0 0 14px rgba(212,240,58,.55); }
-    @keyframes ir-transmission-pulse { 0%,100% { opacity: .35; transform: scaleX(.5); } 50% { opacity: 1; transform: scaleX(1); } }
-
-    .hero-right { align-self: center; justify-self: center; width: min(460px, calc(100% - 4rem)); max-width: 460px; margin: 3rem auto; flex: 0 0 auto; border: 1px solid rgba(237,233,223,.12); background: radial-gradient(circle at 50% 0%, rgba(212,240,58,.075), transparent 36%), var(--bg2); box-shadow: 0 24px 70px rgba(0,0,0,.28); display: flex; flex-direction: column; }
-    .hero-reel-cta { padding: 1rem 1.4rem; border-bottom: 1px solid rgba(212,240,58,.2); background: rgba(212,240,58,.06); display: flex; align-items: center; justify-content: center; }
-    .hero-reels-link { font-size: .65rem; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); text-decoration: none; font-weight: 600; padding: 6px 14px; border: 1px solid var(--accent); border-radius: 2px; transition: all .3s; box-shadow: 0 0 10px rgba(212,240,58,.25); }
-    .hero-reels-link:hover { background: var(--accent); color: #060606; box-shadow: 0 0 18px rgba(212,240,58,.45); transform: translateY(-2px); }
-    .hero-reel-label { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.4rem; border-bottom: 1px solid var(--line); font-size: .58rem; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); gap: 1rem; }
-    .live-dot { display: inline-flex; align-items: center; gap: 6px; color: var(--accent); }
-    .live-dot::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: lpulse 2s ease infinite; }
-    @keyframes lpulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:.3; transform:scale(.6); } }
-    .hero-embed { flex: 0 0 auto; min-height: 0; height: auto; display: flex; justify-content: center; align-items: center; padding: 1rem; overflow: hidden; background: transparent; contain: layout style paint; }
-    .hero-reel-footer { padding: 1rem 1.4rem; border-top: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
-    .hero-reel-title { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: .05em; }
-    .hero-reel-open { font-size: .58rem; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent); padding-bottom: 1px; transition: opacity .2s; white-space: nowrap; }
-    .hero-reel-open:hover { opacity: .6; }
-
-
-    /* Signal panel: replaces the hero video with a generative animation */
-    a.hero-transmission { color: inherit; text-decoration: none; transition: opacity .25s; }
-    a.hero-transmission:hover .transmission-title { color: var(--accent); }
-    .hero-signal { width: min(560px, calc(100% - 4rem)); max-width: 560px; }
-    .signal-stage { position: relative; display: block; padding: 0 !important; height: clamp(340px, 54vh, 560px); background: #050505; overflow: hidden; }
-    .signal-stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-    .signal-stage::before { content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: radial-gradient(circle at 50% 55%, transparent 35%, rgba(0,0,0,.65) 100%); }
-    .signal-hud { position: absolute; z-index: 2; font-size: .56rem; letter-spacing: .2em; text-transform: uppercase; color: rgba(212,240,58,.78); pointer-events: none; }
-    .signal-hud-tl { top: 14px; left: 16px; } .signal-hud-tr { top: 14px; right: 16px; } .signal-hud-bl { bottom: 14px; left: 16px; color: rgba(237,233,223,.42); }
-    .signal-scan { position: absolute; left: 0; right: 0; height: 2px; z-index: 2; pointer-events: none; background: linear-gradient(90deg, transparent, rgba(212,240,58,.55), transparent); box-shadow: 0 0 14px rgba(212,240,58,.5); animation: ir-scan 5.5s linear infinite; }
-    @keyframes ir-scan { 0% { top: -2%; opacity: 0; } 8% { opacity: .9; } 92% { opacity: .9; } 100% { top: 102%; opacity: 0; } }
-    @media (prefers-reduced-motion: reduce) { .signal-scan { animation: none; opacity: 0; } }
-    @media (max-width: 900px) { .hero-signal { width: min(520px, calc(100% - 2rem)); } .hero-signal .signal-stage { height: clamp(280px, 46svh, 420px) !important; min-height: 280px !important; padding: 0 !important; } }
-
+    .hero-sub.ir-typewriter { display: block !important; white-space: normal !important; overflow: visible !important; max-width: 440px !important; }
+    .hero-cta { display: flex; flex-wrap: wrap; gap: .9rem; margin-top: 1.2rem; }
+    .hero-btn { font-size: .68rem; letter-spacing: .16em; text-transform: uppercase; font-weight: 600; text-decoration: none; color: var(--text, #ede9df); padding: .95rem 1.5rem; border: 1px solid rgba(237,233,223,.35); background: rgba(5,5,5,.35); backdrop-filter: blur(6px); transition: all .3s; }
+    .hero-btn:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+    .hero-btn.primary { background: var(--accent); border-color: var(--accent); color: #060606; box-shadow: 0 0 24px rgba(212,240,58,.35); }
+    .hero-btn.primary:hover { background: #e6ff4a; color: #060606; box-shadow: 0 0 36px rgba(212,240,58,.6); }
+    .hero-bottom { display: flex; justify-content: space-between; align-items: flex-end; gap: 1rem; font-size: .58rem; letter-spacing: .22em; text-transform: uppercase; color: rgba(237,233,223,.45); }
+    .hero-hint { display: inline-flex; align-items: center; gap: .8rem; }
+    .hero-hint::before { content: ''; width: 36px; height: 1px; background: rgba(212,240,58,.7); transform-origin: left; animation: ir-hint 2.6s ease-in-out infinite; }
+    @keyframes ir-hint { 0%,100% { transform: scaleX(.3); opacity: .4; } 50% { transform: scaleX(1); opacity: 1; } }
     @media (max-width: 900px) {
-      .hero { grid-template-columns: 1fr !important; min-height: auto !important; }
-      .hero-left { min-height: auto !important; padding: 5.8rem var(--pad-x) 2.6rem !important; border-right: none !important; border-bottom: 1px solid var(--line) !important; order: 1; }
-      .hero-title { font-size: clamp(4.8rem, 23vw, 7.4rem) !important; line-height: .78 !important; }
-      .hero-sub { max-width: 86vw !important; }
-      .hero-right { width: min(390px, calc(100% - 2rem)); margin: 2rem auto; min-height: auto !important; padding: 0 !important; order: 2; margin-bottom: 2rem; }
-      .hero-embed { min-height: auto !important; height: auto !important; padding: 1.1rem !important; }
-      .hero-reel-label, .hero-reel-footer { padding: .9rem 1.1rem !important; gap: .75rem !important; flex-wrap: wrap !important; }
+      .hero-wrap { padding: 5.4rem var(--pad-x) 1.6rem; }
+      .hero-title { font-size: clamp(6rem, 37vw, 10.5rem) !important; line-height: .78 !important; }
+      .hero-sub.ir-typewriter { max-width: 86vw !important; }
+      .hero-vignette { background: radial-gradient(420px circle at var(--mx, 60%) var(--my, 40%), rgba(212,240,58,.10), transparent 62%), linear-gradient(to bottom, rgba(5,5,5,.55), rgba(5,5,5,.15) 45%, rgba(5,5,5,.85)); }
+      .hero-bottom .hero-hint { display: none; }
     }
-    @media (max-width: 420px) { .hero-right { width: calc(100% - 1rem); } }
+    @media (prefers-reduced-motion: reduce) { .hero-tag i, .hero-hint::before { animation: none; } }
 
     /* SECTION HEAD */
     .section-head { padding: 2.5rem var(--pad-x) 1.8rem; display: flex; align-items: baseline; justify-content: space-between; border-bottom: 1px solid var(--line); }
@@ -286,47 +264,27 @@
 </nav>
 <!-- /@nav -->
 
-<!-- HERO: Sky Runway -->
-<section class="hero">
-  <div class="hero-left">
-    <div class="hero-eyebrow"></div>
-    <div>
+<!-- HERO -->
+<section class="hero" id="hero">
+  <canvas id="flow-canvas" aria-hidden="true"></canvas>
+  <div class="hero-vignette" aria-hidden="true"></div>
+  <div class="hero-wrap">
+    <div class="hero-top">
+      <span class="hero-tag"><i></i>AI-driven cinematic worlds</span>
+      <span class="hero-count"><b id="reel-count">15</b> reels and counting</span>
+    </div>
+    <div class="hero-main">
       <h1 class="hero-title ir-electric-title ir-title-typewriter" data-glitch="IRREAL LAB" data-title-first="Irreal" data-title-second="Lab">Irreal<em>Lab</em></h1>
-      <p style="margin-top:1rem;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);opacity:.9;" data-translate="main.heroEyebrow">AI-driven cinematic worlds.</p>
+      <p class="hero-kicker" data-translate="main.heroEyebrow">AI-driven cinematic worlds.</p>
       <p class="hero-sub ir-typewriter" data-typewriter-text="Visual experiments in short-form. Motion, surrealism &amp; the art of the unreal." data-translate="main.heroSubtitle">Visual experiments in short-form. Motion, surrealism &amp; the art of the unreal.</p>
+      <div class="hero-cta">
+        <a href="/reels.html" class="hero-btn primary" data-translate="main.heroReelsLink">↗ Browse All Reels</a>
+        <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="hero-btn" data-translate="nav.instagram">↗ Instagram</a>
+      </div>
     </div>
-    <div class="hero-meta">
-      <div class="hero-divider"></div>
-      <a class="hero-transmission" href="/reel/sky-runway.html" aria-label="Latest reel: Sky Runway">
-        <div class="transmission-kicker" data-translate="main.transmissionKicker">Current Transmission</div>
-        <div class="transmission-title" data-translate="main.transmissionTitle">Sky Runway</div>
-        <div class="transmission-details">
-          <span>Motion study 04</span>
-          <span>Above the clouds</span>
-        </div>
-      </a>
-      <div class="hero-divider"></div>
-    </div>
-  </div>
-
-  <div class="hero-right hero-signal">
-    <div class="hero-reel-cta">
-      <a href="/reels.html" class="hero-reels-link" data-translate="main.heroReelsLink">↗ Browse All Reels</a>
-    </div>
-    <div class="hero-reel-label">
-      <span>Signal / Irreal frequency</span>
-      <span class="live-dot">Transmitting</span>
-    </div>
-    <div class="hero-embed signal-stage" aria-hidden="true">
-      <canvas id="signal-canvas"></canvas>
-      <div class="signal-hud signal-hud-tl"><span id="hud-freq">FREQ 00.00</span></div>
-      <div class="signal-hud signal-hud-tr"><span id="hud-sync">SYNC 000</span></div>
-      <div class="signal-hud signal-hud-bl">AI-driven · surreal · short-form</div>
-      <div class="signal-scan"></div>
-    </div>
-    <div class="hero-reel-footer">
-      <a href="/reel/sky-runway.html" class="hero-reel-title" style="color:inherit;text-decoration:none;">Latest: Sky Runway ↗</a>
-      <a href="/reels.html" class="hero-reel-open" data-translate="main.sectionTitle">See all reels ↗</a>
+    <div class="hero-bottom">
+      <span class="hero-hint">Move your cursor to bend the signal</span>
+      <span>New reel every week</span>
     </div>
   </div>
 </section>
@@ -499,79 +457,103 @@ document.addEventListener('DOMContentLoaded', async function() {
 <!-- Language Switcher -->
 <script src="/language-switcher.js?v=403272fd"></script>
 <script>
-// Hero "signal" animation: layered sine ridges in neon lime, reacting to the pointer
+// Hero flow field: light trails drifting through a noise field.
+// The pointer swirls them, a click sends out a shockwave.
 (function () {
-  var cv = document.getElementById('signal-canvas');
-  if (!cv) return;
+  var hero = document.getElementById('hero'), cv = document.getElementById('flow-canvas');
+  if (!hero || !cv) return;
   var ctx = cv.getContext('2d');
-  var stage = cv.parentElement;
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var W = 0, H = 0, dpr = 1, running = false, raf = 0, t0 = performance.now();
-  var mouse = { x: .5, y: .5, tx: .5, ty: .5, on: false };
-  var freqEl = document.getElementById('hud-freq'), syncEl = document.getElementById('hud-sync');
-  var glitch = { until: 0, y: 0, h: 0, dx: 0 };
+  var W = 0, H = 0, dpr = 1, N = 0, P = [], running = false, raf = 0, last = 0, t = 0;
+  var mouse = { x: -9999, y: -9999, active: false };
+  var burst = { x: 0, y: 0, r: 0, on: 0 };
 
+  function spawn(p) {
+    p.x = Math.random() * W; p.y = Math.random() * H;
+    p.px = p.x; p.py = p.y; p.vx = 0; p.vy = 0;
+    p.life = 60 + Math.random() * 220; p.age = 0;
+    p.hot = Math.random() < .12;
+    p.w = p.hot ? 1.4 : .7 + Math.random() * .5;
+    return p;
+  }
   function resize() {
-    var r = stage.getBoundingClientRect();
-    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var r = hero.getBoundingClientRect();
+    dpr = Math.min(window.devicePixelRatio || 1, 1.6);
     W = Math.max(1, r.width); H = Math.max(1, r.height);
     cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  }
-  function wave(x, i, t, mx, my) {
-    var u = x / W, v = i / 38;
-    var env = Math.pow(Math.sin(Math.PI * u), 1.15);
-    var a = Math.sin(u * 9 + t * .9 + v * 3.1) * .55 + Math.sin(u * 17 - t * 1.35 + v * 6.2) * .3 + Math.sin(u * 31 + t * 2.1 - v * 2.4) * .15;
-    var d = Math.abs(u - mx), pull = Math.exp(-d * d * 28) * (1 - Math.abs(v - my) * 1.2);
-    return (a * env * (20 + 22 * Math.sin(t * .35 + v * 5)) - Math.max(0, pull) * 46 * (mouse.on ? 1 : .55));
-  }
-  function draw(now) {
-    var t = (now - t0) / 1000;
-    mouse.x += (mouse.tx - mouse.x) * .06; mouse.y += (mouse.ty - mouse.y) * .06;
     ctx.fillStyle = '#050505'; ctx.fillRect(0, 0, W, H);
-    var lines = 38, top = H * .16, bottom = H * .92, step = 5;
-    for (var i = 0; i < lines; i++) {
-      var yBase = top + (bottom - top) * (i / (lines - 1));
-      var near = i / (lines - 1);
-      ctx.beginPath();
-      for (var x = 0; x <= W + step; x += step) {
-        var y = yBase + wave(x, i, t, mouse.x, mouse.y);
-        if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-      }
-      // fill below the ridge so nearer lines occlude farther ones
-      ctx.lineTo(W + step, H + 4); ctx.lineTo(0, H + 4); ctx.closePath();
-      ctx.fillStyle = '#050505'; ctx.fill();
-      ctx.strokeStyle = 'rgba(212,240,58,' + (.16 + near * .78).toFixed(3) + ')';
-      ctx.lineWidth = .8 + near * .9;
-      ctx.stroke();
-    }
-    // occasional glitch slice
-    if (now > glitch.until && Math.random() < .012) {
-      glitch.until = now + 90 + Math.random() * 120; glitch.y = Math.random() * H * .8; glitch.h = 10 + Math.random() * 38; glitch.dx = (Math.random() - .5) * 46;
-    }
-    if (now < glitch.until) {
-      try { ctx.drawImage(cv, 0, glitch.y * dpr, W * dpr, glitch.h * dpr, glitch.dx, glitch.y, W, glitch.h); } catch (e) {}
-    }
-    if (freqEl && ((now / 120) | 0) % 2 === 0) {
-      freqEl.textContent = 'FREQ ' + (8 + Math.sin(t * .6) * 2.5 + mouse.x * 4).toFixed(2).padStart(5, '0');
-      syncEl.textContent = 'SYNC ' + String(Math.round(40 + mouse.y * 55 + Math.sin(t * 1.3) * 4)).padStart(3, '0');
-    }
+    N = Math.round(Math.min(1100, Math.max(260, (W * H) / 2300)));
+    P = [];
+    for (var i = 0; i < N; i++) P.push(spawn({}));
   }
-  function loop(now) { if (!running) return; draw(now); raf = requestAnimationFrame(loop); }
-  function start() { if (reduce || running) return; running = true; raf = requestAnimationFrame(loop); }
+  function angle(x, y, tt) {
+    return (Math.sin(x * .0021 + tt * .21) + Math.cos(y * .0026 - tt * .17) + Math.sin((x + y) * .0012 + tt * .11) * .8 + Math.cos((x - y) * .0016 - tt * .09)) * 1.6;
+  }
+  function step(dt) {
+    t += dt * .016;
+    var R = Math.max(150, Math.min(W, H) * .22), R2 = R * R;
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.fillStyle = 'rgba(5,5,5,' + (reduce ? .1 : .075) + ')';
+    ctx.fillRect(0, 0, W, H);
+    ctx.globalCompositeOperation = 'lighter';
+    for (var i = 0; i < N; i++) {
+      var p = P[i], a = angle(p.x, p.y, t * 60);
+      var ax = Math.cos(a) * .22, ay = Math.sin(a) * .22;
+      if (mouse.active) {
+        var dx = p.x - mouse.x, dy = p.y - mouse.y, d2 = dx * dx + dy * dy;
+        if (d2 < R2 * 2.2) {
+          var d = Math.sqrt(d2) + .001, f = Math.exp(-d2 / (R2 * .8));
+          ax += (-dy / d) * f * 1.5 + (dx / d) * f * .5;
+          ay += (dx / d) * f * 1.5 + (dy / d) * f * .5;
+        }
+      }
+      if (burst.on > 0) {
+        var bx = p.x - burst.x, by = p.y - burst.y, bd = Math.sqrt(bx * bx + by * by) + .001, ring = Math.abs(bd - burst.r);
+        if (ring < 70) { var g = (1 - ring / 70) * burst.on * 2.4; ax += (bx / bd) * g; ay += (by / bd) * g; }
+      }
+      p.vx = (p.vx + ax) * .94; p.vy = (p.vy + ay) * .94;
+      p.px = p.x; p.py = p.y; p.x += p.vx * 2.1; p.y += p.vy * 2.1; p.age++;
+      var sp = Math.min(1, (Math.abs(p.vx) + Math.abs(p.vy)) * .55);
+      var al = (.10 + sp * .55) * Math.min(1, p.age / 20) * Math.min(1, (p.life - p.age) / 30);
+      if (al > .01) {
+        ctx.strokeStyle = p.hot ? 'rgba(237,233,223,' + (al * .9).toFixed(3) + ')' : 'rgba(212,240,58,' + al.toFixed(3) + ')';
+        ctx.lineWidth = p.w;
+        ctx.beginPath(); ctx.moveTo(p.px, p.py); ctx.lineTo(p.x, p.y); ctx.stroke();
+      }
+      if (p.age > p.life || p.x < -20 || p.x > W + 20 || p.y < -20 || p.y > H + 20) spawn(p);
+    }
+    if (burst.on > 0) { burst.r += 14 * dt; burst.on -= .035 * dt; if (burst.on < 0) burst.on = 0; }
+    ctx.globalCompositeOperation = 'source-over';
+  }
+  function loop(now) {
+    if (!running) return;
+    var dt = Math.min(2.5, (now - last) / 16.67 || 1); last = now;
+    step(dt); raf = requestAnimationFrame(loop);
+  }
+  function start() { if (reduce || running) return; running = true; last = performance.now(); raf = requestAnimationFrame(loop); }
   function stop() { running = false; cancelAnimationFrame(raf); }
+  function warm(n) { for (var k = 0; k < n; k++) step(1); }
 
-  resize(); draw(performance.now() + 4000);
-  window.addEventListener('resize', function () { resize(); if (!running) draw(performance.now() + 4000); });
-  stage.addEventListener('pointermove', function (e) {
-    var r = stage.getBoundingClientRect();
-    mouse.tx = (e.clientX - r.left) / r.width; mouse.ty = (e.clientY - r.top) / r.height; mouse.on = true;
-  });
-  stage.addEventListener('pointerleave', function () { mouse.on = false; mouse.tx = .5; mouse.ty = .5; });
+  resize(); warm(reduce ? 260 : 90);
+  window.addEventListener('resize', function () { resize(); warm(70); });
+  function setMouse(e) {
+    var r = hero.getBoundingClientRect();
+    mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top; mouse.active = true;
+    hero.style.setProperty('--mx', mouse.x + 'px'); hero.style.setProperty('--my', mouse.y + 'px');
+  }
+  hero.addEventListener('pointermove', setMouse);
+  hero.addEventListener('pointerdown', function (e) { setMouse(e); burst.x = mouse.x; burst.y = mouse.y; burst.r = 0; burst.on = 1; });
+  hero.addEventListener('pointerleave', function () { mouse.active = false; });
   if ('IntersectionObserver' in window) {
-    new IntersectionObserver(function (es) { es[0].isIntersecting ? start() : stop(); }, { threshold: .05 }).observe(stage);
+    new IntersectionObserver(function (es) { es[0].isIntersecting ? start() : stop(); }, { threshold: .05 }).observe(hero);
   } else start();
   document.addEventListener('visibilitychange', function () { document.hidden ? stop() : start(); });
+
+  fetch('/api/reels').then(function (r) { return r.json(); }).then(function (list) {
+    var n = Array.isArray(list) ? list.length : (list && list.reels ? list.reels.length : 0);
+    var el = document.getElementById('reel-count'); if (n && el) el.textContent = n;
+  }).catch(function () {});
 })();
 </script>
 </body>
