@@ -293,6 +293,7 @@ ${JSON.stringify(jsonLd, null, 2)}
     .btn:hover { background: var(--accent); color: #060606; }
     .btn.primary { background: var(--accent); color: #060606; }
     .btn.primary:hover { background: transparent; color: var(--accent); }
+    .actions .like-btn { align-self: center; padding: 11px 16px; font-size: .75rem; }
     .reel-nav {
       display: flex;
       justify-content: space-between;
@@ -353,6 +354,7 @@ ${JSON.stringify(jsonLd, null, 2)}
       <div class="actions">
         <a class="btn primary" href="${escapeHtml(reel.url)}" target="_blank" rel="noopener">Watch on Instagram &#8599;</a>
         <a class="btn" href="/reels.html">More reels</a>
+        <button type="button" class="like-btn" data-like="${meta.slug}"></button>
       </div>
       <nav class="reel-nav" aria-label="More reels">
         ${prev ? `<a href="/reel/${prev.slug}.html">&larr; ${escapeHtml(prev.title)}</a>` : '<span></span>'}
@@ -368,6 +370,7 @@ ${JSON.stringify(jsonLd, null, 2)}
   <div class="ir-cursor-trail" aria-hidden="true"></div>
 
   <script src="/animations2.js" defer></script>
+  <script src="/likes.js"></script>
   <script src="/language-switcher.js"></script>
 </body>
 </html>

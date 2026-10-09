@@ -7,6 +7,8 @@ const { execSync } = require('child_process');
 const https = require('https');
 
 const app = express();
+// Railway (and Cloudflare) sit in front of the app; needed for the real client IP.
+app.set('trust proxy', 1);
 const PORT = process.env.PORT || 3000;
 
 // Ensure directories exist
@@ -590,6 +592,94 @@ app.post('/api/reorder', requireAdmin, express.json(), (req, res) => {
     console.error('Reorder error:', error);
     res.status(500).json({ error: error.message });
   }
+});
+
+// ---------------------------------------------------------------------------
+// Reel likes — anonymous hearts. Only counters are stored (no personal data).
+// Anti-spam is in-memory: a per-IP rate limit and one active like per
+// IP+reel while the server is up. Set DATA_DIR to a persistent volume
+// (e.g. a Railway volume) or the counts reset whenever the app redeploys.
+// ---------------------------------------------------------------------------
+const DATA_DIR = process.env.DATA_DIR || path.join(__dirname, 'data');
+fs.mkdirSync(DATA_DIR, { recursive: true });
+const LIKES_FILE = path.join(DATA_DIR, 'likes.json');
+const FEATURED_SLUGS = ['sky-runway'];
+
+let likeCounts = {};
+try { likeCounts = JSON.parse(fs.readFileSync(LIKES_FILE, 'utf8')); } catch (e) { likeCounts = {}; }
+
+let likesSaveTimer = null;
+function saveLikesSoon() {
+  clearTimeout(likesSaveTimer);
+  likesSaveTimer = setTimeout(() => {
+    try {
+      const tmp = LIKES_FILE + '.tmp';
+      fs.writeFileSync(tmp, JSON.stringify(likeCounts));
+      fs.renameSync(tmp, LIKES_FILE);
+    } catch (err) {
+      console.error('Could not save likes:', err.message);
+    }
+  }, 400);
+}
+
+function slugifyTitle(title) {
+  return String(title).normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+}
+
+let slugCache = { mtime: 0, slugs: new Set(FEATURED_SLUGS) };
+function allowedSlugs() {
+  try {
+    const file = path.join(__dirname, 'reels.json');
+    const mtime = fs.statSync(file).mtimeMs;
+    if (mtime !== slugCache.mtime) {
+      const reels = JSON.parse(fs.readFileSync(file, 'utf8'));
+      const slugs = new Set(FEATURED_SLUGS);
+      reels.forEach(r => { if (r.title && r.video_url && r.video_url.startsWith('/')) slugs.add(slugifyTitle(r.title)); });
+      slugCache = { mtime, slugs };
+    }
+  } catch (e) { /* keep last known list */ }
+  return slugCache.slugs;
+}
+
+const likeRate = new Map();   // ip -> { count, resetAt }
+const likedBy = new Set();    // `${ip}|${slug}`
+function likeRateLimited(ip) {
+  const now = Date.now();
+  const entry = likeRate.get(ip);
+  if (!entry || entry.resetAt < now) { likeRate.set(ip, { count: 1, resetAt: now + 60 * 1000 }); return false; }
+  entry.count += 1;
+  return entry.count > 30;
+}
+setInterval(() => {
+  const now = Date.now();
+  for (const [ip, e] of likeRate) if (e.resetAt < now) likeRate.delete(ip);
+}, 5 * 60 * 1000).unref();
+
+app.get('/api/likes', (req, res) => {
+  const out = {};
+  allowedSlugs().forEach(slug => { out[slug] = likeCounts[slug] || 0; });
+  res.set('Cache-Control', 'no-store');
+  res.json(out);
+});
+
+app.post('/api/likes/:slug', express.json({ limit: '1kb' }), (req, res) => {
+  const slug = req.params.slug;
+  if (!allowedSlugs().has(slug)) return res.status(404).json({ error: 'Unknown reel' });
+  if (likeRateLimited(req.ip)) return res.status(429).json({ error: 'Too many requests' });
+
+  const liked = !!(req.body && req.body.liked);
+  const key = `${req.ip}|${slug}`;
+  if (liked && !likedBy.has(key)) {
+    likedBy.add(key);
+    likeCounts[slug] = (likeCounts[slug] || 0) + 1;
+    saveLikesSoon();
+  } else if (!liked) {
+    likedBy.delete(key);
+    if ((likeCounts[slug] || 0) > 0) { likeCounts[slug] -= 1; saveLikesSoon(); }
+  }
+  res.set('Cache-Control', 'no-store');
+  res.json({ slug, count: likeCounts[slug] || 0 });
 });
 
 // Health check endpoint

@@ -95,6 +95,13 @@
     .reel-row:hover::before { transform: scaleX(1); }
     .reel-row:hover, .reel-row:hover .reel-row-sub, .reel-row:hover .reel-row-arrow { color: #060606; }
     .reel-row:hover .reel-row-tag { background: #06060618; color: #060606; }
+    .reel-row-link { color: inherit; text-decoration: none; }
+    .reel-row { cursor: pointer; }
+    .reel-row-right .like-btn { position: relative; z-index: 2; }
+    .reel-row:hover .like-btn { border-color: rgba(6,6,6,.45); color: #060606; }
+    .reel-row:hover .like-btn.is-liked { background: rgba(6,6,6,.1); border-color: #060606; }
+    .reel-row:hover .like-btn.is-liked svg { fill: #060606; stroke: #060606; filter: none; }
+    .reel-row:focus-within::before { transform: scaleX(1); }
     .reel-row-num { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2rem, 4vw, 3rem); color: var(--muted2); padding: 1.6rem 1.5rem 1.6rem var(--pad-x); line-height: 1; position: relative; z-index: 1; transition: color .3s; overflow: visible; text-shadow: 0 0 8px rgba(212,240,58,.10), 0 0 18px rgba(212,240,58,.05); }
     .reel-row-body { padding: 1.6rem 1.5rem; position: relative; z-index: 1; }
     .reel-row-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(1.1rem, 2.5vw, 1.4rem); letter-spacing: .03em; line-height: 1.1; margin-bottom: .3rem; }
@@ -122,8 +129,8 @@
     .preview-video { cursor: pointer; display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; background: #000; }
 
     @media (max-width: 900px) { .reel-row-preview-panel { display: none; } }
-    @media (max-width: 768px) { .reel-row-right { display: none; } }
-    @media (max-width: 600px) { .reel-row { grid-template-columns: 60px 1fr; } .reel-row-num { padding-left: var(--pad-x); font-size: 2rem; } }
+    @media (max-width: 768px) { .reel-row-tag, .reel-row-arrow { display: none; } .reel-row-right { padding: 1.4rem var(--pad-x) 1.4rem .5rem; } }
+    @media (max-width: 600px) { .reel-row { grid-template-columns: 60px 1fr auto; } .reel-row-num { padding-left: var(--pad-x); font-size: 2rem; } }
 
     /* CTA */
     .cta-band { display: flex; align-items: center; justify-content: space-between; padding: 2.5rem var(--pad-x); background: var(--bg2); border-bottom: 1px solid var(--line); gap: 2rem; flex-wrap: wrap; }
@@ -347,6 +354,7 @@
 <div class="ir-cursor-trail" aria-hidden="true"></div>
 
 <script src="animations2.js" defer></script>
+<script src="/likes.js"></script>
 
 <script>
 document.getElementById('intro-enter-btn')?.addEventListener('click', () => {
@@ -378,14 +386,14 @@ document.addEventListener('DOMContentLoaded', async function() {
       const openHref = slug ? `/reel/${slug}.html` : reel.url;
 
       return `
-        <a class="reel-row" href="${openHref}" data-video-trigger="true">
+        <div class="reel-row" data-video-trigger="true">
           <div class="reel-row-num" data-num="${num}">${num}</div>
           <div class="reel-row-body">
-            <div class="reel-row-title">${reel.title}</div>
+            <a class="reel-row-link" href="${openHref}"><div class="reel-row-title">${reel.title}</div></a>
             <div class="reel-row-sub">${reel.subtitle || ''}</div>
           </div>
-          <div class="reel-row-right"><span class="reel-row-tag">${tag}</span><span class="reel-row-arrow">↗</span></div>
-        </a>
+          <div class="reel-row-right">${slug ? `<button type="button" class="like-btn" data-like="${slug}"></button>` : ''}<span class="reel-row-tag">${tag}</span><span class="reel-row-arrow">↗</span></div>
+        </div>
         <div class="reel-row-preview-panel" aria-hidden="true">
           <div class="reel-row-preview-shell">
             <div class="reel-row-preview-label">Preview</div>
@@ -405,6 +413,18 @@ document.addEventListener('DOMContentLoaded', async function() {
         </div>
       `;
     }).join('');
+
+    if (window.irreallabLikes) window.irreallabLikes.bind(reelsList);
+
+    // Whole row opens the reel page; the heart (and real links) keep their own behaviour.
+    reelsList.querySelectorAll('.reel-row').forEach(row => {
+      const href = row.querySelector('.reel-row-link')?.getAttribute('href');
+      if (!href) return;
+      row.addEventListener('click', e => {
+        if (e.target.closest('.like-btn, a')) return;
+        window.location.href = href;
+      });
+    });
 
     const previewVideos = document.querySelectorAll('.preview-video');
     const audioToggleBtn = document.getElementById('audio-toggle');

@@ -126,6 +126,24 @@ Add new reels via the admin panel or by editing `reels.json` directly.
 
 ---
 
+## Likes
+
+Every reel has an anonymous heart button (reels archive, homepage "More Reels", and
+each reel page), powered by `likes.js` and two endpoints in `server.js`
+(`GET /api/likes`, `POST /api/likes/:slug`).
+
+- Only counters are stored, in `$DATA_DIR/likes.json` — no personal data. A visitor's
+  own hearts live in their browser's `localStorage`.
+- Anti-spam is in memory: 30 requests/minute per IP, and one active like per IP per
+  reel while the server is up.
+- **Set `DATA_DIR` to a persistent volume.** On Railway the container filesystem is
+  wiped on every deploy, so without a volume the counts reset on each push. Add a
+  Volume (e.g. mounted at `/data`) and set `DATA_DIR=/data`.
+- Any `<button class="like-btn" data-like="reel-slug">` is wired up automatically; the
+  slug must match a reel in `reels.json` (or `sky-runway`).
+
+---
+
 ## Development
 
 ### Local setup

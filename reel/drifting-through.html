@@ -194,6 +194,7 @@
     .btn:hover { background: var(--accent); color: #060606; }
     .btn.primary { background: var(--accent); color: #060606; }
     .btn.primary:hover { background: transparent; color: var(--accent); }
+    .actions .like-btn { align-self: center; padding: 11px 16px; font-size: .75rem; }
     .reel-nav {
       display: flex;
       justify-content: space-between;
@@ -294,6 +295,7 @@
       <div class="actions">
         <a class="btn primary" href="https://www.instagram.com/reel/DXZxbCWiFPa/" target="_blank" rel="noopener">Watch on Instagram &#8599;</a>
         <a class="btn" href="/reels.html">More reels</a>
+        <button type="button" class="like-btn" data-like="drifting-through"></button>
       </div>
       <nav class="reel-nav" aria-label="More reels">
         <a href="/reel/art-heist.html">&larr; Art Heist</a>
@@ -323,6 +325,7 @@
   <div class="ir-cursor-trail" aria-hidden="true"></div>
 
   <script src="/animations2.js" defer></script>
+  <script src="/likes.js"></script>
   <script src="/language-switcher.js"></script>
 </body>
 </html>

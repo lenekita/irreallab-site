@@ -635,6 +635,7 @@
     }
 
     .reels-page .open:hover { opacity: .6; }
+    .card-actions { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
 
     @media (max-width: 900px) {
       .reels-page .head {
@@ -994,12 +995,16 @@ window.cookiehub.load(cpm);
               <h2 data-text="${esc(r.title).replace(/"/g,'&quot;')}">${esc(r.title)}</h2>
               <div class="sub">${esc(r.subtitle||'@irreallab · Watch on Instagram')}</div>
               <p class="hashtags">${esc(r.hashtags)}</p>
-              ${slug ? `<a class="open" href="/reel/${slug}.html" style="margin-right:1.2rem;">View + share ↗</a>` : ''}<a class="open" href="${esc(r.url)}" target="_blank" rel="noopener">Open reel ↗</a>
+              <div class="card-actions">
+                <div>${slug ? `<a class="open" href="/reel/${slug}.html" style="margin-right:1.2rem;">View + share ↗</a>` : ''}<a class="open" href="${esc(r.url)}" target="_blank" rel="noopener">Open reel ↗</a></div>
+                ${slug ? `<button type="button" class="like-btn" data-like="${slug}"></button>` : ''}
+              </div>
             </div>
           </article>`;
         }).join('');
 
         count.textContent = String(reels.length).padStart(2,'0') + ' live reels';
+        if (window.irreallabLikes) window.irreallabLikes.bind(grid);
 
         // Staggered scroll reveal
         const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1149,6 +1154,7 @@ window.cookiehub.load(cpm);
   <!-- Instagram embed script -->
   <script async src="https://www.instagram.com/embed.js"></script>
   <script src="animations2.js" defer></script>
+  <script src="/likes.js"></script>
 <!-- Language Switcher -->
 <script src="/language-switcher.js"></script>
 </body>
