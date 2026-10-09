@@ -115,7 +115,7 @@ Add new reels via the admin panel or by editing `reels.json` directly.
 
 ## Admin panel
 
-`/admin.html` (French UI, owner only) lets you publish and manage reels without
+`/admin.html` (owner only) lets you publish and manage reels without
 touching git: **upload** a video (MP4/MOV, 100 MB max), **edit** title /
 description / hashtags / Instagram link / date, **schedule** a publication,
 **delete** (or hide / restore) a reel, and see the **likes ranking**.
