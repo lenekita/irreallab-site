@@ -28,13 +28,13 @@
   <link rel="stylesheet" href="/styles/site.css?v=8eee6657">
   <style>
     /* HERO: full-bleed particle flow field behind a giant title */
-    .hero { position: relative; display: block; min-height: 100svh; border-bottom: 1px solid var(--line); overflow: hidden; isolation: isolate; background: #050505; }
+    .hero { position: relative; display: block; min-height: calc(100svh - var(--marquee-height, 34px) - var(--nav-height, 60px)); border-bottom: 1px solid var(--line); overflow: hidden; isolation: isolate; background: #050505; }
     #flow-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; z-index: 0; }
     .hero-vignette { position: absolute; inset: 0; z-index: 1; pointer-events: none;
       background: radial-gradient(520px circle at var(--mx, 70%) var(--my, 45%), rgba(212,240,58,.10), transparent 62%),
                   linear-gradient(90deg, rgba(5,5,5,.78) 0%, rgba(5,5,5,.35) 46%, rgba(5,5,5,0) 70%),
                   linear-gradient(to top, rgba(5,5,5,.85), transparent 28%); }
-    .hero-wrap { position: relative; z-index: 2; min-height: 100svh; display: flex; flex-direction: column; justify-content: space-between; padding: 6.2rem var(--pad-x) 2.2rem; pointer-events: none; }
+    .hero-wrap { position: relative; z-index: 2; min-height: calc(100svh - var(--marquee-height, 34px) - var(--nav-height, 60px)); display: flex; flex-direction: column; justify-content: space-between; gap: 1.2rem; padding: 3.2rem var(--pad-x) 2rem; pointer-events: none; }
     .hero-wrap a, .hero-wrap button { pointer-events: auto; }
     .hero-top { display: flex; justify-content: flex-start; align-items: center; flex-wrap: wrap; gap: .6rem 2rem; max-width: calc(100% - 7rem); font-size: .6rem; letter-spacing: .22em; text-transform: uppercase; color: rgba(237,233,223,.6); }
     .hero-tag { display: inline-flex; align-items: center; gap: .7rem; }
@@ -43,7 +43,9 @@
     .hero-count { padding-left: 2rem; border-left: 1px solid rgba(237,233,223,.2); }
     .hero-count b { color: var(--accent); font-weight: 700; }
     @media (max-width: 520px) { .hero-count { padding-left: 0; border-left: 0; } }
-    .hero-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(5.4rem, 17.5vw, 19rem); line-height: .8; letter-spacing: -.015em; margin-left: -.04em; }
+    .hero-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(5.4rem, min(17.5vw, 31vh), 19rem); line-height: .8; letter-spacing: -.015em; margin-left: -.04em; min-height: 1.62em; }
+    /* slim block cursor instead of a giant underscore glyph (the title types and erases in a loop) */
+    .hero-title em::after { content: ''; display: inline-block; width: .34em; height: .075em; margin-left: .1em; vertical-align: baseline; background: var(--accent); box-shadow: 0 0 14px rgba(212,240,58,.6), 0 0 34px rgba(212,240,58,.3); }
     .hero-title em { color: var(--accent); display: block; font-style: normal; text-shadow: 0 0 40px rgba(212,240,58,.35), 0 0 120px rgba(212,240,58,.18); }
     .hero-sub {
       font-family: 'Space Mono', 'Courier New', monospace !important; font-style: normal !important;
