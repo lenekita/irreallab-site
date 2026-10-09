@@ -25,7 +25,7 @@
   <meta name="twitter:image" content="https://irreallab.fr/images/preview.jpg">
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300&display=swap" rel="stylesheet">
   <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/styles/site.css?v=205c1de8">
+  <link rel="stylesheet" href="/styles/site.css?v=8eee6657">
   <style>
     /* HERO */
     .hero { display: grid; grid-template-columns: 1fr 1fr; min-height: 92vh; border-bottom: 1px solid var(--line); contain: layout; }
@@ -100,10 +100,12 @@
     .reel-row-right .like-btn { position: relative; z-index: 2; }
     .reel-row:hover .like-btn::before { display: none; }
     .reel-row .like-btn { background: transparent; }
-    .reel-row:hover .like-btn { color: #060606; border-color: rgba(6,6,6,.55); background: transparent; transform: none; }
-    .reel-row:hover .like-btn svg { fill: transparent; }
-    .reel-row:hover .like-btn:hover, .reel-row:hover .like-btn.is-liked { background: #060606; color: var(--accent); border-color: #060606; box-shadow: none; }
-    .reel-row:hover .like-btn:hover svg, .reel-row:hover .like-btn.is-liked svg { fill: var(--accent); }
+    .reel-row:hover .like-btn, .reel-row:hover .like-btn.is-liked { color: #060606; border-color: rgba(6,6,6,.55); background: transparent; transform: none; box-shadow: none; }
+    .reel-row:hover .like-btn svg { fill: transparent; filter: none; }
+    .reel-row:hover .like-btn.is-liked { border-color: #060606; }
+    .reel-row:hover .like-btn.is-liked svg { fill: #060606; }
+    .reel-row:hover .like-btn:hover { background: #060606; color: var(--accent); border-color: #060606; }
+    .reel-row:hover .like-btn:hover svg, .reel-row:hover .like-btn.is-liked:hover svg { fill: var(--accent); }
     .reel-row:focus-within::before { transform: scaleX(1); }
     .reel-row-num { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2rem, 4vw, 3rem); color: var(--muted2); padding: 1.6rem 1.5rem 1.6rem var(--pad-x); line-height: 1; position: relative; z-index: 1; transition: color .3s; overflow: visible; text-shadow: 0 0 8px rgba(212,240,58,.10), 0 0 18px rgba(212,240,58,.05); }
     .reel-row-body { padding: 1.6rem 1.5rem; position: relative; z-index: 1; }

@@ -401,14 +401,15 @@ footer { display: flex; align-items: center; justify-content: space-between; pad
   transition: fill .2s;
 }
 .like-btn .like-count { min-width: 1ch; font-variant-numeric: tabular-nums; }
-.like-btn:hover { color: #060606; border-color: var(--accent); transform: translateY(-2px); }
-.like-btn:hover::before { transform: scaleX(1); }
-.like-btn:hover svg { fill: #060606; }
 .like-btn:focus-visible { outline: 1px solid var(--accent); outline-offset: 3px; }
 .like-btn:active { transform: translateY(0); }
-.like-btn.is-liked { color: #060606; border-color: var(--accent); box-shadow: 0 0 22px rgba(212,240,58,.28); }
-.like-btn.is-liked::before { transform: scaleX(1); }
-.like-btn.is-liked svg { fill: #060606; }
+/* liked = same shape, just a filled lime heart and lime outline (no solid block) */
+.like-btn.is-liked { color: var(--accent); border-color: var(--accent); background: rgba(212,240,58,.07); box-shadow: 0 0 18px rgba(212,240,58,.18); }
+.like-btn.is-liked svg { fill: var(--accent); filter: drop-shadow(0 0 5px rgba(212,240,58,.6)); }
+/* hover comes last so it wins for both states */
+.like-btn:hover { color: #060606; border-color: var(--accent); transform: translateY(-2px); box-shadow: none; }
+.like-btn:hover::before { transform: scaleX(1); }
+.like-btn:hover svg { fill: #060606; filter: none; }
 .like-btn.pop { animation: like-glitch .45s steps(2, end); }
 .like-btn.pop svg { animation: like-beat .45s steps(3, end); }
 @keyframes like-glitch {
@@ -416,7 +417,7 @@ footer { display: flex; align-items: center; justify-content: space-between; pad
   20% { transform: translate(-3px,1px); box-shadow: 3px 0 0 #3ad4f0, -3px 0 0 #f03a6e; }
   40% { transform: translate(3px,-1px); box-shadow: -3px 0 0 #3ad4f0, 3px 0 0 #f03a6e; }
   60% { transform: translate(-2px,0); box-shadow: 0 0 36px rgba(212,240,58,.55); }
-  100% { transform: translate(0,0); box-shadow: 0 0 22px rgba(212,240,58,.28); }
+  100% { transform: translate(0,0); box-shadow: 0 0 18px rgba(212,240,58,.18); }
 }
 @keyframes like-beat { 0% { transform: scale(1); } 40% { transform: scale(1.5); } 100% { transform: scale(1); } }
 @media (prefers-reduced-motion: reduce) { .like-btn.pop, .like-btn.pop svg { animation: none; } .like-btn { transition: none; } }
