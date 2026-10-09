@@ -5,7 +5,7 @@
   'use strict';
 
   var KEY = 'irreallab_likes';
-  var HEART = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 2.6 4.5 6.3 4.5c2.1 0 3.9 1.1 5.7 3.2 1.8-2.1 3.6-3.2 5.7-3.2 3.7 0 5.4 3.9 3.9 7.3C19.5 16.4 12 21 12 21z"/></svg>';
+  var HEART = '<svg viewBox="-1 -1 11 10" aria-hidden="true" focusable="false"><path d="M1 0H3V1H4V2H5V1H6V0H8V1H9V4H8V5H7V6H6V7H5V8H4V7H3V6H2V5H1V4H0V1H1Z"/></svg>';
 
   var mine = new Set();
   try { mine = new Set(JSON.parse(localStorage.getItem(KEY) || '[]')); } catch (e) {}
@@ -26,7 +26,7 @@
   function paint(btn) {
     var slug = btn.getAttribute('data-like');
     var on = mine.has(slug);
-    var count = counts[slug] || 0;
+    var count = Math.max(counts[slug] || 0, on ? 1 : 0);
     btn.classList.toggle('is-liked', on);
     btn.setAttribute('aria-pressed', on ? 'true' : 'false');
     btn.setAttribute('aria-label', (on ? 'Unlike this reel' : 'Like this reel') + (loaded ? ' (' + count + (count === 1 ? ' like)' : ' likes)') : ''));

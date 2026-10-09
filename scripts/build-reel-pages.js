@@ -293,7 +293,8 @@ ${JSON.stringify(jsonLd, null, 2)}
     .btn:hover { background: var(--accent); color: #060606; }
     .btn.primary { background: var(--accent); color: #060606; }
     .btn.primary:hover { background: transparent; color: var(--accent); }
-    .actions .like-btn { align-self: center; padding: 11px 16px; font-size: .75rem; }
+    .actions .like-btn { align-self: stretch; padding: 12px 24px 11px; font-size: 1.1rem; border-color: var(--accent); }
+    .actions .like-btn:not(:hover):not(.is-liked) { color: var(--accent); }
     .reel-nav {
       display: flex;
       justify-content: space-between;
