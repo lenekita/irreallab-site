@@ -45,11 +45,10 @@
     @media (max-width: 520px) { .hero-count { padding-left: 0; border-left: 0; } }
     .hero-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(5.4rem, 17.5vw, 19rem); line-height: .8; letter-spacing: -.015em; margin-left: -.04em; }
     .hero-title em { color: var(--accent); display: block; font-style: normal; text-shadow: 0 0 40px rgba(212,240,58,.35), 0 0 120px rgba(212,240,58,.18); }
-    .hero-kicker { margin-top: 1.4rem; font-size: .72rem; letter-spacing: .2em; text-transform: uppercase; color: var(--accent); }
     .hero-sub {
       font-family: 'Space Mono', 'Courier New', monospace !important; font-style: normal !important;
       font-size: 1rem !important; line-height: 1.7 !important; color: rgba(237,233,223,.72) !important;
-      margin-top: 1rem !important; min-height: calc(1em * 1.7 * 3);
+      margin-top: 1.6rem !important; min-height: calc(1em * 1.7 * 3);
       font-weight: 400 !important; letter-spacing: .035em !important; text-transform: none !important;
     }
     .hero-sub.ir-typewriter { display: block !important; white-space: normal !important; overflow: visible !important; max-width: 440px !important; }
@@ -64,8 +63,10 @@
     @keyframes ir-hint { 0%,100% { transform: scaleX(.3); opacity: .4; } 50% { transform: scaleX(1); opacity: 1; } }
     @media (max-width: 900px) {
       .hero-wrap { padding: 5.4rem var(--pad-x) 1.6rem; }
-      .hero-title { font-size: clamp(6rem, 37vw, 10.5rem) !important; line-height: .78 !important; }
-      .hero-sub.ir-typewriter { max-width: 86vw !important; }
+      .hero-top { max-width: 100%; }
+      .hero-title { font-size: clamp(5.4rem, 30vw, 9.5rem) !important; line-height: .78 !important; }
+      .hero-sub { font-size: .86rem !important; line-height: 1.65 !important; hyphens: none; word-break: normal; overflow-wrap: normal; }
+      .hero-sub.ir-typewriter { max-width: min(92vw, 420px) !important; }
       .hero-vignette { background: radial-gradient(420px circle at var(--mx, 60%) var(--my, 40%), rgba(212,240,58,.10), transparent 62%), linear-gradient(to bottom, rgba(5,5,5,.55), rgba(5,5,5,.15) 45%, rgba(5,5,5,.85)); }
       .hero-bottom .hero-hint { display: none; }
     }
@@ -270,12 +271,11 @@
   <div class="hero-vignette" aria-hidden="true"></div>
   <div class="hero-wrap">
     <div class="hero-top">
-      <span class="hero-tag"><i></i>AI-driven cinematic worlds</span>
+      <span class="hero-tag"><i></i><span data-translate="main.heroEyebrow">AI-driven cinematic worlds.</span></span>
       <span class="hero-count"><b id="reel-count">15</b> reels and counting</span>
     </div>
     <div class="hero-main">
       <h1 class="hero-title ir-electric-title ir-title-typewriter" data-glitch="IRREAL LAB" data-title-first="Irreal" data-title-second="Lab">Irreal<em>Lab</em></h1>
-      <p class="hero-kicker" data-translate="main.heroEyebrow">AI-driven cinematic worlds.</p>
       <p class="hero-sub ir-typewriter" data-typewriter-text="Visual experiments in short-form. Motion, surrealism &amp; the art of the unreal." data-translate="main.heroSubtitle">Visual experiments in short-form. Motion, surrealism &amp; the art of the unreal.</p>
       <div class="hero-cta">
         <a href="/reels.html" class="hero-btn primary" data-translate="main.heroReelsLink">↗ Browse All Reels</a>
