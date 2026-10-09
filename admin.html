@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -137,13 +137,13 @@
 <!-- ═════ LOGIN ═════ -->
 <section class="login" id="loginView" hidden>
   <div class="card">
-    <h1>Espace <span>admin</span></h1>
-    <p class="lead">Accès réservé. Les identifiants sont ceux définis dans Railway (variables ADMIN_USER et ADMIN_PASSWORD).</p>
+    <h1>Admin <span>area</span></h1>
+    <p class="lead">Restricted access. The login is the one set in Railway (variables ADMIN_USER and ADMIN_PASSWORD).</p>
     <div id="loginError" class="msg err" hidden></div>
     <form id="loginForm">
-      <div class="field"><label for="userId">Identifiant</label><input type="text" id="userId" autocomplete="username" required></div>
-      <div class="field"><label for="userPassword">Mot de passe</label><input type="password" id="userPassword" autocomplete="current-password" required></div>
-      <button class="btn" type="submit" id="loginBtn" style="width:100%">Se connecter</button>
+      <div class="field"><label for="userId">Username</label><input type="text" id="userId" autocomplete="username" required></div>
+      <div class="field"><label for="userPassword">Password</label><input type="password" id="userPassword" autocomplete="current-password" required></div>
+      <button class="btn" type="submit" id="loginBtn" style="width:100%">Log in</button>
     </form>
   </div>
 </section>
@@ -155,17 +155,17 @@
     <span class="badge">Admin</span>
     <nav class="tabs" role="tablist">
       <button class="tab active" data-view="reels" role="tab">Reels</button>
-      <button class="tab" data-view="new" role="tab">Nouveau reel</button>
-      <button class="tab" data-view="stats" role="tab">Statistiques</button>
+      <button class="tab" data-view="new" role="tab">New reel</button>
+      <button class="tab" data-view="stats" role="tab">Statistics</button>
     </nav>
-    <button class="out" id="logoutBtn">Déconnexion</button>
+    <button class="out" id="logoutBtn">Log out</button>
   </header>
 
   <main>
     <!-- Reels -->
     <section id="view-reels">
-      <h1>Vos <span>reels</span></h1>
-      <p class="lead">Les reels publiés ici restent en ligne après chaque mise à jour du site. Ceux marqués « code » viennent du dépôt : les masquer ne supprime rien et vous pouvez les restaurer.</p>
+      <h1>Your <span>reels</span></h1>
+      <p class="lead">Reels published here stay online after every site update. The ones tagged “code” come from the repository: hiding them deletes nothing and you can restore them.</p>
       <div class="toolbar">
         <div class="filters" id="filters"></div>
         <span class="count" id="reelCount"></span>
@@ -175,27 +175,27 @@
 
     <!-- New reel -->
     <section id="view-new" hidden>
-      <h1>Publier un <span>reel</span></h1>
-      <p class="lead">Envoyez la vidéo : le site la compresse, crée la vignette, la page du reel et met à jour le plan du site pour Google, tout seul.</p>
+      <h1>Publish a <span>reel</span></h1>
+      <p class="lead">Upload the video: the site compresses it, creates the thumbnail and the reel page, and updates the sitemap for Google, all by itself.</p>
       <form id="uploadForm" class="new" novalidate>
         <div>
           <div class="drop" id="drop" tabindex="0">
             <video id="preview" controls muted playsinline hidden></video>
-            <strong id="dropTitle">Déposez la vidéo ici</strong>
-            <small id="dropHint">ou cliquez pour choisir un fichier<br>MP4 ou MOV · 9:16 conseillé · 100 Mo maximum</small>
+            <strong id="dropTitle">Drop the video here</strong>
+            <small id="dropHint">or click to choose a file<br>MP4 or MOV · 9:16 recommended · 100 MB max</small>
             <input type="file" id="videoFile" accept="video/*" hidden>
           </div>
         </div>
         <div>
           <div id="uploadMsg" class="msg" hidden></div>
           <div class="field">
-            <label for="fTitle">Titre *</label>
-            <input type="text" id="fTitle" maxlength="120" placeholder="ex. Northern Fires" required>
-            <div class="hint">Adresse de la page : <span class="slug" id="slugPreview">irreallab.fr/reel/…</span> (elle ne change plus ensuite)</div>
+            <label for="fTitle">Title *</label>
+            <input type="text" id="fTitle" maxlength="120" placeholder="e.g. Northern Fires" required>
+            <div class="hint">Page address: <span class="slug" id="slugPreview">irreallab.fr/reel/…</span> (it never changes afterwards)</div>
           </div>
           <div class="field">
             <label for="fDesc">Description</label>
-            <textarea id="fDesc" maxlength="500" placeholder="Une ou deux phrases : elles apparaissent sur la page du reel et dans Google."></textarea>
+            <textarea id="fDesc" maxlength="500" placeholder="One or two sentences: shown on the reel page and in Google."></textarea>
           </div>
           <div class="field">
             <label for="fTags">Hashtags</label>
@@ -203,16 +203,16 @@
             <div class="chips" id="tagChips"></div>
           </div>
           <div class="field">
-            <label for="fUrl">Lien Instagram</label>
+            <label for="fUrl">Instagram link</label>
             <input type="url" id="fUrl" placeholder="https://www.instagram.com/reel/…">
           </div>
           <div class="row2">
-            <div class="field"><label for="fDate">Date de publication</label><input type="date" id="fDate" required></div>
-            <div class="field"><label for="fSchedule">Programmer (facultatif)</label><input type="datetime-local" id="fSchedule"></div>
+            <div class="field"><label for="fDate">Publication date</label><input type="date" id="fDate" required></div>
+            <div class="field"><label for="fSchedule">Schedule (optional)</label><input type="datetime-local" id="fSchedule"></div>
           </div>
-          <button class="btn" type="submit" id="uploadBtn">Publier le reel</button>
+          <button class="btn" type="submit" id="uploadBtn">Publish reel</button>
           <div class="progress" id="progress" hidden>
-            <div class="label"><span id="progressStep">Envoi…</span><span id="progressPct">0%</span></div>
+            <div class="label"><span id="progressStep">Uploading…</span><span id="progressPct">0%</span></div>
             <div class="bar-track"><div class="bar-fill" id="progressFill"></div></div>
           </div>
         </div>
@@ -221,8 +221,8 @@
 
     <!-- Stats -->
     <section id="view-stats" hidden>
-      <h1>Likes <span>statistiques</span></h1>
-      <p class="lead">Le classement se met à jour à chaque ouverture de cet onglet.</p>
+      <h1>Likes <span>statistics</span></h1>
+      <p class="lead">The ranking refreshes every time you open this tab.</p>
       <div class="total"><b id="statTotal">0</b><span class="count" id="statSub"></span></div>
       <div id="statList"></div>
     </section>
@@ -232,21 +232,21 @@
 <!-- Edit dialog -->
 <dialog id="editDialog">
   <form id="editForm" method="dialog">
-    <h2>Modifier le <span>reel</span></h2>
+    <h2>Edit <span>reel</span></h2>
     <div id="editMsg" class="msg err" hidden></div>
-    <div class="field"><label for="eTitle">Titre</label><input type="text" id="eTitle" maxlength="120" required>
-      <div class="hint">Changer le titre ne change pas l'adresse de la page ni les likes.</div></div>
+    <div class="field"><label for="eTitle">Title</label><input type="text" id="eTitle" maxlength="120" required>
+      <div class="hint">Changing the title does not change the page address or the likes.</div></div>
     <div class="field"><label for="eDesc">Description</label><textarea id="eDesc" maxlength="500"></textarea></div>
     <div class="field"><label for="eTags">Hashtags</label><input type="text" id="eTags" maxlength="300"></div>
-    <div class="field"><label for="eUrl">Lien Instagram</label><input type="url" id="eUrl"></div>
+    <div class="field"><label for="eUrl">Instagram link</label><input type="url" id="eUrl"></div>
     <div class="row2">
-      <div class="field"><label for="eDate">Date de publication</label><input type="date" id="eDate"></div>
-      <div class="field"><label for="eSchedule">Programmé pour</label><input type="datetime-local" id="eSchedule">
-        <div class="hint">Laissez vide pour publier tout de suite.</div></div>
+      <div class="field"><label for="eDate">Publication date</label><input type="date" id="eDate"></div>
+      <div class="field"><label for="eSchedule">Scheduled for</label><input type="datetime-local" id="eSchedule">
+        <div class="hint">Leave empty to publish right away.</div></div>
     </div>
     <div class="dialog-actions">
-      <button type="submit" class="btn" id="eSave">Enregistrer</button>
-      <button type="button" class="btn ghost" id="eCancel">Annuler</button>
+      <button type="submit" class="btn" id="eSave">Save</button>
+      <button type="button" class="btn ghost" id="eCancel">Cancel</button>
     </div>
   </form>
 </dialog>
@@ -259,7 +259,7 @@
   const $ = id => document.getElementById(id);
   const esc = t => String(t == null ? '' : t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const slugify = t => t.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
-  const fmtDate = iso => iso ? new Date(iso).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' }) : '—';
+  const fmtDate = iso => iso ? new Date(iso).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : '—';
   const toDateInput = iso => iso ? new Date(iso).toISOString().slice(0, 10) : '';
   const toLocalInput = iso => { if (!iso) return ''; const d = new Date(iso); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0, 16); };
 
@@ -275,10 +275,10 @@
 
   async function api(url, opts) {
     const res = await fetch(url, opts);
-    if (res.status === 401 && !url.includes('/admin/login')) { showLogin('Session expirée — reconnectez-vous.'); throw new Error('unauthenticated'); }
+    if (res.status === 401 && !url.includes('/admin/login')) { showLogin('Session expired — please log in again.'); throw new Error('unauthenticated'); }
     let data = {};
     try { data = await res.json(); } catch (e) { /* empty body */ }
-    if (!res.ok) throw new Error(data.error || 'Erreur ' + res.status);
+    if (!res.ok) throw new Error(data.error || 'Error ' + res.status);
     return data;
   }
 
@@ -297,7 +297,7 @@
       $('userPassword').value = '';
       showApp();
     } catch (err) {
-      showLogin(err.message.includes('not configured') ? 'Identifiants non configurés sur le serveur : ajoutez ADMIN_USER et ADMIN_PASSWORD dans Railway.' : err.message.replace('Invalid credentials', 'Identifiant ou mot de passe incorrect'));
+      showLogin(err.message.includes('not configured') ? 'Login is not configured on the server: add ADMIN_USER and ADMIN_PASSWORD in Railway (Variables), then redeploy.' : err.message.replace('Invalid credentials', 'Incorrect username or password'));
     } finally { btn.disabled = false; }
   });
   $('logoutBtn').addEventListener('click', async () => { try { await fetch('/api/admin/logout', { method: 'POST' }); } catch (e) {} showLogin(''); });
@@ -313,7 +313,7 @@
   document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => switchView(t.dataset.view)));
 
   /* ── reels list ── */
-  const FILTERS = [['all', 'Tous'], ['live', 'En ligne'], ['scheduled', 'Programmés'], ['hidden', 'Masqués']];
+  const FILTERS = [['all', 'All'], ['live', 'Live'], ['scheduled', 'Scheduled'], ['hidden', 'Hidden']];
   function renderFilters() {
     $('filters').innerHTML = FILTERS.map(([k, label]) => `<button class="chip" data-f="${k}" style="${filter === k ? 'border-color:var(--accent);color:var(--accent)' : ''}">${label}</button>`).join('');
     $('filters').querySelectorAll('.chip').forEach(c => c.addEventListener('click', () => { filter = c.dataset.f; renderReels(); }));
@@ -324,11 +324,11 @@
   function renderReels() {
     renderFilters();
     const list = visible();
-    $('reelCount').textContent = list.length + ' reel' + (list.length > 1 ? 's' : '');
-    if (!list.length) { $('reelList').innerHTML = '<div class="empty">Aucun reel ici pour le moment.</div>'; return; }
+    $('reelCount').textContent = list.length + ' reel' + (list.length === 1 ? '' : 's');
+    if (!list.length) { $('reelList').innerHTML = '<div class="empty">No reels here yet.</div>'; return; }
     $('reelList').innerHTML = list.map(r => {
-      const status = r.hidden ? '<span class="tag hid">Masqué</span>' : r.status === 'Scheduled' ? `<span class="tag sched">Programmé · ${fmtDate(r.scheduled_publish_at)}</span>` : '<span class="tag live">En ligne</span>';
-      const del = r.source === 'admin' ? '<button class="btn small danger" data-act="delete">Supprimer</button>' : r.hidden ? '' : '<button class="btn small danger" data-act="delete">Masquer</button>';
+      const status = r.hidden ? '<span class="tag hid">Hidden</span>' : r.status === 'Scheduled' ? `<span class="tag sched">Scheduled · ${fmtDate(r.scheduled_publish_at)}</span>` : '<span class="tag live">Live</span>';
+      const del = r.source === 'admin' ? '<button class="btn small danger" data-act="delete">Delete</button>' : r.hidden ? '' : '<button class="btn small danger" data-act="delete">Hide</button>';
       return `<article class="reel ${r.hidden ? 'is-hidden' : ''}" data-slug="${esc(r.slug)}">
         <img src="${esc(r.poster)}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
         <div>
@@ -337,7 +337,7 @@
           ${r.description ? `<div class="desc">${esc(r.description)}</div>` : ''}
         </div>
         <div class="actions">
-          ${r.hidden ? '<button class="btn small" data-act="restore">Restaurer</button>' : `<a class="btn small ghost" href="/reel/${encodeURIComponent(r.slug)}.html" target="_blank" rel="noopener">Voir ↗</a><button class="btn small ghost" data-act="edit">Modifier</button>`}
+          ${r.hidden ? '<button class="btn small" data-act="restore">Restore</button>' : `<a class="btn small ghost" href="/reel/${encodeURIComponent(r.slug)}.html" target="_blank" rel="noopener">View ↗</a><button class="btn small ghost" data-act="edit">Edit</button>`}
           ${del}
         </div>
       </article>`;
@@ -352,11 +352,11 @@
     const slug = btn.closest('.reel').dataset.slug; const reel = reels.find(r => r.slug === slug);
     try {
       if (btn.dataset.act === 'edit') return openEdit(reel);
-      if (btn.dataset.act === 'restore') { await api(`/api/reel/${slug}/restore`, { method: 'POST' }); toast('Reel restauré'); }
+      if (btn.dataset.act === 'restore') { await api(`/api/reel/${slug}/restore`, { method: 'POST' }); toast('Reel restored'); }
       if (btn.dataset.act === 'delete') {
-        const msg = reel.source === 'admin' ? `Supprimer définitivement « ${reel.title} » et ses fichiers vidéo ?` : `Masquer « ${reel.title} » du site ? (il reste dans le code et peut être restauré)`;
+        const msg = reel.source === 'admin' ? `Permanently delete “${reel.title}” and its video files?` : `Hide “${reel.title}” from the site? (It stays in the code and can be restored.)`;
         if (!confirm(msg)) return;
-        await api(`/api/reel/${slug}`, { method: 'DELETE' }); toast(reel.source === 'admin' ? 'Reel supprimé' : 'Reel masqué');
+        await api(`/api/reel/${slug}`, { method: 'DELETE' }); toast(reel.source === 'admin' ? 'Reel deleted' : 'Reel hidden');
       }
       loadReels();
     } catch (err) { if (err.message !== 'unauthenticated') toast(err.message, true); }
@@ -377,7 +377,7 @@
       await api(`/api/reel/${editing.slug}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({
         title: $('eTitle').value, description: $('eDesc').value, hashtags: $('eTags').value, url: $('eUrl').value,
         posted_at: $('eDate').value || undefined, scheduled_publish_at: $('eSchedule').value || null }) });
-      $('editDialog').close(); toast('Modifications enregistrées'); loadReels();
+      $('editDialog').close(); toast('Changes saved'); loadReels();
     } catch (err) { if (err.message !== 'unauthenticated') { $('editMsg').textContent = err.message; $('editMsg').hidden = false; } }
     finally { btn.disabled = false; }
   });
@@ -396,11 +396,11 @@
   let file = null;
   function setFile(f) {
     if (!f) return;
-    if (!f.type.startsWith('video/')) return showUploadMsg('Ce fichier n\'est pas une vidéo.', true);
-    if (f.size > 100 * 1024 * 1024) return showUploadMsg(`Cette vidéo fait ${(f.size / 1048576).toFixed(0)} Mo : la limite est de 100 Mo.`, true);
+    if (!f.type.startsWith('video/')) return showUploadMsg('This file is not a video.', true);
+    if (f.size > 100 * 1024 * 1024) return showUploadMsg(`This video is ${(f.size / 1048576).toFixed(0)} MB: the limit is 100 MB.`, true);
     file = f; showUploadMsg('');
     const v = $('preview'); v.src = URL.createObjectURL(f); v.hidden = false;
-    $('dropTitle').textContent = f.name; $('dropHint').textContent = (f.size / 1048576).toFixed(1) + ' Mo — cliquez pour changer';
+    $('dropTitle').textContent = f.name; $('dropHint').textContent = (f.size / 1048576).toFixed(1) + ' MB — click to change';
   }
   const drop = $('drop');
   drop.addEventListener('click', e => { if (e.target.tagName !== 'VIDEO') $('videoFile').click(); });
@@ -417,13 +417,13 @@
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.open('POST', '/api/upload-reel');
-      xhr.upload.onprogress = e => { if (e.lengthComputable) setProgress('Envoi de la vidéo', Math.round(e.loaded / e.total * 100)); };
+      xhr.upload.onprogress = e => { if (e.lengthComputable) setProgress('Uploading the video', Math.round(e.loaded / e.total * 100)); };
       xhr.onload = () => {
         let data = {}; try { data = JSON.parse(xhr.responseText); } catch (e) {}
-        if (xhr.status === 401) { showLogin('Session expirée — reconnectez-vous.'); return reject(new Error('unauthenticated')); }
-        xhr.status === 202 ? resolve(data) : reject(new Error(data.error || 'Erreur ' + xhr.status));
+        if (xhr.status === 401) { showLogin('Session expired — please log in again.'); return reject(new Error('unauthenticated')); }
+        xhr.status === 202 ? resolve(data) : reject(new Error(data.error || 'Error ' + xhr.status));
       };
-      xhr.onerror = () => reject(new Error('Connexion interrompue pendant l\'envoi'));
+      xhr.onerror = () => reject(new Error('Connection lost during upload'));
       xhr.send(fd);
     });
   }
@@ -431,29 +431,29 @@
     for (;;) {
       await new Promise(r => setTimeout(r, 1000));
       const j = await api('/api/upload-jobs/' + id);
-      if (j.status === 'error') throw new Error(j.error || 'Le traitement a échoué');
+      if (j.status === 'error') throw new Error(j.error || 'Processing failed');
       if (j.status === 'done') return j;
-      setProgress(j.step || 'Traitement', j.progress);
+      setProgress(j.step || 'Processing', j.progress);
     }
   }
   $('uploadForm').addEventListener('submit', async e => {
     e.preventDefault();
-    if (!file) return showUploadMsg('Choisissez d\'abord une vidéo.', true);
-    if (!$('fTitle').value.trim()) return showUploadMsg('Le titre est obligatoire.', true);
+    if (!file) return showUploadMsg('Choose a video first.', true);
+    if (!$('fTitle').value.trim()) return showUploadMsg('The title is required.', true);
     const fd = new FormData();
     fd.append('video', file); fd.append('title', $('fTitle').value); fd.append('description', $('fDesc').value);
     fd.append('hashtags', $('fTags').value); fd.append('url', $('fUrl').value);
     if ($('fDate').value) fd.append('posted_at', $('fDate').value);
     if ($('fSchedule').value) fd.append('scheduledDate', new Date($('fSchedule').value).toISOString());
-    $('uploadBtn').disabled = true; showUploadMsg(''); setProgress('Envoi de la vidéo', 0);
+    $('uploadBtn').disabled = true; showUploadMsg(''); setProgress('Uploading the video', 0);
     try {
       const { jobId } = await sendForm(fd);
-      setProgress('En attente', 0);
+      setProgress('Waiting', 0);
       const done = await pollJob(jobId);
-      toast('Reel publié : ' + done.reel.title);
+      toast('Reel published: ' + done.reel.title);
       file = null; $('uploadForm').reset(); $('fDate').value = new Date().toISOString().slice(0, 10);
-      $('preview').hidden = true; $('preview').removeAttribute('src'); $('dropTitle').textContent = 'Déposez la vidéo ici';
-      $('dropHint').innerHTML = 'ou cliquez pour choisir un fichier<br>MP4 ou MOV · 9:16 conseillé · 100 Mo maximum';
+      $('preview').hidden = true; $('preview').removeAttribute('src'); $('dropTitle').textContent = 'Drop the video here';
+      $('dropHint').innerHTML = 'or click to choose a file<br>MP4 or MOV · 9:16 recommended · 100 MB max';
       $('progress').hidden = true; $('slugPreview').textContent = 'irreallab.fr/reel/…';
       switchView('reels');
     } catch (err) {
@@ -468,13 +468,13 @@
       const d = await api('/api/likes-report');
       const max = Math.max(1, ...d.reels.map(r => r.likes));
       $('statTotal').textContent = d.total;
-      $('statSub').textContent = 'like' + (d.total > 1 ? 's' : '') + ' au total · ' + d.reels.length + ' reels';
+      $('statSub').textContent = 'like' + (d.total === 1 ? '' : 's') + ' in total · ' + d.reels.length + ' reels';
       $('statList').innerHTML = d.reels.map((r, i) => `<div class="stat"><span class="n">${String(i + 1).padStart(2, '0')}</span><div><a href="/reel/${encodeURIComponent(r.slug)}.html" target="_blank" rel="noopener">${esc(r.title)}</a><div class="track"><div class="fill" style="width:${r.likes / max * 100}%"></div></div></div><strong>${r.likes}</strong></div>`).join('');
     } catch (e) { if (e.message !== 'unauthenticated') $('statList').innerHTML = `<div class="msg err">${esc(e.message)}</div>`; }
   }
 
   /* ── boot ── */
-  fetch('/api/admin/session').then(r => r.json()).then(s => (s.authenticated ? showApp() : showLogin(''))).catch(() => showLogin('Serveur injoignable.'));
+  fetch('/api/admin/session').then(r => r.json()).then(s => (s.authenticated ? showApp() : showLogin(''))).catch(() => showLogin('Server unreachable.'));
 })();
 </script>
 </body>

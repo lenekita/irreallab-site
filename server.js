@@ -108,7 +108,7 @@ app.post('/api/admin/login', express.json(), (req, res) => {
   const idOk = timingSafeEqualStr(id || '', ADMIN_USER);
   const passOk = timingSafeEqualStr(password || '', ADMIN_PASSWORD);
   if (loginLimited(req.ip)) {
-    return res.status(429).json({ error: 'Trop de tentatives — réessayez dans 15 minutes' });
+    return res.status(429).json({ error: 'Too many attempts — try again in 15 minutes' });
   }
   if (idOk && passOk) {
     loginAttempts.delete(req.ip);
@@ -241,23 +241,23 @@ app.get('/api/reels-admin', requireAdmin, (req, res) => {
 function cleanFields(body) {
   const out = {};
   const str = (v, max) => String(v == null ? '' : v).trim().slice(0, max);
-  if ('title' in body) { out.title = str(body.title, 120); if (!out.title) throw new Error('Le titre est obligatoire'); }
+  if ('title' in body) { out.title = str(body.title, 120); if (!out.title) throw new Error('Title is required'); }
   if ('description' in body) out.description = str(body.description, 500);
   if ('hashtags' in body) out.hashtags = str(body.hashtags, 300);
   if ('url' in body) {
     out.url = str(body.url, 500);
-    if (out.url && !/^https:\/\//i.test(out.url)) throw new Error('Le lien Instagram doit commencer par https://');
+    if (out.url && !/^https:\/\//i.test(out.url)) throw new Error('Instagram URL must start with https://');
   }
   if ('posted_at' in body && body.posted_at) {
     const d = new Date(body.posted_at);
-    if (isNaN(d)) throw new Error('Date de publication invalide');
+    if (isNaN(d)) throw new Error('Invalid publish date');
     out.posted_at = d.toISOString();
   }
   if ('scheduled_publish_at' in body) {
     if (!body.scheduled_publish_at) out.scheduled_publish_at = null;
     else {
       const d = new Date(body.scheduled_publish_at);
-      if (isNaN(d)) throw new Error('Date de programmation invalide');
+      if (isNaN(d)) throw new Error('Invalid schedule date');
       out.scheduled_publish_at = d.toISOString();
     }
   }
@@ -265,7 +265,7 @@ function cleanFields(body) {
 }
 
 app.put('/api/reel/:slug', requireAdmin, (req, res) => {
-  if (!store.findBySlug(req.params.slug)) return res.status(404).json({ error: 'Reel introuvable' });
+  if (!store.findBySlug(req.params.slug)) return res.status(404).json({ error: 'Reel not found' });
   try {
     store.updateReel(req.params.slug, cleanFields(req.body || {}));
     res.json({ success: true });
@@ -273,12 +273,12 @@ app.put('/api/reel/:slug', requireAdmin, (req, res) => {
 });
 
 app.delete('/api/reel/:slug', requireAdmin, (req, res) => {
-  if (!store.deleteReel(req.params.slug)) return res.status(404).json({ error: 'Reel introuvable' });
+  if (!store.deleteReel(req.params.slug)) return res.status(404).json({ error: 'Reel not found' });
   res.json({ success: true });
 });
 
 app.post('/api/reel/:slug/restore', requireAdmin, (req, res) => {
-  if (!store.restoreReel(req.params.slug)) return res.status(404).json({ error: 'Rien à restaurer' });
+  if (!store.restoreReel(req.params.slug)) return res.status(404).json({ error: 'Nothing to restore' });
   res.json({ success: true });
 });
 
@@ -290,14 +290,14 @@ const upload = multer({
     destination: (req, file, cb) => cb(null, TMP_DIR),
     filename: (req, file, cb) => cb(null, `${Date.now()}-${crypto.randomBytes(4).toString('hex')}${path.extname(file.originalname).toLowerCase().replace(/[^.a-z0-9]/g, '')}`),
   }),
-  fileFilter: (req, file, cb) => (file.mimetype.startsWith('video/') ? cb(null, true) : cb(new Error('Seules les vidéos sont acceptées'), false)),
+  fileFilter: (req, file, cb) => (file.mimetype.startsWith('video/') ? cb(null, true) : cb(new Error('Only video files are allowed'), false)),
   limits: { fileSize: MAX_UPLOAD_MB * 1024 * 1024 },
 });
 function receiveVideo(req, res, next) {
   upload.single('video')(req, res, err => {
     if (!err) return next();
     const tooBig = err.code === 'LIMIT_FILE_SIZE';
-    res.status(tooBig ? 413 : 400).json({ error: tooBig ? `La vidéo dépasse ${MAX_UPLOAD_MB} Mo (limite d'envoi)` : err.message });
+    res.status(tooBig ? 413 : 400).json({ error: tooBig ? `Video is larger than ${MAX_UPLOAD_MB} MB (the upload limit)` : err.message });
   });
 }
 
@@ -311,30 +311,30 @@ setInterval(() => {
 async function processUpload(job, tmpFile, record) {
   const made = [];
   try {
-    job.status = 'processing'; job.step = 'Lecture de la vidéo'; job.progress = 0;
+    job.status = 'processing'; job.step = 'Reading the video'; job.progress = 0;
     let info;
-    try { info = media.probeVideo(tmpFile); } catch (e) { throw new Error("Ce fichier n'est pas une vidéo lisible"); }
+    try { info = media.probeVideo(tmpFile); } catch (e) { throw new Error("This file is not a readable video"); }
     const n = store.nextReelNumber();
     const videoPath = path.join(MEDIA_DIR, 'video', `reel-${n}.mp4`);
     const audioPath = path.join(MEDIA_DIR, 'audio', `reel-${n}.mp3`);
     const posterPath = path.join(MEDIA_DIR, 'images', 'posters', `${record.slug}.jpg`);
 
-    job.step = 'Compression de la vidéo';
+    job.step = 'Compressing the video';
     made.push(videoPath);
     await media.compressVideo(tmpFile, videoPath, info.duration, p => { job.progress = p; });
 
-    job.step = 'Extraction du son'; job.progress = 100;
+    job.step = 'Extracting the audio'; job.progress = 100;
     let audioUrl;
     try { made.push(audioPath); await media.extractAudio(videoPath, audioPath); audioUrl = `/audio/reel-${n}.mp3`; }
     catch (e) { /* silent video: no hover audio */ }
 
-    job.step = 'Création de la vignette';
+    job.step = 'Creating the thumbnail';
     const meta = media.probeVideo(videoPath);
     made.push(posterPath);
     await media.makePoster(videoPath, posterPath, meta.duration);
 
     store.addReel({ ...record, video_url: `/video/reel-${n}.mp4`, ...(audioUrl ? { audio_url: audioUrl } : {}), meta });
-    job.status = 'done'; job.step = 'Publié'; job.reel = { slug: record.slug, title: record.title };
+    job.status = 'done'; job.step = 'Published'; job.reel = { slug: record.slug, title: record.title };
   } catch (err) {
     made.forEach(f => { try { fs.unlinkSync(f); } catch (e) { /* not created */ } });
     job.status = 'error'; job.error = err.message;
@@ -345,7 +345,7 @@ async function processUpload(job, tmpFile, record) {
 
 app.post('/api/upload-reel', requireAdmin, receiveVideo, (req, res) => {
   const file = req.file;
-  if (!file) return res.status(400).json({ error: 'Aucune vidéo reçue' });
+  if (!file) return res.status(400).json({ error: 'No video file provided' });
   const fail = (code, error) => { fs.unlink(file.path, () => {}); return res.status(code).json({ error }); };
 
   let fields;
@@ -353,17 +353,17 @@ app.post('/api/upload-reel', requireAdmin, receiveVideo, (req, res) => {
   catch (err) { return fail(400, err.message); }
 
   const slug = site.slugify(fields.title);
-  if (!slug) return fail(400, 'Le titre doit contenir des lettres ou des chiffres');
+  if (!slug) return fail(400, 'Title must contain letters or numbers');
   if (store.findBySlug(slug) || site.FEATURED_VIDEOS.some(v => site.slugify(v.title) === slug)) {
-    return fail(409, 'Un reel porte déjà ce titre');
+    return fail(409, 'A reel with this title already exists');
   }
 
   let posted_at = new Date();
-  if (req.body.posted_at) { posted_at = new Date(req.body.posted_at); if (isNaN(posted_at)) return fail(400, 'Date de publication invalide'); }
+  if (req.body.posted_at) { posted_at = new Date(req.body.posted_at); if (isNaN(posted_at)) return fail(400, 'Invalid publish date'); }
   let scheduled;
   if (req.body.scheduledDate) {
     const d = new Date(req.body.scheduledDate);
-    if (isNaN(d)) return fail(400, 'Date de programmation invalide');
+    if (isNaN(d)) return fail(400, 'Invalid schedule date');
     scheduled = d.toISOString();
   }
 
@@ -376,7 +376,7 @@ app.post('/api/upload-reel', requireAdmin, receiveVideo, (req, res) => {
     ...(scheduled ? { scheduled_publish_at: scheduled } : {}),
   };
 
-  const job = { id: crypto.randomBytes(8).toString('hex'), status: 'queued', step: 'En attente', progress: 0, createdAt: Date.now() };
+  const job = { id: crypto.randomBytes(8).toString('hex'), status: 'queued', step: 'Waiting', progress: 0, createdAt: Date.now() };
   jobs.set(job.id, job);
   jobQueue = jobQueue.then(() => processUpload(job, file.path, record));
   res.status(202).json({ jobId: job.id });
@@ -384,7 +384,7 @@ app.post('/api/upload-reel', requireAdmin, receiveVideo, (req, res) => {
 
 app.get('/api/upload-jobs/:id', requireAdmin, (req, res) => {
   const j = jobs.get(req.params.id);
-  if (!j) return res.status(404).json({ error: 'Tâche inconnue' });
+  if (!j) return res.status(404).json({ error: 'Unknown job' });
   res.set('Cache-Control', 'no-store');
   res.json({ status: j.status, step: j.step, progress: j.progress, error: j.error, reel: j.reel });
 });
