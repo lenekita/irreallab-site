@@ -3,48 +3,53 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Merch — irreallab tees | irreallab</title>
+  <title>Merch — irreallab tee | irreallab</title>
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link rel="icon" type="image/png" sizes="192x192" href="/images/favicon.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
-  <meta name="description" content="Merch from irreallab: the wordmark and the signal artwork on cotton tees. Drop 01 is coming soon.">
+  <meta name="description" content="Merch from irreallab: the IRREAL LAB_ white unisex oversized tee, available in all sizes. Drop 01 is coming soon.">
   <link rel="canonical" href="https://irreallab.fr/shop.html">
-  <meta property="og:title" content="Merch — irreallab tees | irreallab">
-  <meta property="og:description" content="The irreallab wordmark and signal artwork on cotton tees. Drop 01 is coming soon.">
+  <meta property="og:title" content="Merch — irreallab tee | irreallab">
+  <meta property="og:description" content="The IRREAL LAB_ white unisex oversized tee, available in all sizes. Drop 01 is coming soon.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://irreallab.fr/shop.html">
   <meta property="og:site_name" content="irreallab">
-  <meta property="og:image" content="https://irreallab.fr/images/merch/tee-signal-black.jpg">
+  <meta property="og:image" content="https://irreallab.fr/images/merch/tee-oversized-white-robot.jpg">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Merch — irreallab tees | irreallab">
-  <meta name="twitter:image" content="https://irreallab.fr/images/merch/tee-signal-black.jpg">
+  <meta name="twitter:title" content="Merch — irreallab tee | irreallab">
+  <meta name="twitter:image" content="https://irreallab.fr/images/merch/tee-oversized-white-robot.jpg">
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles/site.css?v=a48d5478">
   <style>
-    .tees { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); }
-    .tee { background: var(--bg); display: flex; flex-direction: column; transition: background .3s; }
-    .tee:hover { background: var(--bg2); }
-    .tee-img { position: relative; overflow: hidden; background: #1a1a19; }
-    .tee-img img { display: block; width: 100%; height: auto; aspect-ratio: 900 / 990; object-fit: cover; transition: transform .6s cubic-bezier(.16,1,.3,1); }
-    .tee:hover .tee-img img { transform: scale(1.035); }
-    .tee-badge { position: absolute; left: 12px; top: 12px; font-size: .52rem; letter-spacing: .2em; text-transform: uppercase; color: #060606; background: var(--accent); padding: .4rem .7rem; }
-    .tee.is-live .tee-badge { display: none; }
-    .tee-body { padding: 1.3rem 1.3rem 1.5rem; display: flex; flex-direction: column; gap: .5rem; flex: 1; }
-    .tee h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; line-height: 1; letter-spacing: .02em; }
-    .tee p { font-size: .74rem; line-height: 1.7; color: rgba(237,233,223,.62); }
-    .tee-foot { margin-top: auto; padding-top: .9rem; display: flex; align-items: center; justify-content: space-between; gap: .8rem; flex-wrap: wrap; }
-    .tee-price { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: .04em; color: var(--accent); }
-    .tee .btn-ghost { font-size: .95rem; padding: 9px 20px; }
-    .story { display: grid; grid-template-columns: minmax(0, 460px) 1fr; gap: clamp(2rem, 5vw, 5rem); align-items: center; }
-    .story-img img { display: block; width: 100%; height: auto; border: 1px solid var(--line2); }
-    .story p { font-size: .9rem; line-height: 1.85; color: rgba(237,233,223,.72); max-width: 520px; }
+    .product { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 5rem); align-items: start; }
+    .gallery-main { position: relative; overflow: hidden; background: #1a1a19; border: 1px solid var(--line2); }
+    .gallery-main img { display: block; width: 100%; height: auto; aspect-ratio: 1 / 1; object-fit: cover; transition: opacity .25s; }
+    .gallery-badge { position: absolute; left: 14px; top: 14px; font-size: .56rem; letter-spacing: .2em; text-transform: uppercase; color: #060606; background: var(--accent); padding: .45rem .8rem; }
+    .product.is-live .gallery-badge, .product.is-live .p-soon { display: none; }
+    .thumbs { display: flex; gap: 10px; margin-top: 10px; }
+    .thumb { width: 92px; padding: 0; border: 1px solid var(--line2); background: #1a1a19; opacity: .55; transition: opacity .2s, border-color .2s; }
+    .thumb:hover, .thumb[aria-current="true"] { opacity: 1; }
+    .thumb[aria-current="true"] { border-color: var(--accent); }
+    .thumb img { display: block; width: 100%; height: auto; aspect-ratio: 1 / 1; object-fit: cover; }
+    .p-name { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2rem, 4vw, 3.1rem); line-height: .95; letter-spacing: .01em; }
+    .p-soon { margin: .8rem 0 0; font-size: .66rem; letter-spacing: .22em; text-transform: uppercase; color: var(--accent); }
+    .p-desc { margin-top: 1.5rem; font-size: .86rem; line-height: 1.85; color: rgba(237,233,223,.74); max-width: 520px; }
+    .p-feat { list-style: none; margin: 1.4rem 0 0; padding: 0; max-width: 520px; }
+    .p-feat li { position: relative; padding: .5rem 0 .5rem 1.4rem; border-top: 1px solid var(--line2); font-size: .78rem; letter-spacing: .02em; color: rgba(237,233,223,.82); }
+    .p-feat li:last-child { border-bottom: 1px solid var(--line2); }
+    .p-feat li::before { content: ''; position: absolute; left: 0; top: 50%; width: 7px; height: 7px; margin-top: -3px; border-radius: 50%; background: var(--accent); opacity: .8; }
+    .p-comp { margin-top: .9rem; font-size: .7rem; letter-spacing: .06em; color: rgba(237,233,223,.58); }
+    .p-facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; margin-top: 1.6rem; max-width: 520px; background: var(--line); border: 1px solid var(--line); }
+    .p-fact { background: var(--bg); padding: 1rem 1.1rem; }
+    .p-fact span { display: block; font-size: .54rem; letter-spacing: .2em; text-transform: uppercase; color: rgba(237,233,223,.5); }
+    .p-fact strong { display: block; margin-top: .35rem; font-family: 'Bebas Neue', sans-serif; font-weight: 400; font-size: 1.35rem; letter-spacing: .04em; color: var(--text, #ede9df); }
+    .tee-foot { margin-top: 1.8rem; display: flex; align-items: center; gap: 1.2rem; flex-wrap: wrap; }
+    .tee-price { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: .04em; color: var(--accent); }
     .infos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); }
     .info { background: var(--bg); padding: 1.8rem 1.5rem 2rem; }
     .info h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.7rem; letter-spacing: .02em; margin-bottom: .6rem; }
     .info p { font-size: .78rem; line-height: 1.8; color: rgba(237,233,223,.66); }
-    @media (max-width: 1100px) { .tees { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 900px) { .story, .infos { grid-template-columns: 1fr; } .story-img { max-width: 460px; } }
-    @media (max-width: 560px) { .tees { grid-template-columns: 1fr; } }
+    @media (max-width: 900px) { .product, .infos { grid-template-columns: 1fr; } }
   </style>
   <script type="text/javascript">
     /* Microsoft Clarity: loaded only after the visitor accepts "analytics" cookies in CookieHub. */
@@ -122,7 +127,7 @@
   <a href="/" class="nav-logo"><span class="footer-irreal">irreal</span><em>lab_</em></a>
   <div class="nav-links">
     <a href="/reels.html" data-translate="nav.reels">Reels</a>
-    <a href="/shop.html" class="nav-hide" data-translate="nav.shop">Shop</a>
+    <a href="/shop.html" data-translate="nav.shop">Shop</a>
     <a href="/about.html" class="nav-hide" data-translate="nav.about">About</a>
     <a href="/contact.html" class="nav-hide" data-translate="nav.contact">Contact</a>
     <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="nav-cta" data-translate="nav.instagram">↗ Instagram</a>
@@ -135,15 +140,15 @@
     <div class="wrap">
       <div class="eyebrow" data-translate="shop.kicker">Merch · Drop 01</div>
       <h1 class="page-title"><span data-translate="shop.heroLine1">Wear the</span><span class="l2" data-translate="shop.heroLine2">signal</span></h1>
-      <p class="hero-copy" data-translate="shop.heroCopy">The irreallab wordmark and the signal artwork, printed on cotton tees. A small drop, made on demand.</p>
+      <p class="hero-copy" data-translate="shop.heroCopy">The IRREAL LAB_ logo on a white oversized tee, printed on demand. Drop 01 is coming soon.</p>
       <div class="hero-actions">
         <a href="/contact.html" class="cta-btn" data-translate="shop.ctaNotify">Get notified ↗</a>
         <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="btn-ghost" data-translate="shop.ctaFollow">Follow @irreallab</a>
       </div>
       <div class="chips">
         <span data-translate="shop.chip1">Drop 01 · coming soon</span>
-        <span data-translate="shop.chip2">Wordmark + signal artwork</span>
-        <span data-translate="shop.chip3">Unisex tees</span>
+        <span data-translate="shop.chip2">Unisex oversized</span>
+        <span data-translate="shop.chip3">All sizes</span>
       </div>
     </div>
   </section>
@@ -151,51 +156,36 @@
   <section class="section" id="drop">
     <div class="wrap">
       <div class="eyebrow" data-translate="shop.dropKicker">The drop</div>
-      <h2 class="section-title" data-translate="shop.dropTitle">Four tees. One signal.</h2>
-      <div class="tees">
-      <article class="tee" data-id="wordmark-black">
-        <div class="tee-img"><img src="/images/merch/tee-wordmark-black.jpg" alt="Wordmark tee in black with IRREALLAB_ on the chest" width="900" height="990" loading="lazy"><span class="tee-badge" data-translate="shop.soon">Coming soon</span></div>
-        <div class="tee-body">
-          <h3 data-translate="shop.p1Name">Wordmark tee — black</h3>
-          <p data-translate="shop.p1Desc">IRREALLAB_ on the chest, in cream and lime.</p>
-          <div class="tee-foot"><span class="tee-price" hidden></span><a class="btn-ghost tee-cta" href="/contact.html" data-translate="shop.notify">Notify me ↗</a></div>
+      <div class="product" id="tee" data-id="oversized-white">
+        <div class="gallery">
+          <div class="gallery-main">
+            <img id="mainPic" src="/images/merch/tee-oversized-white-robot.jpg" alt="IRREAL LAB_ white oversized tee worn by a robot" width="1200" height="1200">
+            <span class="gallery-badge" data-translate="shop.soon">Coming soon</span>
+          </div>
+          <div class="thumbs">
+            <button type="button" class="thumb" aria-current="true" aria-label="Worn by the robot" data-src="/images/merch/tee-oversized-white-robot.jpg" data-alt="IRREAL LAB_ white oversized tee worn by a robot"><img src="/images/merch/tee-oversized-white-robot.jpg" alt="" width="1200" height="1200" loading="lazy"></button>
+            <button type="button" class="thumb" aria-current="false" aria-label="Front view" data-src="/images/merch/tee-oversized-white-flat.jpg" data-alt="Front of the white oversized tee with the IRREAL LAB_ logo in black and yellow"><img src="/images/merch/tee-oversized-white-flat.jpg" alt="" width="1200" height="1200" loading="lazy"></button>
+          </div>
         </div>
-      </article>
-      <article class="tee" data-id="wordmark-white">
-        <div class="tee-img"><img src="/images/merch/tee-wordmark-white.jpg" alt="Off-white tee with the black IRREALLAB_ wordmark" width="900" height="990" loading="lazy"><span class="tee-badge" data-translate="shop.soon">Coming soon</span></div>
-        <div class="tee-body">
-          <h3 data-translate="shop.p2Name">Wordmark tee — off-white</h3>
-          <p data-translate="shop.p2Desc">The wordmark in black, with the lime cursor.</p>
-          <div class="tee-foot"><span class="tee-price" hidden></span><a class="btn-ghost tee-cta" href="/contact.html" data-translate="shop.notify">Notify me ↗</a></div>
+        <div class="p-info">
+          <h2 class="p-name" data-translate="shop.pName">IRREAL LAB_ — White Unisex Oversized T-Shirt</h2>
+          <p class="p-soon" data-translate="shop.soon">Coming soon</p>
+          <p class="p-desc" data-translate="shop.pDesc">Wear your creative side with the signature IRREAL LAB_ logo in black and vibrant yellow. A bold graphic design on a white oversized T-shirt, made for a relaxed, everyday look.</p>
+          <p class="p-desc" style="margin-top:.9rem" data-translate="shop.pDesc2">The SOL’S Legacy 03996 features a ribbed crew neck, dropped shoulders and a tubular oversized cut.</p>
+          <ul class="p-feat">
+            <li data-translate="shop.f1">Unisex oversized fit</li>
+            <li data-translate="shop.f2">Ribbed round neck</li>
+            <li data-translate="shop.f3">Dropped shoulders</li>
+            <li data-translate="shop.f4">Tubular construction</li>
+            <li data-translate="shop.f5">IRREAL LAB_ logo printed on the front</li>
+          </ul>
+          <p class="p-comp" data-translate="shop.comp">Composition: 50% recycled cotton and 50% cotton.</p>
+          <div class="p-facts">
+            <div class="p-fact"><span data-translate="shop.factSizes">Sizes</span><strong data-translate="shop.factSizesV">All sizes</strong></div>
+            <div class="p-fact"><span data-translate="shop.factFit">Fit</span><strong data-translate="shop.factFitV">Unisex oversized</strong></div>
+          </div>
+          <div class="tee-foot"><span class="tee-price" hidden></span><a class="cta-btn tee-cta" href="/contact.html" data-translate="shop.notify">Notify me ↗</a></div>
         </div>
-      </article>
-      <article class="tee" data-id="signal-black">
-        <div class="tee-img"><img src="/images/merch/tee-signal-black.jpg" alt="Black tee with the signal flow-field artwork and a small wordmark" width="900" height="990" loading="lazy"><span class="tee-badge" data-translate="shop.soon">Coming soon</span></div>
-        <div class="tee-body">
-          <h3 data-translate="shop.p3Name">Signal tee — black</h3>
-          <p data-translate="shop.p3Desc">The homepage flow field on the chest, with a small wordmark.</p>
-          <div class="tee-foot"><span class="tee-price" hidden></span><a class="btn-ghost tee-cta" href="/contact.html" data-translate="shop.notify">Notify me ↗</a></div>
-        </div>
-      </article>
-      <article class="tee" data-id="stacked-black">
-        <div class="tee-img"><img src="/images/merch/tee-stacked-back-black.jpg" alt="Back of a black tee with a large stacked IRREAL LAB_ wordmark" width="900" height="990" loading="lazy"><span class="tee-badge" data-translate="shop.soon">Coming soon</span></div>
-        <div class="tee-body">
-          <h3 data-translate="shop.p4Name">Stacked tee — black</h3>
-          <p data-translate="shop.p4Desc">A large stacked IRREAL / LAB_ across the back.</p>
-          <div class="tee-foot"><span class="tee-price" hidden></span><a class="btn-ghost tee-cta" href="/contact.html" data-translate="shop.notify">Notify me ↗</a></div>
-        </div>
-      </article>
-      </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="wrap story">
-      <div class="story-img"><img src="/images/merch/irreallab-signal-art.jpg" alt="The signal artwork: light trails bent by two vortices" width="800" height="800" loading="lazy"></div>
-      <div>
-        <div class="eyebrow" data-translate="shop.storyKicker">Behind the print</div>
-        <h2 class="section-title" data-translate="shop.storyTitle">Drawn by the same code as the homepage</h2>
-        <p data-translate="shop.storyText">The signal artwork is a snapshot of the flow field that runs behind the title on the homepage: hundreds of light trails bent by two invisible vortices.</p>
       </div>
     </div>
   </section>
@@ -205,7 +195,7 @@
       <div class="eyebrow" data-translate="shop.infoKicker">The details</div>
       <div class="infos">
         <div class="info"><h3 data-translate="shop.info1T">Made on demand</h3><p data-translate="shop.info1P">Each tee is printed when it is ordered: no stock, no minimum.</p></div>
-        <div class="info"><h3 data-translate="shop.info2T">Unisex cut</h3><p data-translate="shop.info2P">Sizes S to XXL, to be confirmed at launch.</p></div>
+        <div class="info"><h3 data-translate="shop.info2T">Unisex oversized cut</h3><p data-translate="shop.info2P">A relaxed, boxy fit, available in all sizes.</p></div>
         <div class="info"><h3 data-translate="shop.info3T">Questions?</h3><p data-translate="shop.info3P">Write to us from the contact page and we will answer.</p></div>
       </div>
     </div>
@@ -214,7 +204,7 @@
   <section class="cta-final">
     <div class="wrap">
       <h2 data-translate="shop.ctaHeadline">Want first access?</h2>
-      <p data-translate="shop.ctaText">Tell us which tee you want and we will let you know when the drop opens.</p>
+      <p data-translate="shop.ctaText">Leave us a message and we will let you know when Drop 01 opens.</p>
       <div class="hero-actions">
         <a href="/contact.html" class="cta-btn" data-translate="shop.ctaStart">Notify me ↗</a>
         <a href="https://www.instagram.com/irreallab/" target="_blank" rel="noopener" class="btn-ghost">@irreallab</a>
@@ -245,15 +235,12 @@
 <div class="ir-cursor-trail" aria-hidden="true"></div>
 
 <script>
-// When a tee goes on sale, paste its store link (Printful, Stripe payment link, Shopify...) and a price here.
-// Cards with a url switch from "Coming soon / Notify me" to "Buy" automatically.
+// When the tee goes on sale, paste its Shopify product link and the price here.
+// The card then switches from "Coming soon / Notify me" to "Buy" automatically.
 var SHOP = {
-  'wordmark-black': { url: '', price: '' },
-  'wordmark-white': { url: '', price: '' },
-  'signal-black':   { url: '', price: '' },
-  'stacked-black':  { url: '', price: '' }
+  'oversized-white': { url: '', price: '' }
 };
-document.querySelectorAll('.tee').forEach(function (card) {
+document.querySelectorAll('.product').forEach(function (card) {
   var p = SHOP[card.dataset.id];
   if (!p || !p.url) return;
   var cta = card.querySelector('.tee-cta');
@@ -262,6 +249,17 @@ document.querySelectorAll('.tee').forEach(function (card) {
   if (p.price) { var pr = card.querySelector('.tee-price'); pr.textContent = p.price; pr.hidden = false; }
   card.classList.add('is-live');
 });
+// Gallery: thumbnails swap the main picture.
+(function () {
+  var main = document.getElementById('mainPic');
+  var thumbs = document.querySelectorAll('.thumb');
+  thumbs.forEach(function (t) {
+    t.addEventListener('click', function () {
+      main.src = t.dataset.src; main.alt = t.dataset.alt;
+      thumbs.forEach(function (o) { o.setAttribute('aria-current', o === t ? 'true' : 'false'); });
+    });
+  });
+})();
 </script>
 <script src="/animations2.js?v=77428177" defer></script>
 <script src="/language-switcher.js?v=403272fd"></script>
