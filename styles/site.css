@@ -288,6 +288,14 @@ footer { display: flex; align-items: center; justify-content: space-between; pad
   body.ir-cursor-hover .ir-cursor { width: 20px; height: 20px; }
   body.ir-cursor-hover .ir-cursor-trail { width: 58px; height: 58px; border-color: rgba(212,240,58,.75); background: rgba(212,240,58,.06); }
   body.ir-cursor-hidden .ir-cursor, body.ir-cursor-hidden .ir-cursor-trail { opacity: 0; }
+
+  /* CookieHub (banner, settings, re-open icon) is a third-party layer that paints above our
+     custom cursor (same z-index, added later), so it must keep the normal system pointer. */
+  body.ir-cursor-active :is(.ch2, .ch2-container, [class^="ch2-"], [class*=" ch2-"]),
+  body.ir-cursor-active :is(.ch2, .ch2-container, [class^="ch2-"], [class*=" ch2-"]) * { cursor: auto !important; }
+  body.ir-cursor-active :is(.ch2, .ch2-container) :is(button, a, [role="button"], [role="tab"], [role="switch"], label, summary, input, select, .ch2-btn, .ch2-switch, .ch2-switch *, .ch2-open-settings-btn, .ch2-open-settings-btn *) { cursor: pointer !important; }
+  /* no ghost dot/trail underneath the banner while the system pointer is shown */
+  body:has(.ch2-container:hover) .ir-cursor, body:has(.ch2-container:hover) .ir-cursor-trail { opacity: 0 !important; }
 }
 @media (hover: none), (pointer: coarse) {
   .ir-cursor, .ir-cursor-trail { display: none !important; }

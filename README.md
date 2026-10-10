@@ -199,7 +199,10 @@ on Railway. `server.js` serves the static files, rewrites extensionless URLs
 - **i18n:** English (default), French, Romanian — `translations/*.json`, wired via
   `language-switcher.js` (`data-translate="key.path"` on any element, including
   `<title>` and `<meta>` tags)
-- **Analytics:** Microsoft Clarity. Cookie consent is handled by CookieHub.
+- **Analytics:** Google Analytics 4 (`G-628Q19EM44`) and Microsoft Clarity (`wr62xdtgob`). Cookie consent is handled by CookieHub:
+  GA4 uses Consent Mode (everything `denied` until accepted); Clarity is only loaded after the visitor accepts the
+  *analytics* category (`window.irreallabLoadClarity()` called from CookieHub's `onAllow`). Both snippets live in the
+  `<head>` of every page and in `lib/site.js` (template of the reel pages) — change them in both places.
 
 ### Audio
 
