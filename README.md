@@ -204,6 +204,25 @@ on Railway. `server.js` serves the static files, rewrites extensionless URLs
   *analytics* category (`window.irreallabLoadClarity()` called from CookieHub's `onAllow`). Both snippets live in the
   `<head>` of every page and in `lib/site.js` (template of the reel pages) — change them in both places.
 
+### Instagram statistics (admin → Statistics)
+
+The admin panel's **Statistics** tab shows Instagram followers, views, likes, comments, shares, saves, reach and
+average watch time (totals, evolution curve and one row per reel, next to the site's own hearts).
+
+- **Source:** the official *Instagram API with Instagram Login* (`lib/instagram.js`). The account must be a
+  Professional (Creator/Business) account.
+- **Setup:** create an app on developers.facebook.com → Instagram → *API setup with Instagram login* → add the
+  account as a tester → *Generate token* (`instagram_business_basic`, `instagram_business_manage_insights`) → set
+  `INSTAGRAM_ACCESS_TOKEN` in Railway and redeploy. Without it the tab shows the setup steps and nothing breaks.
+- **Sync:** 20 s after boot, then every 6 h, plus the **Refresh** button (limited to 1/min). Latest snapshot and one
+  point per day (history, 400 days) are stored in `$DATA_DIR/instagram-stats.json`.
+- **Token:** long-lived tokens last 60 days; the server renews them (after 30 days) and keeps the renewed token in
+  `$DATA_DIR/instagram-token.json`. If you paste a new `INSTAGRAM_ACCESS_TOKEN`, it takes over automatically.
+- **Reel matching:** by the Instagram link stored on each reel (`url`, edit it in the admin if it is only the profile
+  link); fallback: the reel title found in exactly one post caption. Unmatched posts are listed separately.
+- **API:** `GET /api/instagram-stats`, `POST /api/instagram-stats/refresh` (both admin-only).
+- **Optional env:** `INSTAGRAM_API_VERSION` (default `v23.0`).
+
 ### Audio
 
 - Homepage background track: `audio/carbune-cobza.mp3` (looped, toggled by the visible

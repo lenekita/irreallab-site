@@ -7,6 +7,7 @@ const crypto = require('crypto');
 const site = require('./lib/site');
 const media = require('./lib/media');
 const store = require('./lib/reels-store');
+const instagram = require('./lib/instagram');
 const { DATA_DIR, MEDIA_DIR, TMP_DIR } = store;
 
 const app = express();
@@ -189,6 +190,65 @@ app.get('/api/likes-report', requireAdmin, (req, res) => {
   res.set('Cache-Control', 'no-store');
   res.json({ total: reels.reduce((n, r) => n + r.likes, 0), reels });
 });
+
+// ---------------------------------------------------------------------------
+// Instagram statistics (admin only). Data comes from lib/instagram.js, which
+// syncs with the official Instagram API and caches the result on the volume.
+// ---------------------------------------------------------------------------
+function instagramReport(error) {
+  const snap = instagram.snapshot();
+  const base = { configured: instagram.isConfigured(), error: error ? instagram.friendlyError(error) : '' };
+  if (!snap) return { ...base, synced: false };
+
+  // Join Instagram posts to the site's reels through the Instagram link stored on each reel.
+  const byCode = new Map(snap.media.filter(m => m.shortcode).map(m => [m.shortcode, m]));
+  const used = new Set();
+  const list = store.getAll().filter(r => !r.hidden);
+  const matched = new Map(); // slug -> instagram media
+  list.forEach(r => {                       // 1) exact: reel link stored on the site reel
+    const code = instagram.shortcodeOf(r.url);
+    const ig = code ? byCode.get(code) : null;
+    if (ig) { matched.set(r.slug, ig); used.add(ig.id); }
+  });
+  const norm = s => String(s || '').toLowerCase().normalize('NFKD').replace(/[^a-z0-9]+/g, ' ').trim();
+  list.forEach(r => {                       // 2) fallback: the reel's title appears in exactly one unused caption
+    if (matched.has(r.slug)) return;
+    const t = norm(r.title);
+    if (t.length < 5) return;
+    const hits = snap.media.filter(m => !used.has(m.id) && (' ' + norm(m.caption) + ' ').includes(' ' + t + ' '));
+    if (hits.length === 1) { matched.set(r.slug, hits[0]); used.add(hits[0].id); }
+  });
+  const reels = list.map(r => ({
+    slug: r.slug, title: r.title, posted_at: r.posted_at || null, site_likes: likeCounts[r.slug] || 0,
+    instagram: matched.get(r.slug) || null, linked_by: matched.has(r.slug) ? (instagram.shortcodeOf(r.url) ? 'link' : 'title') : null,
+  }));
+  const unmatched = snap.media.filter(m => !used.has(m.id));
+  return { ...base, synced: true, fetched_at: snap.fetched_at, account: snap.account, totals: snap.totals, reels, unmatched, history: snap.history || [] };
+}
+
+app.get('/api/instagram-stats', requireAdmin, (req, res) => {
+  res.set('Cache-Control', 'no-store');
+  res.json(instagramReport());
+});
+
+app.post('/api/instagram-stats/refresh', requireAdmin, async (req, res) => {
+  res.set('Cache-Control', 'no-store');
+  if (!instagram.isConfigured()) return res.status(400).json({ ...instagramReport(), error: instagram.friendlyError({ code: 'not_configured' }) });
+  try {
+    await instagram.sync({ manual: true });
+    res.json(instagramReport());
+  } catch (e) {
+    const status = e.code === 'rate_limited' ? 429 : 502;
+    res.status(status).json({ ...instagramReport(e), error: instagram.friendlyError(e) });
+  }
+});
+
+// Background sync: shortly after boot, then every 6 hours (keeps the daily history filled).
+if (instagram.isConfigured()) {
+  const run = () => instagram.sync().catch(e => console.warn('[instagram] sync failed:', instagram.friendlyError(e)));
+  setTimeout(run, 20 * 1000).unref();
+  setInterval(run, 6 * 60 * 60 * 1000).unref();
+}
 
 app.post('/api/likes/:slug', express.json({ limit: '1kb' }), (req, res) => {
   const slug = req.params.slug;

@@ -106,6 +106,42 @@
     .total { display: inline-flex; align-items: baseline; gap: .8rem; margin-bottom: 1.4rem; }
     .total b { font-family: 'Bebas Neue', sans-serif; font-size: 3.4rem; color: var(--accent); font-weight: 400; line-height: 1; }
 
+    /* ── instagram stats ── */
+    .sec-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 1rem; flex-wrap: wrap; margin: 0 0 1.2rem; }
+    .sec-head h2 { font-family: 'Bebas Neue', sans-serif; font-weight: 400; font-size: 2.1rem; letter-spacing: .03em; line-height: 1; }
+    .sec-head h2 span { color: var(--accent); }
+    .sync { font-size: .58rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-top: .5rem; }
+    .kpis { display: grid; grid-template-columns: repeat(6, 1fr); gap: .7rem; margin-bottom: 1.6rem; }
+    .kpi { border: 1px solid var(--line); background: rgba(8,8,8,.6); padding: .9rem 1rem; }
+    .kpi small { display: block; font-size: .54rem; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); margin-bottom: .35rem; }
+    .kpi b { display: block; font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; font-weight: 400; color: var(--accent); line-height: 1; }
+    .kpi em { display: block; font-style: normal; font-size: .56rem; letter-spacing: .08em; color: var(--muted); margin-top: .35rem; }
+    .kpi em.up { color: var(--accent); }
+    .chart { border: 1px solid var(--line); background: rgba(8,8,8,.6); padding: 1rem 1.1rem 1.1rem; margin-bottom: 1.8rem; }
+    .chart-top { display: flex; justify-content: space-between; align-items: center; gap: .8rem; flex-wrap: wrap; margin-bottom: .6rem; }
+    .chart svg { width: 100%; height: 170px; display: block; }
+    .chart .axis { font-size: .5rem; letter-spacing: .08em; fill: rgba(237,233,223,.5); font-family: 'Space Mono', monospace; }
+    .chip.on { border-color: var(--accent); color: var(--accent); }
+    .tbl-wrap { overflow-x: auto; border: 1px solid var(--line); margin-bottom: 2.4rem; }
+    table.ig { width: 100%; border-collapse: collapse; min-width: 720px; }
+    table.ig th { font-size: .54rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); font-weight: 400; text-align: right; padding: .75rem .8rem; border-bottom: 1px solid var(--line); white-space: nowrap; }
+    table.ig th:first-child, table.ig td:first-child { text-align: left; }
+    table.ig td { text-align: right; padding: .7rem .8rem; border-bottom: 1px solid var(--line); font-size: .74rem; font-variant-numeric: tabular-nums; }
+    table.ig tr:last-child td { border-bottom: 0; }
+    table.ig td:first-child { font-family: 'Bebas Neue', sans-serif; font-size: 1.15rem; letter-spacing: .03em; }
+    table.ig td:first-child a { color: var(--text); text-decoration: none; }
+    table.ig td:first-child a:hover { color: var(--accent); }
+    table.ig td.na { color: var(--muted); }
+    table.ig td.hl { color: var(--accent); }
+    table.ig .sub { display: block; font-family: 'Space Mono', monospace; font-size: .52rem; letter-spacing: .1em; color: var(--muted); }
+    .setup { border: 1px solid rgba(212,240,58,.35); background: rgba(212,240,58,.04); padding: 1.3rem 1.4rem; margin-bottom: 2.2rem; }
+    .setup h3 { font-family: 'Bebas Neue', sans-serif; font-weight: 400; font-size: 1.5rem; letter-spacing: .04em; margin-bottom: .6rem; }
+    .setup ol { padding-left: 1.2rem; font-size: .7rem; line-height: 1.9; color: rgba(237,233,223,.8); }
+    .setup code { color: var(--accent); }
+    .divider { border: 0; border-top: 1px solid var(--line); margin: 2.4rem 0 2rem; }
+    @media (max-width: 860px) { .kpis { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 520px) { .kpis { grid-template-columns: repeat(2, 1fr); } }
+
     dialog { background: #0b0b0b; color: var(--text); border: 1px solid rgba(212,240,58,.3); padding: 0; width: min(560px, calc(100% - 2rem)); max-height: 92vh; overflow: auto; margin: auto; }
     dialog::backdrop { background: rgba(0,0,0,.78); backdrop-filter: blur(4px); }
     dialog form { padding: 2rem; }
@@ -220,8 +256,27 @@
 
     <!-- Stats -->
     <section id="view-stats" hidden>
-      <h1>Likes <span>statistics</span></h1>
-      <p class="lead">The ranking refreshes every time you open this tab.</p>
+      <h1>Your <span>statistics</span></h1>
+      <p class="lead">Instagram numbers are synchronised automatically every 6 hours; use Refresh for an immediate update. Site hearts come from irreallab.fr visitors.</p>
+
+      <div class="sec-head">
+        <div><h2>Insta<span>gram</span></h2><div class="sync" id="igSync"></div></div>
+        <button class="btn ghost small" id="igRefresh" type="button">Refresh</button>
+      </div>
+      <div id="igMsg" class="msg err" hidden></div>
+      <div id="igSetup" class="setup" hidden></div>
+      <div id="igBody" hidden>
+        <div class="kpis" id="igKpis"></div>
+        <div class="chart">
+          <div class="chart-top"><span class="count" id="igChartTitle">Evolution</span><div class="filters" id="igMetrics"></div></div>
+          <div id="igChart"></div>
+        </div>
+        <div class="tbl-wrap"><table class="ig" id="igTable"></table></div>
+        <div id="igOther"></div>
+      </div>
+
+      <hr class="divider">
+      <div class="sec-head"><div><h2>Site <span>hearts</span></h2></div></div>
       <div class="total"><b id="statTotal">0</b><span class="count" id="statSub"></span></div>
       <div id="statList"></div>
     </section>
@@ -462,7 +517,97 @@
   });
 
   /* ── stats ── */
+  const fmt = n => (n == null ? '–' : Number(n).toLocaleString('en-US'));
+  let igData = null, igMetric = 'views';
+  const IG_METRICS = [['views', 'Views'], ['likes', 'Likes'], ['comments', 'Comments'], ['followers', 'Followers']];
+
+  function igPointValue(h, m) { return m === 'followers' ? h.followers : (h.totals ? h.totals[m] : null); }
+  function igDelta(d, m) {
+    const h = (d.history || []).filter(p => igPointValue(p, m) != null);
+    if (h.length < 2) return '';
+    const last = h[h.length - 1];
+    const target = new Date(last.date).getTime() - 7 * 86400000;
+    const ref = [...h].reverse().find(p => new Date(p.date).getTime() <= target) || h[0];
+    if (ref === last) return '';
+    const diff = igPointValue(last, m) - igPointValue(ref, m);
+    const days = Math.round((new Date(last.date) - new Date(ref.date)) / 86400000);
+    return `<em class="${diff > 0 ? 'up' : ''}">${diff > 0 ? '+' : ''}${fmt(diff)} · ${days}d</em>`;
+  }
+
+  function renderIgChart() {
+    const d = igData, box = $('igChart');
+    $('igMetrics').innerHTML = IG_METRICS.map(([k, l]) => `<button type="button" class="chip${k === igMetric ? ' on' : ''}" data-m="${k}">${l}</button>`).join('');
+    $('igMetrics').querySelectorAll('.chip').forEach(b => b.addEventListener('click', () => { igMetric = b.dataset.m; renderIgChart(); }));
+    const pts = (d.history || []).map(h => ({ date: h.date, v: igPointValue(h, igMetric) })).filter(p => p.v != null);
+    if (pts.length < 2) { box.innerHTML = '<div class="empty" style="padding:2rem 1rem">The evolution curve fills in day by day — one point is recorded per day, so it appears from tomorrow.</div>'; return; }
+    const W = 600, H = 170, pl = 8, pr = 8, pt = 14, pb = 26;
+    const vs = pts.map(p => p.v), lo = Math.min(...vs), hi = Math.max(...vs), span = (hi - lo) || 1;
+    const x = i => pl + (W - pl - pr) * (pts.length === 1 ? 0 : i / (pts.length - 1));
+    const y = v => pt + (H - pt - pb) * (1 - (v - lo) / span);
+    const line = pts.map((p, i) => `${x(i).toFixed(1)},${y(p.v).toFixed(1)}`).join(' ');
+    const area = `${x(0)},${H - pb} ${line} ${x(pts.length - 1)},${H - pb}`;
+    box.innerHTML = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="${igMetric} over time">
+      <polygon points="${area}" fill="rgba(212,240,58,.1)"></polygon>
+      <polyline points="${line}" fill="none" stroke="#d4f03a" stroke-width="2" vector-effect="non-scaling-stroke"></polyline>
+      ${pts.map((p, i) => `<circle cx="${x(i)}" cy="${y(p.v)}" r="2.6" fill="#d4f03a"><title>${p.date}: ${fmt(p.v)}</title></circle>`).join('')}
+      <text class="axis" x="${pl}" y="${H - 8}">${pts[0].date}</text>
+      <text class="axis" x="${W - pr}" y="${H - 8}" text-anchor="end">${pts[pts.length - 1].date}</text>
+      <text class="axis" x="${W - pr}" y="10" text-anchor="end">max ${fmt(hi)}</text></svg>`;
+  }
+
+  function igRow(title, link, ig, extra, siteLikes) {
+    const c = v => v == null ? '<td class="na">–</td>' : `<td>${fmt(v)}</td>`;
+    if (!ig) return `<tr><td>${link ? `<a href="${link}" target="_blank" rel="noopener">${esc(title)}</a>` : esc(title)}<span class="sub">no Instagram post found — add its reel link in Edit</span></td><td class="na">–</td><td class="na">–</td><td class="na">–</td><td class="na">–</td><td class="na">–</td><td class="na">–</td><td class="na">–</td><td>${fmt(siteLikes)}</td></tr>`;
+    const watch = ig.avg_watch_seconds != null ? ig.avg_watch_seconds + 's' : '–';
+    const date = ig.posted_at ? ig.posted_at.slice(0, 10) : '';
+    return `<tr><td>${link ? `<a href="${link}" target="_blank" rel="noopener">${esc(title)}</a>` : `<a href="${esc(ig.permalink)}" target="_blank" rel="noopener">${esc(title)}</a>`}<span class="sub">${esc(date)}${extra ? ' · ' + esc(extra) : ''}</span></td>
+      <td class="hl">${fmt(ig.views)}</td>${c(ig.likes)}${c(ig.comments)}${c(ig.shares)}${c(ig.saves)}${c(ig.reach)}<td>${watch}</td><td>${siteLikes == null ? '–' : fmt(siteLikes)}</td></tr>`;
+  }
+
+  function renderInstagram(d) {
+    igData = d;
+    const msg = $('igMsg'), setup = $('igSetup'), body = $('igBody');
+    msg.hidden = !d.error || !d.configured && !d.error; msg.textContent = d.error || '';
+    $('igRefresh').hidden = !d.configured;
+    if (!d.configured) {
+      setup.hidden = false; body.hidden = true; msg.hidden = true;
+      $('igSync').textContent = 'Not connected';
+      setup.innerHTML = `<h3>Connect your Instagram account</h3><ol>
+        <li>Make sure <b>@irreallab</b> is a <b>Professional</b> account (Creator or Business) — free, in Instagram: Settings → Account type.</li>
+        <li>On <code>developers.facebook.com</code> create an app, add the product <b>Instagram</b> → <b>API setup with Instagram login</b>, and add your account as a tester.</li>
+        <li>Click <b>Generate token</b> for your account (permissions: <code>instagram_business_basic</code> and <code>instagram_business_manage_insights</code>).</li>
+        <li>In Railway, add the variable <code>INSTAGRAM_ACCESS_TOKEN</code> with that token and redeploy. The server renews it automatically.</li></ol>`;
+      return;
+    }
+    setup.hidden = true;
+    if (!d.synced) { body.hidden = true; $('igSync').textContent = 'Waiting for the first synchronisation…'; return; }
+    body.hidden = false;
+    const a = d.account || {}, t = d.totals || {};
+    $('igSync').textContent = `@${a.username || ''} · last sync ${new Date(d.fetched_at).toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' })}`;
+    const kpi = (l, v, key) => `<div class="kpi"><small>${l}</small><b>${fmt(v)}</b>${key ? igDelta(d, key) : ''}</div>`;
+    $('igKpis').innerHTML = kpi('Followers', a.followers, 'followers') + kpi('Views', t.views, 'views') + kpi('Likes', t.likes, 'likes') + kpi('Comments', t.comments, 'comments') + kpi('Shares', t.shares) + kpi('Saves', t.saves);
+    renderIgChart();
+    const reels = [...d.reels].sort((p, q) => ((q.instagram && q.instagram.views) || -1) - ((p.instagram && p.instagram.views) || -1));
+    $('igTable').innerHTML = `<thead><tr><th>Reel</th><th>Views</th><th>Likes</th><th>Comments</th><th>Shares</th><th>Saves</th><th>Reach</th><th>Avg watch</th><th>Site ♥</th></tr></thead><tbody>${
+      reels.map(r => igRow(r.title, '/reel/' + encodeURIComponent(r.slug) + '.html', r.instagram, r.linked_by === 'title' ? 'matched by title' : '', r.site_likes)).join('')}</tbody>`;
+    const other = d.unmatched || [];
+    $('igOther').innerHTML = other.length ? `<div class="sec-head"><div><h2 style="font-size:1.5rem">Other Instagram <span>posts</span></h2><div class="sync">Not linked to a reel of the site</div></div></div><div class="tbl-wrap"><table class="ig"><thead><tr><th>Post</th><th>Views</th><th>Likes</th><th>Comments</th><th>Shares</th><th>Saves</th><th>Reach</th><th>Avg watch</th><th>Site ♥</th></tr></thead><tbody>${
+      other.map(m => igRow(m.caption ? m.caption.slice(0, 50) : (m.type || 'Post'), '', m, m.type, null)).join('')}</tbody></table></div>` : '';
+  }
+
+  async function loadInstagram() {
+    try { renderInstagram(await api('/api/instagram-stats')); }
+    catch (e) { if (e.message !== 'unauthenticated') { $('igMsg').hidden = false; $('igMsg').textContent = e.message; } }
+  }
+  $('igRefresh').addEventListener('click', async () => {
+    const b = $('igRefresh'); b.disabled = true; b.textContent = 'Syncing…';
+    try { renderInstagram(await api('/api/instagram-stats/refresh', { method: 'POST' })); toast('Instagram statistics updated'); }
+    catch (e) { if (e.message !== 'unauthenticated') { $('igMsg').hidden = false; $('igMsg').textContent = e.message; toast(e.message, true); } }
+    finally { b.disabled = false; b.textContent = 'Refresh'; }
+  });
+
   async function loadStats() {
+    loadInstagram();
     try {
       const d = await api('/api/likes-report');
       const max = Math.max(1, ...d.reels.map(r => r.likes));
