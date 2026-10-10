@@ -223,7 +223,14 @@ function instagramReport(error) {
     instagram: matched.get(r.slug) || null, linked_by: matched.has(r.slug) ? (instagram.shortcodeOf(r.url) ? 'link' : 'title') : null,
   }));
   const unmatched = snap.media.filter(m => !used.has(m.id));
-  return { ...base, synced: true, fetched_at: snap.fetched_at, insights_at: snap.insights_at || null, account: snap.account, totals: snap.totals, reels, unmatched, history: snap.history || [] };
+
+  // Titles for the "last hour" recap: the site's reel title when matched, else the Instagram caption.
+  const titleById = new Map();
+  list.forEach(r => { const ig = matched.get(r.slug); if (ig) titleById.set(ig.id, { title: r.title, link: '/reel/' + r.slug + '.html' }); });
+  snap.media.forEach(m => { if (!titleById.has(m.id)) titleById.set(m.id, { title: (m.caption || m.type || 'Post').split('\n')[0].slice(0, 60) || 'Post', link: m.permalink }); });
+  const recap = instagram.lastHourRecap();
+  if (recap.ready) recap.posts = recap.posts.map(p => ({ ...p, ...(titleById.get(p.id) || { title: 'Post', link: '' }) }));
+  return { ...base, synced: true, fetched_at: snap.fetched_at, insights_at: snap.insights_at || null, hourly: instagram.hourlySeries(), recap, account: snap.account, totals: snap.totals, reels, unmatched, history: snap.history || [] };
 }
 
 app.get('/api/instagram-stats', requireAdmin, (req, res) => {

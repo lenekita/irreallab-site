@@ -222,6 +222,11 @@ average watch time (totals, evolution curve and one row per reel, next to the si
     while the Statistics tab is open. Instagram itself delays views/reach by minutes to hours and has no push
     notification for likes or views, so this is as close to "live" as the official API allows.
   Latest snapshot and one point per day (history, 400 days) are stored in `$DATA_DIR/instagram-stats.json`.
+- **Hourly graph + last-hour recap:** every sync also records a point in `$DATA_DIR/instagram-points.json`
+  (all points kept for 26 h with per-post numbers, then one point per hour for 14 days). The Statistics tab shows a
+  *Last hour* text recap (follower/view/like/comment/share/save gains, then the posts that moved, by title) and a
+  chart switchable between Hourly/Daily and Gain/Total for each metric. Instagram does not expose past hours, so the
+  hourly history starts at the first sync after deployment. Views/reach only change on the hourly *full* sync.
 - **Token:** long-lived tokens last 60 days; the server renews them (after 30 days) and keeps the renewed token in
   `$DATA_DIR/instagram-token.json`. If you paste a new `INSTAGRAM_ACCESS_TOKEN`, it takes over automatically.
 - **Reel matching:** by the Instagram link stored on each reel (`url`, edit it in the admin if it is only the profile

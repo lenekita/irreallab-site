@@ -138,6 +138,20 @@
     .setup h3 { font-family: 'Bebas Neue', sans-serif; font-weight: 400; font-size: 1.5rem; letter-spacing: .04em; margin-bottom: .6rem; }
     .setup ol { padding-left: 1.2rem; font-size: .7rem; line-height: 1.9; color: rgba(237,233,223,.8); }
     .setup code { color: var(--accent); }
+    .recap { border: 1px solid rgba(212,240,58,.35); background: rgba(212,240,58,.04); padding: 1.1rem 1.3rem 1.2rem; margin-bottom: 1.6rem; }
+    .recap-h { display: flex; justify-content: space-between; align-items: baseline; gap: .8rem; flex-wrap: wrap; margin-bottom: .7rem; }
+    .recap-h b { font-family: 'Bebas Neue', sans-serif; font-weight: 400; font-size: 1.5rem; letter-spacing: .04em; color: var(--accent); }
+    .recap-h span { font-size: .58rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+    .recap-sum { font-size: .8rem; line-height: 1.9; color: var(--text); margin-bottom: .8rem; }
+    .recap-sum em { font-style: normal; color: var(--accent); }
+    .recap ul { list-style: none; border-top: 1px solid var(--line); }
+    .recap li { padding: .55rem 0; border-bottom: 1px solid var(--line); font-size: .72rem; line-height: 1.6; color: rgba(237,233,223,.8); }
+    .recap li a { color: var(--text); text-decoration: none; font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: .03em; }
+    .recap li a:hover { color: var(--accent); }
+    .recap .nochange { color: var(--muted); font-size: .72rem; }
+    .neg { color: #ff9a9a; }
+    .chart-ctl { display: flex; gap: .8rem 1.2rem; flex-wrap: wrap; align-items: center; }
+    .chart-ctl .filters + .filters { padding-left: 1.2rem; border-left: 1px solid var(--line); }
     .divider { border: 0; border-top: 1px solid var(--line); margin: 2.4rem 0 2rem; }
     @media (max-width: 860px) { .kpis { grid-template-columns: repeat(3, 1fr); } }
     @media (max-width: 520px) { .kpis { grid-template-columns: repeat(2, 1fr); } }
@@ -267,8 +281,9 @@
       <div id="igSetup" class="setup" hidden></div>
       <div id="igBody" hidden>
         <div class="kpis" id="igKpis"></div>
+        <div class="recap" id="igRecap"></div>
         <div class="chart">
-          <div class="chart-top"><span class="count" id="igChartTitle">Evolution</span><div class="filters" id="igMetrics"></div></div>
+          <div class="chart-top"><span class="count" id="igChartTitle">Evolution</span><div class="chart-ctl"><div class="filters" id="igMetrics"></div><div class="filters" id="igPeriod"></div><div class="filters" id="igMode"></div></div></div>
           <div id="igChart"></div>
         </div>
         <div class="tbl-wrap"><table class="ig" id="igTable"></table></div>
@@ -534,25 +549,95 @@
     return `<em class="${diff > 0 ? 'up' : ''}">${diff > 0 ? '+' : ''}${fmt(diff)} · ${days}d</em>`;
   }
 
+  const IG_KEYS = ['views', 'likes', 'comments', 'shares', 'saves', 'reach'];
+  const IG_METRIC_LIST = [['views', 'Views'], ['likes', 'Likes'], ['comments', 'Comments'], ['shares', 'Shares'], ['saves', 'Saves'], ['followers', 'Followers']];
+  let igPeriod = 'hour', igMode = 'gain';
+  const sgn = n => n == null ? '–' : (n > 0 ? '+' : n < 0 ? '−' : '') + fmt(Math.abs(n));
+  const hhmm = iso => new Date(iso).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+  const dayLabel = iso => new Date(iso).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
+
+  function chartSeries(d) {
+    const key = igMetric;
+    if (igPeriod === 'hour') {
+      const ix = IG_KEYS.indexOf(key);
+      return (d.hourly || []).map(h => ({ label: dayLabel(h.t) + ' ' + hhmm(new Date(new Date(h.t).getTime() - 1000).toISOString()).slice(0, 2) + ':00', v: key === 'followers' ? h.f : (h.tot ? h.tot[ix] : null) })).filter(p => p.v != null).slice(-49);
+    }
+    return (d.history || []).map(h => ({ label: h.date, v: igPointValue(h, key === 'followers' ? 'followers' : key) })).filter(p => p.v != null).slice(-31);
+  }
+
   function renderIgChart() {
     const d = igData, box = $('igChart');
-    $('igMetrics').innerHTML = IG_METRICS.map(([k, l]) => `<button type="button" class="chip${k === igMetric ? ' on' : ''}" data-m="${k}">${l}</button>`).join('');
-    $('igMetrics').querySelectorAll('.chip').forEach(b => b.addEventListener('click', () => { igMetric = b.dataset.m; renderIgChart(); }));
-    const pts = (d.history || []).map(h => ({ date: h.date, v: igPointValue(h, igMetric) })).filter(p => p.v != null);
-    if (pts.length < 2) { box.innerHTML = '<div class="empty" style="padding:2rem 1rem">The evolution curve fills in day by day — one point is recorded per day, so it appears from tomorrow.</div>'; return; }
-    const W = 600, H = 170, pl = 8, pr = 8, pt = 14, pb = 26;
-    const vs = pts.map(p => p.v), lo = Math.min(...vs), hi = Math.max(...vs), span = (hi - lo) || 1;
-    const x = i => pl + (W - pl - pr) * (pts.length === 1 ? 0 : i / (pts.length - 1));
+    const chips = (id, list, cur, set) => {
+      $(id).innerHTML = list.map(([k, l]) => `<button type="button" class="chip${k === cur ? ' on' : ''}" data-k="${k}">${l}</button>`).join('');
+      $(id).querySelectorAll('.chip').forEach(b => b.addEventListener('click', () => { set(b.dataset.k); renderIgChart(); }));
+    };
+    chips('igMetrics', IG_METRIC_LIST, igMetric, v => { igMetric = v; });
+    chips('igPeriod', [['hour', 'Hourly'], ['day', 'Daily']], igPeriod, v => { igPeriod = v; });
+    chips('igMode', [['gain', 'Gain'], ['total', 'Total']], igMode, v => { igMode = v; });
+    const unit = igPeriod === 'hour' ? 'hour' : 'day';
+    $('igChartTitle').textContent = (igMode === 'gain' ? 'Gained per ' + unit : 'Total by ' + unit) + ' · ' + (IG_METRIC_LIST.find(m => m[0] === igMetric) || [0, ''])[1];
+    let pts = chartSeries(d);
+    let vals = pts.map(p => p.v);
+    if (igMode === 'gain') { vals = pts.slice(1).map((p, i) => p.v - pts[i].v); pts = pts.slice(1); }
+    if (vals.length < (igMode === 'gain' ? 1 : 2)) {
+      box.innerHTML = '<div class="empty" style="padding:2rem 1rem">' + (igPeriod === 'hour'
+        ? 'Hourly points are recorded at every synchronisation — the graph starts filling in about an hour after the first sync, then one bar per hour.'
+        : 'The daily curve fills in day by day — one point is recorded per day.') + '</div>';
+      return;
+    }
+    const W = 600, H = 170, pl = 8, pr = 8, pt = 16, pb = 26;
+    const lo = igMode === 'gain' ? Math.min(0, ...vals) : Math.min(...vals), hi = Math.max(igMode === 'gain' ? 0 : -Infinity, ...vals);
+    const span = (hi - lo) || 1;
+    const x = i => pl + (W - pl - pr) * (vals.length === 1 ? .5 : i / (vals.length - 1));
     const y = v => pt + (H - pt - pb) * (1 - (v - lo) / span);
-    const line = pts.map((p, i) => `${x(i).toFixed(1)},${y(p.v).toFixed(1)}`).join(' ');
-    const area = `${x(0)},${H - pb} ${line} ${x(pts.length - 1)},${H - pb}`;
-    box.innerHTML = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="${igMetric} over time">
-      <polygon points="${area}" fill="rgba(212,240,58,.1)"></polygon>
-      <polyline points="${line}" fill="none" stroke="#d4f03a" stroke-width="2" vector-effect="non-scaling-stroke"></polyline>
-      ${pts.map((p, i) => `<circle cx="${x(i)}" cy="${y(p.v)}" r="2.6" fill="#d4f03a"><title>${p.date}: ${fmt(p.v)}</title></circle>`).join('')}
-      <text class="axis" x="${pl}" y="${H - 8}">${pts[0].date}</text>
-      <text class="axis" x="${W - pr}" y="${H - 8}" text-anchor="end">${pts[pts.length - 1].date}</text>
-      <text class="axis" x="${W - pr}" y="10" text-anchor="end">max ${fmt(hi)}</text></svg>`;
+    let body = '';
+    if (igMode === 'gain') {
+      const bw = Math.max(3, (W - pl - pr) / vals.length * .68), zero = y(0);
+      body = vals.map((v, i) => {
+        const cx = pl + (W - pl - pr) * ((i + .5) / vals.length), yy = y(v);
+        return `<rect x="${(cx - bw / 2).toFixed(1)}" y="${Math.min(yy, zero).toFixed(1)}" width="${bw.toFixed(1)}" height="${Math.max(1, Math.abs(zero - yy)).toFixed(1)}" fill="${v < 0 ? '#ff9a9a' : '#d4f03a'}"><title>${esc(pts[i].label)}: ${sgn(v)}</title></rect>`;
+      }).join('') + `<line x1="${pl}" x2="${W - pr}" y1="${zero}" y2="${zero}" stroke="rgba(237,233,223,.25)" stroke-width="1" vector-effect="non-scaling-stroke"></line>`;
+    } else {
+      const line = vals.map((v, i) => `${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
+      body = `<polygon points="${x(0)},${H - pb} ${line} ${x(vals.length - 1)},${H - pb}" fill="rgba(212,240,58,.1)"></polygon>
+        <polyline points="${line}" fill="none" stroke="#d4f03a" stroke-width="2" vector-effect="non-scaling-stroke"></polyline>` +
+        vals.map((v, i) => `<circle cx="${x(i)}" cy="${y(v)}" r="2.4" fill="#d4f03a"><title>${esc(pts[i].label)}: ${fmt(v)}</title></circle>`).join('');
+    }
+    box.innerHTML = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="${esc(igMetric)} ${igMode} per ${unit}">${body}
+      <text class="axis" x="${pl}" y="${H - 8}">${esc(pts[0].label)}</text>
+      <text class="axis" x="${W - pr}" y="${H - 8}" text-anchor="end">${esc(pts[pts.length - 1].label)}</text>
+      <text class="axis" x="${W - pr}" y="10" text-anchor="end">${igMode === 'gain' ? 'max ' + sgn(hi) : 'max ' + fmt(hi)}</text></svg>`;
+  }
+
+  function renderIgRecap(d) {
+    const box = $('igRecap'), r = d.recap;
+    if (!r || !r.ready) {
+      const m = r ? r.collected_minutes : 0;
+      box.innerHTML = `<div class="recap-h"><b>Last hour</b><span>recap in preparation</span></div><p class="recap-sum">The one-hour recap appears once an hour of data has been collected (${m} min so far). Numbers are recorded at every synchronisation.</p>`;
+      return;
+    }
+    const t = r.totals, w = (n, one, many) => `<em>${sgn(n)}</em> ${Math.abs(n) === 1 ? one : many}`;
+    const parts = [];
+    if (r.followers != null) parts.push(w(r.followers, 'follower', 'followers'));
+    if (t.views != null) parts.push(w(t.views, 'view', 'views'));
+    if (t.likes != null) parts.push(w(t.likes, 'like', 'likes'));
+    if (t.comments != null) parts.push(w(t.comments, 'comment', 'comments'));
+    if (t.shares != null) parts.push(w(t.shares, 'share', 'shares'));
+    if (t.saves != null) parts.push(w(t.saves, 'save', 'saves'));
+    const row = p => {
+      const bits = [];
+      if (p.views) bits.push(`<span class="${p.views < 0 ? 'neg' : ''}">${sgn(p.views)} view${Math.abs(p.views) === 1 ? '' : 's'}</span>`);
+      if (p.likes) bits.push(`<span class="${p.likes < 0 ? 'neg' : ''}">${sgn(p.likes)} like${Math.abs(p.likes) === 1 ? '' : 's'}</span>`);
+      if (p.comments) bits.push(`<span class="${p.comments < 0 ? 'neg' : ''}">${sgn(p.comments)} comment${Math.abs(p.comments) === 1 ? '' : 's'}</span>`);
+      if (p.shares) bits.push(`${sgn(p.shares)} share${Math.abs(p.shares) === 1 ? '' : 's'}`);
+      if (p.saves) bits.push(`${sgn(p.saves)} save${Math.abs(p.saves) === 1 ? '' : 's'}`);
+      const name = p.link ? `<a href="${esc(p.link)}" target="_blank" rel="noopener">${esc(p.title)}</a>` : esc(p.title);
+      return `<li>${name}${p.is_new ? ' <span class="tag live">new post</span>' : ''} — ${bits.join(', ') || 'published'}</li>`;
+    };
+    const anything = (r.followers || 0) !== 0 || ['views', 'likes', 'comments', 'shares', 'saves'].some(k => (t[k] || 0) !== 0);
+    box.innerHTML = `<div class="recap-h"><b>Last hour</b><span>${hhmm(r.from)} → ${hhmm(r.to)} · ${r.minutes} min</span></div>
+      <p class="recap-sum">${parts.join(' · ')}</p>
+      ${r.posts.length ? '<ul>' + r.posts.map(row).join('') + '</ul>' : `<p class="nochange">${anything ? 'The changes come from posts that are not in the recent list.' : 'Nothing changed on the posts during this hour.'}</p>`}`;
   }
 
   function igRow(title, link, ig, extra, siteLikes) {
@@ -611,6 +696,7 @@
     paintIgStamp();
     const kpi = (l, v, key) => `<div class="kpi"><small>${l}</small><b>${fmt(v)}</b>${key ? igDelta(d, key) : ''}</div>`;
     $('igKpis').innerHTML = kpi('Followers', a.followers, 'followers') + kpi('Views', t.views, 'views') + kpi('Likes', t.likes, 'likes') + kpi('Comments', t.comments, 'comments') + kpi('Shares', t.shares) + kpi('Saves', t.saves);
+    renderIgRecap(d);
     renderIgChart();
     const reels = [...d.reels].sort((p, q) => ((q.instagram && q.instagram.views) || -1) - ((p.instagram && p.instagram.views) || -1));
     $('igTable').innerHTML = `<thead><tr><th>Reel</th><th>Views</th><th>Likes</th><th>Comments</th><th>Shares</th><th>Saves</th><th>Reach</th><th>Avg watch</th><th>Site ♥</th></tr></thead><tbody>${
