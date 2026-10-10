@@ -223,7 +223,7 @@ function instagramReport(error) {
     instagram: matched.get(r.slug) || null, linked_by: matched.has(r.slug) ? (instagram.shortcodeOf(r.url) ? 'link' : 'title') : null,
   }));
   const unmatched = snap.media.filter(m => !used.has(m.id));
-  return { ...base, synced: true, fetched_at: snap.fetched_at, account: snap.account, totals: snap.totals, reels, unmatched, history: snap.history || [] };
+  return { ...base, synced: true, fetched_at: snap.fetched_at, insights_at: snap.insights_at || null, account: snap.account, totals: snap.totals, reels, unmatched, history: snap.history || [] };
 }
 
 app.get('/api/instagram-stats', requireAdmin, (req, res) => {
@@ -243,11 +243,16 @@ app.post('/api/instagram-stats/refresh', requireAdmin, async (req, res) => {
   }
 });
 
-// Background sync: shortly after boot, then every 6 hours (keeps the daily history filled).
+// Background sync (only when Instagram is connected):
+//   - light every INSTAGRAM_LIGHT_MINUTES (default 10, min 5): followers, likes, comments;
+//   - full  every INSTAGRAM_SYNC_MINUTES  (default 60, min 15): + views, reach, saves, shares.
 if (instagram.isConfigured()) {
-  const run = () => instagram.sync().catch(e => console.warn('[instagram] sync failed:', instagram.friendlyError(e)));
-  setTimeout(run, 20 * 1000).unref();
-  setInterval(run, 6 * 60 * 60 * 1000).unref();
+  const FULL_MIN = Math.max(15, Number(process.env.INSTAGRAM_SYNC_MINUTES) || 60);
+  const LIGHT_MIN = Math.max(5, Number(process.env.INSTAGRAM_LIGHT_MINUTES) || 10);
+  const run = light => () => instagram.sync({ light }).catch(e => console.warn('[instagram] sync failed:', instagram.friendlyError(e)));
+  setTimeout(run(false), 20 * 1000).unref();
+  setInterval(run(false), FULL_MIN * 60 * 1000).unref();
+  setInterval(run(true), LIGHT_MIN * 60 * 1000).unref();
 }
 
 app.post('/api/likes/:slug', express.json({ limit: '1kb' }), (req, res) => {

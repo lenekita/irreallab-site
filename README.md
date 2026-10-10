@@ -214,8 +214,14 @@ average watch time (totals, evolution curve and one row per reel, next to the si
 - **Setup:** create an app on developers.facebook.com → Instagram → *API setup with Instagram login* → add the
   account as a tester → *Generate token* (`instagram_business_basic`, `instagram_business_manage_insights`) → set
   `INSTAGRAM_ACCESS_TOKEN` in Railway and redeploy. Without it the tab shows the setup steps and nothing breaks.
-- **Sync:** 20 s after boot, then every 6 h, plus the **Refresh** button (limited to 1/min). Latest snapshot and one
-  point per day (history, 400 days) are stored in `$DATA_DIR/instagram-stats.json`.
+- **Sync (two tiers, to stay far below Instagram's rate limit):**
+  - *light*, every 10 min (`INSTAGRAM_LIGHT_MINUTES`, min 5): followers, likes, comments — about 3 API calls;
+  - *full*, every 60 min (`INSTAGRAM_SYNC_MINUTES`, min 15): also views, reach, saves, shares, watch time for posts
+    younger than 30 days (older posts at most once a day; brand-new posts are always fetched immediately).
+  - plus the **Refresh** button (full sync, limited to 1/min). The admin page re-reads the cached numbers every minute
+    while the Statistics tab is open. Instagram itself delays views/reach by minutes to hours and has no push
+    notification for likes or views, so this is as close to "live" as the official API allows.
+  Latest snapshot and one point per day (history, 400 days) are stored in `$DATA_DIR/instagram-stats.json`.
 - **Token:** long-lived tokens last 60 days; the server renews them (after 30 days) and keeps the renewed token in
   `$DATA_DIR/instagram-token.json`. If you paste a new `INSTAGRAM_ACCESS_TOKEN`, it takes over automatically.
 - **Reel matching:** by the Instagram link stored on each reel (`url`, edit it in the admin if it is only the profile

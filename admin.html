@@ -257,7 +257,7 @@
     <!-- Stats -->
     <section id="view-stats" hidden>
       <h1>Your <span>statistics</span></h1>
-      <p class="lead">Instagram numbers are synchronised automatically every 6 hours; use Refresh for an immediate update. Site hearts come from irreallab.fr visitors.</p>
+      <p class="lead">Instagram numbers update by themselves: followers, likes and comments every 10 minutes, views, reach, saves and shares every hour. This page refreshes on its own while it is open. Site hearts come from irreallab.fr visitors.</p>
 
       <div class="sec-head">
         <div><h2>Insta<span>gram</span></h2><div class="sync" id="igSync"></div></div>
@@ -361,7 +361,7 @@
     document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.view === name));
     ['reels', 'new', 'stats'].forEach(v => { $('view-' + v).hidden = v !== name; });
     if (name === 'reels') loadReels();
-    if (name === 'stats') loadStats();
+    if (name === 'stats') loadStats(); else stopIgPolling();
     window.scrollTo(0, 0);
   }
   document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => switchView(t.dataset.view)));
@@ -564,6 +564,30 @@
       <td class="hl">${fmt(ig.views)}</td>${c(ig.likes)}${c(ig.comments)}${c(ig.shares)}${c(ig.saves)}${c(ig.reach)}<td>${watch}</td><td>${siteLikes == null ? '–' : fmt(siteLikes)}</td></tr>`;
   }
 
+  /* live feel: the page re-reads the (cached) numbers every minute while the tab is open */
+  let igStamp = null, igPoll = null, igTick = null;
+  function ago(iso) {
+    if (!iso) return 'never';
+    const m = Math.max(0, Math.round((Date.now() - new Date(iso).getTime()) / 60000));
+    if (m < 1) return 'just now';
+    if (m < 60) return m + ' min ago';
+    const h = Math.floor(m / 60);
+    return h < 48 ? h + ' h ago' : Math.floor(h / 24) + ' d ago';
+  }
+  function paintIgStamp() {
+    if (!igStamp) return;
+    $('igSync').innerHTML = `<span style="color:var(--accent)">● live</span> · @${esc(igStamp.user)} · likes &amp; comments ${esc(ago(igStamp.fetched))} · views &amp; reach ${esc(ago(igStamp.insights || igStamp.fetched))}`;
+  }
+  function stopIgPolling() { clearInterval(igPoll); clearInterval(igTick); igPoll = igTick = null; }
+  function startIgPolling() {
+    stopIgPolling();
+    igTick = setInterval(paintIgStamp, 15000);
+    igPoll = setInterval(async () => {
+      if (document.hidden || $('view-stats').hidden || !igData || !igData.configured) return;
+      try { const d = await api('/api/instagram-stats'); if (d.synced) renderInstagram(d); } catch (e) { /* keep showing the last numbers */ }
+    }, 60000);
+  }
+
   function renderInstagram(d) {
     igData = d;
     const msg = $('igMsg'), setup = $('igSetup'), body = $('igBody');
@@ -583,7 +607,8 @@
     if (!d.synced) { body.hidden = true; $('igSync').textContent = 'Waiting for the first synchronisation…'; return; }
     body.hidden = false;
     const a = d.account || {}, t = d.totals || {};
-    $('igSync').textContent = `@${a.username || ''} · last sync ${new Date(d.fetched_at).toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' })}`;
+    igStamp = { user: a.username || '', fetched: d.fetched_at, insights: d.insights_at };
+    paintIgStamp();
     const kpi = (l, v, key) => `<div class="kpi"><small>${l}</small><b>${fmt(v)}</b>${key ? igDelta(d, key) : ''}</div>`;
     $('igKpis').innerHTML = kpi('Followers', a.followers, 'followers') + kpi('Views', t.views, 'views') + kpi('Likes', t.likes, 'likes') + kpi('Comments', t.comments, 'comments') + kpi('Shares', t.shares) + kpi('Saves', t.saves);
     renderIgChart();
@@ -608,6 +633,7 @@
 
   async function loadStats() {
     loadInstagram();
+    startIgPolling();
     try {
       const d = await api('/api/likes-report');
       const max = Math.max(1, ...d.reels.map(r => r.likes));
