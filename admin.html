@@ -7,7 +7,7 @@
   <meta name="robots" content="noindex, nofollow">
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link rel="icon" type="image/png" sizes="192x192" href="/images/favicon.png">
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles/site.css?v=a48d5478">
   <style>
     body { padding-bottom: 5rem; }
@@ -180,6 +180,88 @@
       .row2 { grid-template-columns: 1fr; }
       input, textarea { font-size: 16px; }
     }
+
+    /* ══ statistics view: cleaner, larger, easier to read ══ */
+    #view-stats { font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif; font-size: 1rem; line-height: 1.6; color: var(--text); --card: rgba(255,255,255,.035); --edge: rgba(237,233,223,.09); }
+    #view-stats h1 { font-size: clamp(2.8rem, 5.5vw, 4rem); margin-bottom: .8rem; }
+    #view-stats .lead { font-family: 'Inter', system-ui, sans-serif; font-size: 1rem; letter-spacing: 0; line-height: 1.7; max-width: 62ch; margin-bottom: 2.6rem; }
+    #view-stats .sec-head { margin-bottom: 1.5rem; }
+    #view-stats .sec-head h2 { font-size: 2.3rem; }
+    #view-stats .sync { font-size: .88rem; letter-spacing: 0; text-transform: none; margin-top: .55rem; color: var(--muted); }
+    #view-stats .sync .live-dot { color: var(--accent); }
+    #view-stats .sync .live-dot::first-letter { animation: pulse 2s ease-in-out infinite; }
+    #view-stats .count { font-size: .9rem; letter-spacing: 0; text-transform: none; color: var(--muted); }
+    #view-stats .btn.small { font-family: 'Inter', system-ui, sans-serif; font-size: .85rem; font-weight: 500; letter-spacing: .02em; text-transform: none; padding: 9px 18px; }
+
+    /* kpis */
+    #view-stats .kpis { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+    #view-stats .kpi { background: var(--card); border: 1px solid var(--edge); padding: 1.15rem 1.25rem 1.1rem; transition: border-color .25s, transform .25s; }
+    #view-stats .kpi:hover { border-color: rgba(212,240,58,.4); transform: translateY(-2px); }
+    #view-stats .kpi small { font-size: .82rem; letter-spacing: 0; text-transform: none; color: var(--muted); margin-bottom: .5rem; }
+    #view-stats .kpi b { font-size: 2.9rem; letter-spacing: .01em; font-variant-numeric: tabular-nums; }
+    #view-stats .kpi em { font-size: .85rem; letter-spacing: 0; margin-top: .55rem; }
+
+    /* last-hour recap */
+    #view-stats .recap { background: var(--card); border: 1px solid var(--edge); border-left: 3px solid var(--accent); padding: 1.4rem 1.6rem; margin-bottom: 1.5rem; }
+    #view-stats .recap-h { margin-bottom: .9rem; }
+    #view-stats .recap-h b { font-size: 1.8rem; }
+    #view-stats .recap-h span { font-size: .85rem; letter-spacing: 0; text-transform: none; }
+    #view-stats .recap-sum { font-size: 1.05rem; line-height: 1.8; margin-bottom: 1rem; }
+    #view-stats .recap li { font-size: .95rem; padding: .75rem 0; }
+    #view-stats .recap li a { font-family: 'Inter', system-ui, sans-serif; font-size: 1rem; font-weight: 600; letter-spacing: 0; }
+    #view-stats .recap .nochange { font-size: .95rem; }
+    #view-stats .tag { font-size: .72rem; letter-spacing: .04em; }
+
+    /* chart */
+    #view-stats .chart { background: var(--card); border: 1px solid var(--edge); padding: 1.3rem 1.5rem 1.2rem; margin-bottom: 1.5rem; }
+    #view-stats .chart-top { margin-bottom: 1rem; gap: 1rem; }
+    #view-stats .chart-top .count { font-size: 1rem; color: var(--text); font-weight: 500; }
+    #view-stats .chart svg { height: 200px; }
+    #view-stats .chip { font-family: 'Inter', system-ui, sans-serif; font-size: .85rem; letter-spacing: 0; padding: 7px 14px; border-color: var(--edge); }
+    #view-stats .chart-ctl { gap: .8rem 1.4rem; }
+    #view-stats .axis-row { display: flex; justify-content: space-between; gap: 1rem; margin-top: .7rem; font-size: .82rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+    #view-stats .axis-row .mx { color: var(--accent); }
+    #view-stats .chart .empty { font-size: .95rem; line-height: 1.7; }
+
+    /* table */
+    #view-stats .tbl-wrap { background: var(--card); border: 1px solid var(--edge); margin-bottom: 3rem; }
+    #view-stats table.ig { min-width: 760px; }
+    #view-stats table.ig th { font-family: 'Inter', system-ui, sans-serif; font-size: .78rem; font-weight: 500; letter-spacing: .02em; text-transform: none; padding: 1rem 1.1rem; background: rgba(255,255,255,.02); }
+    #view-stats table.ig td { font-size: 1rem; padding: 1.05rem 1.1rem; }
+    #view-stats table.ig tbody tr { transition: background .2s; }
+    #view-stats table.ig tbody tr:hover { background: rgba(212,240,58,.045); }
+    #view-stats table.ig td:first-child { font-family: 'Inter', system-ui, sans-serif; font-size: 1.02rem; font-weight: 600; letter-spacing: 0; }
+    #view-stats table.ig .sub { font-family: 'Inter', system-ui, sans-serif; font-size: .8rem; font-weight: 400; letter-spacing: 0; margin-top: .2rem; }
+    #view-stats table.ig td.hl { font-weight: 600; }
+
+    /* setup + messages */
+    #view-stats .setup { background: var(--card); padding: 1.6rem 1.8rem; }
+    #view-stats .setup h3 { font-size: 1.8rem; }
+    #view-stats .setup ol { font-size: .95rem; line-height: 1.9; }
+    #view-stats .msg { font-size: .95rem; }
+
+    /* site hearts */
+    #view-stats .divider { margin: 3.2rem 0 2.6rem; border-color: var(--edge); }
+    #view-stats .total { margin-bottom: 1.6rem; }
+    #view-stats .total b { font-size: 4rem; }
+    #view-stats .stat { grid-template-columns: 2.6rem 1fr auto; gap: 1.2rem; padding: 1.1rem 0; border-color: var(--edge); }
+    #view-stats .stat .n { font-size: .9rem; font-variant-numeric: tabular-nums; }
+    #view-stats .stat a { font-family: 'Inter', system-ui, sans-serif; font-size: 1.05rem; font-weight: 500; letter-spacing: 0; transition: color .2s; }
+    #view-stats .stat a:hover { color: var(--accent); }
+    #view-stats .stat .track { height: 5px; margin-top: .65rem; background: rgba(212,240,58,.08); }
+    #view-stats .stat .fill { transition: width .9s cubic-bezier(.2,.8,.2,1); }
+    #view-stats .stat strong { font-size: 1.9rem; font-variant-numeric: tabular-nums; }
+
+    /* a little motion */
+    @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .25; } }
+    #view-stats.fresh .kpi, #view-stats.fresh .recap, #view-stats.fresh .chart, #view-stats.fresh .tbl-wrap { animation: rise .55s cubic-bezier(.2,.8,.2,1) both; }
+    #view-stats.fresh .kpi:nth-child(2) { animation-delay: .05s; } #view-stats.fresh .kpi:nth-child(3) { animation-delay: .1s; }
+    #view-stats.fresh .kpi:nth-child(4) { animation-delay: .15s; } #view-stats.fresh .kpi:nth-child(5) { animation-delay: .2s; } #view-stats.fresh .kpi:nth-child(6) { animation-delay: .25s; }
+    #view-stats.fresh .recap { animation-delay: .3s; } #view-stats.fresh .chart { animation-delay: .38s; } #view-stats.fresh .tbl-wrap { animation-delay: .46s; }
+    #view-stats .stat { animation: rise .5s cubic-bezier(.2,.8,.2,1) both; animation-delay: calc(var(--i, 0) * 35ms); }
+    @media (prefers-reduced-motion: reduce) { #view-stats * { animation: none !important; transition: none !important; } }
+    @media (max-width: 600px) { #view-stats .kpi b { font-size: 2.3rem; } #view-stats .kpis { grid-template-columns: 1fr 1fr; } #view-stats .chart, #view-stats .recap { padding: 1.1rem; } }
   </style>
 </head>
 <body>
@@ -585,7 +667,7 @@
         : 'The daily curve fills in day by day — one point is recorded per day.') + '</div>';
       return;
     }
-    const W = 600, H = 170, pl = 8, pr = 8, pt = 16, pb = 26;
+    const W = 600, H = 170, pl = 8, pr = 8, pt = 12, pb = 8;
     const lo = igMode === 'gain' ? Math.min(0, ...vals) : Math.min(...vals), hi = Math.max(igMode === 'gain' ? 0 : -Infinity, ...vals);
     const span = (hi - lo) || 1;
     const x = i => pl + (W - pl - pr) * (vals.length === 1 ? .5 : i / (vals.length - 1));
@@ -604,9 +686,23 @@
         vals.map((v, i) => `<circle cx="${x(i)}" cy="${y(v)}" r="2.4" fill="#d4f03a"><title>${esc(pts[i].label)}: ${fmt(v)}</title></circle>`).join('');
     }
     box.innerHTML = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="${esc(igMetric)} ${igMode} per ${unit}">${body}
-      <text class="axis" x="${pl}" y="${H - 8}">${esc(pts[0].label)}</text>
-      <text class="axis" x="${W - pr}" y="${H - 8}" text-anchor="end">${esc(pts[pts.length - 1].label)}</text>
-      <text class="axis" x="${W - pr}" y="10" text-anchor="end">${igMode === 'gain' ? 'max ' + sgn(hi) : 'max ' + fmt(hi)}</text></svg>`;
+    </svg><div class="axis-row"><span>${esc(pts[0].label)}</span><span class="mx">peak ${igMode === 'gain' ? sgn(hi) : fmt(hi)}</span><span>${esc(pts[pts.length - 1].label)}</span></div>`;
+  }
+
+  const kpiPrev = {};
+  function animateKpis() {
+    $('igKpis').querySelectorAll('b[data-v]').forEach((el, i) => {
+      if (el.dataset.v === '') return;
+      const to = Number(el.dataset.v), from = kpiPrev[i] == null ? 0 : kpiPrev[i];
+      kpiPrev[i] = to;
+      if (!isFinite(to) || from === to || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      const t0 = performance.now(), dur = 900;
+      (function step(now) {
+        const p = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+        el.textContent = fmt(Math.round(from + (to - from) * e));
+        if (p < 1) requestAnimationFrame(step);
+      })(t0);
+    });
   }
 
   function renderIgRecap(d) {
@@ -661,7 +757,7 @@
   }
   function paintIgStamp() {
     if (!igStamp) return;
-    $('igSync').innerHTML = `<span style="color:var(--accent)">● live</span> · @${esc(igStamp.user)} · likes &amp; comments ${esc(ago(igStamp.fetched))} · views &amp; reach ${esc(ago(igStamp.insights || igStamp.fetched))}`;
+    $('igSync').innerHTML = `<span class="live-dot">●</span> Live · @${esc(igStamp.user)} · likes &amp; comments updated ${esc(ago(igStamp.fetched))} · views &amp; reach ${esc(ago(igStamp.insights || igStamp.fetched))}`;
   }
   function stopIgPolling() { clearInterval(igPoll); clearInterval(igTick); igPoll = igTick = null; }
   function startIgPolling() {
@@ -694,8 +790,9 @@
     const a = d.account || {}, t = d.totals || {};
     igStamp = { user: a.username || '', fetched: d.fetched_at, insights: d.insights_at };
     paintIgStamp();
-    const kpi = (l, v, key) => `<div class="kpi"><small>${l}</small><b>${fmt(v)}</b>${key ? igDelta(d, key) : ''}</div>`;
+    const kpi = (l, v, key) => `<div class="kpi"><small>${l}</small><b data-v="${v == null ? '' : v}">${fmt(v)}</b>${key ? igDelta(d, key) : ''}</div>`;
     $('igKpis').innerHTML = kpi('Followers', a.followers, 'followers') + kpi('Views', t.views, 'views') + kpi('Likes', t.likes, 'likes') + kpi('Comments', t.comments, 'comments') + kpi('Shares', t.shares) + kpi('Saves', t.saves);
+    animateKpis();
     renderIgRecap(d);
     renderIgChart();
     const reels = [...d.reels].sort((p, q) => ((q.instagram && q.instagram.views) || -1) - ((p.instagram && p.instagram.views) || -1));
@@ -718,6 +815,7 @@
   });
 
   async function loadStats() {
+    const sv = $('view-stats'); sv.classList.add('fresh'); setTimeout(() => sv.classList.remove('fresh'), 1800);
     loadInstagram();
     startIgPolling();
     try {
@@ -725,7 +823,8 @@
       const max = Math.max(1, ...d.reels.map(r => r.likes));
       $('statTotal').textContent = d.total;
       $('statSub').textContent = 'like' + (d.total === 1 ? '' : 's') + ' in total · ' + d.reels.length + ' reels';
-      $('statList').innerHTML = d.reels.map((r, i) => `<div class="stat"><span class="n">${String(i + 1).padStart(2, '0')}</span><div><a href="/reel/${encodeURIComponent(r.slug)}.html" target="_blank" rel="noopener">${esc(r.title)}</a><div class="track"><div class="fill" style="width:${r.likes / max * 100}%"></div></div></div><strong>${r.likes}</strong></div>`).join('');
+      $('statList').innerHTML = d.reels.map((r, i) => `<div class="stat" style="--i:${i}"><span class="n">${String(i + 1).padStart(2, '0')}</span><div><a href="/reel/${encodeURIComponent(r.slug)}.html" target="_blank" rel="noopener">${esc(r.title)}</a><div class="track"><div class="fill" style="width:0" data-w="${r.likes / max * 100}"></div></div></div><strong>${r.likes}</strong></div>`).join('');
+      requestAnimationFrame(() => requestAnimationFrame(() => $('statList').querySelectorAll('.fill').forEach(f => { f.style.width = f.dataset.w + '%'; })));
     } catch (e) { if (e.message !== 'unauthenticated') $('statList').innerHTML = `<div class="msg err">${esc(e.message)}</div>`; }
   }
 
