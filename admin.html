@@ -7,7 +7,7 @@
   <meta name="robots" content="noindex, nofollow">
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link rel="icon" type="image/png" sizes="192x192" href="/images/favicon.png">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles/site.css?v=a48d5478">
   <style>
     body { padding-bottom: 5rem; }
@@ -182,13 +182,13 @@
     }
 
     /* ══ statistics view ══ */
-    #view-stats { font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif; font-size: 1rem; line-height: 1.6; color: var(--text); --card: rgba(255,255,255,.03); --edge: rgba(237,233,223,.09); --pos: #d4f03a; --neg: #ff9a9a; }
+    #view-stats { font-family: 'Montserrat', system-ui, -apple-system, 'Segoe UI', sans-serif; font-size: 1rem; line-height: 1.6; color: var(--text); --card: rgba(255,255,255,.03); --edge: rgba(237,233,223,.09); --pos: #d4f03a; --neg: #ff9a9a; }
     #view-stats h1 { font-size: clamp(2.8rem, 5.5vw, 4rem); margin: 0; }
     .st-top { display: flex; justify-content: space-between; align-items: flex-end; gap: 1rem; flex-wrap: wrap; }
     #view-stats .sync { font-size: .9rem; letter-spacing: 0; text-transform: none; color: var(--muted); margin-top: .6rem; }
     #view-stats .live-dot { color: var(--accent); animation: pulse 2s ease-in-out infinite; }
     .st-note { color: var(--muted); font-size: .92rem; max-width: 70ch; margin: 1rem 0 2rem; }
-    #view-stats .btn.small { font-family: 'Inter', system-ui, sans-serif; font-size: .85rem; font-weight: 500; letter-spacing: .02em; text-transform: none; padding: 9px 18px; }
+    #view-stats .btn.small { font-family: 'Montserrat', system-ui, sans-serif; font-size: .85rem; font-weight: 500; letter-spacing: .02em; text-transform: none; padding: 9px 18px; }
     #view-stats .count { font-size: .9rem; letter-spacing: 0; text-transform: none; color: var(--muted); }
     #view-stats .msg { font-size: .95rem; }
     #view-stats .setup { background: var(--card); padding: 1.6rem 1.8rem; }
@@ -216,7 +216,7 @@
     .chart-sub { font-size: .88rem; color: var(--muted); margin-top: .15rem; }
     .chart-ctl { display: flex; gap: .6rem; flex-wrap: wrap; }
     .seg { display: inline-flex; border: 1px solid var(--edge); background: rgba(0,0,0,.25); padding: 3px; gap: 2px; flex-wrap: wrap; }
-    .seg button { font-family: 'Inter', system-ui, sans-serif; font-size: .82rem; font-weight: 500; color: var(--muted); background: none; border: 0; padding: 6px 12px; cursor: pointer; transition: color .2s, background .2s; }
+    .seg button { font-family: 'Montserrat', system-ui, sans-serif; font-size: .82rem; font-weight: 500; color: var(--muted); background: none; border: 0; padding: 6px 12px; cursor: pointer; transition: color .2s, background .2s; }
     .seg button:hover { color: var(--text); }
     .seg button.on { background: var(--accent); color: #060606; }
     .chart-box { position: relative; height: 340px; }
@@ -233,7 +233,7 @@
     .rc-h span { font-size: .85rem; color: var(--muted); }
     .rc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .7rem; margin-bottom: 1.2rem; }
     .rc-grid div { background: rgba(0,0,0,.25); padding: .7rem .85rem; }
-    .rc-grid b { display: block; font-family: 'Bebas Neue', sans-serif; font-weight: 400; font-size: 1.9rem; line-height: 1.05; font-variant-numeric: tabular-nums; }
+    .rc-grid b { display: block; font-family: 'Montserrat', system-ui, sans-serif; font-weight: 400; font-size: 1.9rem; line-height: 1.05; font-variant-numeric: tabular-nums; }
     .rc-grid b.up { color: var(--pos); } .rc-grid b.down { color: var(--neg); } .rc-grid b.zero { color: var(--muted); }
     .rc-grid small { font-size: .8rem; color: var(--muted); }
     .rc-posts { list-style: none; padding: 0; margin: 0; border-top: 1px solid var(--edge); }
@@ -248,11 +248,11 @@
     #view-stats .sec-head h2 { font-size: 2.2rem; }
     #view-stats .tbl-wrap { background: var(--card); border: 1px solid var(--edge); margin-bottom: 3rem; }
     #view-stats table.ig { min-width: 860px; }
-    #view-stats table.ig th { font-family: 'Inter', system-ui, sans-serif; font-size: .78rem; font-weight: 500; letter-spacing: .02em; text-transform: none; padding: 1rem 1.1rem; background: rgba(255,255,255,.02); }
+    #view-stats table.ig th { font-family: 'Montserrat', system-ui, sans-serif; font-size: .78rem; font-weight: 500; letter-spacing: .02em; text-transform: none; padding: 1rem 1.1rem; background: rgba(255,255,255,.02); }
     #view-stats table.ig td { font-size: 1rem; padding: 1rem 1.1rem; }
     #view-stats table.ig tbody tr:hover { background: rgba(212,240,58,.04); }
-    #view-stats table.ig td:first-child { font-family: 'Inter', system-ui, sans-serif; font-size: 1.02rem; font-weight: 600; letter-spacing: 0; }
-    #view-stats table.ig .sub { font-family: 'Inter', system-ui, sans-serif; font-size: .8rem; font-weight: 400; letter-spacing: 0; margin-top: .15rem; }
+    #view-stats table.ig td:first-child { font-family: 'Montserrat', system-ui, sans-serif; font-size: 1.02rem; font-weight: 600; letter-spacing: 0; }
+    #view-stats table.ig .sub { font-family: 'Montserrat', system-ui, sans-serif; font-size: .8rem; font-weight: 400; letter-spacing: 0; margin-top: .15rem; }
     #view-stats table.ig td.hl { font-weight: 600; min-width: 130px; }
     .vbar { display: block; height: 4px; background: rgba(212,240,58,.1); margin-top: .5rem; }
     .vbar i { display: block; height: 100%; background: var(--accent); }
@@ -263,7 +263,7 @@
     #view-stats .total b { font-size: 4rem; }
     #view-stats .stat { grid-template-columns: 2.6rem 1fr auto; gap: 1.2rem; padding: 1.1rem 0; border-color: var(--edge); }
     #view-stats .stat .n { font-size: .9rem; font-variant-numeric: tabular-nums; }
-    #view-stats .stat a { font-family: 'Inter', system-ui, sans-serif; font-size: 1.05rem; font-weight: 500; letter-spacing: 0; transition: color .2s; }
+    #view-stats .stat a { font-family: 'Montserrat', system-ui, sans-serif; font-size: 1.05rem; font-weight: 500; letter-spacing: 0; transition: color .2s; }
     #view-stats .stat a:hover { color: var(--accent); }
     #view-stats .stat .track { height: 5px; margin-top: .65rem; background: rgba(212,240,58,.08); }
     #view-stats .stat .fill { transition: width .9s cubic-bezier(.2,.8,.2,1); }
@@ -284,6 +284,13 @@
       .chart-box { height: 280px; } .chart-stats { grid-template-columns: 1fr; gap: .7rem; }
       #view-stats .chart, #view-stats .recap { padding: 1.1rem; }
     }
+    #view-stats h1, #view-stats .sec-head h2, #view-stats .setup h3 { font-family: 'Montserrat', system-ui, sans-serif; font-weight: 700; letter-spacing: -.02em; text-transform: none; }
+    #view-stats h1 { font-size: clamp(2.2rem, 4.4vw, 3.1rem); line-height: 1.05; }
+    #view-stats .sec-head h2 { font-size: 1.7rem; line-height: 1.15; }
+    #view-stats .kpi b, #view-stats .total b, #view-stats .stat strong, .rc-grid b { font-weight: 700; letter-spacing: -.02em; }
+    #view-stats .kpi b { font-size: 2.4rem; }
+    #view-stats .total b { font-size: 3.2rem; }
+    .rc-grid b { font-size: 1.6rem; }
   </style>
 </head>
 <body>
@@ -706,7 +713,7 @@
       const { ctx, chartArea } = chart, meta = chart.getDatasetMeta(0);
       ctx.save();
       ctx.setLineDash([3, 4]); ctx.strokeStyle = 'rgba(237,233,223,.22)'; ctx.lineWidth = 1;
-      ctx.fillStyle = 'rgba(237,233,223,.55)'; ctx.font = '600 11px Inter, system-ui, sans-serif'; ctx.textAlign = 'left';
+      ctx.fillStyle = 'rgba(237,233,223,.55)'; ctx.font = '600 11px Montserrat, system-ui, sans-serif'; ctx.textAlign = 'left';
       opts.hours.forEach((h, i) => {
         if (h.getHours() !== 0 || !meta.data[i]) return;
         const x = meta.data[i].x;
@@ -781,8 +788,8 @@
           dayLines: { hours: hourly && isBar !== undefined ? times : null },
           tooltip: {
             backgroundColor: '#0b0b0b', borderColor: 'rgba(212,240,58,.5)', borderWidth: 1, padding: 12, displayColors: false,
-            titleColor: '#ede9df', titleFont: { family: 'Inter, system-ui, sans-serif', size: 13, weight: '600' },
-            bodyColor: '#d4f03a', bodyFont: { family: 'Inter, system-ui, sans-serif', size: 14, weight: '600' },
+            titleColor: '#ede9df', titleFont: { family: 'Montserrat, system-ui, sans-serif', size: 13, weight: '600' },
+            bodyColor: '#d4f03a', bodyFont: { family: 'Montserrat, system-ui, sans-serif', size: 14, weight: '600' },
             callbacks: {
               title: items => tips[items[0].dataIndex],
               label: item => isBar ? sgn(item.parsed.y) + ' ' + metricName().toLowerCase() : fmt(item.parsed.y) + ' ' + metricName().toLowerCase()
@@ -793,7 +800,7 @@
           x: {
             grid: { display: false }, border: { color: 'rgba(237,233,223,.18)' },
             ticks: {
-              autoSkip: false, maxRotation: 0, color: 'rgba(237,233,223,.7)', font: { family: 'Inter, system-ui, sans-serif', size: 12 },
+              autoSkip: false, maxRotation: 0, color: 'rgba(237,233,223,.7)', font: { family: 'Montserrat, system-ui, sans-serif', size: 12 },
               callback: (_v, i) => {
                 if (hourly && times[i].getHours() === 0) return labels[i];
                 if (hourly && [-2, -1, 1, 2].some(o => times[i + o] && times[i + o].getHours() === 0)) return '';
@@ -804,7 +811,7 @@
           y: {
             beginAtZero: isBar, grace: isBar ? '8%' : '12%',
             grid: { color: 'rgba(237,233,223,.07)' }, border: { display: false },
-            ticks: { color: 'rgba(237,233,223,.7)', font: { family: 'Inter, system-ui, sans-serif', size: 12 }, maxTicksLimit: 6, callback: v => (v < 0 ? '−' : '') + compact(Math.abs(v)) }
+            ticks: { color: 'rgba(237,233,223,.7)', font: { family: 'Montserrat, system-ui, sans-serif', size: 12 }, maxTicksLimit: 6, callback: v => (v < 0 ? '−' : '') + compact(Math.abs(v)) }
           }
         }
       }
