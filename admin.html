@@ -181,68 +181,85 @@
       input, textarea { font-size: 16px; }
     }
 
-    /* ══ statistics view: cleaner, larger, easier to read ══ */
-    #view-stats { font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif; font-size: 1rem; line-height: 1.6; color: var(--text); --card: rgba(255,255,255,.035); --edge: rgba(237,233,223,.09); }
-    #view-stats h1 { font-size: clamp(2.8rem, 5.5vw, 4rem); margin-bottom: .8rem; }
-    #view-stats .lead { font-family: 'Inter', system-ui, sans-serif; font-size: 1rem; letter-spacing: 0; line-height: 1.7; max-width: 62ch; margin-bottom: 2.6rem; }
-    #view-stats .sec-head { margin-bottom: 1.5rem; }
-    #view-stats .sec-head h2 { font-size: 2.3rem; }
-    #view-stats .sync { font-size: .88rem; letter-spacing: 0; text-transform: none; margin-top: .55rem; color: var(--muted); }
-    #view-stats .sync .live-dot { color: var(--accent); }
-    #view-stats .sync .live-dot::first-letter { animation: pulse 2s ease-in-out infinite; }
-    #view-stats .count { font-size: .9rem; letter-spacing: 0; text-transform: none; color: var(--muted); }
+    /* ══ statistics view ══ */
+    #view-stats { font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif; font-size: 1rem; line-height: 1.6; color: var(--text); --card: rgba(255,255,255,.03); --edge: rgba(237,233,223,.09); --pos: #d4f03a; --neg: #ff9a9a; }
+    #view-stats h1 { font-size: clamp(2.8rem, 5.5vw, 4rem); margin: 0; }
+    .st-top { display: flex; justify-content: space-between; align-items: flex-end; gap: 1rem; flex-wrap: wrap; }
+    #view-stats .sync { font-size: .9rem; letter-spacing: 0; text-transform: none; color: var(--muted); margin-top: .6rem; }
+    #view-stats .live-dot { color: var(--accent); animation: pulse 2s ease-in-out infinite; }
+    .st-note { color: var(--muted); font-size: .92rem; max-width: 70ch; margin: 1rem 0 2rem; }
     #view-stats .btn.small { font-family: 'Inter', system-ui, sans-serif; font-size: .85rem; font-weight: 500; letter-spacing: .02em; text-transform: none; padding: 9px 18px; }
-
-    /* kpis */
-    #view-stats .kpis { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
-    #view-stats .kpi { background: var(--card); border: 1px solid var(--edge); padding: 1.15rem 1.25rem 1.1rem; transition: border-color .25s, transform .25s; }
-    #view-stats .kpi:hover { border-color: rgba(212,240,58,.4); transform: translateY(-2px); }
-    #view-stats .kpi small { font-size: .82rem; letter-spacing: 0; text-transform: none; color: var(--muted); margin-bottom: .5rem; }
-    #view-stats .kpi b { font-size: 2.9rem; letter-spacing: .01em; font-variant-numeric: tabular-nums; }
-    #view-stats .kpi em { font-size: .85rem; letter-spacing: 0; margin-top: .55rem; }
-
-    /* last-hour recap */
-    #view-stats .recap { background: var(--card); border: 1px solid var(--edge); border-left: 3px solid var(--accent); padding: 1.4rem 1.6rem; margin-bottom: 1.5rem; }
-    #view-stats .recap-h { margin-bottom: .9rem; }
-    #view-stats .recap-h b { font-size: 1.8rem; }
-    #view-stats .recap-h span { font-size: .85rem; letter-spacing: 0; text-transform: none; }
-    #view-stats .recap-sum { font-size: 1.05rem; line-height: 1.8; margin-bottom: 1rem; }
-    #view-stats .recap li { font-size: .95rem; padding: .75rem 0; }
-    #view-stats .recap li a { font-family: 'Inter', system-ui, sans-serif; font-size: 1rem; font-weight: 600; letter-spacing: 0; }
-    #view-stats .recap .nochange { font-size: .95rem; }
-    #view-stats .tag { font-size: .72rem; letter-spacing: .04em; }
-
-    /* chart */
-    #view-stats .chart { background: var(--card); border: 1px solid var(--edge); padding: 1.3rem 1.5rem 1.2rem; margin-bottom: 1.5rem; }
-    #view-stats .chart-top { margin-bottom: 1rem; gap: 1rem; }
-    #view-stats .chart-top .count { font-size: 1rem; color: var(--text); font-weight: 500; }
-    #view-stats .chart svg { height: 200px; }
-    #view-stats .chip { font-family: 'Inter', system-ui, sans-serif; font-size: .85rem; letter-spacing: 0; padding: 7px 14px; border-color: var(--edge); }
-    #view-stats .chart-ctl { gap: .8rem 1.4rem; }
-    #view-stats .axis-row { display: flex; justify-content: space-between; gap: 1rem; margin-top: .7rem; font-size: .82rem; color: var(--muted); font-variant-numeric: tabular-nums; }
-    #view-stats .axis-row .mx { color: var(--accent); }
-    #view-stats .chart .empty { font-size: .95rem; line-height: 1.7; }
-
-    /* table */
-    #view-stats .tbl-wrap { background: var(--card); border: 1px solid var(--edge); margin-bottom: 3rem; }
-    #view-stats table.ig { min-width: 760px; }
-    #view-stats table.ig th { font-family: 'Inter', system-ui, sans-serif; font-size: .78rem; font-weight: 500; letter-spacing: .02em; text-transform: none; padding: 1rem 1.1rem; background: rgba(255,255,255,.02); }
-    #view-stats table.ig td { font-size: 1rem; padding: 1.05rem 1.1rem; }
-    #view-stats table.ig tbody tr { transition: background .2s; }
-    #view-stats table.ig tbody tr:hover { background: rgba(212,240,58,.045); }
-    #view-stats table.ig td:first-child { font-family: 'Inter', system-ui, sans-serif; font-size: 1.02rem; font-weight: 600; letter-spacing: 0; }
-    #view-stats table.ig .sub { font-family: 'Inter', system-ui, sans-serif; font-size: .8rem; font-weight: 400; letter-spacing: 0; margin-top: .2rem; }
-    #view-stats table.ig td.hl { font-weight: 600; }
-
-    /* setup + messages */
+    #view-stats .count { font-size: .9rem; letter-spacing: 0; text-transform: none; color: var(--muted); }
+    #view-stats .msg { font-size: .95rem; }
     #view-stats .setup { background: var(--card); padding: 1.6rem 1.8rem; }
     #view-stats .setup h3 { font-size: 1.8rem; }
     #view-stats .setup ol { font-size: .95rem; line-height: 1.9; }
-    #view-stats .msg { font-size: .95rem; }
+
+    /* kpi cards with sparkline */
+    #view-stats .kpis { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 1rem; margin-bottom: 1.2rem; }
+    @media (max-width: 1100px) { #view-stats .kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+    #view-stats .kpi { position: relative; background: var(--card); border: 1px solid var(--edge); padding: 1.1rem 1.2rem 0; overflow: hidden; transition: border-color .25s, transform .25s; }
+    #view-stats .kpi:hover { border-color: rgba(212,240,58,.45); transform: translateY(-2px); }
+    #view-stats .kpi small { display: block; font-size: .85rem; letter-spacing: 0; text-transform: none; color: var(--muted); margin-bottom: .35rem; }
+    #view-stats .kpi b { display: block; font-size: 2.9rem; line-height: 1; letter-spacing: .01em; font-variant-numeric: tabular-nums; font-weight: 400; }
+    #view-stats .kpi .dl { display: inline-block; margin-top: .65rem; font-size: .8rem; font-weight: 500; padding: 2px 9px; border-radius: 99px; background: rgba(255,255,255,.06); color: var(--muted); font-variant-numeric: tabular-nums; }
+    #view-stats .kpi .dl.up { background: rgba(212,240,58,.14); color: var(--pos); }
+    #view-stats .kpi .dl.down { background: rgba(255,154,154,.14); color: var(--neg); }
+    #view-stats .kpi svg { display: block; width: calc(100% + 2.4rem); margin: .5rem -1.2rem 0; height: 38px; }
+    #view-stats .kpi .nospark { height: 38px; }
+
+    /* chart + recap */
+    .st-grid { display: grid; grid-template-columns: minmax(0, 1.9fr) minmax(280px, 1fr); gap: 1rem; margin-bottom: 3rem; align-items: stretch; }
+    #view-stats .chart { background: var(--card); border: 1px solid var(--edge); padding: 1.4rem 1.5rem 1.2rem; margin: 0; min-width: 0; }
+    .chart-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem 1.5rem; flex-wrap: wrap; margin-bottom: 1.2rem; }
+    .chart-title { font-size: 1.15rem; font-weight: 600; }
+    .chart-sub { font-size: .88rem; color: var(--muted); margin-top: .15rem; }
+    .chart-ctl { display: flex; gap: .6rem; flex-wrap: wrap; }
+    .seg { display: inline-flex; border: 1px solid var(--edge); background: rgba(0,0,0,.25); padding: 3px; gap: 2px; flex-wrap: wrap; }
+    .seg button { font-family: 'Inter', system-ui, sans-serif; font-size: .82rem; font-weight: 500; color: var(--muted); background: none; border: 0; padding: 6px 12px; cursor: pointer; transition: color .2s, background .2s; }
+    .seg button:hover { color: var(--text); }
+    .seg button.on { background: var(--accent); color: #060606; }
+    .chart-box { position: relative; height: 340px; }
+    .chart-box canvas { width: 100% !important; }
+    .chart-box .empty { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; padding: 1rem 2rem; font-size: .95rem; line-height: 1.7; color: var(--muted); }
+    .chart-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 1.2rem; padding-top: 1.1rem; border-top: 1px solid var(--edge); }
+    .chart-stats small { display: block; font-size: .8rem; color: var(--muted); }
+    .chart-stats b { display: block; font-size: 1.35rem; font-weight: 600; font-variant-numeric: tabular-nums; margin-top: .1rem; }
+    .chart-stats span { font-size: .8rem; color: var(--muted); }
+
+    #view-stats .recap { background: var(--card); border: 1px solid var(--edge); border-left: 3px solid var(--accent); padding: 1.4rem 1.5rem; margin: 0; }
+    .rc-h { display: flex; justify-content: space-between; align-items: baseline; gap: .6rem; flex-wrap: wrap; margin-bottom: 1.1rem; }
+    .rc-h b { font-size: 1.15rem; font-weight: 600; }
+    .rc-h span { font-size: .85rem; color: var(--muted); }
+    .rc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .7rem; margin-bottom: 1.2rem; }
+    .rc-grid div { background: rgba(0,0,0,.25); padding: .7rem .85rem; }
+    .rc-grid b { display: block; font-family: 'Bebas Neue', sans-serif; font-weight: 400; font-size: 1.9rem; line-height: 1.05; font-variant-numeric: tabular-nums; }
+    .rc-grid b.up { color: var(--pos); } .rc-grid b.down { color: var(--neg); } .rc-grid b.zero { color: var(--muted); }
+    .rc-grid small { font-size: .8rem; color: var(--muted); }
+    .rc-posts { list-style: none; padding: 0; margin: 0; border-top: 1px solid var(--edge); }
+    .rc-posts li { padding: .7rem 0; border-bottom: 1px solid var(--edge); font-size: .92rem; line-height: 1.5; color: rgba(237,233,223,.8); }
+    .rc-posts li a { color: var(--text); font-weight: 600; text-decoration: none; }
+    .rc-posts li a:hover { color: var(--accent); }
+    .rc-empty { font-size: .95rem; color: var(--muted); line-height: 1.7; }
+    #view-stats .tag { font-size: .7rem; letter-spacing: .04em; }
+
+    /* ranking table */
+    #view-stats .sec-head { margin: 0 0 1.2rem; }
+    #view-stats .sec-head h2 { font-size: 2.2rem; }
+    #view-stats .tbl-wrap { background: var(--card); border: 1px solid var(--edge); margin-bottom: 3rem; }
+    #view-stats table.ig { min-width: 860px; }
+    #view-stats table.ig th { font-family: 'Inter', system-ui, sans-serif; font-size: .78rem; font-weight: 500; letter-spacing: .02em; text-transform: none; padding: 1rem 1.1rem; background: rgba(255,255,255,.02); }
+    #view-stats table.ig td { font-size: 1rem; padding: 1rem 1.1rem; }
+    #view-stats table.ig tbody tr:hover { background: rgba(212,240,58,.04); }
+    #view-stats table.ig td:first-child { font-family: 'Inter', system-ui, sans-serif; font-size: 1.02rem; font-weight: 600; letter-spacing: 0; }
+    #view-stats table.ig .sub { font-family: 'Inter', system-ui, sans-serif; font-size: .8rem; font-weight: 400; letter-spacing: 0; margin-top: .15rem; }
+    #view-stats table.ig td.hl { font-weight: 600; min-width: 130px; }
+    .vbar { display: block; height: 4px; background: rgba(212,240,58,.1); margin-top: .5rem; }
+    .vbar i { display: block; height: 100%; background: var(--accent); }
 
     /* site hearts */
-    #view-stats .divider { margin: 3.2rem 0 2.6rem; border-color: var(--edge); }
-    #view-stats .total { margin-bottom: 1.6rem; }
+    #view-stats .divider { margin: 3rem 0 2.6rem; border-color: var(--edge); }
+    #view-stats .total { margin-bottom: 1.4rem; }
     #view-stats .total b { font-size: 4rem; }
     #view-stats .stat { grid-template-columns: 2.6rem 1fr auto; gap: 1.2rem; padding: 1.1rem 0; border-color: var(--edge); }
     #view-stats .stat .n { font-size: .9rem; font-variant-numeric: tabular-nums; }
@@ -252,16 +269,21 @@
     #view-stats .stat .fill { transition: width .9s cubic-bezier(.2,.8,.2,1); }
     #view-stats .stat strong { font-size: 1.9rem; font-variant-numeric: tabular-nums; }
 
-    /* a little motion */
+    /* motion */
     @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
     @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .25; } }
-    #view-stats.fresh .kpi, #view-stats.fresh .recap, #view-stats.fresh .chart, #view-stats.fresh .tbl-wrap { animation: rise .55s cubic-bezier(.2,.8,.2,1) both; }
+    #view-stats.fresh .kpi, #view-stats.fresh .chart, #view-stats.fresh .recap, #view-stats.fresh .tbl-wrap { animation: rise .55s cubic-bezier(.2,.8,.2,1) both; }
     #view-stats.fresh .kpi:nth-child(2) { animation-delay: .05s; } #view-stats.fresh .kpi:nth-child(3) { animation-delay: .1s; }
     #view-stats.fresh .kpi:nth-child(4) { animation-delay: .15s; } #view-stats.fresh .kpi:nth-child(5) { animation-delay: .2s; } #view-stats.fresh .kpi:nth-child(6) { animation-delay: .25s; }
-    #view-stats.fresh .recap { animation-delay: .3s; } #view-stats.fresh .chart { animation-delay: .38s; } #view-stats.fresh .tbl-wrap { animation-delay: .46s; }
+    #view-stats.fresh .chart { animation-delay: .3s; } #view-stats.fresh .recap { animation-delay: .38s; } #view-stats.fresh .tbl-wrap { animation-delay: .46s; }
     #view-stats .stat { animation: rise .5s cubic-bezier(.2,.8,.2,1) both; animation-delay: calc(var(--i, 0) * 35ms); }
     @media (prefers-reduced-motion: reduce) { #view-stats * { animation: none !important; transition: none !important; } }
-    @media (max-width: 600px) { #view-stats .kpi b { font-size: 2.3rem; } #view-stats .kpis { grid-template-columns: 1fr 1fr; } #view-stats .chart, #view-stats .recap { padding: 1.1rem; } }
+    @media (max-width: 1000px) { .st-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 600px) {
+      #view-stats .kpis { grid-template-columns: 1fr 1fr; } #view-stats .kpi b { font-size: 2.3rem; }
+      .chart-box { height: 280px; } .chart-stats { grid-template-columns: 1fr; gap: .7rem; }
+      #view-stats .chart, #view-stats .recap { padding: 1.1rem; }
+    }
   </style>
 </head>
 <body>
@@ -352,28 +374,50 @@
 
     <!-- Stats -->
     <section id="view-stats" hidden>
-      <h1>Your <span>statistics</span></h1>
-      <p class="lead">Instagram numbers update by themselves: followers, likes and comments every 10 minutes, views, reach, saves and shares every hour. This page refreshes on its own while it is open. Site hearts come from irreallab.fr visitors.</p>
-
-      <div class="sec-head">
-        <div><h2>Insta<span>gram</span></h2><div class="sync" id="igSync"></div></div>
+      <div class="st-top">
+        <div>
+          <h1>Your <span>statistics</span></h1>
+          <div class="sync" id="igSync"></div>
+        </div>
         <button class="btn ghost small" id="igRefresh" type="button">Refresh</button>
       </div>
+      <p class="st-note">Followers, likes and comments refresh every 10 minutes; views, reach, saves and shares every hour. The page updates by itself while it is open.</p>
+
       <div id="igMsg" class="msg err" hidden></div>
       <div id="igSetup" class="setup" hidden></div>
+
       <div id="igBody" hidden>
         <div class="kpis" id="igKpis"></div>
-        <div class="recap" id="igRecap"></div>
-        <div class="chart">
-          <div class="chart-top"><span class="count" id="igChartTitle">Evolution</span><div class="chart-ctl"><div class="filters" id="igMetrics"></div><div class="filters" id="igPeriod"></div><div class="filters" id="igMode"></div></div></div>
-          <div id="igChart"></div>
+
+        <div class="st-grid">
+          <div class="chart">
+            <div class="chart-top">
+              <div>
+                <div class="chart-title" id="igChartTitle">Evolution</div>
+                <div class="chart-sub" id="igChartSub"></div>
+              </div>
+              <div class="chart-ctl">
+                <div class="seg" id="igMetrics" role="group" aria-label="Metric"></div>
+                <div class="seg" id="igPeriod" role="group" aria-label="Period"></div>
+                <div class="seg" id="igMode" role="group" aria-label="Display"></div>
+              </div>
+            </div>
+            <div class="chart-box">
+              <canvas id="igCanvas" role="img" aria-label="Statistics chart"></canvas>
+              <div class="empty" id="igChartEmpty" hidden></div>
+            </div>
+            <div class="chart-stats" id="igChartStats"></div>
+          </div>
+          <aside class="recap" id="igRecap"></aside>
         </div>
+
+        <div class="sec-head"><div><h2>Reels <span>ranking</span></h2><div class="sync">Sorted by views · engagement = likes, comments, shares and saves per view</div></div></div>
         <div class="tbl-wrap"><table class="ig" id="igTable"></table></div>
         <div id="igOther"></div>
       </div>
 
       <hr class="divider">
-      <div class="sec-head"><div><h2>Site <span>hearts</span></h2></div></div>
+      <div class="sec-head"><div><h2>Site <span>hearts</span></h2><div class="sync">Likes given by visitors on irreallab.fr</div></div></div>
       <div class="total"><b id="statTotal">0</b><span class="count" id="statSub"></span></div>
       <div id="statList"></div>
     </section>
@@ -404,6 +448,7 @@
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+<script src="/vendor/chart.umd.min.js"></script>
 <script>
 (() => {
   'use strict';
@@ -615,78 +660,194 @@
 
   /* ── stats ── */
   const fmt = n => (n == null ? '–' : Number(n).toLocaleString('en-US'));
-  let igData = null, igMetric = 'views';
-  const IG_METRICS = [['views', 'Views'], ['likes', 'Likes'], ['comments', 'Comments'], ['followers', 'Followers']];
+  const compact = n => new Intl.NumberFormat('en', { notation: 'compact', maximumFractionDigits: 1 }).format(n);
+  const sgn = n => n == null ? '–' : (n > 0 ? '+' : n < 0 ? '−' : '') + fmt(Math.abs(n));
+  const two = n => String(n).padStart(2, '0');
+  const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const DOW = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const dm = d => d.getDate() + ' ' + MON[d.getMonth()];
+  const hhmm = iso => { const d = new Date(iso); return two(d.getHours()) + ':' + two(d.getMinutes()); };
 
-  function igPointValue(h, m) { return m === 'followers' ? h.followers : (h.totals ? h.totals[m] : null); }
-  function igDelta(d, m) {
-    const h = (d.history || []).filter(p => igPointValue(p, m) != null);
-    if (h.length < 2) return '';
+  const IG_KEYS = ['views', 'likes', 'comments', 'shares', 'saves', 'reach'];
+  const METRICS = [['views', 'Views'], ['likes', 'Likes'], ['comments', 'Comments'], ['shares', 'Shares'], ['saves', 'Saves'], ['followers', 'Followers']];
+  const RANGES = [['24h', '24 h'], ['48h', '48 h'], ['7d', '7 days'], ['30d', '30 days']];
+  let igData = null, igMetric = 'views', igRange = null, igMode = 'gain', igChart = null;
+
+  function pointValue(h, m) { return m === 'followers' ? h.followers : (h.totals ? h.totals[m] : null); }
+
+  /* cumulative series for the selected metric and range: [{ t: Date, v: number }] */
+  function series(d) {
+    const hourly = igRange === '24h' || igRange === '48h';
+    if (hourly) {
+      const ix = IG_KEYS.indexOf(igMetric);
+      const all = (d.hourly || []).map(h => ({
+        t: new Date(new Date(h.t).getTime() - 1000),
+        v: igMetric === 'followers' ? h.f : (h.tot ? h.tot[ix] : null)
+      })).filter(p => p.v != null);
+      return { hourly, pts: all.slice(-(igRange === '24h' ? 25 : 49)) };
+    }
+    const all = (d.history || []).map(h => ({ t: new Date(h.date + 'T12:00:00'), v: pointValue(h, igMetric) })).filter(p => p.v != null);
+    return { hourly, pts: all.slice(-(igRange === '7d' ? 8 : 31)) };
+  }
+
+  function metricName() { return (METRICS.find(m => m[0] === igMetric) || [0, ''])[1]; }
+
+  function segment(id, list, cur, set) {
+    const box = $(id);
+    box.innerHTML = list.map(([k, l]) => `<button type="button" data-k="${k}" class="${k === cur ? 'on' : ''}">${l}</button>`).join('');
+    box.querySelectorAll('button').forEach(b => b.addEventListener('click', () => { set(b.dataset.k); renderIgChart(); }));
+  }
+
+  /* draws a dashed line at every midnight so days are easy to tell apart on the hourly view */
+  const dayLines = {
+    id: 'dayLines',
+    afterDatasetsDraw(chart, _a, opts) {
+      if (!opts || !opts.hours) return;
+      const { ctx, chartArea } = chart, meta = chart.getDatasetMeta(0);
+      ctx.save();
+      ctx.setLineDash([3, 4]); ctx.strokeStyle = 'rgba(237,233,223,.22)'; ctx.lineWidth = 1;
+      ctx.fillStyle = 'rgba(237,233,223,.55)'; ctx.font = '600 11px Inter, system-ui, sans-serif'; ctx.textAlign = 'left';
+      opts.hours.forEach((h, i) => {
+        if (h.getHours() !== 0 || !meta.data[i]) return;
+        const x = meta.data[i].x;
+        ctx.beginPath(); ctx.moveTo(x, chartArea.top); ctx.lineTo(x, chartArea.bottom); ctx.stroke();
+        ctx.fillText(DOW[h.getDay()] + ' ' + dm(h), x + 6, chartArea.top + 12);
+      });
+      ctx.restore();
+    }
+  };
+
+  function renderIgChart() {
+    const d = igData; if (!d) return;
+    const hourly = igRange === '24h' || igRange === '48h';
+    segment('igMetrics', METRICS, igMetric, v => { igMetric = v; });
+    segment('igPeriod', RANGES, igRange, v => { igRange = v; });
+    segment('igMode', [['gain', 'Gained'], ['total', 'Total']], igMode, v => { igMode = v; });
+
+    const s = series(d);
+    let labels = [], tips = [], vals = [], times = [];
+    if (igMode === 'gain') {
+      s.pts.slice(1).forEach((p, i) => { vals.push(p.v - s.pts[i].v); times.push(p.t); });
+    } else {
+      s.pts.forEach(p => { vals.push(p.v); times.push(p.t); });
+    }
+    const unit = hourly ? 'hour' : 'day';
+    $('igChartTitle').textContent = metricName() + (igMode === 'gain' ? ' gained per ' + unit : ' · running total');
+    const empty = $('igChartEmpty'), canvas = $('igCanvas');
+    if (vals.length < (igMode === 'gain' ? 1 : 2)) {
+      if (igChart) { igChart.destroy(); igChart = null; }
+      canvas.hidden = true; empty.hidden = false;
+      empty.textContent = hourly
+        ? 'Hourly points are recorded at every synchronisation. This view fills in about an hour after the first sync, one bar per hour. Try 7 days or 30 days meanwhile.'
+        : 'The daily curve fills in day by day: one point is recorded per day.';
+      $('igChartSub').textContent = '';
+      $('igChartStats').innerHTML = '';
+      return;
+    }
+    canvas.hidden = false; empty.hidden = true;
+
+    times.forEach(t => {
+      if (hourly) {
+        const h = t.getHours();
+        labels.push(h === 0 ? dm(t) : two(h) + ':00');
+        tips.push(DOW[t.getDay()] + ' ' + dm(t) + ' · ' + two(h) + ':00 – ' + two((h + 1) % 24) + ':00');
+      } else {
+        labels.push(dm(t));
+        tips.push(DOW[t.getDay()] + ' ' + dm(t) + ' ' + t.getFullYear());
+      }
+    });
+    $('igChartSub').textContent = tips[0].split(' · ')[0] + (tips.length > 1 ? '  →  ' + tips[tips.length - 1].split(' · ')[0] : '');
+
+    const n = vals.length;
+    const step = hourly ? (n > 36 ? 6 : 3) : (n > 20 ? 5 : (n > 10 ? 2 : 1));
+    const isBar = igMode === 'gain';
+    const ctx = canvas.getContext('2d');
+    const grad = ctx.createLinearGradient(0, 0, 0, 340);
+    grad.addColorStop(0, 'rgba(212,240,58,.35)'); grad.addColorStop(1, 'rgba(212,240,58,0)');
+    const dataset = isBar
+      ? { type: 'bar', data: vals, backgroundColor: vals.map(v => v < 0 ? '#ff9a9a' : '#d4f03a'), borderRadius: 2, maxBarThickness: 26, hoverBackgroundColor: '#ffffff' }
+      : { type: 'line', data: vals, borderColor: '#d4f03a', backgroundColor: grad, fill: true, tension: .3, borderWidth: 2.5, pointRadius: n > 40 ? 0 : 3, pointHoverRadius: 6, pointBackgroundColor: '#d4f03a' };
+    const cfg = {
+      type: isBar ? 'bar' : 'line',
+      data: { labels, datasets: [dataset] },
+      plugins: [dayLines],
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        animation: { duration: 450 },
+        interaction: { mode: 'index', intersect: false },
+        layout: { padding: { top: 6, right: 6 } },
+        plugins: {
+          legend: { display: false },
+          dayLines: { hours: hourly && isBar !== undefined ? times : null },
+          tooltip: {
+            backgroundColor: '#0b0b0b', borderColor: 'rgba(212,240,58,.5)', borderWidth: 1, padding: 12, displayColors: false,
+            titleColor: '#ede9df', titleFont: { family: 'Inter, system-ui, sans-serif', size: 13, weight: '600' },
+            bodyColor: '#d4f03a', bodyFont: { family: 'Inter, system-ui, sans-serif', size: 14, weight: '600' },
+            callbacks: {
+              title: items => tips[items[0].dataIndex],
+              label: item => isBar ? sgn(item.parsed.y) + ' ' + metricName().toLowerCase() : fmt(item.parsed.y) + ' ' + metricName().toLowerCase()
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: { display: false }, border: { color: 'rgba(237,233,223,.18)' },
+            ticks: {
+              autoSkip: false, maxRotation: 0, color: 'rgba(237,233,223,.7)', font: { family: 'Inter, system-ui, sans-serif', size: 12 },
+              callback: (_v, i) => {
+                if (hourly && times[i].getHours() === 0) return labels[i];
+                if (hourly && [-2, -1, 1, 2].some(o => times[i + o] && times[i + o].getHours() === 0)) return '';
+                return i % step === 0 ? labels[i] : '';
+              }
+            }
+          },
+          y: {
+            beginAtZero: isBar, grace: isBar ? '8%' : '12%',
+            grid: { color: 'rgba(237,233,223,.07)' }, border: { display: false },
+            ticks: { color: 'rgba(237,233,223,.7)', font: { family: 'Inter, system-ui, sans-serif', size: 12 }, maxTicksLimit: 6, callback: v => (v < 0 ? '−' : '') + compact(Math.abs(v)) }
+          }
+        }
+      }
+    };
+    if (igChart) igChart.destroy();
+    igChart = new Chart(ctx, cfg);
+
+    /* summary under the chart */
+    const sum = vals.reduce((a, b) => a + b, 0);
+    let pk = 0; vals.forEach((v, i) => { if (v > vals[pk]) pk = i; });
+    const per = hourly ? 'hour' : 'day';
+    if (isBar) {
+      $('igChartStats').innerHTML =
+        `<div><small>Gained over the period</small><b>${sgn(sum)}</b></div>
+         <div><small>Average per ${per}</small><b>${sgn(Math.round(sum / n))}</b></div>
+         <div><small>Best ${per}</small><b>${sgn(vals[pk])}</b><span>${esc(tips[pk])}</span></div>`;
+    } else {
+      const first = vals[0], last = vals[n - 1];
+      $('igChartStats').innerHTML =
+        `<div><small>Now</small><b>${fmt(last)}</b></div>
+         <div><small>Change over the period</small><b>${sgn(last - first)}</b></div>
+         <div><small>Highest point</small><b>${fmt(Math.max(...vals))}</b></div>`;
+    }
+  }
+
+  /* 7-day change shown on the KPI cards */
+  function weekDelta(d, m) {
+    const h = (d.history || []).filter(p => pointValue(p, m) != null);
+    if (h.length < 2) return null;
     const last = h[h.length - 1];
     const target = new Date(last.date).getTime() - 7 * 86400000;
     const ref = [...h].reverse().find(p => new Date(p.date).getTime() <= target) || h[0];
-    if (ref === last) return '';
-    const diff = igPointValue(last, m) - igPointValue(ref, m);
-    const days = Math.round((new Date(last.date) - new Date(ref.date)) / 86400000);
-    return `<em class="${diff > 0 ? 'up' : ''}">${diff > 0 ? '+' : ''}${fmt(diff)} · ${days}d</em>`;
+    if (ref === last) return null;
+    return { diff: pointValue(last, m) - pointValue(ref, m), days: Math.max(1, Math.round((new Date(last.date) - new Date(ref.date)) / 86400000)) };
   }
 
-  const IG_KEYS = ['views', 'likes', 'comments', 'shares', 'saves', 'reach'];
-  const IG_METRIC_LIST = [['views', 'Views'], ['likes', 'Likes'], ['comments', 'Comments'], ['shares', 'Shares'], ['saves', 'Saves'], ['followers', 'Followers']];
-  let igPeriod = 'hour', igMode = 'gain';
-  const sgn = n => n == null ? '–' : (n > 0 ? '+' : n < 0 ? '−' : '') + fmt(Math.abs(n));
-  const hhmm = iso => new Date(iso).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
-  const dayLabel = iso => new Date(iso).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
-
-  function chartSeries(d) {
-    const key = igMetric;
-    if (igPeriod === 'hour') {
-      const ix = IG_KEYS.indexOf(key);
-      return (d.hourly || []).map(h => ({ label: dayLabel(h.t) + ' ' + hhmm(new Date(new Date(h.t).getTime() - 1000).toISOString()).slice(0, 2) + ':00', v: key === 'followers' ? h.f : (h.tot ? h.tot[ix] : null) })).filter(p => p.v != null).slice(-49);
-    }
-    return (d.history || []).map(h => ({ label: h.date, v: igPointValue(h, key === 'followers' ? 'followers' : key) })).filter(p => p.v != null).slice(-31);
-  }
-
-  function renderIgChart() {
-    const d = igData, box = $('igChart');
-    const chips = (id, list, cur, set) => {
-      $(id).innerHTML = list.map(([k, l]) => `<button type="button" class="chip${k === cur ? ' on' : ''}" data-k="${k}">${l}</button>`).join('');
-      $(id).querySelectorAll('.chip').forEach(b => b.addEventListener('click', () => { set(b.dataset.k); renderIgChart(); }));
-    };
-    chips('igMetrics', IG_METRIC_LIST, igMetric, v => { igMetric = v; });
-    chips('igPeriod', [['hour', 'Hourly'], ['day', 'Daily']], igPeriod, v => { igPeriod = v; });
-    chips('igMode', [['gain', 'Gain'], ['total', 'Total']], igMode, v => { igMode = v; });
-    const unit = igPeriod === 'hour' ? 'hour' : 'day';
-    $('igChartTitle').textContent = (igMode === 'gain' ? 'Gained per ' + unit : 'Total by ' + unit) + ' · ' + (IG_METRIC_LIST.find(m => m[0] === igMetric) || [0, ''])[1];
-    let pts = chartSeries(d);
-    let vals = pts.map(p => p.v);
-    if (igMode === 'gain') { vals = pts.slice(1).map((p, i) => p.v - pts[i].v); pts = pts.slice(1); }
-    if (vals.length < (igMode === 'gain' ? 1 : 2)) {
-      box.innerHTML = '<div class="empty" style="padding:2rem 1rem">' + (igPeriod === 'hour'
-        ? 'Hourly points are recorded at every synchronisation — the graph starts filling in about an hour after the first sync, then one bar per hour.'
-        : 'The daily curve fills in day by day — one point is recorded per day.') + '</div>';
-      return;
-    }
-    const W = 600, H = 170, pl = 8, pr = 8, pt = 12, pb = 8;
-    const lo = igMode === 'gain' ? Math.min(0, ...vals) : Math.min(...vals), hi = Math.max(igMode === 'gain' ? 0 : -Infinity, ...vals);
-    const span = (hi - lo) || 1;
-    const x = i => pl + (W - pl - pr) * (vals.length === 1 ? .5 : i / (vals.length - 1));
-    const y = v => pt + (H - pt - pb) * (1 - (v - lo) / span);
-    let body = '';
-    if (igMode === 'gain') {
-      const bw = Math.max(3, (W - pl - pr) / vals.length * .68), zero = y(0);
-      body = vals.map((v, i) => {
-        const cx = pl + (W - pl - pr) * ((i + .5) / vals.length), yy = y(v);
-        return `<rect x="${(cx - bw / 2).toFixed(1)}" y="${Math.min(yy, zero).toFixed(1)}" width="${bw.toFixed(1)}" height="${Math.max(1, Math.abs(zero - yy)).toFixed(1)}" fill="${v < 0 ? '#ff9a9a' : '#d4f03a'}"><title>${esc(pts[i].label)}: ${sgn(v)}</title></rect>`;
-      }).join('') + `<line x1="${pl}" x2="${W - pr}" y1="${zero}" y2="${zero}" stroke="rgba(237,233,223,.25)" stroke-width="1" vector-effect="non-scaling-stroke"></line>`;
-    } else {
-      const line = vals.map((v, i) => `${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
-      body = `<polygon points="${x(0)},${H - pb} ${line} ${x(vals.length - 1)},${H - pb}" fill="rgba(212,240,58,.1)"></polygon>
-        <polyline points="${line}" fill="none" stroke="#d4f03a" stroke-width="2" vector-effect="non-scaling-stroke"></polyline>` +
-        vals.map((v, i) => `<circle cx="${x(i)}" cy="${y(v)}" r="2.4" fill="#d4f03a"><title>${esc(pts[i].label)}: ${fmt(v)}</title></circle>`).join('');
-    }
-    box.innerHTML = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="${esc(igMetric)} ${igMode} per ${unit}">${body}
-    </svg><div class="axis-row"><span>${esc(pts[0].label)}</span><span class="mx">peak ${igMode === 'gain' ? sgn(hi) : fmt(hi)}</span><span>${esc(pts[pts.length - 1].label)}</span></div>`;
+  function spark(d, m) {
+    const v = (d.history || []).map(p => pointValue(p, m)).filter(x => x != null).slice(-14);
+    if (v.length < 2) return '<div class="nospark"></div>';
+    const lo = Math.min(...v), hi = Math.max(...v), W = 200, H = 38, span = (hi - lo) || 1;
+    const pts = v.map((x, i) => [i / (v.length - 1) * W, H - 5 - (x - lo) / span * (H - 12)]);
+    const line = pts.map(p => p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' ');
+    return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true"><polygon points="0,${H} ${line} ${W},${H}" fill="rgba(212,240,58,.12)"/><polyline points="${line}" fill="none" stroke="#d4f03a" stroke-width="2" vector-effect="non-scaling-stroke"/></svg>`;
   }
 
   const kpiPrev = {};
@@ -697,10 +858,10 @@
       kpiPrev[i] = to;
       if (!isFinite(to) || from === to || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
       const t0 = performance.now(), dur = 900;
-      (function step(now) {
+      (function stepf(now) {
         const p = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - p, 3);
         el.textContent = fmt(Math.round(from + (to - from) * e));
-        if (p < 1) requestAnimationFrame(step);
+        if (p < 1) requestAnimationFrame(stepf);
       })(t0);
     });
   }
@@ -709,41 +870,37 @@
     const box = $('igRecap'), r = d.recap;
     if (!r || !r.ready) {
       const m = r ? r.collected_minutes : 0;
-      box.innerHTML = `<div class="recap-h"><b>Last hour</b><span>recap in preparation</span></div><p class="recap-sum">The one-hour recap appears once an hour of data has been collected (${m} min so far). Numbers are recorded at every synchronisation.</p>`;
+      box.innerHTML = `<div class="rc-h"><b>Last hour</b><span>in preparation</span></div><p class="rc-empty">The one-hour recap appears once an hour of data has been collected (${m} min so far). Numbers are recorded at every synchronisation.</p>`;
       return;
     }
-    const t = r.totals, w = (n, one, many) => `<em>${sgn(n)}</em> ${Math.abs(n) === 1 ? one : many}`;
-    const parts = [];
-    if (r.followers != null) parts.push(w(r.followers, 'follower', 'followers'));
-    if (t.views != null) parts.push(w(t.views, 'view', 'views'));
-    if (t.likes != null) parts.push(w(t.likes, 'like', 'likes'));
-    if (t.comments != null) parts.push(w(t.comments, 'comment', 'comments'));
-    if (t.shares != null) parts.push(w(t.shares, 'share', 'shares'));
-    if (t.saves != null) parts.push(w(t.saves, 'save', 'saves'));
+    const t = r.totals;
+    const cell = (label, n) => `<div><b class="${n > 0 ? 'up' : n < 0 ? 'down' : 'zero'}">${n == null ? '–' : sgn(n)}</b><small>${label}</small></div>`;
     const row = p => {
       const bits = [];
-      if (p.views) bits.push(`<span class="${p.views < 0 ? 'neg' : ''}">${sgn(p.views)} view${Math.abs(p.views) === 1 ? '' : 's'}</span>`);
-      if (p.likes) bits.push(`<span class="${p.likes < 0 ? 'neg' : ''}">${sgn(p.likes)} like${Math.abs(p.likes) === 1 ? '' : 's'}</span>`);
-      if (p.comments) bits.push(`<span class="${p.comments < 0 ? 'neg' : ''}">${sgn(p.comments)} comment${Math.abs(p.comments) === 1 ? '' : 's'}</span>`);
-      if (p.shares) bits.push(`${sgn(p.shares)} share${Math.abs(p.shares) === 1 ? '' : 's'}`);
-      if (p.saves) bits.push(`${sgn(p.saves)} save${Math.abs(p.saves) === 1 ? '' : 's'}`);
+      [['views', 'view'], ['likes', 'like'], ['comments', 'comment'], ['shares', 'share'], ['saves', 'save']].forEach(([k, w]) => {
+        if (p[k]) bits.push(sgn(p[k]) + ' ' + w + (Math.abs(p[k]) === 1 ? '' : 's'));
+      });
       const name = p.link ? `<a href="${esc(p.link)}" target="_blank" rel="noopener">${esc(p.title)}</a>` : esc(p.title);
-      return `<li>${name}${p.is_new ? ' <span class="tag live">new post</span>' : ''} — ${bits.join(', ') || 'published'}</li>`;
+      return `<li>${name}${p.is_new ? ' <span class="tag live">new post</span>' : ''}<br>${bits.join(' · ') || 'published'}</li>`;
     };
     const anything = (r.followers || 0) !== 0 || ['views', 'likes', 'comments', 'shares', 'saves'].some(k => (t[k] || 0) !== 0);
-    box.innerHTML = `<div class="recap-h"><b>Last hour</b><span>${hhmm(r.from)} → ${hhmm(r.to)} · ${r.minutes} min</span></div>
-      <p class="recap-sum">${parts.join(' · ')}</p>
-      ${r.posts.length ? '<ul>' + r.posts.map(row).join('') + '</ul>' : `<p class="nochange">${anything ? 'The changes come from posts that are not in the recent list.' : 'Nothing changed on the posts during this hour.'}</p>`}`;
+    box.innerHTML = `<div class="rc-h"><b>Last hour</b><span>${hhmm(r.from)} → ${hhmm(r.to)}</span></div>
+      <div class="rc-grid">${cell('Followers', r.followers)}${cell('Views', t.views)}${cell('Likes', t.likes)}${cell('Comments', t.comments)}${cell('Shares', t.shares)}${cell('Saves', t.saves)}</div>
+      ${r.posts.length ? '<ul class="rc-posts">' + r.posts.map(row).join('') + '</ul>' : `<p class="rc-empty">${anything ? 'The changes come from posts that are not in the recent list.' : 'Nothing changed on the posts during this hour.'}</p>`}`;
   }
 
-  function igRow(title, link, ig, extra, siteLikes) {
+  function igRow(title, link, ig, extra, siteLikes, maxViews) {
     const c = v => v == null ? '<td class="na">–</td>' : `<td>${fmt(v)}</td>`;
-    if (!ig) return `<tr><td>${link ? `<a href="${link}" target="_blank" rel="noopener">${esc(title)}</a>` : esc(title)}<span class="sub">no Instagram post found — add its reel link in Edit</span></td><td class="na">–</td><td class="na">–</td><td class="na">–</td><td class="na">–</td><td class="na">–</td><td class="na">–</td><td class="na">–</td><td>${fmt(siteLikes)}</td></tr>`;
-    const watch = ig.avg_watch_seconds != null ? ig.avg_watch_seconds + 's' : '–';
+    const nameLink = link ? `<a href="${link}" target="_blank" rel="noopener">${esc(title)}</a>` : (ig ? `<a href="${esc(ig.permalink)}" target="_blank" rel="noopener">${esc(title)}</a>` : esc(title));
+    if (!ig) return `<tr><td>${nameLink}<span class="sub">no Instagram post found — add its reel link in Edit</span></td><td class="na">–</td><td class="na">–</td><td class="na">–</td><td class="na">–</td><td class="na">–</td><td class="na">–</td><td class="na">–</td><td class="na">–</td><td>${fmt(siteLikes)}</td></tr>`;
+    const watch = ig.avg_watch_seconds != null ? ig.avg_watch_seconds + ' s' : '–';
     const date = ig.posted_at ? ig.posted_at.slice(0, 10) : '';
-    return `<tr><td>${link ? `<a href="${link}" target="_blank" rel="noopener">${esc(title)}</a>` : `<a href="${esc(ig.permalink)}" target="_blank" rel="noopener">${esc(title)}</a>`}<span class="sub">${esc(date)}${extra ? ' · ' + esc(extra) : ''}</span></td>
-      <td class="hl">${fmt(ig.views)}</td>${c(ig.likes)}${c(ig.comments)}${c(ig.shares)}${c(ig.saves)}${c(ig.reach)}<td>${watch}</td><td>${siteLikes == null ? '–' : fmt(siteLikes)}</td></tr>`;
+    const eng = ig.views ? (((ig.likes || 0) + (ig.comments || 0) + (ig.shares || 0) + (ig.saves || 0)) / ig.views * 100).toFixed(1) + '%' : '–';
+    const w = maxViews && ig.views ? Math.max(2, ig.views / maxViews * 100) : 0;
+    return `<tr><td>${nameLink}<span class="sub">${esc(date)}${extra ? ' · ' + esc(extra) : ''}</span></td>
+      <td class="hl">${fmt(ig.views)}<span class="vbar"><i style="width:${w}%"></i></span></td>${c(ig.likes)}${c(ig.comments)}${c(ig.shares)}${c(ig.saves)}${c(ig.reach)}<td>${watch}</td><td>${eng}</td><td>${siteLikes == null ? '–' : fmt(siteLikes)}</td></tr>`;
   }
+  const IG_HEAD = '<thead><tr><th>Reel</th><th>Views</th><th>Likes</th><th>Comments</th><th>Shares</th><th>Saves</th><th>Reach</th><th>Avg watch</th><th>Engagement</th><th>Site ♥</th></tr></thead>';
 
   /* live feel: the page re-reads the (cached) numbers every minute while the tab is open */
   let igStamp = null, igPoll = null, igTick = null;
@@ -757,7 +914,7 @@
   }
   function paintIgStamp() {
     if (!igStamp) return;
-    $('igSync').innerHTML = `<span class="live-dot">●</span> Live · @${esc(igStamp.user)} · likes &amp; comments updated ${esc(ago(igStamp.fetched))} · views &amp; reach ${esc(ago(igStamp.insights || igStamp.fetched))}`;
+    $('igSync').innerHTML = `<span class="live-dot">●</span> Live · @${esc(igStamp.user)} · likes &amp; comments ${esc(ago(igStamp.fetched))} · views &amp; reach ${esc(ago(igStamp.insights || igStamp.fetched))}`;
   }
   function stopIgPolling() { clearInterval(igPoll); clearInterval(igTick); igPoll = igTick = null; }
   function startIgPolling() {
@@ -790,17 +947,25 @@
     const a = d.account || {}, t = d.totals || {};
     igStamp = { user: a.username || '', fetched: d.fetched_at, insights: d.insights_at };
     paintIgStamp();
-    const kpi = (l, v, key) => `<div class="kpi"><small>${l}</small><b data-v="${v == null ? '' : v}">${fmt(v)}</b>${key ? igDelta(d, key) : ''}</div>`;
-    $('igKpis').innerHTML = kpi('Followers', a.followers, 'followers') + kpi('Views', t.views, 'views') + kpi('Likes', t.likes, 'likes') + kpi('Comments', t.comments, 'comments') + kpi('Shares', t.shares) + kpi('Saves', t.saves);
+    if (igRange == null) igRange = (d.hourly || []).length >= 3 ? '48h' : '30d';
+
+    const kpi = (label, v, key) => {
+      const wd = key ? weekDelta(d, key) : null;
+      const cls = wd ? (wd.diff > 0 ? 'up' : wd.diff < 0 ? 'down' : '') : '';
+      return `<div class="kpi"><small>${label}</small><b data-v="${v == null ? '' : v}">${fmt(v)}</b>${wd ? `<span class="dl ${cls}">${sgn(wd.diff)} · ${wd.days} d</span>` : '<span class="dl">&nbsp;</span>'}${key ? spark(d, key) : '<div class="nospark"></div>'}</div>`;
+    };
+    $('igKpis').innerHTML = kpi('Followers', a.followers, 'followers') + kpi('Views', t.views, 'views') + kpi('Likes', t.likes, 'likes') + kpi('Comments', t.comments, 'comments') + kpi('Shares', t.shares, 'shares') + kpi('Saves', t.saves, 'saves');
     animateKpis();
     renderIgRecap(d);
     renderIgChart();
+
     const reels = [...d.reels].sort((p, q) => ((q.instagram && q.instagram.views) || -1) - ((p.instagram && p.instagram.views) || -1));
-    $('igTable').innerHTML = `<thead><tr><th>Reel</th><th>Views</th><th>Likes</th><th>Comments</th><th>Shares</th><th>Saves</th><th>Reach</th><th>Avg watch</th><th>Site ♥</th></tr></thead><tbody>${
-      reels.map(r => igRow(r.title, '/reel/' + encodeURIComponent(r.slug) + '.html', r.instagram, r.linked_by === 'title' ? 'matched by title' : '', r.site_likes)).join('')}</tbody>`;
+    const maxV = Math.max(1, ...reels.map(r => (r.instagram && r.instagram.views) || 0));
+    $('igTable').innerHTML = IG_HEAD + `<tbody>${reels.map(r => igRow(r.title, '/reel/' + encodeURIComponent(r.slug) + '.html', r.instagram, r.linked_by === 'title' ? 'matched by title' : '', r.site_likes, maxV)).join('')}</tbody>`;
     const other = d.unmatched || [];
-    $('igOther').innerHTML = other.length ? `<div class="sec-head"><div><h2 style="font-size:1.5rem">Other Instagram <span>posts</span></h2><div class="sync">Not linked to a reel of the site</div></div></div><div class="tbl-wrap"><table class="ig"><thead><tr><th>Post</th><th>Views</th><th>Likes</th><th>Comments</th><th>Shares</th><th>Saves</th><th>Reach</th><th>Avg watch</th><th>Site ♥</th></tr></thead><tbody>${
-      other.map(m => igRow(m.caption ? m.caption.slice(0, 50) : (m.type || 'Post'), '', m, m.type, null)).join('')}</tbody></table></div>` : '';
+    const maxO = Math.max(1, ...other.map(m => m.views || 0));
+    $('igOther').innerHTML = other.length ? `<div class="sec-head"><div><h2 style="font-size:1.6rem">Other Instagram <span>posts</span></h2><div class="sync">Not linked to a reel of the site</div></div></div><div class="tbl-wrap"><table class="ig">${IG_HEAD}<tbody>${
+      other.map(m => igRow(m.caption ? m.caption.slice(0, 50) : (m.type || 'Post'), '', m, m.type, null, maxO)).join('')}</tbody></table></div>` : '';
   }
 
   async function loadInstagram() {
