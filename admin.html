@@ -362,6 +362,10 @@
             <input type="text" id="fTags" maxlength="300" placeholder="#irreallab #surrealvisuals">
             <div class="chips" id="tagChips"></div>
           </div>
+          <div class="row2">
+            <div class="field"><label for="fMusic">Song title</label><input type="text" id="fMusic" maxlength="120" placeholder="Name of the song used"><div class="hint">Added automatically to the Credits page.</div></div>
+            <div class="field"><label for="fArtist">Artist</label><input type="text" id="fArtist" maxlength="120" placeholder="Who made it"></div>
+          </div>
           <div class="field">
             <label for="fUrl">Instagram link</label>
             <input type="url" id="fUrl" placeholder="https://www.instagram.com/reel/…">
@@ -440,6 +444,10 @@
       <div class="hint">Changing the title does not change the page address or the likes.</div></div>
     <div class="field"><label for="eDesc">Description</label><textarea id="eDesc" maxlength="500"></textarea></div>
     <div class="field"><label for="eTags">Hashtags</label><input type="text" id="eTags" maxlength="300"></div>
+    <div class="row2">
+      <div class="field"><label for="eMusic">Song title</label><input type="text" id="eMusic" maxlength="120"><div class="hint">Shown on the Credits page. Leave empty for no credit.</div></div>
+      <div class="field"><label for="eArtist">Artist</label><input type="text" id="eArtist" maxlength="120"></div>
+    </div>
     <div class="field"><label for="eUrl">Instagram link</label><input type="url" id="eUrl"></div>
     <div class="row2">
       <div class="field"><label for="eDate">Publication date</label><input type="date" id="eDate"></div>
@@ -569,6 +577,7 @@
   function openEdit(r) {
     editing = r; $('editMsg').hidden = true;
     $('eTitle').value = r.title; $('eDesc').value = r.description; $('eTags').value = r.hashtags; $('eUrl').value = r.url;
+    $('eMusic').value = r.music_title || ''; $('eArtist').value = r.music_artist || '';
     $('eDate').value = toDateInput(r.posted_at); $('eSchedule').value = toLocalInput(r.scheduled_publish_at);
     $('editDialog').showModal();
   }
@@ -578,7 +587,7 @@
     const btn = $('eSave'); btn.disabled = true;
     try {
       await api(`/api/reel/${editing.slug}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({
-        title: $('eTitle').value, description: $('eDesc').value, hashtags: $('eTags').value, url: $('eUrl').value,
+        title: $('eTitle').value, description: $('eDesc').value, hashtags: $('eTags').value, url: $('eUrl').value, music_title: $('eMusic').value, music_artist: $('eArtist').value,
         posted_at: $('eDate').value || undefined, scheduled_publish_at: $('eSchedule').value || null }) });
       $('editDialog').close(); toast('Changes saved'); loadReels();
     } catch (err) { if (err.message !== 'unauthenticated') { $('editMsg').textContent = err.message; $('editMsg').hidden = false; } }
@@ -646,6 +655,7 @@
     const fd = new FormData();
     fd.append('video', file); fd.append('title', $('fTitle').value); fd.append('description', $('fDesc').value);
     fd.append('hashtags', $('fTags').value); fd.append('url', $('fUrl').value);
+    fd.append('music_title', $('fMusic').value); fd.append('music_artist', $('fArtist').value);
     if ($('fDate').value) fd.append('posted_at', $('fDate').value);
     if ($('fSchedule').value) fd.append('scheduledDate', new Date($('fSchedule').value).toISOString());
     $('uploadBtn').disabled = true; showUploadMsg(''); setProgress('Uploading the video', 0);

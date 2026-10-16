@@ -63,7 +63,9 @@
     "video_url": "/video/reel-11.mp4",
     "posted_at": "2026-06-06T00:00:00.000Z",
     "audio_url": "/audio/reel-11.mp3",
-    "description": "A fashion runway from the year 2086 — synthetic fabrics, augmented silhouettes and couture designed for a posthuman world."
+    "description": "A fashion runway from the year 2086 — synthetic fabrics, augmented silhouettes and couture designed for a posthuman world.",
+    "music_title": "The Lizards That Sing At Night",
+    "music_artist": "promptgenix"
   },
   {
     "title": "crowded thoughts",
@@ -85,7 +87,9 @@
     "video_url": "/video/reel-9.mp4",
     "posted_at": "2026-05-18T00:00:00.000Z",
     "audio_url": "/audio/reel-9.mp3",
-    "description": "Machines learning to feel — a cinematic study of synthetic faces caught somewhere between code and emotion."
+    "description": "Machines learning to feel — a cinematic study of synthetic faces caught somewhere between code and emotion.",
+    "music_title": "Clint Eastwood",
+    "music_artist": "Gorillaz"
   },
   {
     "title": "urban mirage",
@@ -118,7 +122,9 @@
     "video_url": "/video/reel-2.mp4",
     "audio_url": "/audio/reel-2.mp3",
     "posted_at": "2026-05-15T12:18:34.357Z",
-    "description": "A surreal love letter to speed culture — engines, blur and the poetry of motion at the edge of control."
+    "description": "A surreal love letter to speed culture — engines, blur and the poetry of motion at the edge of control.",
+    "music_title": "Can't Tell Me Nothing",
+    "music_artist": "Kanye West"
   },
   {
     "title": "Closing Hours",
@@ -138,7 +144,9 @@
     "status": "Live",
     "video_url": "/video/reel-4.mp4",
     "audio_url": "/audio/reel-4.mp3",
-    "description": "Perspective folds in on itself — one scene, infinite angles, pure dream logic set in motion."
+    "description": "Perspective folds in on itself — one scene, infinite angles, pure dream logic set in motion.",
+    "music_title": "Connected",
+    "music_artist": "Adam Jamar"
   },
   {
     "title": "Art Heist",
@@ -148,7 +156,9 @@
     "status": "Live",
     "video_url": "/video/reel-5.mp4",
     "audio_url": "/audio/reel-5.mp3",
-    "description": "The perfect crime is a point of view — a cinematic heist through galleries of stolen vision."
+    "description": "The perfect crime is a point of view — a cinematic heist through galleries of stolen vision.",
+    "music_title": "Radiant Pulse",
+    "music_artist": "Donushi"
   },
   {
     "title": "Drifting through",

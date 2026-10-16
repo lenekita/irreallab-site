@@ -302,7 +302,7 @@ app.get('/reels.json', sendPublicReels);
 app.get('/api/reels-admin', requireAdmin, (req, res) => {
   const reels = store.getAll().map(r => ({
     slug: r.slug, title: r.title, description: r.description || '', hashtags: r.hashtags || '',
-    url: r.url || '', posted_at: r.posted_at || null, scheduled_publish_at: r.scheduled_publish_at || null,
+    url: r.url || '', music_title: r.music_title || '', music_artist: r.music_artist || '', posted_at: r.posted_at || null, scheduled_publish_at: r.scheduled_publish_at || null,
     status: r.status, source: r.source, hidden: !!r.hidden,
     poster: `/images/posters/${r.slug}.jpg`, likes: likeCounts[r.slug] || 0,
   }));
@@ -316,6 +316,8 @@ function cleanFields(body) {
   if ('title' in body) { out.title = str(body.title, 120); if (!out.title) throw new Error('Title is required'); }
   if ('description' in body) out.description = str(body.description, 500);
   if ('hashtags' in body) out.hashtags = str(body.hashtags, 300);
+  if ('music_title' in body) out.music_title = str(body.music_title, 120);
+  if ('music_artist' in body) out.music_artist = str(body.music_artist, 120);
   if ('url' in body) {
     out.url = str(body.url, 500);
     if (out.url && !/^https:\/\//i.test(out.url)) throw new Error('Instagram URL must start with https://');
@@ -421,7 +423,7 @@ app.post('/api/upload-reel', requireAdmin, receiveVideo, (req, res) => {
   const fail = (code, error) => { fs.unlink(file.path, () => {}); return res.status(code).json({ error }); };
 
   let fields;
-  try { fields = cleanFields({ title: req.body.title, description: req.body.description, hashtags: req.body.hashtags, url: req.body.url }); }
+  try { fields = cleanFields({ title: req.body.title, description: req.body.description, hashtags: req.body.hashtags, url: req.body.url, music_title: req.body.music_title, music_artist: req.body.music_artist }); }
   catch (err) { return fail(400, err.message); }
 
   const slug = site.slugify(fields.title);
@@ -444,6 +446,7 @@ app.post('/api/upload-reel', requireAdmin, receiveVideo, (req, res) => {
     url: fields.url || 'https://www.instagram.com/irreallab/',
     hashtags: fields.hashtags || '#irreallab',
     description: fields.description || '',
+    ...(fields.music_title ? { music_title: fields.music_title, music_artist: fields.music_artist || '' } : {}),
     posted_at: posted_at.toISOString(),
     ...(scheduled ? { scheduled_publish_at: scheduled } : {}),
   };
@@ -498,6 +501,29 @@ app.get('/reel/:slug.html', (req, res, next) => {
   if (!meta) return next();
   res.set('Cache-Control', 'public, max-age=0, must-revalidate');
   res.type('html').send(site.renderPage(site.pageHtml(reel, { slug, ...meta }, neighbors)));
+});
+
+// Credits page: the song of every published reel is listed automatically
+// (from the "Song" fields of the admin), so nothing has to be edited by hand.
+const escHtml = t => String(t == null ? '' : t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+function reelMusicCredits() {
+  return store.getPublic().filter(r => r.music_title).map(r => `      <div class="credit-item">
+        <div class="credit-info">
+          <h3>${escHtml(r.music_title)}</h3>
+          <div class="artist">${escHtml(r.music_artist || 'Unknown artist')}</div>
+          <div class="credit-usage">
+            <span class="credit-usage-label">Reel</span>
+            <a href="/reel/${encodeURIComponent(r.slug)}.html" style="color: inherit; text-decoration: none;">${escHtml(r.title)}</a>
+          </div>
+        </div>
+      </div>`).join('\n');
+}
+app.get(['/credits', '/credits.html'], (req, res, next) => {
+  fs.readFile(path.join(__dirname, 'credits.html'), 'utf8', (err, html) => {
+    if (err) return next();
+    res.set('Cache-Control', 'public, max-age=0, must-revalidate');
+    res.type('html').send(html.replace('<!-- @reel-music -->', () => reelMusicCredits()));
+  });
 });
 
 let sitemapCache = { key: '', xml: '' };
