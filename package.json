@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js",
+    "stats": "node scripts/ig-stats.js",
     "build:pages": "node scripts/inject-partials.js",
     "build:reels": "node scripts/build-reel-pages.js && npm run build:pages"
   },
